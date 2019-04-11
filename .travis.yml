@@ -1,0 +1,14 @@
+sudo: required
+language: node_js
+services:
+  - docker
+
+script:
+  - npm run build
+
+deploy:
+  provider: heroku
+  api_key: $HEROKU_API_KEY
+  app:
+    master: tshirtshopminh
+    # feature/netcore-to-nextjs: tsstest
