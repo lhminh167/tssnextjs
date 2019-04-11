@@ -1,15 +1,12 @@
 {
-  "name": "Tss",
-  "description": "Demo app on ASP.NET Core",
+  "name": "tssnextjs",
+  "description": "A client app for T-Shirt Shop based on Next.js",
   "repository": "https://github.com/lhminh167/Tss",
-  "keywords": ["aspnet", "core"],
+  "keywords": ["JavaScript", "Next.js"],
   "stack": "heroku-18",
   "buildpacks": [
     {
       "url": "https://github.com/heroku/heroku-buildpack-nodejs"
-    },
-    {
-      "url": "https://github.com/jincod/dotnetcore-buildpack"
     }
   ]
 }
