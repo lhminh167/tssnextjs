@@ -1,13 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { loadData, startClock, tickClock } from '../store/product.actions'
 import Page from '../components/page'
+import { productTickClock } from '../store/product.actions';
+import { loadData, startClock } from '../generics/actions';
 
 class Index extends React.Component {
   static async getInitialProps (props) {
     const { store, isServer } = props.ctx
-    store.dispatch(tickClock(isServer))
+    // store.dispatch(productTickClock(isServer))
 
     if (!store.getState().placeholderData) {
       store.dispatch(loadData())
@@ -17,7 +18,7 @@ class Index extends React.Component {
   }
 
   componentDidMount () {
-    this.props.dispatch(startClock())
+    // this.props.dispatch(startClock())
   }
 
   render () {

@@ -3,8 +3,8 @@
 import es6promise from 'es6-promise';
 import 'isomorphic-unfetch';
 import { all, call, delay, put, take, takeLatest } from 'redux-saga/effects';
-import { productActionTypes, failure, loadDataSuccess, tickClock } from './product.actions';
-import { service } from './product.service';
+import { productActionTypes, productTickClock } from './product.actions';
+import { loadDataSuccess, failure } from '../generics/actions';
 
 
 es6promise.polyfill()
@@ -12,14 +12,15 @@ es6promise.polyfill()
 function* runClockSaga() {
   yield take(productActionTypes.START_CLOCK)
   while (true) {
-    yield put(tickClock(false))
+    yield put(productTickClock(false))
     yield delay(1000)
   }
 }
 
-function* loadDataSaga() {
+function * loadDataSaga () {
   try {
-    const data = yield service()
+    const res = yield fetch('https://jsonplaceholder.typicode.com/users')
+    const data = yield res.json()
     yield put(loadDataSuccess(data))
   } catch (err) {
     yield put(failure(err))
