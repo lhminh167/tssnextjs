@@ -1,9 +1,6 @@
-import { actionTypes, tickClock } from "../generics/actions";
+import { actionTypes } from "../generics/actions";
 
 export const productActionTypes = {
   ...actionTypes
 }
 
-export function productTickClock(isServer) {
-  return tickClock(isServer);
-}

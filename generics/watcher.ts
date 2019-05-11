@@ -1,10 +1,8 @@
 /* global fetch */
 
-import { all, takeEvery, takeLatest } from 'redux-saga/effects';
+import { all, takeEvery, call } from 'redux-saga/effects';
 import { actionTypes } from './actions';
 import { Worker } from './worker';
-
-
 
 export function Watcher(entityName) {
 
@@ -13,15 +11,14 @@ export function Watcher(entityName) {
   function* get() {
     yield takeEvery(actionTypes(entityName).GET_PENDING, worker.get);
   }
+
+  return [
+    get
+  ]
 }
 
-function* rootSaga() {
-
-  const worker = Worker('product')
-  
-  yield all([
-    takeLatest(actionTypes('product').GET_PENDING, worker.get)
+export function* combineWatchers(watchers) {  
+  return yield all([
+    ...watchers.map(w=>call(w))
   ])
 }
-
-export default rootSaga
