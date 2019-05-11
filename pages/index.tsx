@@ -2,8 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import Page from '../components/page'
-import { productTickClock } from '../store/product.actions';
-import { loadData, startClock } from '../generics/actions';
+import { getPending } from '../generics/actions';
 
 class Index extends React.Component {
   static async getInitialProps (props) {
@@ -11,7 +10,7 @@ class Index extends React.Component {
     // store.dispatch(productTickClock(isServer))
 
     if (!store.getState().placeholderData) {
-      store.dispatch(loadData())
+      store.dispatch(getPending('product'))
     }
 
     return { isServer }
