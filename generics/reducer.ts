@@ -8,7 +8,7 @@ export const exampleInitialState = {
   placeholderData: null
 }
 
-function reducer (state = exampleInitialState, action) {
+function reducer (state = exampleInitialState, action, entityName = 'product') {
   switch (action.type) {
 
     // case actionTypes.RESET:
@@ -17,7 +17,7 @@ function reducer (state = exampleInitialState, action) {
     //     ...{ count: exampleInitialState.count }
     //   }
 
-    case actionTypes('product').GET_SUCCEEDED:
+    case actionTypes(entityName).GET_SUCCEEDED:
       return {
         ...state,
         ...{ placeholderData: action.payload }
