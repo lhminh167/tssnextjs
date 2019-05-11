@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { increment, decrement, reset } from '../store/actions'
+import { increment, decrement, reset } from '../store/product.actions'
 
 class Counter extends Component {
   increment = () => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { startClock, tickClock } from '../store/actions'
+import { startClock, tickClock } from '../store/product.actions'
 import Page from '../components/page'
 
 class Other extends React.Component {
