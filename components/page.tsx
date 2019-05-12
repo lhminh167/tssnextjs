@@ -1,8 +1,8 @@
-import Link from 'next/link'
-import { connect } from 'react-redux'
-import Button from '@material-ui/core/Button';
+import Link from 'next/link';
+import { connect } from 'react-redux';
+import Loader from './shared/loader/loader'
 
-function Page ({
+function Page({
   error,
   linkTo,
   NavigateTo,
@@ -11,6 +11,7 @@ function Page ({
 }) {
   return (
     <div>
+      <Loader />
       <h1>{title}</h1>
       <nav>
         <Link href={linkTo}>
@@ -23,11 +24,8 @@ function Page ({
         </pre>
       )}
       {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
-      <Button variant="contained" color="primary">
-        Hello World
-      </Button>
     </div>
-    
+
   )
 }
 
