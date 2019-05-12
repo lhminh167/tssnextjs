@@ -5,7 +5,7 @@ function Page ({
   error,
   linkTo,
   NavigateTo,
-  placeholderData,
+  product,
   title
 }) {
   return (
@@ -16,9 +16,9 @@ function Page ({
           <a>Navigate: {NavigateTo}</a>
         </Link>
       </nav>
-      {placeholderData && (
+      {product.data.length > 0 && (
         <pre>
-          <code>{JSON.stringify(placeholderData, null, 2)}</code>
+          <code>{JSON.stringify(product.data, null, 2)}</code>
         </pre>
       )}
       {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
