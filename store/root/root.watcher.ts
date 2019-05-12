@@ -1,5 +1,5 @@
 import { all, call } from 'redux-saga/effects';
-import { productWatcher } from './product.watcher';
+import { productWatcher } from '../product/product.watcher';
 
 const watchers = [
   ...productWatcher

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { connect } from 'react-redux'
+import Button from '@material-ui/core/Button';
 
 function Page ({
   error,
@@ -22,7 +23,11 @@ function Page ({
         </pre>
       )}
       {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+      <Button variant="contained" color="primary">
+        Hello World
+      </Button>
     </div>
+    
   )
 }
 
