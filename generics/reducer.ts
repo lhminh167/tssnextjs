@@ -1,37 +1,44 @@
-import { actionTypes } from './actions'
+import { actionTypes } from './actions';
+import { baseIntitialState } from './state';
 
-export const exampleInitialState = {
-  count: 0,
-  error: false,
-  lastUpdate: 0,
-  light: false,
-  placeholderData: null
-}
+export function Reducer(entityName: string, intitialState = baseIntitialState) {
 
-function reducer (state = exampleInitialState, action, entityName = 'product') {
-  switch (action.type) {
+  return function (state = intitialState, action) {
 
-    // case actionTypes.RESET:
-    //   return {
-    //     ...state,
-    //     ...{ count: exampleInitialState.count }
-    //   }
+    switch (action.type) {
 
-    case actionTypes(entityName).GET_SUCCEEDED:
-      return {
-        ...state,
-        ...{ placeholderData: action.payload }
-      }
+      case actionTypes(entityName).GET_PENDING:
+        return {
+          ...state,
+          ...intitialState,
+          loading: true
+        }
 
-    // case actionTypes.TICK_CLOCK:
-    //   return {
-    //     ...state,
-    //     ...{ lastUpdate: action.ts, light: !!action.light }
-    //   }
+      case actionTypes(entityName).GET_FAILED:
+        return {
+          ...state,
+          ...intitialState,
+          error: action.payload,
 
-    default:
-      return state
+        }
+
+      case actionTypes(entityName).GET_SUCCEEDED:
+        return {
+          ...state,
+          ...intitialState,
+          data: action.payload
+        }
+
+      case actionTypes(entityName).GET_IDLE:
+        return {
+          ...state,
+          ...intitialState
+        }
+
+      default:
+        return state
+    }
+
   }
-}
 
-export default reducer
+}

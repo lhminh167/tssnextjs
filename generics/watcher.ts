@@ -1,12 +1,10 @@
 /* global fetch */
 
-import { all, takeEvery, call } from 'redux-saga/effects';
+import { all, call, takeEvery } from 'redux-saga/effects';
 import { actionTypes } from './actions';
 import { Worker } from './worker';
 
-export function Watcher(entityName) {
-
-  const worker = Worker(entityName)
+export function Watcher(entityName: string, worker = Worker(entityName)) {
 
   function* get() {
     yield takeEvery(actionTypes(entityName).GET_PENDING, worker.get);
@@ -17,8 +15,8 @@ export function Watcher(entityName) {
   ]
 }
 
-export function* combineWatchers(watchers) {  
+export function* combineWatchers(watchers) {
   return yield all([
-    ...watchers.map(w=>call(w))
+    ...watchers.map(w => call(w))
   ])
 }
