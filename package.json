@@ -13,6 +13,13 @@
     "@material-ui/core": "latest",
     "@material-ui/icons": "latest",
     "@material-ui/styles": "latest",
+    "@types/next": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/react-redux": "latest",
+    "@types/styled-jsx": "latest",
+    "@zeit/next-sass": "latest",
+    "@zeit/next-typescript": "latest",
     "es6-promise": "latest",
     "i18next": "latest",
     "isomorphic-unfetch": "latest",
@@ -31,15 +38,9 @@
     "redux": "latest",
     "redux-form": "latest",
     "redux-saga": "latest",
+    "redux-starter-kit": "^0.5.1",
     "typeface-roboto": "latest",
-    "typescript": "latest",
-    "@types/next": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "@types/react-redux": "latest",
-    "@types/styled-jsx": "latest",
-    "@zeit/next-sass": "latest",
-    "@zeit/next-typescript": "latest"
+    "typescript": "latest"
   },
   "devDependencies": {
     "redux-devtools-extension": "latest"
