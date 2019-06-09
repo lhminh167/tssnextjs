@@ -1,28 +1,15 @@
-export const mainLoaderActionTypes = {
-    SHOW: 'SHOW_MAIN_LOADER',
-    HIDE: 'HIDE_MAIN_LOADER'
-}
+import { createSlice } from 'redux-starter-kit';
 
-export function showMainLoader() {
-    return {
-        type: mainLoaderActionTypes.SHOW,
-    }
-};
+export const mainLoader = createSlice({
+    slice: 'mainLoader',
+    initialState: { isLoading: false },
+    reducers: {
+        show: (state) => {
+            state.isLoading = true;
+        },
+        hide: (state) => {
+            state.isLoading = false;
+        }
+    },
 
-export function hideMainLoader() {
-    return {
-        type: mainLoaderActionTypes.HIDE,
-    }
-}
-
-export function loaderReducer(state = false, action) {
-
-    if (action.type === mainLoaderActionTypes.SHOW)
-        return true
-
-    if (action.type === mainLoaderActionTypes.HIDE)
-        return false
-
-    return state;
-
-}
+})
