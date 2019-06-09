@@ -10,7 +10,7 @@
     "start": "next start -p $PORT"
   },
   "dependencies": {
-    "@material-ui/core": "^4.0.2",
+    "@material-ui/core": "latest",
     "@material-ui/icons": "latest",
     "@material-ui/styles": "latest",
     "@types/next": "latest",
@@ -38,7 +38,7 @@
     "redux": "latest",
     "redux-form": "latest",
     "redux-saga": "latest",
-    "redux-starter-kit": "^0.5.1",
+    "redux-starter-kit": "latest",
     "typeface-roboto": "latest",
     "typescript": "latest"
   },
