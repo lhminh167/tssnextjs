@@ -1,48 +1,22 @@
-export function enqueueSnackbar(notification) {
-    return {
-        type: 'ENQUEUE_SNACKBAR',
-        notification: {
-            key: new Date().getTime() + Math.random(),
-            ...notification,
+import { createSlice } from 'redux-starter-kit';
+
+export const notifier = createSlice({
+    slice: 'notifier',
+    initialState: {
+        notifications: []
+    },
+    reducers: {
+        enqueue: (state, action) => {
+            state.notifications.push({
+                key: new Date().getTime() + Math.random(),
+                ...action.payload
+            });
         },
-    }
-};
+        remove: (state, action) => {
+            state.notifications.filter(
+                notification => notification.key !== action.key
+            )
+        }
+    },
 
-export function removeSnackbar(key) {
-    return {
-        type: 'REMOVE_SNACKBAR',
-        key,
-    }
-}
-
-const defaultState = {
-    notifications: [],
-};
-
-export function notifierReducer(state = defaultState, action) {
-    switch (action.type) {
-        case 'ENQUEUE_SNACKBAR':
-            return {
-                ...state,
-                notifications: [
-                    ...state.notifications,
-                    {
-                        ...action.notification,
-                    },
-                ],
-            };
-
-        case 'REMOVE_SNACKBAR':
-            return {
-                ...state,
-                notifications: state.notifications.filter(
-                    notification => notification.key !== action.key,
-                ),
-            };
-
-        default:
-            return state;
-    }
-
-    
-};
+})

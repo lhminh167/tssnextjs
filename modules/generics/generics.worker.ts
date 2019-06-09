@@ -5,7 +5,7 @@ import 'isomorphic-unfetch';
 import { put } from 'redux-saga/effects';
 import { getFailed, getSucceeded } from './generics.actions';
 import { mainLoader } from '../loader/loader.redux';
-import { enqueueSnackbar } from '../notifier/notifier.redux';
+import { notifier } from '../notifier/notifier.redux';
 
 es6promise.polyfill()
 
@@ -38,7 +38,7 @@ export function Worker(entityName: string) {
                     variant: 'success',
                 },
             }
-            yield put(enqueueSnackbar(snack))
+            yield put(notifier.actions.enqueue(snack))
 
         } catch (err) {
             yield put(getFailed(entityName, err))
@@ -49,7 +49,7 @@ export function Worker(entityName: string) {
                     variant: 'danger',
                 },
             }
-            yield put(enqueueSnackbar(snack))
+            yield put(notifier.actions.enqueue(snack))
         }
     }
 
