@@ -1,0 +1,15 @@
+export const equals = "==";
+export const notEquals = "!=";
+export const greaterThan = ">";
+export const lessThan = "<";
+export const greaterOrEquals = ">=";
+export const lessOrEquals = "<=";
+export const contains = "@=";
+export const startsWith = "_=";
+export const notContains = "!@=";
+export const notStartsWith = "!_=";
+export const containsCaseInsensitive = "@=*";
+export const startsWithCaseInsensitive = "_=*";
+export const equalsCaseInsensitive = "==*";
+export const notContainsCaseInsensitive = "!@=*";
+export const notStartsWithCaseInsensitive = "!_=*";

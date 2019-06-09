@@ -1,5 +1,5 @@
 {
-  "name": "with-redux-saga",
+  "name": "tssnextjs",
   "version": "1.0.0",
   "license": "ISC",
   "scripts": {
@@ -10,31 +10,38 @@
     "start": "next start -p $PORT"
   },
   "dependencies": {
-    "@material-ui/core": "^3.9.3",
-    "@material-ui/icons": "^3.0.2",
-    "@types/next": "8.0.5",
-    "@types/react": "16.8.16",
-    "@types/react-dom": "16.8.4",
-    "@types/react-redux": "7.0.8",
-    "@zeit/next-sass": "1.0.1",
-    "@zeit/next-typescript": "1.1.1",
-    "es6-promise": "^4.2.6",
-    "i18next": "^15.1.0",
-    "isomorphic-unfetch": "^2.1.1",
+    "@material-ui/core": "latest",
+    "@material-ui/icons": "latest",
+    "@material-ui/styles": "latest",
+    "es6-promise": "latest",
+    "i18next": "latest",
+    "isomorphic-unfetch": "latest",
     "next": "latest",
-    "next-redux-saga": "^4.0.1",
-    "next-redux-wrapper": "^2.0.0",
-    "node-sass": "4.12.0",
-    "query-string": "^6.5.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-jss": "^8.6.1",
-    "react-redux": "^5.1.1",
-    "redux": "^4.0.1",
-    "redux-saga": "^1.0.2",
-    "typeface-roboto": "0.0.54"
+    "next-redux-saga": "latest",
+    "next-redux-wrapper": "latest",
+    "node-sass": "latest",
+    "notistack": "latest",
+    "query-string": "latest",
+    "react": "latest",
+    "react-compound-slider": "latest",
+    "react-dom": "latest",
+    "react-jss": "latest",
+    "react-redux": "latest",
+    "reactive-react-redux": "latest",
+    "redux": "latest",
+    "redux-form": "latest",
+    "redux-saga": "latest",
+    "typeface-roboto": "latest",
+    "typescript": "latest",
+    "@types/next": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/react-redux": "latest",
+    "@types/styled-jsx": "latest",
+    "@zeit/next-sass": "latest",
+    "@zeit/next-typescript": "latest"
   },
   "devDependencies": {
-    "redux-devtools-extension": "^2.13.8"
+    "redux-devtools-extension": "latest"
   }
 }

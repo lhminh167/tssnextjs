@@ -1,28 +1,8 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import Page from '../modules/page/page.component'
 
-import Page from '../components/page'
-import { getPending } from '../generics/actions';
-
-class Index extends React.Component {
-  static async getInitialProps (props) {
-    const { store, isServer } = props.ctx
-    // store.dispatch(productTickClock(isServer))
-
-    if (!store.getState().placeholderData) {
-      store.dispatch(getPending('product'))
-    }
-
-    return { isServer }
-  }
-
-  componentDidMount () {
-    // this.props.dispatch(startClock())
-  }
-
-  render () {
-    return <Page title='Index Page' linkTo='/other' NavigateTo='Other Page' />
-  }
+function Index(props) {
+  return <Page title='Index Page' linkTo='/other' NavigateTo='Other Page' />
 }
 
-export default connect()(Index)
+export default Index
