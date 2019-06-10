@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ClearIcon from "@material-ui/icons/Clear";
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 import { useReduxDispatch, useReduxState } from 'reactive-react-redux';
 import BrandPicker from "../brandPicker/brandPicker.component";
 import ColorPicker from "../colorPicker/colorPicker.component";
@@ -45,32 +45,12 @@ const useStyles = makeStyles((theme: Theme) =>
 function ProductFilter(props) {
     const classes = useStyles();
     const { productFilter: { data: state } } = useReduxState();
-    const [color, setColor] = useState({});
-    const [size, setSize] = useState({});
-    const [brand, setBrand] = useState({});
-
-
     const dispatch = useReduxDispatch();
 
     useEffect(() => {
         dispatch(productFilter.actions.getPending());
         return () => { return; };
     }, [])
-
-    function colorOutput(output) {
-        setColor(output)
-        console.log(color)
-    }
-
-    function sizeOutput(output) {
-        setSize(output)
-        console.log(size)
-    }
-
-    function brandOutput(output) {
-        setBrand(output)
-        console.log(brand)
-    }
 
     return (
         <Fragment>
@@ -89,14 +69,14 @@ function ProductFilter(props) {
                         <Divider />
                         <ExpansionPanelDetails className={classes.expansionPanelDetails}>
                             {state.colors && state.colors.length > 0 &&
-                                <ColorPicker output={colorOutput} />
+                                <ColorPicker />
                             }
                             {state.colors && state.colors.length > 0 &&
-                                <SizePicker output={sizeOutput} />
+                                <SizePicker />
                             }
                             <TwoHandleSlider />
                             {state.categories && state.categories.length > 0 &&
-                                <BrandPicker output={brandOutput} />
+                                <BrandPicker />
                             }
                         </ExpansionPanelDetails>
                         <Divider />
