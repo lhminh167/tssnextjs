@@ -8,15 +8,14 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ClearIcon from "@material-ui/icons/Clear";
 
-import { getPending } from "../generics/generics.actions";
 import { Fragment, useEffect, useState } from "react";
 import { useReduxDispatch, useReduxState } from 'reactive-react-redux';
 import BrandPicker from "../brandPicker/brandPicker.component";
 import ColorPicker from "../colorPicker/colorPicker.component";
 import SizePicker from "../sizePicker/sizePicker.component";
 import TwoHandleSlider from "../slider/twoHandleSlider.component";
-import { productFilterEntityName } from "./product.filter.model";
 import { ExpansionPanelActions, Fab, Button } from "@material-ui/core";
+import { productFilter } from "./product.filter.redux";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -54,7 +53,7 @@ function ProductFilter(props) {
     const dispatch = useReduxDispatch();
 
     useEffect(() => {
-        dispatch(getPending(productFilterEntityName));
+        dispatch(productFilter.actions.getPending());
         return () => { return; };
     }, [])
 

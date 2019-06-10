@@ -1,6 +1,6 @@
-import { Reducer } from '../generics/generics.reducer';
+import { newSlice } from '../generics/generics.reducer';
 import { Watcher } from "../generics/generics.watcher";
-import { product } from './product.model';
+import { productEntityName } from './product.model';
 
-export const productReducer = Reducer(product.entityName);
-export const productWatcher = Watcher(product.entityName)
+export const product = newSlice(productEntityName);
+export const productWatcher = Watcher(product)

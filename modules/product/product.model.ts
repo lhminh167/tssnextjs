@@ -10,6 +10,4 @@ export class Product {
     display: number = null;
 }
 
-export const product = {
-    entityName: 'products',
-}
+export const productEntityName = 'products';

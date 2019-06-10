@@ -1,44 +1,48 @@
-import { actionTypes } from './generics.actions';
-import { baseIntitialState } from './generics.state';
+import { createSlice } from 'redux-starter-kit';
+import { Action } from './generics.model';
+import { baseInitialState } from './generics.state';
 
-export function Reducer(entityName: string, intitialState = baseIntitialState) {
+export function newSlice(
+    slice: string,
+    otherReducers = {},
+    extraReducers = {},
+    initialState = baseInitialState
+) {
 
-  return function (state = intitialState, action) {
-
-    switch (action.type) {
-
-      case actionTypes(entityName).GET_PENDING:
-        return {
-          ...state,
-          ...intitialState,
-          isLoading: true
-        }
-
-      case actionTypes(entityName).GET_FAILED:
-        return {
-          ...state,
-          ...intitialState,
-          error: action.payload,
-
-        }
-
-      case actionTypes(entityName).GET_SUCCEEDED:
-        return {
-          ...state,
-          ...intitialState,
-          data: action.payload
-        }
-
-      case actionTypes(entityName).GET_IDLE:
-        return {
-          ...state,
-          ...intitialState
-        }
-
-      default:
-        return state
+    const mainReducers = {
+        getPending: (state) => {
+            state.data = [];
+            state.isLoading = true;
+            state.error = null;
+        },
+        getSucceeded: (state, action: Action) => {
+            state.data = action.payload;
+            state.isLoading = false;
+            state.error = null;
+        },
+        getFailed: (state, action) => {
+            state.data = [];
+            state.isLoading = false;
+            state.error = action.payload;
+        },
+        getIdle: (state) => {
+            state.data = [];
+            state.isLoading = false;
+            state.error = null;
+        },
     }
 
-  }
+    const reducers = {
+        ...mainReducers,
+        ...otherReducers
+    }
 
+    const newSlice = createSlice({
+        slice,
+        initialState,
+        reducers,
+        extraReducers
+    })
+
+    return newSlice;
 }

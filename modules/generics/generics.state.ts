@@ -1,5 +1,5 @@
-export const baseIntitialState = {
-  data: [],
-  error: null,
-  isLoading: false
+export const baseInitialState = {
+    data: [],
+    error: null,
+    isLoading: false
 }
