@@ -4,12 +4,16 @@ import withReduxSaga from 'next-redux-saga';
 import App, { Container } from 'next/app';
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
-import { ReduxProvider } from 'reactive-react-redux';
-import theme from '../modules/layout/layout.theme';
-import Notifier from '../modules/notifier/notifier.component';
-import createStore from '../modules/root/root.store';
-import Layout from '../modules/layout/layout.component';
-import Loader from '../modules/loader/loader.component';
+import { Provider } from 'reactive-react-redux';
+import createStore, { TssStore } from '../modules/root/root.store';
+import theme from '../modules/shared/layout/layout.theme';
+import Notifier from '../modules/shared/notifier/notifier.component';
+import Layout from '../modules/shared/layout/layout.component';
+import Loader from '../modules/shared/loader/loader.component';
+
+interface Props {
+    store: TssStore
+}
 
 const isServer = typeof window === 'undefined'
 const __NEXT_REDUX_STORE__ = '__NEXT_REDUX_STORE__'
@@ -28,7 +32,7 @@ function getOrCreateStore() {
 }
 
 
-class MyApp extends App {
+class MyApp extends App<Props> {
 
     store = createStore();
 
@@ -43,10 +47,10 @@ class MyApp extends App {
         return { pageProps }
     }
 
-    constructor({ Component, ctx }) {
-        super({ Component, ctx });
-        // this.pageContext = getPageContext();
-    }
+    // constructor({ Component, ctx }) {
+    //     super({ Component, ctx });
+    //     // this.pageContext = getPageContext();
+    // }
 
     componentDidMount() {
         /**
@@ -63,7 +67,7 @@ class MyApp extends App {
         const { Component, pageProps, store } = this.props
         return (
             <Container>
-                <ReduxProvider store={this.store}>
+                <Provider store={this.store}>
                     {/* ThemeProvider makes the theme available down the React
               tree thanks to React context. */}
                     <ThemeProvider
@@ -95,7 +99,7 @@ class MyApp extends App {
                         </SnackbarProvider>
 
                     </ThemeProvider>
-                </ReduxProvider>
+                </Provider>
             </Container>
         )
     }
@@ -104,6 +108,9 @@ class MyApp extends App {
 
 function withReduxStore(App) {
     return class AppWithRedux extends React.Component {
+
+        private reduxStore;
+
         static async getInitialProps(appContext) {
             // Get or Create the store with `undefined` as initialState
             // This allows you to set a custom default initialState
@@ -141,4 +148,3 @@ export default
             MyApp
         )
     )
-

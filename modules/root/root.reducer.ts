@@ -1,12 +1,16 @@
-import { combineReducers } from 'redux';
-import { product } from '../product/product.redux';
-import { mainLoader } from '../loader/loader.redux';
-import { notifier } from '../notifier/notifier.redux';
-import { productFilter } from '../product.filter/product.filter.redux';
+import { combineReducers } from 'redux-starter-kit';
+import { productFilter } from '../product-filter/product-filter.redux';
+import { mainLoader } from '../shared/loader/loader.redux';
+import { notifier } from '../shared/notifier/notifier.redux';
+
+const productFilterReducer = combineReducers({
+    filter: productFilter.filter.reducer,
+    product: productFilter.product.reducer,
+    choice: productFilter.choice.reducer,
+})
 
 export const rootReducer = combineReducers({
-    product: product.reducer,
     mainLoader: mainLoader.reducer,
     notifier: notifier.reducer,
-    productFilter: productFilter.reducer
+    productFilter: productFilterReducer
 })

@@ -1,8 +1,22 @@
-import React from 'react'
-import Page from '../modules/page/page.component'
+import Link from 'next/link';
+import { Fragment } from 'react';
+import ProductCard from '../modules/product-filter/product-card/product-card.component';
+import ProductFilter from '../modules/product-filter/product-filter.component';
+
 
 function Index(props) {
-  return <Page title='Index Page' linkTo='/other' NavigateTo='Other Page' />
+
+
+    return (
+        <Fragment>
+
+            <ProductFilter />
+
+            <ProductCard />
+
+        </Fragment>
+    )
 }
 
-export default Index
+export default Index;
+
