@@ -4,7 +4,7 @@ export const defaultOptions: IOptions = {
 };
 
 export interface IState<T> {
-    data: any | T | T[];
+    data: T;
     error: IResponse;
     isLoading: boolean;
 }
@@ -25,7 +25,14 @@ export interface IResponse
     type: string;
     title: string;
     detail: string;
-    payload: any;
+    content: any;
     instance: string;
     errors: any[];
+}
+
+
+export interface IAction
+{
+    type: string;
+    payload: IResponse;
 }

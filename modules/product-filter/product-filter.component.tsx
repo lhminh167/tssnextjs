@@ -18,6 +18,7 @@ import ColorPicker from "../shared/color-picker/color-picker.component";
 import SizePicker from "../shared/size-picker/size-picker.component";
 import TwoHandleSlider from "../shared/slider/twoHandleSlider.component";
 import { productFilter } from "./product-filter.redux";
+import { ProductFilterFilterEnum } from "./product-filter.model";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -51,8 +52,8 @@ function ProductFilter(props) {
 
     const [choice, setChoice] = useState(productFilterState.choice)
 
-    const colors = productFilterState.filter.data.colors;
-    const sizes = productFilterState.filter.data.sizes;
+    const colors = productFilterState.filter.data.attributes.filter(x => x.attributeId === ProductFilterFilterEnum.Color);
+    const sizes = productFilterState.filter.data.attributes.filter(x => x.attributeId === ProductFilterFilterEnum.Size);
     // const categories = data.categories;
 
 
@@ -129,7 +130,7 @@ function ProductFilter(props) {
                 </Grid>
                 <Grid item xs={12}>
                     {productFilterState.product.data.length > 0 &&
-                        <ProductFilterProductList rows={productFilterState.product.data}/>
+                        <ProductFilterProductList rows={productFilterState.product.data} />
                     }
                 </Grid>
             </Grid>

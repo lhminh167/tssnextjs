@@ -1,5 +1,5 @@
 import { createSlice } from 'redux-starter-kit';
-import { IResponse, IState } from './crud.model';
+import { IAction, IState } from './crud.model';
 
 export const crudInitialState = (initialData: any = []) => {
     return {
@@ -45,15 +45,15 @@ const getPending = <T>(state: IState<T>) => {
     state.error = null;
 }
 
-const getSucceeded = <T>(state: IState<T>, action: IResponse) => {
-    state.data = action.payload;
+const getSucceeded = <T>(state: IState<T>, action: IAction) => {
+    state.data = action.payload.content;
     state.isLoading = false;
     state.error = null;
 }
 
-const getFailed = <T>(state: IState<T>, action: IResponse) => {
+const getFailed = <T>(state: IState<T>, action: IAction) => {
     state.isLoading = false;
-    state.error = action;
+    state.error = action.payload;
 }
 
 const getIdle = <T>(initialState: IState<T>) => (state: IState<T>) => {

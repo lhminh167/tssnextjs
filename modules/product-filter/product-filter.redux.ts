@@ -4,8 +4,7 @@ import { crudWatcher } from "../shared/crud/crud.watcher";
 import { IProductFilterChoice, IProductFilterFilter, productFilterUrl, IProductFilterProduct } from './product-filter.model';
 
 const filterInitialState: IProductFilterFilter = {
-    colors: [],
-    sizes: [],
+    attributes: [],
     categories: [],
 };
 
@@ -28,7 +27,7 @@ const filter = crudSlice<IProductFilterFilter>(
 
 const filterWatcher = crudWatcher(filter);
 
-const product = crudSlice<IProductFilterProduct>(
+const product = crudSlice<IProductFilterProduct[]>(
     productFilterUrl.product,
     productInitialState
 );

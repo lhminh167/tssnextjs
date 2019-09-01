@@ -5,11 +5,12 @@ import App, { Container } from 'next/app';
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import { Provider } from 'reactive-react-redux';
-import createStore, { TssStore } from '../modules/root/root.store';
+import createStore from '../modules/root/root.store';
 import theme from '../modules/shared/layout/layout.theme';
 import Notifier from '../modules/shared/notifier/notifier.component';
 import Layout from '../modules/shared/layout/layout.component';
 import Loader from '../modules/shared/loader/loader.component';
+import { TssStore } from '../modules/root/root.model';
 
 interface Props {
     store: TssStore
@@ -47,11 +48,6 @@ class MyApp extends App<Props> {
         return { pageProps }
     }
 
-    // constructor({ Component, ctx }) {
-    //     super({ Component, ctx });
-    //     // this.pageContext = getPageContext();
-    // }
-
     componentDidMount() {
         /**
      * Remove the server-side injected CSS.
@@ -62,7 +58,6 @@ class MyApp extends App<Props> {
         }
     }
 
-
     render() {
         const { Component, pageProps, store } = this.props
         return (
@@ -71,10 +66,7 @@ class MyApp extends App<Props> {
               tree thanks to React context. */}
                 <ThemeProvider
                     theme={theme}
-                // sheetsManager={this.pageContext.sheetsManager}
                 >
-
-
                     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                     <CssBaseline />
 
@@ -91,7 +83,6 @@ class MyApp extends App<Props> {
                     to render collected styles on server-side. */}
                             <Component
                                 {...pageProps}
-                            // pageContext={this.pageContext}
                             />
                         </Layout>
 

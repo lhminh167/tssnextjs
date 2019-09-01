@@ -5,7 +5,7 @@ import 'isomorphic-unfetch';
 import { put } from 'redux-saga/effects';
 import { mainLoader } from '../loader/loader.redux';
 import { notifier } from '../notifier/notifier.redux';
-import { IOptions, defaultOptions, IRequest, IResponse } from './crud.model';
+import { IOptions, defaultOptions, IRequest, IResponse, IAction } from './crud.model';
 
 es6promise.polyfill()
 
@@ -26,30 +26,33 @@ export function crudWorker(
         return res.json();
     }
 
-    function* get(action: IResponse) 
+    function* get(action: IAction)
     {
-        try 
+        try
         {
             if (options.withMainLoader) yield put(mainLoader.actions.show());
+
             const res = yield apiCall({
                 input: `/${slice.slice}${action && action.payload ? action.payload : ''}`
             });
+
             yield put(slice.actions.getSucceeded(res));
-            yield put(mainLoader.actions.hide());
-
-            const message: string = action.payload;
-
-
-
-        } 
-        catch (err) 
+        }
+        catch (err)
         {
             yield put(slice.actions.getFailed(err))
-            yield put(mainLoader.actions.hide())
-            yield put(notifier.actions.enqueue({
-                message: err,
-                options: { variant: 'danger' }
-            }))
+
+        }
+        finally
+        {
+            if (action.payload.title)
+                yield put(notifier.actions.enqueue({
+                    message: options.getSucceededMessage,
+                    options: { variant: 'success' },
+                }));
+
+            // if (options.withMainLoader)
+                yield put(mainLoader.actions.hide())
         }
         finally
         {

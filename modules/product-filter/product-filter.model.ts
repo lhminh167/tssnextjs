@@ -15,9 +15,14 @@ export interface IProps { }
 
 export interface IState { }
 
+export enum ProductFilterFilterEnum
+{
+    Size = 1,
+    Color = 2,
+}
+
 export interface IProductFilterFilter {
-    colors: IAttributeValue[];
-    sizes: IAttributeValue[];
+    attributes: IAttributeValue[];
     categories: ICategory[];
 }
 
@@ -39,6 +44,6 @@ export interface IProductFilterProduct extends IProduct {
 
 export interface IProductFilterState {
     filter: IState<IProductFilterFilter>;
-    product: IState<IProductFilterProduct>;
+    product: IState<IProductFilterProduct[]>;
     choice: IProductFilterChoice;
 }

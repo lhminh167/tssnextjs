@@ -10,11 +10,7 @@ import { readyStatePromise } from '../shared/middleware/ready-state-promise';
 import { crashReporter } from '../shared/middleware/crash-reporter';
 import { thunk } from '../shared/middleware/thunk';
 import { rafScheduler } from '../shared/middleware/raf-scheduler';
-
-export type TssStore = ReturnType<typeof createStore> & {
-    sagaTask: Task;
-};
-
+import { TssStore } from './root.model';
 
 function configureStore() {
     const sagaMiddleware = createSagaMiddleware();
