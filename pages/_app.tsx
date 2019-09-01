@@ -66,41 +66,39 @@ class MyApp extends App<Props> {
     render() {
         const { Component, pageProps, store } = this.props
         return (
-            <Container>
-                <Provider store={this.store}>
-                    {/* ThemeProvider makes the theme available down the React
+            <Provider store={this.store}>
+                {/* ThemeProvider makes the theme available down the React
               tree thanks to React context. */}
-                    <ThemeProvider
-                        theme={theme}
-                    // sheetsManager={this.pageContext.sheetsManager}
+                <ThemeProvider
+                    theme={theme}
+                // sheetsManager={this.pageContext.sheetsManager}
+                >
+
+
+                    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                    <CssBaseline />
+
+                    <SnackbarProvider
+                        maxSnack={2}
                     >
 
+                        <Notifier />
 
-                        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                        <CssBaseline />
+                        <Loader />
 
-                        <SnackbarProvider
-                            maxSnack={2}
-                        >
-
-                            <Notifier />
-
-                            <Loader />
-
-                            <Layout>
-                                {/* Pass pageContext to the _document though the renderPage enhancer
+                        <Layout>
+                            {/* Pass pageContext to the _document though the renderPage enhancer
                     to render collected styles on server-side. */}
-                                <Component
-                                    {...pageProps}
-                                // pageContext={this.pageContext}
-                                />
-                            </Layout>
+                            <Component
+                                {...pageProps}
+                            // pageContext={this.pageContext}
+                            />
+                        </Layout>
 
-                        </SnackbarProvider>
+                    </SnackbarProvider>
 
-                    </ThemeProvider>
-                </Provider>
-            </Container>
+                </ThemeProvider>
+            </Provider>
         )
     }
 }

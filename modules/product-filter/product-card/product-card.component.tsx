@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -7,48 +7,64 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { IProductFilterProduct } from '../product-filter.model';
+import { env } from '../../shared/config/config';
+import Image from '../../shared/image/image';
+import { Theme, Fab } from '@material-ui/core';
 
-const useStyles = makeStyles(
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        card: {
-            maxWidth: 345,
+        root: {
+            textAlign: "center",
+            // paddingTop: theme.spacing(3),
         },
-        media: {
-            height: 140,
+        cardContent: {
+        },
+        cardActions: {
+            justifyContent: "center",
+            paddingTop: theme.spacing(3),
+            paddingBottom: theme.spacing(3)
         },
     }),
 );
 
-function ProductCard(props) {
+interface Props {
+    input: IProductFilterProduct;
+}
+
+function ProductCard(props: Props) {
     const classes = useStyles(props);
+    const { input } = props;
 
     return (
-        <Card className={classes.card}>
-            <CardActionArea>
-                <CardMedia
-                    className={classes.media}
-                    image="/static/images/cards/contemplative-reptile.jpg"
-                    title="Contemplative Reptile"
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        Lizard
-          </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                        across all continents except Antarctica
-          </Typography>
-                </CardContent>
-            </CardActionArea>
-            <CardActions>
-                <Button size="small" color="primary">
-                    Share
-        </Button>
-                <Button size="small" color="primary">
-                    Learn More
-        </Button>
-            </CardActions>
-        </Card>
+        <Fragment>
+            <Card>
+                <CardActionArea className={classes.root}>
+                    <CardMedia>
+                        <Image
+                            imageName={input.thumbnail}
+                            imageStyles={{
+                                width: "100%"
+                            }}
+                        />
+                    </CardMedia>
+                    <CardContent className={classes.cardContent}>
+                        <Typography variant="subtitle1" gutterBottom>
+                            {input.name}
+                        </Typography>
+
+                        <Typography variant="subtitle2" gutterBottom>
+                            {input.price}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+                <CardActions className={classes.cardActions}>
+                    <Fab variant="extended" color="primary" size="small">
+                        Add To Cart
+                    </Fab>
+                </CardActions>
+            </Card >
+        </Fragment>
     );
 }
 

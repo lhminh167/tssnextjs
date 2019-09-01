@@ -12,7 +12,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useTrackedState } from 'reactive-react-redux';
-import CustomPaginationActionsTable from "../product-filter/product-list/product-list.component";
+import ProductFilterProductList from "../product-filter/product-list/product-list.component";
 import { IRootState } from "../root/root.model";
 import ColorPicker from "../shared/color-picker/color-picker.component";
 import SizePicker from "../shared/size-picker/size-picker.component";
@@ -46,14 +46,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function ProductFilter(props) {
     const classes = useStyles(props);
-    const { productFilter: { filter: { data } } } = useTrackedState<IRootState>();
+    const { productFilter: productFilterState } = useTrackedState<IRootState>();
     const dispatch = useDispatch();
 
-    const [choice, setChoice] = useState(productFilter.choiceInitialState)
+    const [choice, setChoice] = useState(productFilterState.choice)
 
-    const colors = data.colors;
-    const sizes = data.sizes;
-    const categories = data.categories;
+    const colors = productFilterState.filter.data.colors;
+    const sizes = productFilterState.filter.data.sizes;
+    // const categories = data.categories;
+
 
     const chooseColor = (colorId) => {
         setChoice({ ...choice, colorId })
@@ -68,6 +69,7 @@ function ProductFilter(props) {
     }
 
     const handleApply = () => {
+        dispatch(productFilter.product.actions.getPending());
     }
 
     const handleClear = () => {
@@ -75,14 +77,20 @@ function ProductFilter(props) {
 
     useEffect(() => {
         dispatch(productFilter.filter.actions.getPending());
+        dispatch(productFilter.product.actions.getPending());
         return () => { return; };
     }, [])
+
+    useEffect(() => {
+        console.log(productFilterState.product.data);
+        return () => { return; };
+    }, [productFilterState.product.data])
 
     return (
         <Fragment>
             <Grid container className={classes.root} spacing={2}>
                 <Grid item xs={12}>
-                    <ExpansionPanel>
+                    <ExpansionPanel defaultExpanded>
                         <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -120,7 +128,9 @@ function ProductFilter(props) {
 
                 </Grid>
                 <Grid item xs={12}>
-                    <CustomPaginationActionsTable />
+                    {productFilterState.product.data.length > 0 &&
+                        <ProductFilterProductList rows={productFilterState.product.data}/>
+                    }
                 </Grid>
             </Grid>
         </Fragment>

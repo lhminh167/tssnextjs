@@ -1,7 +1,7 @@
 import { createSlice } from 'redux-starter-kit';
 import { crudSlice } from "../shared/crud/crud.slice";
 import { crudWatcher } from "../shared/crud/crud.watcher";
-import { IProductFilterChoice, IProductFilterFilter, productFilterUrl } from './product-filter.model';
+import { IProductFilterChoice, IProductFilterFilter, productFilterUrl, IProductFilterProduct } from './product-filter.model';
 
 const filterInitialState: IProductFilterFilter = {
     colors: [],
@@ -19,16 +19,18 @@ const choiceInitialState: IProductFilterChoice = {
     }
 };
 
-const filter = crudSlice(
+const productInitialState: IProductFilterProduct[] = [];
+
+const filter = crudSlice<IProductFilterFilter>(
     productFilterUrl.filter,
     filterInitialState,
 );
 
 const filterWatcher = crudWatcher(filter);
 
-const product = crudSlice(
+const product = crudSlice<IProductFilterProduct>(
     productFilterUrl.product,
-    choiceInitialState
+    productInitialState
 );
 
 const productWatcher = crudWatcher(product);
