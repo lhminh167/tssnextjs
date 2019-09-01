@@ -5,11 +5,12 @@ import App, { Container } from 'next/app';
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import { Provider } from 'reactive-react-redux';
-import createStore, { TssStore } from '../modules/root/root.store';
+import createStore from '../modules/root/root.store';
 import theme from '../modules/shared/layout/layout.theme';
 import Notifier from '../modules/shared/notifier/notifier.component';
 import Layout from '../modules/shared/layout/layout.component';
 import Loader from '../modules/shared/loader/loader.component';
+import { TssStore } from '../modules/root/root.model';
 
 interface Props {
     store: TssStore
@@ -47,11 +48,6 @@ class MyApp extends App<Props> {
         return { pageProps }
     }
 
-    // constructor({ Component, ctx }) {
-    //     super({ Component, ctx });
-    //     // this.pageContext = getPageContext();
-    // }
-
     componentDidMount() {
         /**
      * Remove the server-side injected CSS.
@@ -62,45 +58,38 @@ class MyApp extends App<Props> {
         }
     }
 
-
     render() {
         const { Component, pageProps, store } = this.props
         return (
-            <Container>
-                <Provider store={this.store}>
-                    {/* ThemeProvider makes the theme available down the React
+            <Provider store={this.store}>
+                {/* ThemeProvider makes the theme available down the React
               tree thanks to React context. */}
-                    <ThemeProvider
-                        theme={theme}
-                    // sheetsManager={this.pageContext.sheetsManager}
+                <ThemeProvider
+                    theme={theme}
+                >
+                    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                    <CssBaseline />
+
+                    <SnackbarProvider
+                        maxSnack={2}
                     >
 
+                        <Notifier />
 
-                        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                        <CssBaseline />
+                        <Loader />
 
-                        <SnackbarProvider
-                            maxSnack={2}
-                        >
-
-                            <Notifier />
-
-                            <Loader />
-
-                            <Layout>
-                                {/* Pass pageContext to the _document though the renderPage enhancer
+                        <Layout>
+                            {/* Pass pageContext to the _document though the renderPage enhancer
                     to render collected styles on server-side. */}
-                                <Component
-                                    {...pageProps}
-                                // pageContext={this.pageContext}
-                                />
-                            </Layout>
+                            <Component
+                                {...pageProps}
+                            />
+                        </Layout>
 
-                        </SnackbarProvider>
+                    </SnackbarProvider>
 
-                    </ThemeProvider>
-                </Provider>
-            </Container>
+                </ThemeProvider>
+            </Provider>
         )
     }
 }

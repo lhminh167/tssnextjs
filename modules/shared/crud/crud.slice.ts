@@ -1,57 +1,61 @@
 import { createSlice } from 'redux-starter-kit';
-import * as ICrudModule from './crud.model';
+import { IAction, IState } from './crud.model';
 
-export function crudInitialState<T>(initialData: any = []) {
+export const crudInitialState = (initialData: any = []) => {
     return {
         data: initialData,
         error: null,
-        isLoading: false
-    }
-}
+        isLoading: false,
+    };
+};
 
-export function crudSlice(
-    slice: string,
+export const crudSlice = <T>(
+    slice: string = 'default',
     initialData: any = [],
     otherReducers = {},
     extraReducers = {}
-) {
+) => {
 
     const initialState = crudInitialState(initialData);
 
-    const mainReducers = {
-        getPending: (state) => {
-            state.data = initialState.data;
-            state.isLoading = true;
-            state.error = null;
-        },
-        getSucceeded: (state, action) => {
-            state.data = { ...initialState.data, ...action.payload };
-            state.isLoading = false;
-            state.error = null;
-        },
-        getFailed: (state, action) => {
-            state.data = initialState.data;
-            state.isLoading = false;
-            state.error = action.payload;
-        },
-        getIdle: (state) => {
-            state.data = initialState.data;
-            state.isLoading = false;
-            state.error = null;
-        },
-    }
-
     const reducers = {
-        ...mainReducers,
+        ...mainReducers<T>(initialState),
         ...otherReducers
-    }
+    };
 
-    const newSlice = createSlice({
+    return createSlice({
         slice,
         initialState,
         reducers,
         extraReducers
-    })
+    });
+};
 
-    return newSlice;
+const mainReducers = <T>(initialState: IState<T>) => {
+    return {
+        getPending,
+        getSucceeded,
+        getFailed,
+        getIdle: getIdle(initialState),
+    }
 }
+
+const getPending = <T>(state: IState<T>) => {
+    state.isLoading = true;
+    state.error = null;
+}
+
+const getSucceeded = <T>(state: IState<T>, action: IAction) => {
+    state.data = action.payload.content;
+    state.isLoading = false;
+    state.error = null;
+}
+
+const getFailed = <T>(state: IState<T>, action: IAction) => {
+    state.isLoading = false;
+    state.error = action.payload;
+}
+
+const getIdle = <T>(initialState: IState<T>) => (state: IState<T>) => {
+    state = initialState;
+};

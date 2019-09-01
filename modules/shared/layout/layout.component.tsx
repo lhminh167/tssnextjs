@@ -5,6 +5,10 @@ import Navbar from '../navbar/navbar.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    root: {
+      paddingTop: theme.spacing(5),
+      paddingBottom: theme.spacing(4),
+    },
   }),
 );
 
@@ -15,7 +19,7 @@ function Layout(props) {
     <Fragment>
       <Navbar />
       <main>
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" className={classes.root}>
           {props.children}
         </Container>
       </main>
