@@ -17,8 +17,8 @@ import { IRootState } from "../root/root.model";
 import ColorPicker from "../shared/color-picker/color-picker.component";
 import SizePicker from "../shared/size-picker/size-picker.component";
 import TwoHandleSlider from "../shared/slider/twoHandleSlider.component";
-import { productFilter } from "./product-filter.redux";
 import { ProductFilterFilterEnum } from "./product-filter.model";
+import { productFilter } from "./product-filter.slice";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,22 +31,18 @@ const useStyles = makeStyles((theme: Theme) =>
         expansionPanelActions: {
             justifyContent: 'center'
         },
-        fab: {
-            margin: theme.spacing(1),
-            minWidth: '122.25px'
-        },
         extendedIcon: {
             marginRight: theme.spacing(1),
         },
         button: {
-            margin: theme.spacing(1),
-            minWidth: '122.25px'
+            // margin: theme.spacing(1),
+            minWidth: '122.25px !important'
         },
     })
 );
 
-function ProductFilter(props) {
-    const classes = useStyles(props);
+function ProductFilter() {
+    const classes = useStyles({});
     const { productFilter: productFilterState } = useTrackedState<IRootState>();
     const dispatch = useDispatch();
 
@@ -82,11 +78,6 @@ function ProductFilter(props) {
         return () => { return; };
     }, [])
 
-    useEffect(() => {
-        console.log(productFilterState.product.data);
-        return () => { return; };
-    }, [productFilterState.product.data])
-
     return (
         <Fragment>
             <Grid container className={classes.root} spacing={2}>
@@ -116,7 +107,7 @@ function ProductFilter(props) {
                         </ExpansionPanelDetails>
                         <Divider />
                         <ExpansionPanelActions className={classes.expansionPanelActions}>
-                            <Fab variant="extended" color="primary" aria-label="Apply" className={classes.fab} onClick={handleApply}>
+                            <Fab variant="extended" color="primary" aria-label="Apply" className={classes.button} onClick={handleApply}>
                                 Apply
                             </Fab>
                             <Button color="primary" className={classes.button} onClick={handleClear}>

@@ -3,14 +3,15 @@ import createSagaMiddleware, { Task } from 'redux-saga';
 import { rootReducer } from './root.reducer';
 import { rootInitialState } from './root.state';
 import { rootWatcher } from './root.watcher';
-import { reduxLogger } from '../shared/middleware/redux-logger';
-import { timeoutScheduler } from '../shared/middleware/timeout-scheduler';
-import { vanillaPromise } from '../shared/middleware/vanilla-promise';
-import { readyStatePromise } from '../shared/middleware/ready-state-promise';
-import { crashReporter } from '../shared/middleware/crash-reporter';
-import { thunk } from '../shared/middleware/thunk';
-import { rafScheduler } from '../shared/middleware/raf-scheduler';
+import { reduxLogger } from '../shared/middlewares/redux-logger';
+import { timeoutScheduler } from '../shared/middlewares/timeout-scheduler';
+import { vanillaPromise } from '../shared/middlewares/vanilla-promise';
+import { readyStatePromise } from '../shared/middlewares/ready-state-promise';
+import { crashReporter } from '../shared/middlewares/crash-reporter';
+import { thunk } from '../shared/middlewares/thunk';
+import { rafScheduler } from '../shared/middlewares/raf-scheduler';
 import { TssStore } from './root.model';
+import { loaderHandler } from '../shared/middlewares/loader-handler';
 
 function configureStore() {
     const sagaMiddleware = createSagaMiddleware();
@@ -30,8 +31,9 @@ function configureStore() {
         // thunk,
         // vanillaPromise,
         // readyStatePromise,
-        reduxLogger,
-        crashReporter
+        loaderHandler,
+        // reduxLogger,
+        // crashReporter
     ];
 
     const store : TssStore = createStore(

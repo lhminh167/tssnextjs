@@ -192,6 +192,7 @@ ModelManifest.xml
 .vs
 .idea
 .vscode
+.theia
 project.lock.json
 
 node_modules

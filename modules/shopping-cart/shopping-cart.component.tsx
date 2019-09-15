@@ -1,0 +1,163 @@
+import Paper from '@material-ui/core/Paper';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import React, { useEffect } from 'react';
+import { useDispatch, useTrackedState } from 'reactive-react-redux';
+import { IRootState } from '../root/root.model';
+import QuantityPicker from '../shared/quantity-picker/quantity-picker.component';
+import { Order } from './helpers/sorting';
+import EnhancedTableHead from './helpers/table-head.component';
+import EnhancedTableToolbar from './helpers/table-toolbar.component';
+import { IShopingCartItem } from './shopping-cart.model';
+import shoppingCart from './shopping-cart.slice';
+import ShoppingCartItemDetail from './item-detail/item-detail.component';
+import TableFooter from '@material-ui/core/TableFooter';
+import Fab from '@material-ui/core/Fab';
+import Grid from '@material-ui/core/Grid';
+
+export const useShoppingCartStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+
+        },
+        paper: {
+
+        },
+        table: {
+            minWidth: 750,
+        },
+        tableWrapper: {
+            overflowX: 'auto',
+            margin: theme.spacing(3),
+        },
+        visuallyHidden: {
+
+        },
+    }),
+);
+
+function ShoppingCart(props) {
+    const classes = useShoppingCartStyles({});
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+    const { shoppingCart: { data: rows } } = useTrackedState<IRootState>();
+    const dispatch = useDispatch();
+
+
+    useEffect(() => {
+        dispatch(shoppingCart.actions.getCartPending());
+        return () => { return; };
+    }, []);
+
+
+    let numOfItems = rows ? rows.map(x => x.quantity).reduce((acc, cur) => { return acc + cur }, 0) : 0;
+
+    function handleChangePage(event: unknown, newPage: number) {
+        setPage(newPage);
+    }
+
+    function handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement>) {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    }
+
+    function updateItem(item: IShopingCartItem) {
+        dispatch(shoppingCart.actions.updateCartPending({ content: item }));
+    }
+
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+
+    return (
+        <Paper className={classes.paper}>
+
+            <EnhancedTableToolbar numOfItems={numOfItems} />
+            <div className={classes.tableWrapper}>
+
+                <Table
+                    className={classes.table}
+                    aria-labelledby="tableTitle"
+                    size="small"
+                // stickyHeader
+                >
+                    <EnhancedTableHead
+                        classes={classes}
+                        rowCount={rows.length}
+                    />
+                    <TableBody>
+                        {
+                            // stableSort(rows, getSorting(order, orderBy))
+                            rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+
+                                    const attributes = row.attributes.split(':')[1].split('/');
+                                    const color = attributes[0];
+                                    const size = attributes[1];
+
+                                    return (
+                                        <TableRow
+                                            hover
+                                            role="checkbox"
+                                            tabIndex={-1}
+                                            key={row.itemId}
+                                        >
+                                            <TableCell component="th" id={labelId} scope="row" padding="none">
+                                                <ShoppingCartItemDetail input={row} color={color} />
+                                            </TableCell>
+                                            <TableCell align="center">{size}</TableCell>
+                                            <TableCell align="center">
+                                                <QuantityPicker quantity={row.quantity} output={(quantity) => updateItem({ itemId: row.itemId, quantity })} />
+                                            </TableCell>
+                                            <TableCell align="center">{row.price}</TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                        {emptyRows > 0 && (
+                            <TableRow style={{ height: 49 * emptyRows }}>
+                                <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                backIconButtonProps={{
+                    'aria-label': 'previous page',
+                }}
+                nextIconButtonProps={{
+                    'aria-label': 'next page',
+                }}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+            <Grid container
+            justify="space-between"
+            spacing={2}
+            >
+                <Grid item>
+                    <Fab variant="extended" color="primary" aria-label="Apply">
+                        Apply
+                    </Fab>
+                </Grid>
+                <Grid item>
+                    <Fab variant="extended" color="primary" aria-label="Apply">
+                        Apply
+                    </Fab>
+                </Grid>
+            </Grid>
+
+        </Paper >
+    );
+}
+
+export default ShoppingCart;

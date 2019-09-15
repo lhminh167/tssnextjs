@@ -5,7 +5,7 @@ import 'lazysizes/plugins/parent-fit/ls.parent-fit';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        image: (props: Props) => ({...props.imageStyles})
+        image: (props: Props) => ({ ...props.imageStyles })
     }),
 );
 
@@ -24,7 +24,7 @@ function Image(props: Props) {
             <img
 
                 data-src={
-                    "https://res.cloudinary.com/"+
+                    "https://res.cloudinary.com/" +
                     (cloudName ? cloudName : "lhminh167") +
                     "/image/upload/f_auto,w_auto,c_scale,q_auto,dpr_auto/tss/" +
                     imageName.replace(/\.[^/.]+$/, "")

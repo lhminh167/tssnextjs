@@ -1,14 +1,14 @@
 import { all, call } from 'redux-saga/effects';
-import { productFilter } from '../product-filter/product-filter.redux';
+import { productFilterWatchers } from '../product-filter/product-filter.saga';
+import { shoppingCartWatchers } from '../shopping-cart/shopping-cart.saga';
 
 const watchers = [
-    ...productFilter.filterWatcher,
-    ...productFilter.productWatcher
+    ...productFilterWatchers,
+    ...shoppingCartWatchers
 ]
 
 export function* rootWatcher() {
     yield all(
-        
         watchers.map(w => call(w))
-    )
+    );
 }

@@ -14,8 +14,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import SignInModal from '../../user/sign-in/sign-in';
-import ShoppingCartModal from '../../shopping-cart/shopping-cart';
+import Link from 'next/link';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -169,24 +170,17 @@ function Navbar() {
         <AppBar position="static" color="default">
             <Toolbar
                 className={classes.toolBar}
-                variant = "dense"
+                variant="dense"
             >
                 <Typography className={classes.title} variant="subtitle2" noWrap>
                     Hi! Sign in or Register
-                    <SignInModal/>
-                    <ShoppingCartModal/>
                 </Typography>
 
                 <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
                     <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <MailIcon />
-                        </Badge>
-                    </IconButton>
-                    <IconButton color="inherit">
-                        <Badge badgeContent={17} color="secondary">
-                            <NotificationsIcon />
+                        <Badge badgeContent={4}>
+                            <ShoppingCartOutlinedIcon color="action" />
                         </Badge>
                     </IconButton>
                     <IconButton
@@ -221,9 +215,11 @@ function Navbar() {
                 >
                     <MenuIcon />
                 </IconButton>
-                <Typography className={classes.title} variant="h6" noWrap>
-                    Material-UI
-          </Typography>
+                <Link href="/" as="/">
+                    <Typography className={classes.title} variant="h6" noWrap>
+                        SHOPMATE
+                    </Typography>
+                </Link>
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
                         <SearchIcon />
@@ -238,25 +234,13 @@ function Navbar() {
                 </div>
                 <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
-                    <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <MailIcon />
-                        </Badge>
-                    </IconButton>
-                    <IconButton color="inherit">
-                        <Badge badgeContent={17} color="secondary">
-                            <NotificationsIcon />
-                        </Badge>
-                    </IconButton>
-                    <IconButton
-                        edge="end"
-                        aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                        aria-haspopup="true"
-                        onClick={handleProfileMenuOpen}
-                        color="inherit"
-                    >
-                        <AccountCircle />
-                    </IconButton>
+                    <Link href="/shopping-cart" as="/shopping-cart">
+                        <IconButton color="inherit">
+                            <Badge badgeContent={4} color="primary">
+                                <ShoppingCartOutlinedIcon color="action" />
+                            </Badge>
+                        </IconButton>
+                    </Link>
                 </div>
                 <div className={classes.sectionMobile}>
                     <IconButton aria-haspopup="true" onClick={handleMobileMenuOpen} color="inherit">

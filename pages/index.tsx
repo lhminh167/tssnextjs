@@ -10,7 +10,6 @@ function Index(props) {
 
             <ProductFilter />
 
-
         </Fragment>
     )
 }

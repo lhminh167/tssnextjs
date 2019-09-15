@@ -1,4 +1,6 @@
-import { createMuiTheme } from "@material-ui/core/styles";
+import { createMuiTheme, Theme } from "@material-ui/core/styles";
+import { makeStyles, createStyles } from "@material-ui/styles";
+import { ColorProperty, Color } from "csstype";
 
 export const primary = {
     main: "#FFFFFF",
@@ -36,6 +38,9 @@ const theme = createMuiTheme({
             }
         },
         MuiButton: {
+            root: {
+                textTransform: "none"
+            },
             containedPrimary: {
                 color: primary.main,
                 backgroundColor: primary.contrastText
@@ -83,6 +88,9 @@ const theme = createMuiTheme({
             },
         },
         MuiFab: {
+            root: {
+                textTransform: "none"
+            },
             primary: {
                 color: primary.main,
                 backgroundColor: primary.contrastText
@@ -91,7 +99,33 @@ const theme = createMuiTheme({
                 color: secondary.main,
                 backgroundColor: secondary.contrastText
             },
-        }
+        },
+        MuiBadge: {
+            colorPrimary: {
+                color: primary.main,
+                backgroundColor: primary.contrastText,
+            },
+            colorSecondary: {
+                color: secondary.main,
+                backgroundColor: secondary.contrastText,
+            },
+        },
+        MuiIconButton: {
+            colorPrimary: {
+                color: primary.main,
+                backgroundColor: primary.contrastText,
+            }
+        },
+        // MuiIcon: {
+        //     colorPrimary: {
+        //         color: primary.contrastText,
+        //         backgroundColor: primary.main,
+        //     },
+        //     colorSecondary: {
+        //         color: primary.contrastText,
+        //         backgroundColor: primary.main,
+        //     },
+        // },
     }
 });
 

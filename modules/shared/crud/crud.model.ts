@@ -1,38 +1,33 @@
-export const defaultOptions: IOptions = {
-    withMainLoader: true,
-    getSucceededMessage: '',
-};
-
 export interface IState<T> {
     data: T;
-    error: IResponse;
+    error: IResponse<T>;
     isLoading: boolean;
 }
 
-export interface IOptions {
-    withMainLoader: boolean,
-    getSucceededMessage: string
-}
-
-export interface IRequest {
-    input: RequestInfo,
-    init?: RequestInit,
-}
-
-export interface IResponse
+export interface IResponse<T>
 {
-    status: number;
-    type: string;
-    title: string;
-    detail: string;
-    content: any;
-    instance: string;
-    errors: any[];
+    status?: number;
+    type?: string;
+    title?: string;
+    detail?: string;
+    content?: T;
+    instance?: string;
+    errors?: any[];
 }
 
-
-export interface IAction
+export interface IAction<T>
 {
-    type: string;
-    payload: IResponse;
+    type?: string;
+    payload: IResponse<T>;
+}
+
+export enum HttpMethod
+{
+    DELETE = 'DELETE',
+    GET = 'GET',
+    HEAD = 'HEAD',
+    POST = 'POST',
+    OPTIONS = 'OPTIONS',
+    PUT = 'PUT',
+    PATCH = 'PATCH',
 }

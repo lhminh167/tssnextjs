@@ -29,14 +29,14 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-interface Props {
+interface IProps {
     rows: IProductFilterProduct[];
     width: Breakpoint;
     // width: string;
 }
 
 
-function ProductFilterProductList(props: Props) {
+function ProductFilterProductList(props: IProps) {
     const classes = useStyles(props);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(12);

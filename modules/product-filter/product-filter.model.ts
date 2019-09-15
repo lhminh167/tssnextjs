@@ -3,17 +3,13 @@ import { IAttributeValue } from '../shared/models/attribute-value.model';
 import { ICategory } from './../shared/models/category.model';
 import { IProduct } from './../shared/models/product.model';
 
-const productFilterBaseUrl = 'ProductFilter/';
+const productFilterBaseUrl = '/ProductFilter';
 
 export const productFilterUrl = {
-    filter: productFilterBaseUrl + 'Filter',
-    choice: productFilterBaseUrl + 'Choice',
-    product: productFilterBaseUrl + 'Product'
+    filter: productFilterBaseUrl + '/Filter',
+    choice: productFilterBaseUrl + '/Choice',
+    product: productFilterBaseUrl + '/Product'
 }
-
-export interface IProps { }
-
-export interface IState { }
 
 export enum ProductFilterFilterEnum
 {
