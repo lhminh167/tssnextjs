@@ -36,11 +36,11 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-interface EnhancedTableToolbarProps {
+interface IProps {
     numOfItems: number;
 }
 
-const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
+const ShoppingCartTableToolbar = (props: IProps) => {
     const classes = useToolbarStyles({});
     const {numOfItems} = props;
 
@@ -59,4 +59,4 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     );
 };
 
-export default EnhancedTableToolbar;
+export default ShoppingCartTableToolbar;

@@ -6,28 +6,28 @@ import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import AddressForm from './delivery-form.component.ts/delivery-form.component';
+import DeliveryForm from './delivery-form.component.ts/delivery-form.component';
 import PaymentForm from './payment-form/payment-form.component';
 import Review from './confirmation-form/confirmation-form.component';
 import FinishForm from './finish-form/finish-form.component';
 
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+// function Copyright() {
+//   return (
+//     <Typography variant="body2" color="textSecondary" align="center">
+//       {'Copyright © '}
+//       <Link color="inherit" href="https://material-ui.com/">
+//         Your Website
+//       </Link>{' '}
+//       {new Date().getFullYear()}
+//       {'.'}
+//     </Typography>
+//   );
+// }
 
 const useStyles = makeStyles(theme => createStyles({
   appBar: {
@@ -61,6 +61,7 @@ const useStyles = makeStyles(theme => createStyles({
     justifyContent: 'flex-end',
   },
   button: {
+    minWidth: 98,
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
   },
@@ -71,7 +72,7 @@ const steps = ['Shipping address', 'Payment details', 'Review your order'];
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return <AddressForm />;
+      return <DeliveryForm />;
     case 1:
       return <PaymentForm />;
     case 2:
@@ -96,16 +97,16 @@ export default function Checkout() {
   return (
     <React.Fragment>
       {/* <CssBaseline /> */}
-      <AppBar position="absolute" color="default" className={classes.appBar}>
+      {/* <AppBar position="absolute" color="default" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" color="inherit" noWrap>
             Company name
           </Typography>
         </Toolbar>
-      </AppBar>
-      <main className={classes.layout}>
+      </AppBar> */}
+      {/* <main className={classes.layout}> */}
         <Paper className={classes.paper}>
-          <Typography component="h1" variant="h4" align="center">
+          <Typography component="h1" variant="h4" align="left">
             Checkout
           </Typography>
           <Stepper activeStep={activeStep} className={classes.stepper}>
@@ -123,25 +124,29 @@ export default function Checkout() {
                 {getStepContent(activeStep)}
                 <div className={classes.buttons}>
                   {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
+                    <Fab
+                        onClick={handleBack}
+                        className={classes.button}
+                        variant="extended"
+                    >
                       Back
-                    </Button>
+                    </Fab>
                   )}
-                  <Button
-                    variant="contained"
+                  <Fab
+                    variant="extended"
                     color="primary"
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
-                  </Button>
+                    {activeStep === steps.length - 1 ? 'Pay' : 'Next Step'}
+                  </Fab>
                 </div>
               </React.Fragment>
             )}
           </React.Fragment>
         </Paper>
-        <Copyright />
-      </main>
+        {/* <Copyright /> */}
+      {/* </main> */}
     </React.Fragment>
   );
 }

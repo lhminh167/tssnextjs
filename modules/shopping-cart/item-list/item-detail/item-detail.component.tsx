@@ -9,9 +9,9 @@ import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import useTheme from '@material-ui/styles/useTheme';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'reactive-react-redux';
-import Image from '../../shared/image/image';
-import { IShopingCartItem } from '../shopping-cart.model';
-import shoppingCart from '../../shopping-cart/shopping-cart.slice';
+import Image from '../../../shared/image/image';
+import { IShopingCartItem } from '../../shopping-cart.model';
+import shoppingCart from '../../../shopping-cart/shopping-cart.slice';
 
 export const useShoppingCartStyles = makeStyles((theme: Theme) =>
     createStyles({

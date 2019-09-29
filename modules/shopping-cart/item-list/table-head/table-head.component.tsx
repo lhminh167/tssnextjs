@@ -4,9 +4,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import React from 'react';
-import { useShoppingCartStyles } from '../shopping-cart.component';
 import Typography from '@material-ui/core/Typography';
-import { Order } from './sorting';
 
 interface Data {
     item: number;
@@ -30,16 +28,15 @@ const headCells: HeadCell[] = [
     { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
 ];
 
-interface EnhancedTableProps {
-    classes: ReturnType<typeof useShoppingCartStyles>;
+interface IProps {
     // onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
     // order: Order;
     // orderBy: string;
     rowCount: number;
 }
 
-function EnhancedTableHead(props: EnhancedTableProps) {
-    const { classes,
+function ShoppingCartTableHead(props: IProps) {
+    const {
         // order,
         // orderBy,
         rowCount,
@@ -81,4 +78,4 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     );
 }
 
-export default EnhancedTableHead;
+export default ShoppingCartTableHead;

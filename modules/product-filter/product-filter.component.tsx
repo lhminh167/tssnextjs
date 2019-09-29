@@ -16,7 +16,6 @@ import ProductFilterProductList from "../product-filter/product-list/product-lis
 import { IRootState } from "../root/root.model";
 import ColorPicker from "../shared/color-picker/color-picker.component";
 import SizePicker from "../shared/size-picker/size-picker.component";
-import TwoHandleSlider from "../shared/slider/twoHandleSlider.component";
 import { ProductFilterFilterEnum } from "./product-filter.model";
 import { productFilter } from "./product-filter.slice";
 
@@ -100,7 +99,7 @@ function ProductFilter() {
                             {sizes && sizes.length > 0 &&
                                 <SizePicker sizes={sizes} output={chooseSize} />
                             }
-                            <TwoHandleSlider />
+                            {/* <TwoHandleSlider /> */}
                             {/*categories && categories.length > 0 &&
                                 <BrandPicker categories={categories} output={chooseCategory} />
                             */}
