@@ -4,7 +4,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from "@material-ui/core/FormLabel";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { ChangeEvent } from 'react';
-import { useDispatch, useTrackedState } from 'reactive-react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import { IRootState } from '../../root/root.model';
 import { uncheckedColor } from '../layout/layout.theme';
 
@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function BrandPicker(props) {
     const classes = useStyles(props);
-    const { productFilter: { filter: { data } } } = useTrackedState<IRootState>();
+    // const { productFilter: { filter: { data } } } = useTrackedState<IRootState>();
+    // const data = useSelector(state => state.productFilter.filter.data)
     const dispatch = useDispatch();
 
     const brands = props.categories;
@@ -40,9 +41,9 @@ function BrandPicker(props) {
         const toBeUnchecked = chosenCategoryIds.some(chosenCategoryId => chosenCategoryId === eventValue)
 
         // toBeUnchecked ?
-            
+
         //     dispatch(productFilter.actions.removeCategory(eventValue)) :
-            
+
         //     dispatch(productFilter.actions.chooseCategory(eventValue));
     };
 

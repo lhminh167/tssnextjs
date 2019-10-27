@@ -82,9 +82,15 @@ function getStepContent(step) {
   }
 }
 
-export default function Checkout() {
+interface IProps {
+  data: any;
+}
+
+export default function Checkout(props: IProps) {
   const classes = useStyles({});
   const [activeStep, setActiveStep] = React.useState(0);
+  const {data} = props;
+
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);

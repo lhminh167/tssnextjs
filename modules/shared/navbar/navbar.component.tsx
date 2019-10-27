@@ -15,7 +15,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
-import SignInModal from '../../user/sign-in/sign-in';
+// import SignInModal from '../../user/sign-in/sign-in';
 import Link from 'next/link';
 
 const useStyles = makeStyles((theme: Theme) =>

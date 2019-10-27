@@ -11,13 +11,13 @@ import Typography from "@material-ui/core/Typography";
 import ClearIcon from "@material-ui/icons/Clear";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Fragment, useEffect, useState } from "react";
-import { useDispatch, useTrackedState } from 'reactive-react-redux';
 import ProductFilterProductList from "../product-filter/product-list/product-list.component";
-import { IRootState } from "../root/root.model";
-import ColorPicker from "../shared/color-picker/color-picker.component";
-import SizePicker from "../shared/size-picker/size-picker.component";
+// import { IRootState } from "../root/root.model";
+import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import { ProductFilterFilterEnum } from "./product-filter.model";
 import { productFilter } from "./product-filter.slice";
+import ColorPicker from "../shared/color-picker/color-picker.component";
+import SizePicker from "../shared/size-picker/size-picker.component";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -40,17 +40,21 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function ProductFilter() {
+
+
+interface IProps {
+    data: any,
+}
+
+function ProductFilter(props: IProps) {
     const classes = useStyles({});
-    const { productFilter: productFilterState } = useTrackedState<IRootState>();
+    const { data } = props;
     const dispatch = useDispatch();
+    const [choice, setChoice] = useState(data.choice);
 
-    const [choice, setChoice] = useState(productFilterState.choice)
-
-    const colors = productFilterState.filter.data.attributes.filter(x => x.attributeId === ProductFilterFilterEnum.Color);
-    const sizes = productFilterState.filter.data.attributes.filter(x => x.attributeId === ProductFilterFilterEnum.Size);
+    const colors = data.filter.data.attributes.filter(x => x.attributeId === ProductFilterFilterEnum.Color);
+    const sizes = data.filter.data.attributes.filter(x => x.attributeId === ProductFilterFilterEnum.Size);
     // const categories = data.categories;
-
 
     const chooseColor = (colorId) => {
         setChoice({ ...choice, colorId })
@@ -72,13 +76,20 @@ function ProductFilter() {
     }
 
     useEffect(() => {
-        dispatch(productFilter.filter.actions.getPending());
-        dispatch(productFilter.product.actions.getPending());
+        if (data.filter.data.length === 0) {
+            dispatch(productFilter.filter.actions.getPending());
+        }
+
+        if (data.product.data.length === 0) {
+            dispatch(productFilter.product.actions.getPending());
+        }
+
         return () => { return; };
     }, [])
 
     return (
         <Fragment>
+
             <Grid container className={classes.root} spacing={2}>
                 <Grid item xs={12}>
                     <ExpansionPanel defaultExpanded>
@@ -93,12 +104,10 @@ function ProductFilter() {
                         </ExpansionPanelSummary>
                         <Divider />
                         <ExpansionPanelDetails className={classes.expansionPanelDetails}>
-                            {colors && colors.length > 0 &&
-                                <ColorPicker colors={colors} output={chooseColor} />
-                            }
-                            {sizes && sizes.length > 0 &&
-                                <SizePicker sizes={sizes} output={chooseSize} />
-                            }
+                            {colors && colors.length > 0 && <ColorPicker colors={colors} output={chooseColor} />}
+
+                            {/* {sizes && sizes.length > 0 && <SizePicker sizes={sizes} output={chooseSize} />} */}
+
                             {/* <TwoHandleSlider /> */}
                             {/*categories && categories.length > 0 &&
                                 <BrandPicker categories={categories} output={chooseCategory} />
@@ -116,12 +125,18 @@ function ProductFilter() {
                         </ExpansionPanelActions>
                     </ExpansionPanel>
 
-
                 </Grid>
+
+            </Grid>
+
+
+
+            <Grid container className={classes.root} spacing={2}>
+
                 <Grid item xs={12}>
-                    {productFilterState.product.data.length > 0 &&
-                        <ProductFilterProductList rows={productFilterState.product.data} />
-                    }
+
+                    <ProductFilterProductList rows={data.product.data} />
+
                 </Grid>
             </Grid>
         </Fragment>

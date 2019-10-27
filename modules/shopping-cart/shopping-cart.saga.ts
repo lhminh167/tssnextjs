@@ -1,5 +1,5 @@
 import { IShopingCartItem } from './shopping-cart.model';
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { getCart, addItem, updateCart, removeItem, saveItemForLater } from './shopping-cart.service';
 import shoppingCart from './shopping-cart.slice';
 import { IAction } from '../shared/crud/crud.model';
@@ -88,10 +88,16 @@ function* saveItemForLaterWorker(action) {
 // }
 
 export const shoppingCartWatchers = [
-    getCartWatcher,
+    // getCartWatcher,
     // getWishlistWatcher,
-    addItemWatcher,
-    updateCartWatcher,
-    removeItemWatcher,
-    saveItemForLaterWatcher
+    // addItemWatcher,
+    // updateCartWatcher,
+    // removeItemWatcher,
+    // saveItemForLaterWatcher,
+    takeLatest(shoppingCart.actions.getCartPending, getCartWorker),
+    takeLatest(shoppingCart.actions.addItemPending, addItemWorker),
+    takeLatest(shoppingCart.actions.updateCartPending, updateCartWorker),
+    takeLatest(shoppingCart.actions.removeItemPending, removeItemWorker),
+    takeLatest(shoppingCart.actions.saveItemForLaterPending, saveItemForLaterWorker),
+
 ];

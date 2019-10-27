@@ -1,8 +1,8 @@
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import { useDispatch, useTrackedState } from 'reactive-react-redux';
 import { IRootState } from '../../root/root.model';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function Loader(props) {
     const classes = useStyles(props);
-    const state = useTrackedState<IRootState>();
+    const state = useSelector(state => state.mainLoader.isLoading);
     const dispatch = useDispatch();
 
     // useEffect(() => {
@@ -47,9 +47,9 @@ function Loader(props) {
     // function handleClick() {
     //     dispatch(hideMainLoader())
     // }
-    
+
     if (state.mainLoader.isLoading) return (
-        
+
         <Container className={classes.root}>
             <div className={classes.container}>
                 <CircularProgress className={classes.progress} color="primary" />

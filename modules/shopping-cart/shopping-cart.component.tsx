@@ -2,7 +2,7 @@ import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import ShoppingCartItemList from './item-list/item-list.component';
-import Checkout from './checkout/checkout.component';
+import Checkout from '../checkout/checkout.component';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
@@ -32,10 +32,14 @@ export const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-function ShoppingCart() {
-    const classes = useStyles({});
+interface IProps {
+    data: any;
+}
 
+function ShoppingCart(props: IProps) {
+    const classes = useStyles({});
     const [isCheckout, setIsCheckout] = useState(true);
+    const {data} = props;
 
     function showCheckout() {
         setIsCheckout(true);
@@ -44,12 +48,7 @@ function ShoppingCart() {
     return (
         <Paper className={classes.paper}>
 
-            {
-                isCheckout ?
-                <Checkout/>
-                :
-                <ShoppingCartItemList output={showCheckout}/>
-            }
+                <ShoppingCartItemList data={data}/>
 
 
 

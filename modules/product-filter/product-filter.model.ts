@@ -1,4 +1,4 @@
-import { IState } from './../shared/crud/crud.model';
+// import { IState } from './../shared/crud/crud.model';
 import { IAttributeValue } from '../shared/models/attribute-value.model';
 import { ICategory } from './../shared/models/category.model';
 import { IProduct } from './../shared/models/product.model';
@@ -38,8 +38,8 @@ export interface IProductFilterProduct extends IProduct {
     attributes: IAttributeValue[];
 }
 
-export interface IProductFilterState {
-    filter: IState<IProductFilterFilter>;
-    product: IState<IProductFilterProduct[]>;
-    choice: IProductFilterChoice;
-}
+// export interface IProductFilterState {
+//     filter: IState<IProductFilterFilter>;
+//     product: IState<IProductFilterProduct[]>;
+//     choice: IProductFilterChoice;
+// }

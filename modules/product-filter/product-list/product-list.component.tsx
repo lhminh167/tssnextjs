@@ -13,8 +13,11 @@ import ProductCard from '../product-card/product-card.component';
 import PaginationActions from '../pagination-actions/pagination-actions';
 import { GridList, GridListTileBar, IconButton, GridListTile, Card } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
-import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+// import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
+import { ThemeProvider } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import mediaQuery from 'css-mediaquery';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,8 +34,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IProps {
     rows: IProductFilterProduct[];
-    width: Breakpoint;
-    // width: string;
 }
 
 
@@ -40,16 +41,20 @@ function ProductFilterProductList(props: IProps) {
     const classes = useStyles(props);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(12);
-    const { rows, width } = props;
+
+    const { rows } = props;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
     const theme = useTheme();
-    const cols =
-        isWidthUp('lg', width) ? 5 :
-        isWidthUp('md', width) ? 4 :
-        isWidthUp('sm', width) ? 3 :
-        isWidthUp('xs', width) ? 2 :
-        1;
+
+    const ssrMatchMedia = query => ({
+        matches: mediaQuery.match(query, {
+            // The estimated CSS width of the browser.
+            width: 800,
+        }),
+    });
+
+    const matches = useMediaQuery('(min-width:600px)');
 
     function handleChangePage(
         event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
@@ -64,21 +69,29 @@ function ProductFilterProductList(props: IProps) {
         setRowsPerPage(parseInt(event.target.value, 10));
     }
 
-    return (
-        <Fragment>
 
-            <GridList
-            cellHeight={"auto"}
-            spacing={theme.spacing(3)}
-            className={classes.gridList}
-            cols={cols}
+    return (
+        <div>
+            <ThemeProvider
+                theme={{
+                    props: {
+                        // Change the default options of useMediaQuery
+                        MuiUseMediaQuery: { ssrMatchMedia },
+                    },
+                }}
             >
-                {rows && rows.length && rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(tile => (
-                    <GridListTile key={tile.thumbnail} classes={{tile: classes.gridListTile}}>
-                        <ProductCard key={tile.thumbnail} input={tile} />
-                    </GridListTile>
-                ))}
-            </GridList>
+                <GridList
+                    cellHeight={"auto"}
+                    className={classes.gridList}
+                    cols={matches ? 4 : 2}
+                >
+                    {rows && rows.length && rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(tile => (
+                        <GridListTile key={tile.thumbnail} classes={{ tile: classes.gridListTile }}>
+                            <ProductCard key={tile.thumbnail} data={tile} />
+                        </GridListTile>
+                    ))}
+                </GridList>
+            </ThemeProvider>
 
             <TablePagination
                 component="div"
@@ -96,8 +109,8 @@ function ProductFilterProductList(props: IProps) {
                 ActionsComponent={PaginationActions}
             />
 
-        </Fragment>
+        </div>
     );
 }
 
-export default withWidth()(ProductFilterProductList);
+export default ProductFilterProductList;

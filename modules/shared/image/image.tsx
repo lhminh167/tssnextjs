@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import lazySizes from 'lazysizes';
-import 'lazysizes/plugins/parent-fit/ls.parent-fit';
+import LazyLoad from 'react-lazyload';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -21,20 +20,20 @@ function Image(props: Props) {
 
     return (
         <Fragment>
-            <img
+            <LazyLoad height={200} once>
+                <img
 
-                data-src={
-                    "https://res.cloudinary.com/" +
-                    (cloudName ? cloudName : "lhminh167") +
-                    "/image/upload/f_auto,w_auto,c_scale,q_auto,dpr_auto/tss/" +
-                    imageName.replace(/\.[^/.]+$/, "")
-                }
+                    src={
+                        "https://res.cloudinary.com/" +
+                        (cloudName ? cloudName : "lhminh167") +
+                        "/image/upload/f_auto,w_auto,c_scale,q_auto,dpr_auto/tss/" +
+                        imageName.replace(/\.[^/.]+$/, "")
+                    }
 
-                className={"lazyload cld-responsive" + classes.image}
+                    className={"cld-responsive" + classes.image}
+                />
+            </LazyLoad>
 
-                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-
-            />
         </Fragment>
     );
 }

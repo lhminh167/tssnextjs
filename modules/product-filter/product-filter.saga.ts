@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { getFilter, getProduct } from './product-filter.service';
 import { productFilter } from './product-filter.slice';
 
@@ -26,7 +26,18 @@ function* getProductWorker() {
         yield put(productFilter.product.actions.getFailed(error));
 }
 
+// function * loadDataSaga () {
+//   try {
+//     const res = yield fetch('https://tssnetcore.herokuapp.com/api/ProductFilter/Product')
+//     const data = yield res.json()
+//     yield put(user.actions.loadDataSuccess(data))
+//   } catch (err) {
+//     // yield put(reducer.actions.failure(err))
+//   }
+// }
+
+
 export const productFilterWatchers = [
-    getFilterWatcher,
-    getProductWatcher
+    takeLatest(productFilter.filter.actions.getPending, getFilterWorker),
+    takeLatest(productFilter.product.actions.getPending, getProductWorker)
 ];

@@ -5,7 +5,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import React, { Fragment, useEffect } from 'react';
-import { useDispatch, useTrackedState } from 'reactive-react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import { IRootState } from '../../root/root.model';
 import QuantityPicker from '../../shared/quantity-picker/quantity-picker.component';
 import ShoppingCartItemDetail from './item-detail/item-detail.component';
@@ -36,19 +36,22 @@ export const useShoppingCartStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-function ShoppingCartItemList(props) {
+interface IProps {
+    data: any;
+}
+
+function ShoppingCartItemList(props: IProps) {
     const classes = useShoppingCartStyles({});
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    const { output } = props;
-
-    const { shoppingCart: { data: rows } } = useTrackedState<IRootState>();
+    const { data } = props;
+    const rows = data.length > 0 ? data : [];
     const dispatch = useDispatch();
 
 
     useEffect(() => {
-        dispatch(shoppingCart.actions.getCartPending());
+        // dispatch(shoppingCart.actions.getCartPending());
         return () => { return; };
     }, []);
 
@@ -141,11 +144,11 @@ function ShoppingCartItemList(props) {
             />
             <Divider />
             <Grid container
-            justify="space-between"
-            spacing={2}
+                justify="space-between"
+                spacing={2}
             >
                 <Grid item
-                className={classes.footerButton}
+                    className={classes.footerButton}
                 >
                     <Link href="/" as="/">
                         <Fab variant="extended" color="default">
@@ -154,11 +157,14 @@ function ShoppingCartItemList(props) {
                     </Link>
                 </Grid>
                 <Grid item
-                className={classes.footerButton}
+                    className={classes.footerButton}
                 >
-                    <Fab variant="extended" color="primary" onClick={output}>
-                        Checkout
-                    </Fab>
+                    <Link href="/checkout" as="/checkout">
+
+                        <Fab variant="extended" color="primary">
+                            Checkout
+                        </Fab>
+                    </Link>
                 </Grid>
             </Grid>
         </Fragment >

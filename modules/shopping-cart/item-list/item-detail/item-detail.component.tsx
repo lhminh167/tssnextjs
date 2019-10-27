@@ -8,7 +8,7 @@ import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import useTheme from '@material-ui/styles/useTheme';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'reactive-react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import Image from '../../../shared/image/image';
 import { IShopingCartItem } from '../../shopping-cart.model';
 import shoppingCart from '../../../shopping-cart/shopping-cart.slice';
