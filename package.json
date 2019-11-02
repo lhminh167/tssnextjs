@@ -36,6 +36,7 @@
         "redux-starter-kit": "^0.7.0"
     },
     "devDependencies": {
+        "@babel/core": "^7.0.0",
         "@bahmutov/add-typescript-to-cypress": "2.1.2",
         "@cypress/code-coverage": "^1.10.1",
         "@types/chai": "^4.2.4",
@@ -45,7 +46,8 @@
         "@types/react": "^16.9.9",
         "@types/react-redux": "^7.1.5",
         "@zeit/next-bundle-analyzer": "^0.1.2",
-        "babel-jest": "^24.9.0",
+        "babel-core": "^7.0.0-bridge.0",
+        "babel-jest": "^23.4.2",
         "babel-plugin-styled-components": "^1.10.6",
         "cypress": "^3.6.0",
         "enzyme": "^3.10.0",
