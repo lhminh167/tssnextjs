@@ -20,8 +20,8 @@ const nextConfig = {
 }
 
 module.exports =
-    withOffline(
-        withBundleAnalyzer(
+    withBundleAnalyzer(
+        withOffline(
             nextConfig
         )
     )
