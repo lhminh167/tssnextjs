@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function Loader(props) {
     const classes = useStyles(props);
-    const state = useSelector(state => state.mainLoader.isLoading);
+    const isLoading = useSelector((state: IRootState) => state.mainLoader.isLoading);
     const dispatch = useDispatch();
 
     // useEffect(() => {
@@ -48,7 +48,7 @@ function Loader(props) {
     //     dispatch(hideMainLoader())
     // }
 
-    if (state.mainLoader.isLoading) return (
+    if (isLoading) return (
 
         <Container className={classes.root}>
             <div className={classes.container}>
