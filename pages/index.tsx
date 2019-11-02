@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import ProductFilter from '../modules/product-filter/product-filter.component';
 import { productFilter } from '../modules/product-filter/product-filter.slice';
+import { IRootState } from '../modules/root/root.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,16 +24,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-interface RootState {
-    placeholderData: {
-        content: any[]
-    }
-}
-
 function Home(props) {
     const classes = useStyles(props);
     const data = useSelector(
-        (state) => state.productFilter
+        (state: IRootState) => state.productFilter
     )
 
     return (

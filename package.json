@@ -1,7 +1,8 @@
 {
-    "name": "test",
-    "version": "0.1.0",
-    "private": true,
+    "name": "cyts",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
     "scripts": {
         "dev": "next && node server.js",
         "build": "next build",
@@ -9,7 +10,11 @@
         "start": "NODE_ENV=production node server.js",
         "analyze": "BUNDLE_ANALYZE=both next build",
         "analyze:server": "BUNDLE_ANALYZE=server next build",
-        "analyze:browser": "BUNDLE_ANALYZE=browser next build"
+        "analyze:browser": "BUNDLE_ANALYZE=browser next build",
+        "test": "jest",
+        "coverage:report": "npx nyc report --reporter=text-summary",
+        "cy:run": "cypress run",
+        "cy:open": "cypress open"
     },
     "dependencies": {
         "@material-ui/core": "^4.5.1",
@@ -31,12 +36,22 @@
         "redux-starter-kit": "^0.7.0"
     },
     "devDependencies": {
+        "@bahmutov/add-typescript-to-cypress": "2.1.2",
+        "@cypress/code-coverage": "^1.10.1",
+        "@types/chai": "^4.2.4",
+        "@types/jest": "24.0.21",
+        "@types/mocha": "^5.2.7",
         "@types/node": "^12.11.1",
         "@types/react": "^16.9.9",
+        "@types/react-redux": "^7.1.5",
         "@zeit/next-bundle-analyzer": "^0.1.2",
         "babel-plugin-styled-components": "^1.10.6",
-        "cypress": "^3.5.0",
-        "jest": "^24.9.0",
-        "typescript": "^3.6.4"
+        "cypress": "^3.6.0",
+        "istanbul-lib-coverage": "^2.0.5",
+        "jest": "24.9.0",
+        "nyc": "^14.1.1",
+        "ts-jest": "24.1.0",
+        "typescript": "^3.6.4",
+        "webpack": "4.41.2"
     }
 }
