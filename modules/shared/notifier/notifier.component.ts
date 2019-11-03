@@ -7,7 +7,7 @@ import { notifier } from './notifier.redux';
 function Notifier(props) {
     const { enqueueSnackbar } = props;
     const [displayed, storeDisplayed] = useState([]);
-    const state = useSelector(state=>state);
+    const state = useSelector((state: IRootState) => state);
     const dispatch = useDispatch();
 
     useEffect(() => {

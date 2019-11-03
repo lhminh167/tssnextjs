@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import Checkout from '../modules/checkout/checkout.component';
 import shoppingCart from '../modules/shopping-cart/shopping-cart.slice';
+import { IRootState } from '../modules/root/root.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,16 +24,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-interface RootState {
-    placeholderData: {
-        content: any[]
-    }
-}
-
 function CheckoutPage(props) {
     const classes = useStyles(props);
     const data = useSelector(
-        (state) => state.shoppingCart
+        (state: IRootState) => state.shoppingCart
     )
 
     return (

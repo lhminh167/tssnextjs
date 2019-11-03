@@ -216,7 +216,9 @@ function Navbar() {
                     <MenuIcon />
                 </IconButton>
                 <Link href="/" as="/">
-                    <Typography className={classes.title} variant="h6" noWrap>
+                    <Typography className={classes.title} variant="h6" noWrap
+                    data-testid="d6bb0acf-c5be-4016-ae14-ccfc1801db08"
+                    >
                         SHOPMATE
                     </Typography>
                 </Link>

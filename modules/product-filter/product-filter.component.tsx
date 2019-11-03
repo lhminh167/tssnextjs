@@ -12,12 +12,13 @@ import ClearIcon from "@material-ui/icons/Clear";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Fragment, useEffect, useState } from "react";
 import ProductFilterProductList from "../product-filter/product-list/product-list.component";
-// import { IRootState } from "../root/root.model";
+import { IRootState } from "../root/root.model";
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
-import { ProductFilterFilterEnum } from "./product-filter.model";
+import { ProductFilterFilterEnum, IProductFilterState } from "./product-filter.model";
 import { productFilter } from "./product-filter.slice";
 import ColorPicker from "../shared/color-picker/color-picker.component";
 import SizePicker from "../shared/size-picker/size-picker.component";
+import { IAttributeValue } from "../shared/models/attribute-value.model";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 interface IProps {
-    data: any,
+    data: IProductFilterState,
 }
 
 function ProductFilter(props: IProps) {
@@ -52,19 +53,19 @@ function ProductFilter(props: IProps) {
     const dispatch = useDispatch();
     const [choice, setChoice] = useState(data.choice);
 
-    const colors = data.filter.data.attributes.filter(x => x.attributeId === ProductFilterFilterEnum.Color);
-    const sizes = data.filter.data.attributes.filter(x => x.attributeId === ProductFilterFilterEnum.Size);
+    const colors = data.filter.data.attributes.filter((x: IAttributeValue) => x.attributeId === ProductFilterFilterEnum.Color);
+    const sizes = data.filter.data.attributes.filter((x: IAttributeValue) => x.attributeId === ProductFilterFilterEnum.Size);
     // const categories = data.categories;
 
-    const chooseColor = (colorId) => {
+    const chooseColor = (colorId: number) => {
         setChoice({ ...choice, colorId })
     }
 
-    const chooseSize = (sizeId) => {
+    const chooseSize = (sizeId: number) => {
         setChoice({ ...choice, sizeId })
     }
 
-    const chooseCategory = (categoryIds) => {
+    const chooseCategory = (categoryIds: number) => {
         // choice.categoryIds = categoryIds;
     }
 
@@ -76,7 +77,7 @@ function ProductFilter(props: IProps) {
     }
 
     useEffect(() => {
-        if (data.filter.data.length === 0) {
+        if (data.filter.data.attributes.length === 0) {
             dispatch(productFilter.filter.actions.getPending());
         }
 
