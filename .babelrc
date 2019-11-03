@@ -1,12 +1,8 @@
 {
     "presets": [
-        [
-            "next/babel"
-        ]
+        "next/babel"
     ],
     "plugins": [
-        [
-            "babel-plugin-styled-components"
-        ]
+        "babel-plugin-styled-components"
     ]
 }
