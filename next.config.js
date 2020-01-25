@@ -1,37 +1,18 @@
-const withPlugins = require('next-compose-plugins');
+require('dotenv').config();
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true"
+});
+const withOffline = require("next-offline");
 
-const withTypescript = require('@zeit/next-typescript')
-const withCSS = require('@zeit/next-css')
-const withSass = require('@zeit/next-sass');
-const withBundleAnalyzer = require("@zeit/next-bundle-analyzer");
-const nextRuntimeDotenv = require('next-runtime-dotenv')
+const nextConfig = {
+  env: {
+    API_URL: process.env.API_URL,
+    STRIPE_API_KEY: process.env.STRIPE_API_KEY
+  },
 
-const withConfig = nextRuntimeDotenv({
-	public: [
-		'API_URL'
-	]
-})
+  webpack(config) {
+    return config;
+  }
+};
 
-module.exports = withPlugins(
-	[
-		[withTypescript],
-		[withCSS],
-		[withSass],
-		[withBundleAnalyzer],
-		[withConfig]
-	],
-	{
-		analyzeServer: ["server", "both"].includes(process.env.BUNDLE_ANALYZE),
-		analyzeBrowser: ["browser", "both"].includes(process.env.BUNDLE_ANALYZE),
-		bundleAnalyzerConfig: {
-			server: {
-				analyzerMode: 'static',
-				reportFilename: '../bundles/server.html'
-			},
-			browser: {
-				analyzerMode: 'static',
-				reportFilename: '../bundles/client.html'
-			}
-		}
-	}
-);
+module.exports = withOffline(withBundleAnalyzer(nextConfig));

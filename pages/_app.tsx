@@ -1,42 +1,71 @@
-//#region Global Imports
-import App, { Container } from 'next/app';
-import * as React from 'react';
+import CssBaseline from '@material-ui/core/CssBaseline'
+import { ThemeProvider } from '@material-ui/styles'
+import withReduxSaga from 'next-redux-saga'
+import withRedux from 'next-redux-wrapper'
+import App from 'next/app'
+import React from 'react'
+import { Provider } from 'react-redux'
+import { currentUser, currentUserInitialData } from '../modules/customer/customer.slice'
+import createStore, { TssStore } from '../modules/root/root.store'
+import { decodeLoginToken, setTokenHeader, getLoginToken } from '../modules/shared/helpers/token.helper'
+import Layout from '../modules/shared/layout/layout.component'
+import theme from '../modules/shared/layout/layout.theme'
+import { getTotalQuantity } from '../modules/shopping-cart/shopping-cart.service'
+import { Response } from '../modules/shared/crud/crud.model'
+import { shoppingCartItemCountSlice } from '../modules/shopping-cart/shopping-cart.slice'
+import { getCustomerIdFromLoginToken } from '../modules/shared/helpers/auth.helper'
 
-import { Provider } from 'react-redux';
-import withRedux from 'next-redux-wrapper';
-//#endregion Global Imports
+interface IProps {
+    store: TssStore;
+}
 
-//#region Local Imports
-import store from '@Redux/store';
-//#endregion Local Imports
-
-//#region Interface Imports
-import { IApp } from '@Interfaces';
-//#endregion Interface Imports
-
-class MyApp extends App<IApp.IProps> {
-    static async getInitialProps(props: any) {
+class MyApp extends App<IProps> {
+    static async getInitialProps({ Component, ctx }) {
         let pageProps = {};
 
-        if (props.Component.getInitialProps) {
-            pageProps = await props.Component.getInitialProps(props.ctx);
+        if (Component.getInitialProps) {
+            pageProps = await Component.getInitialProps({ ctx });
         }
 
-        return { pageProps };
+        return { pageProps }
     }
 
+    componentDidMount() {
+        this.getCurrentUser();
 
-    render(): JSX.Element {
+        // Remove the server-side injected CSS.
+        const jssStyles = document.querySelector('#jss-server-side');
+        if (jssStyles) jssStyles.parentNode.removeChild(jssStyles);
+    }
+
+    getCurrentUser() {
+        const { store } = this.props;
+
+        if (!getLoginToken()) return;
+        console.log(getLoginToken())
+        store.dispatch(shoppingCartItemCountSlice.actions.getTotalQuantityPending());
+
+        const customerId = getCustomerIdFromLoginToken();
+        customerId
+            ? store.dispatch(currentUser.actions.getCustomerPending(customerId))
+            : store.dispatch(currentUser.actions.setCurrentUser(decodeLoginToken()));;
+    }
+
+    render() {
         const { Component, pageProps, store } = this.props;
-
         return (
-            <Container>
+            <ThemeProvider theme={theme}>
+
+                <CssBaseline />
                 <Provider store={store}>
-                    <Component {...pageProps} />
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
                 </Provider>
-            </Container>
-        );
+            </ThemeProvider>
+
+        )
     }
 }
 
-export default withRedux(store)(MyApp);
+export default withRedux(createStore)(withReduxSaga(MyApp))
