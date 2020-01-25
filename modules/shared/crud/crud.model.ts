@@ -15,7 +15,17 @@ export interface IResponse<T>
     errors?: any[];
 }
 
-export interface IAction<T>
+export class Response<T> implements IResponse<T>
+{
+    constructor(content: T){
+        this.content = content;
+    }
+
+    content?: T;
+}
+
+
+export interface PayloadAction<T>
 {
     type?: string;
     payload: IResponse<T>;

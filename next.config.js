@@ -1,27 +1,18 @@
-const withBundleAnalyzer = require('@zeit/next-bundle-analyzer')
-const withOffline = require('next-offline')
+require('dotenv').config();
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true"
+});
+const withOffline = require("next-offline");
 
 const nextConfig = {
-    analyzeServer: ['server', 'both'].includes(process.env.BUNDLE_ANALYZE),
-    analyzeBrowser: ['browser', 'both'].includes(process.env.BUNDLE_ANALYZE),
-    bundleAnalyzerConfig: {
-        server: {
-            analyzerMode: 'static',
-            reportFilename: '../bundles/server.html'
-        },
-        browser: {
-            analyzerMode: 'static',
-            reportFilename: '../bundles/client.html'
-        }
-    },
-    webpack(config) {
-        return config
-    }
-}
+  env: {
+    API_URL: process.env.API_URL,
+    STRIPE_API_KEY: process.env.STRIPE_API_KEY
+  },
 
-module.exports =
-    withOffline(
-        withBundleAnalyzer(
-            nextConfig
-        )
-    )
+  webpack(config) {
+    return config;
+  }
+};
+
+module.exports = withOffline(withBundleAnalyzer(nextConfig));

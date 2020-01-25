@@ -6,6 +6,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { ChangeEvent, useEffect, useState } from "react";
+import { IAttributeValue } from "../models/attribute-value.model";
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -21,19 +22,21 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-function SizePicker(props) {
+interface Props {
+    data: IAttributeValue[];
+    state: IAttributeValue;
+    output: any;
+}
+
+
+function SizePicker(props: Props) {
     const classes = useStyles(props);
-    const { sizes, output } = props;
-    const [chosenSizeId, setSize] = useState(0);
+    const { data, state, output } = props;
 
     function handleChange(event: ChangeEvent<unknown>) {
-        setSize(Number((event.target as HTMLInputElement).value));
+        output(data.find(a => a.attributeValueId === Number((event.target as HTMLInputElement).value)));
     }
-
-    useEffect(() => {
-        output(chosenSizeId);
-    }, [chosenSizeId]);
-
+    
     function icon(text: string) {
         return (
             <Button variant="contained" size="small">
@@ -54,14 +57,14 @@ function SizePicker(props) {
         );
     }
 
-    const radios = sizes.map(size => (
+    const radios = data ? data.map(size => (
         <FormControlLabel
             key={size.attributeValueId}
             value={size.attributeValueId.toString()}
             control={<Radio icon={icon(size.value)} checkedIcon={checkedIcon(size.value)} />}
             label={null}
         />
-    ));
+    )): null;
 
     return (
         <FormControl component="fieldset" className={classes.formControl}>
@@ -70,7 +73,7 @@ function SizePicker(props) {
                 aria-label="Size"
                 name="Size"
                 className={classes.group}
-                value={chosenSizeId.toString()}
+                value={state.attributeValueId.toString()}
                 onChange={handleChange}
             >
                 {radios}

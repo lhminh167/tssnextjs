@@ -1,158 +1,137 @@
-import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Paper from '@material-ui/core/Paper';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Fab from '@material-ui/core/Fab';
-import Link from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import DeliveryForm from './delivery-form.component.ts/delivery-form.component';
-import PaymentForm from './payment-form/payment-form.component';
-import Review from './confirmation-form/confirmation-form.component';
-import FinishForm from './finish-form/finish-form.component';
+import Paper from "@material-ui/core/Paper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Stepper from "@material-ui/core/Stepper";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Customer } from "../customer/customer.model";
+import { IRootState } from "../root/root.model";
+import { DeliveryForm } from "./checkout.model";
+import { createOrder } from "./checkout.service";
+import OrderConfirmationComponent from "./confirmation-form/confirmation-form.component";
+import DeliveryFormComponent from "./delivery-form/delivery-form.component";
+import FinishForm from "./finish-form/finish-form.component";
+import PaymentFormComponent from "./payment-form/payment-form.component";
+import { getCustomerId } from "../shared/helpers/auth.helper";
 
+const useStyles = makeStyles(theme => createStyles({}));
 
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="textSecondary" align="center">
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://material-ui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
+const steps = [
+  "Shipping address",
+  "Payment details",
+  "Review your order",
+  "Finish"
+];
 
-const useStyles = makeStyles(theme => createStyles({
-  appBar: {
-    position: 'relative',
-  },
-  layout: {
-    width: 'auto',
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 600,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  paper: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
-    padding: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      marginTop: theme.spacing(6),
-      marginBottom: theme.spacing(6),
-      padding: theme.spacing(3),
-    },
-  },
-  stepper: {
-    padding: theme.spacing(3, 0, 5),
-  },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  button: {
-    minWidth: 98,
-    marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1),
-  },
-}));
+interface ActiveStepProps {
+  step: number;
+  data: any;
+  output: any;
+  back: any;
+  next: any;
+}
 
-const steps = ['Shipping address', 'Payment details', 'Review your order'];
-
-function getStepContent(step) {
+function ActiveStepComponent({
+  step,
+  data,
+  output,
+  back,
+  next
+}: ActiveStepProps) {
   switch (step) {
     case 0:
-      return <DeliveryForm />;
+      return <DeliveryFormComponent data={data} output={output} next={next} />;
     case 1:
-      return <PaymentForm />;
+      return (
+        <PaymentFormComponent
+          // data={data}
+          // state={state}
+          // output={setState}
+          next={next}
+          back={back}
+        />
+      );
     case 2:
-      return <Review />;
+      return (
+        <OrderConfirmationComponent
+          // data={data}
+          // state={state}
+          // output={setState}
+          next={next}
+          back={back}
+        />
+      );
+    case 3:
+      return <FinishForm back={back} />;
     default:
-      throw new Error('Unknown step');
+      throw new Error("Unknown step");
   }
 }
 
-interface IProps {
-  data: any;
-}
+interface CheckoutProps { }
 
-export default function Checkout(props: IProps) {
+export default function CheckoutComponent({ }: CheckoutProps) {
   const classes = useStyles({});
+  const currentUser = useSelector(
+    (state: IRootState) => state.currentUser.data
+  );
+  const defaultState: DeliveryForm = {
+    ...currentUser,
+    customerId: getCustomerId(currentUser.customerId),
+    shippingId: 1
+  };
   const [activeStep, setActiveStep] = React.useState(0);
-  const {data} = props;
+  const [state, setState] = React.useState<DeliveryForm>(defaultState);
 
+  useEffect(() => {
+    setState(defaultState);
+  }, [currentUser]);
 
-  const handleNext = () => {
+  const next = async () => {
     setActiveStep(activeStep + 1);
+    if (activeStep === 1) await submit();
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
 
+  const change = (input: DeliveryForm) => {
+    setState(input);
+  };
+
+  const submit = async () => {
+    // createOrder(state)
+    //   .then(data => {
+    //     debugger;
+    //     // setState(data.content);
+    //   })
+    //   .catch(err => {});
+  };
+
   return (
-    <React.Fragment>
-      {/* <CssBaseline /> */}
-      {/* <AppBar position="absolute" color="default" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Company name
-          </Typography>
-        </Toolbar>
-      </AppBar> */}
-      {/* <main className={classes.layout}> */}
-        <Paper className={classes.paper}>
-          <Typography component="h1" variant="h4" align="left">
-            Checkout
-          </Typography>
-          <Stepper activeStep={activeStep} className={classes.stepper}>
-            {steps.map(label => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          <React.Fragment>
-            {activeStep === steps.length ? (
-              <FinishForm/>
-            ) : (
-              <React.Fragment>
-                {getStepContent(activeStep)}
-                <div className={classes.buttons}>
-                  {activeStep !== 0 && (
-                    <Fab
-                        onClick={handleBack}
-                        className={classes.button}
-                        variant="extended"
-                    >
-                      Back
-                    </Fab>
-                  )}
-                  <Fab
-                    variant="extended"
-                    color="primary"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? 'Pay' : 'Next Step'}
-                  </Fab>
-                </div>
-              </React.Fragment>
-            )}
-          </React.Fragment>
-        </Paper>
-        {/* <Copyright /> */}
-      {/* </main> */}
-    </React.Fragment>
+    <Paper>
+      <Typography component="h1" variant="h4" align="left">
+        Checkout
+      </Typography>
+
+      <Stepper activeStep={activeStep}>
+        {steps.map(label => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+
+      <ActiveStepComponent
+        step={activeStep}
+        data={state}
+        output={change}
+        back={handleBack}
+        next={next}
+      />
+    </Paper>
   );
 }

@@ -1,72 +1,60 @@
-/* global fetch */
-import es6promise from 'es6-promise';
-import 'isomorphic-unfetch';
-import { HttpMethod } from '../crud/crud.model';
+import es6promise from "es6-promise";
+import "isomorphic-unfetch";
+import { HttpMethod } from "../crud/crud.model";
+import { setTokenHeader } from "../helpers/token.helper";
+import { setContentType } from "../helpers/http.helper";
 
-es6promise.polyfill()
+es6promise.polyfill();
 
-// const baseUrl = `https://localhost:5001${path}`;
+// const baseUrl = process.env.API_URL;
 
 // if (process.env.NODE_ENV === 'production')
-const baseUrl = 'https://tssnetcore.herokuapp.com/api';
+const baseUrl = 'https://tssnetcore.herokuapp.com/api/';
 
-export async function get(url: string) {
+export async function get(url: string, id: number) {
+  url = `${baseUrl}${url}`;
 
-    url = `${baseUrl}${url}`;
+  url += id > 0 ? `/${id}` : "";
 
-    return await callApi(url);
+  return await callApi(url);
 }
 
-export async function getById(url: string, id: number) {
+export async function post(url: string, body: any) {
+  url = `${baseUrl}${url}`;
 
-    url = `${baseUrl}${url}/${id}`;
-
-    return await callApi(url);
+  return await callApi(url, {
+    method: HttpMethod.POST,
+    body: JSON.stringify(body)
+  });
 }
 
-export async function post(url: string, body) {
+export async function put(url: string, id: number, body: any) {
+  url = `${baseUrl}${url}`;
 
-    url = `${baseUrl}${url}`;
+  url += id > 0 ? `/${id}` : "";
 
-    return await callApi(url, {
-        method: HttpMethod.POST,
-        body: JSON.stringify(body)
-    });
+  return await callApi(url, {
+    method: HttpMethod.PUT,
+    body: JSON.stringify(body)
+  });
 }
 
-export async function update(url: string, id: number, body) {
+export async function remove(url: string, id: number, body: any) {
+  url = `${baseUrl}${url}`;
 
-    url = `${baseUrl}${url}/${id}`;
+  url += id > 0 ? `/${id}` : "";
 
-    return await callApi(url, {
-        method: HttpMethod.PUT,
-        body: JSON.stringify(body)
-    });
+  return await callApi(url, {
+    method: HttpMethod.DELETE,
+    body: JSON.stringify(body)
+  });
 }
 
-export async function remove(url: string, id: number, body) {
+async function callApi(url: string, options: RequestInit = {}) {
+  options.headers = {};
+  setTokenHeader(options);
+  setContentType(options, "application/json");
 
-    url = `${baseUrl}${url}/${id}`;
-
-    return await callApi(url, {
-        method: HttpMethod.DELETE,
-        body: JSON.stringify(body)
-    });
-}
-
-function callApi(url: string, options?: RequestInit) {
-    return fetch(url, {
-        ...options,
-        headers: {
-            'Content-Type': 'application/json-patch+json',
-        },
-    }).then(response =>
-        response.json().then(json => ({ json, response }))
-    ).then(({ json, response }) => {
-        return response.ok ? json : Promise.reject(json);
-    })
-    .then(
-        response => ({ response }),
-        error => ({ error })
-    )
+  const response = await fetch(url, options);
+  return await response.json();
 }

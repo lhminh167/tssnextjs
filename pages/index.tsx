@@ -37,7 +37,6 @@ function Home(props) {
 
 Home.getInitialProps = function(props) {
     const { store, isServer } = props.ctx;
-
     if (
         store.getState().productFilter.filter.data.attributes.length === 0 ||
         store.getState().productFilter.filter.data.categories.length === 0
@@ -52,4 +51,4 @@ Home.getInitialProps = function(props) {
     return { isServer }
 }
 
-export default Home
+export default Home;

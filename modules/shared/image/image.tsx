@@ -27,7 +27,7 @@ function Image(props: Props) {
                         "https://res.cloudinary.com/" +
                         (cloudName ? cloudName : "lhminh167") +
                         "/image/upload/f_auto,w_auto,c_scale,q_auto,dpr_auto/tss/" +
-                        imageName.replace(/\.[^/.]+$/, "")
+                        (imageName ? imageName.replace(/\.[^/.]+$/, ""): "placeholder")
                     }
 
                     className={"cld-responsive" + classes.image}

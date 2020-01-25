@@ -6,6 +6,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Color } from "csstype";
 import { ChangeEvent, useState, useEffect } from "react";
+import { IAttributeValue } from "../models/attribute-value.model";
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -32,20 +33,20 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
-function ColorPicker(props) {
+interface Props {
+    data: IAttributeValue[];
+    state: IAttributeValue;
+    output: any;
+}
+
+function ColorPicker(props: Props) {
     const classes = useStyles(props);
 
-    const { colors, output } = props;
-
-    const [chosenColorId, setColor] = useState(0);
+    const { data, state, output } = props;
 
     function handleChange(event: ChangeEvent<unknown>) {
-        setColor(Number((event.target as HTMLInputElement).value))
+        output(data.find(a => a.attributeValueId === Number((event.target as HTMLInputElement).value)));
     }
-
-    useEffect(() => {
-        output(chosenColorId);
-    }, [chosenColorId]);
 
     function icon(color: Color) {
         const icon = (<div className={classes.iconBorder}>
@@ -61,7 +62,7 @@ function ColorPicker(props) {
         return checkedIcon;
     }
 
-    const colorRadios = colors ? colors.map(color => (
+    const colorRadios = data? data.map(color => (
         <FormControlLabel
             key={color.attributeValueId}
             value={color.attributeValueId.toString()}
@@ -77,7 +78,7 @@ function ColorPicker(props) {
                 aria-label="Color"
                 name="Color"
                 className={classes.group}
-                value={chosenColorId.toString()}
+                value={state.attributeValueId.toString()}
                 onChange={handleChange}
             >
                 {colorRadios}

@@ -1,7 +1,7 @@
-import { createSlice } from 'redux-starter-kit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export const mainLoader = createSlice({
-    slice: 'mainLoader',
+    name: 'mainLoader',
     initialState: { isLoading: false },
     reducers: {
         show: (state) => {

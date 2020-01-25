@@ -1,7 +1,7 @@
-import { createSlice } from 'redux-starter-kit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export const notifier = createSlice({
-    slice: 'notifier',
+    name: 'notifier',
     initialState: {
         notifications: []
     },
@@ -13,9 +13,9 @@ export const notifier = createSlice({
             });
         },
         remove: (state, action) => {
-            state.notifications.filter(
-                notification => notification.key !== action.key
-            )
+            // state.notifications.filter(
+            //     notification => notification.key !== action.key
+            // )
         }
     },
 

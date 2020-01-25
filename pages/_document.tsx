@@ -19,6 +19,7 @@ class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          <script id="stripe-js" src="https://js.stripe.com/v3/" defer></script>
         </Head>
         <body>
           <Main />

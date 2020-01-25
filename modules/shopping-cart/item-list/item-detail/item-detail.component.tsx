@@ -11,7 +11,9 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import Image from '../../../shared/image/image';
 import { IShopingCartItem } from '../../shopping-cart.model';
-import shoppingCart from '../../../shopping-cart/shopping-cart.slice';
+import { removeItem, saveItemForLater } from '../../shopping-cart.service';
+import { Response } from '../../../shared/crud/crud.model';
+import { shoppingCartSlice } from '../../shopping-cart.slice';
 
 export const useShoppingCartStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -47,65 +49,54 @@ export const useShoppingCartStyles = makeStyles((theme: Theme) =>
 );
 
 interface IProps {
-    input: IShopingCartItem;
-    color: string
+    data: IShopingCartItem;
+    color: string;
 }
 
 
-function ShoppingCartItemDetail(props: IProps) {
+function ShoppingCartItemDetail({ data, color }: IProps) {
     const classes = useShoppingCartStyles({});
-    const theme = useTheme();
-
-    const { input, color } = props;
-
     const dispatch = useDispatch();
 
-    useEffect(() => {
-
-        return () => { return; };
-    }, []);
-
     function removeItem() {
-        dispatch(shoppingCart.actions.removeItemPending({content: {
-            itemId: input.itemId
-        }}));
+        dispatch(shoppingCartSlice.actions.removeItemPending({
+            itemId: data.itemId
+        }));
     }
 
     function saveItemForLater() {
-        dispatch(shoppingCart.actions.saveItemForLaterPending({content: {
-            itemId: input.itemId
-        }}));
+        dispatch(shoppingCartSlice.actions.saveItemForLaterPending({
+            itemId: data.itemId
+        }));
     }
 
     return (
         <div className={classes.card}>
-            {input && input.image &&
-                <Image
-                    imageName={input.image}
-                    imageStyles={{
-                        width: 100,
-                    }}
-                />
-            }
+            <Image
+                imageName={data ?.product ?.image}
+                imageStyles={{
+                    width: 100,
+                }}
+            />
             <div className={classes.details}>
 
                 <CardContent className={classes.content}>
                     <Typography variant="body1" className={classes.title}>
-                        {color} {input.name}
+                        {color} {data ?.product ?.name}
                     </Typography>
                 </CardContent>
 
                 <div className={classes.controls}>
 
                     <Button color="primary" className={classes.button} size="small"
-                    onClick={saveItemForLater}
+                        onClick={saveItemForLater}
                     >
                         <BookmarkIcon className={classes.leftIcon} fontSize="small" />
                         Save for later
                     </Button>
 
                     <Button color="primary" className={classes.button} size="small"
-                    onClick={removeItem}
+                        onClick={removeItem}
                     >
                         <ClearRoundedIcon className={classes.leftIcon} fontSize="small" />
                         Remove

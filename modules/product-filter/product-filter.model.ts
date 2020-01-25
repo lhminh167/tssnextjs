@@ -3,12 +3,12 @@ import { IAttributeValue } from '../shared/models/attribute-value.model';
 import { ICategory } from './../shared/models/category.model';
 import { IProduct } from './../shared/models/product.model';
 
-const productFilterBaseUrl = '/ProductFilter';
+const productFilterBaseUrl = 'Product';
 
 export const productFilterUrl = {
-    filter: productFilterBaseUrl + '/Filter',
-    choice: productFilterBaseUrl + '/Choice',
-    product: productFilterBaseUrl + '/Product'
+    filter: productFilterBaseUrl + '/' + 'Filter',
+    choice: productFilterBaseUrl + '/' + 'Choice',
+    product: productFilterBaseUrl
 }
 
 export enum ProductFilterFilterEnum
@@ -23,23 +23,14 @@ export interface IProductFilterFilter {
 }
 
 export interface IProductFilterChoice {
-    colorId: number;
-    sizeId: number;
-    categoryIds: number[];
-    priceRange: IPriceRange;
-}
-
-export interface IPriceRange {
+    attributes: IAttributeValue[];
+    categories: IAttributeValue[];
     minPrice: number;
     maxPrice: number;
 }
 
-export interface IProductFilterProduct extends IProduct {
-    attributes: IAttributeValue[];
-}
-
 export interface IProductFilterState {
     filter: IState<IProductFilterFilter>;
-    product: IState<IProductFilterProduct[]>;
+    product: IState<IProduct[]>;
     choice: IProductFilterChoice;
 }

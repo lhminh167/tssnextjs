@@ -1,103 +1,105 @@
-import { IShopingCartItem } from './shopping-cart.model';
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
-import { getCart, addItem, updateCart, removeItem, saveItemForLater } from './shopping-cart.service';
-import shoppingCart from './shopping-cart.slice';
-import { IAction } from '../shared/crud/crud.model';
-import { mainLoader } from '../shared/loader/loader.redux';
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { setLoginToken } from "../shared/helpers/token.helper";
+import { mainLoader } from "../shared/loader/loader.redux";
+import {
+  addItem,
+  getCart,
+  getTotalQuantity,
+  removeItem,
+  saveItemForLater,
+  updateItem
+} from "./shopping-cart.service";
+import {
+  shoppingCartItemCountSlice,
+  shoppingCartSlice
+} from "./shopping-cart.slice";
 
-function* getCartWatcher() {
-    yield takeEvery(shoppingCart.actions.getCartPending, getCartWorker);
+function* getTotalQuantityWorker() {
+  const response = yield call(getTotalQuantity);
+  response.status < 300
+    ? yield put(
+        shoppingCartItemCountSlice.actions.getTotalQuantitySucceeded(
+          response.content
+        )
+      )
+    : yield put(
+        shoppingCartItemCountSlice.actions.getTotalQuantityFailed(
+          response.title
+        )
+      );
 }
 
 function* getCartWorker() {
-    const { response, error } = yield call(getCart);
-    response ?
-        yield put(shoppingCart.actions.getCartSucceeded(response)) :
-        yield put(shoppingCart.actions.getCartFailed(error));
+  const response = yield call(getCart);
+  response.status < 300
+    ? yield put(shoppingCartSlice.actions.getCartSucceeded(response.content))
+    : yield put(shoppingCartSlice.actions.getCartFailed(response.title));
 }
-
-// function* getWishlistWatcher() {
-//     yield takeEvery(shoppingCart.actions.getWishlistPending, getWishlistWorker);
-// }
 
 // function* getWishlistWorker() {
-
-//     const { response, error } = yield call(getWishlist)
-//     response ?
-//         yield put(shoppingCart.actions.getWishlistSucceeded(response)) :
-//         yield put(shoppingCart.actions.getWishlistFailed(error));
+//   const { response= yield call(getWishlist)
+//     response.status < 300 ?
+//         yield put(shoppingCartSlice.actions.getWishlistSucceeded(response.content)) :
+//         yield put(shoppingCartSlice.actions.getWishlistFailed(response.title));
 // }
 
-function* addItemWatcher() {
-    yield takeEvery(shoppingCart.actions.addItemPending, addItemWorker);
-}
-
 function* addItemWorker(action) {
-    const { response, error } = yield call(addItem, action.payload.content)
-    response ?
-        yield put(shoppingCart.actions.addItemSucceeded(response)) :
-        yield put(shoppingCart.actions.addItemFailed(error));
+  const response = yield call(addItem, action.payload);
+  if (response.status < 300) {
+    setLoginToken(response.content.loginToken);
+    yield put(shoppingCartSlice.actions.addItemSucceeded(response.content));
+  } else {
+    yield put(shoppingCartSlice.actions.addItemFailed(response.title));
+  }
 }
 
-function* updateCartWatcher() {
-    yield takeEvery(shoppingCart.actions.updateCartPending, updateCartWorker);
-}
-
-function* updateCartWorker(action) {
-    yield put(mainLoader.actions.show());
-    const { response, error } = yield call(updateCart, action.payload.content);
-    response ?
-        yield put(shoppingCart.actions.updateCartSucceeded(response)) :
-        yield put(shoppingCart.actions.updateCartFailed(error));
-}
-
-function* removeItemWatcher() {
-    yield takeEvery(shoppingCart.actions.removeItemPending, removeItemWorker);
+function* updateItemWorker(action) {
+  yield put(mainLoader.actions.show());
+  const response = yield call(updateItem, action.payload.item);
+  if (response.status < 300) {
+    debugger;
+    yield put(
+      shoppingCartSlice.actions.updateItemSucceeded({
+        item: response.content,
+        previousItem: action.payload.previousItem
+      })
+    );
+  } else {
+    yield put(shoppingCartSlice.actions.updateItemFailed(response.title));
+  }
 }
 
 function* removeItemWorker(action) {
-    yield put(mainLoader.actions.show());
-    const { response, error } = yield call(removeItem, action.payload.content)
-    response ?
-        yield put(shoppingCart.actions.removeItemSucceeded(response)) :
-        yield put(shoppingCart.actions.removeItemFailed(error));
-}
-
-function* saveItemForLaterWatcher() {
-    yield takeEvery(shoppingCart.actions.saveItemForLaterPending, saveItemForLaterWorker);
+  yield put(mainLoader.actions.show());
+  const response = yield call(removeItem, action.payload);
+  response.status < 300
+    ? yield put(shoppingCartSlice.actions.removeItemSucceeded(response.content))
+    : yield put(shoppingCartSlice.actions.removeItemFailed(response.title));
 }
 
 function* saveItemForLaterWorker(action) {
-    yield put(mainLoader.actions.show());
-    const { response, error } = yield call(saveItemForLater, action.payload.content)
-    response ?
-        yield put(shoppingCart.actions.saveItemForLaterSucceeded(response)) :
-        yield put(shoppingCart.actions.saveItemForLaterFailed(error));
+  yield put(mainLoader.actions.show());
+  const response = yield call(saveItemForLater, action.payload);
+  response.status < 300
+    ? yield put(
+        shoppingCartSlice.actions.saveItemForLaterSucceeded(response.content)
+      )
+    : yield put(
+        shoppingCartSlice.actions.saveItemForLaterFailed(response.title)
+      );
 }
 
-// function* getFilterWatcher() {
-//     yield takeEvery(shoppingCart.actions.getPending, getFilterWorker);
-// }
-
-// function* getFilterWorker() {
-
-//     const { response, error } = yield call(getFilter)
-//     response ?
-//         yield put(shoppingCart.actions.getSucceeded(response)) :
-//         yield put(shoppingCart.actions.getFailed(error));
-// }
-
 export const shoppingCartWatchers = [
-    // getCartWatcher,
-    // getWishlistWatcher,
-    // addItemWatcher,
-    // updateCartWatcher,
-    // removeItemWatcher,
-    // saveItemForLaterWatcher,
-    takeLatest(shoppingCart.actions.getCartPending, getCartWorker),
-    takeLatest(shoppingCart.actions.addItemPending, addItemWorker),
-    takeLatest(shoppingCart.actions.updateCartPending, updateCartWorker),
-    takeLatest(shoppingCart.actions.removeItemPending, removeItemWorker),
-    takeLatest(shoppingCart.actions.saveItemForLaterPending, saveItemForLaterWorker),
-
+  takeLatest(
+    shoppingCartItemCountSlice.actions.getTotalQuantityPending,
+    getTotalQuantityWorker
+  ),
+  takeLatest(shoppingCartSlice.actions.getCartPending, getCartWorker),
+  takeLatest(shoppingCartSlice.actions.addItemPending, addItemWorker),
+  takeLatest(shoppingCartSlice.actions.updateItemPending, updateItemWorker),
+  takeLatest(shoppingCartSlice.actions.removeItemPending, removeItemWorker),
+  takeLatest(
+    shoppingCartSlice.actions.saveItemForLaterPending,
+    saveItemForLaterWorker
+  )
 ];

@@ -1,50 +1,32 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import Checkout from '../modules/checkout/checkout.component';
-import shoppingCart from '../modules/shopping-cart/shopping-cart.slice';
-import { IRootState } from '../modules/root/root.model';
+import CheckoutComponent from '../modules/checkout/checkout.component';
+import { redirect, getCustomerIdFromStore } from '../modules/shared/helpers/auth.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-around',
-            overflow: 'hidden',
-            backgroundColor: theme.palette.background.paper,
-        },
-        gridList: {
-            // width: 500,
-            // height: 450,
-        },
-        icon: {
-            color: 'rgba(255, 255, 255, 0.54)',
-        },
     }),
 );
 
-function CheckoutPage(props) {
-    const classes = useStyles(props);
-    const data = useSelector(
-        (state: IRootState) => state.shoppingCart
-    )
-
+function CheckoutPage(
+) {
+    const classes = useStyles({});
     return (
-        <Checkout data={data} />
+        <CheckoutComponent />
     );
 }
 
-CheckoutPage.getInitialProps = function(props) {
-    const { store, isServer } = props.ctx;
-
+CheckoutPage.getInitialProps = async function ({
+    ctx: {
+        isServer,
+        store
+    },
+    ctx
+}) {
     if (
-        store.getState().shoppingCart.length === 0
-    ) {
-        store.dispatch(shoppingCart.actions.getCartPending());
-    }
-
-    return { isServer }
+        !isServer &&
+        getCustomerIdFromStore(store) <= 0
+    )
+        redirect(ctx, '/user/login');
 }
 
-export default CheckoutPage
+export default CheckoutPage;

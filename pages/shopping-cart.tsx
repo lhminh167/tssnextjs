@@ -1,42 +1,47 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import ShoppingCart from '../modules/shopping-cart/shopping-cart.component';
-import shoppingCart from '../modules/shopping-cart/shopping-cart.slice';
-import { IRootState } from '../modules/root/root.model';
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { IRootState } from "../modules/root/root.model";
+import ShoppingCartComponent from "../modules/shopping-cart/shopping-cart.component";
+import { IShopingCartItem } from "../modules/shopping-cart/shopping-cart.model";
+import { shoppingCartSlice } from "../modules/shopping-cart/shopping-cart.slice";
+import { getCustomerIdFromStore, redirect } from "../modules/shared/helpers/auth.helper";
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-        },
-        gridList: {
-        },
-        icon: {
-        },
-    }),
+  createStyles({
+    root: {},
+    gridList: {},
+    icon: {}
+  })
 );
 
 function ShoppingCartPage(props) {
-    const classes = useStyles(props);
-    const data = useSelector(
-        (state: IRootState) => state.shoppingCart.data
-    )
+  const classes = useStyles(props);
+  const dispatch = useDispatch();
 
-    return (
-        <ShoppingCart data={data} />
-    );
+  useEffect(() => {
+    dispatch(shoppingCartSlice.actions.getCartPending());
+  }, []);
+
+  const data: IShopingCartItem[] = useSelector(
+    (state: IRootState) => state.shoppingCart.data
+  );
+
+  return <ShoppingCartComponent data={data} />;
 }
 
-ShoppingCartPage.getInitialProps = function(props) {
-    const { store, isServer } = props.ctx;
-
-    if (
-        store.getState().shoppingCart.data.length === 0
-    ) {
-        store.dispatch(shoppingCart.actions.getCartPending());
-    }
-
-    return { isServer }
+ShoppingCartPage.getInitialProps = async function ({
+  ctx: {
+    isServer,
+    store
+  },
+  ctx
+}) {
+  if (
+    !isServer &&
+    getCustomerIdFromStore(store) <= 0
+  )
+    redirect(ctx, '/user/login');
 }
 
-export default ShoppingCartPage
+export default ShoppingCartPage;

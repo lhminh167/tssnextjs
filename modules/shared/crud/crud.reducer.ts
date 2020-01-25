@@ -1,4 +1,4 @@
-import { IAction, IState } from './crud.model';
+import { PayloadAction, IState } from './crud.model';
 
 export function pending(state: IState<any>) {
     state.isLoading = true;
@@ -10,9 +10,9 @@ export function succeeded(state: IState<any>) {
     state.error = null;
 }
 
-export function failed(state: IState<any>, action: IAction<any>) {
+export function failed(state: IState<any>, action: any) {
     state.isLoading = false;
-    state.error = action.payload;
+    state.error = action;
 }
 
 export function idle(state: IState<any>, initialState: IState<any>) {

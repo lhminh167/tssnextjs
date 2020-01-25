@@ -1,8 +1,9 @@
-import { createSlice } from 'redux-starter-kit';
-import { IAction, IState } from '../shared/crud/crud.model';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IState } from '../shared/crud/crud.model';
 import { succeeded, failed, idle, pending } from '../shared/crud/crud.reducer';
 import { crudInitialState } from '../shared/crud/crud.state';
-import { IProductFilterChoice, IProductFilterFilter, IProductFilterProduct, productFilterUrl } from './product-filter.model';
+import { IProductFilterChoice, IProductFilterFilter, productFilterUrl } from './product-filter.model';
+import { IProduct } from '../shared/models/product.model';
 
 const filterInitialData: IProductFilterFilter = {
     attributes: [],
@@ -12,67 +13,62 @@ const filterInitialData: IProductFilterFilter = {
 const filterInitialState: IState<IProductFilterFilter> = crudInitialState(filterInitialData);
 
 const choiceInitialState: IProductFilterChoice = {
-    colorId: 0,
-    sizeId: 0,
-    categoryIds: [],
-    priceRange: {
-        minPrice: null,
-        maxPrice: null,
-    }
+    attributes: [],
+    categories: [],
+    minPrice: null,
+    maxPrice: null,
 };
 
-const productInitialData: IProductFilterProduct[] = [];
+const productInitialData: IProduct[] = [];
 
-const productInitialState: IState<IProductFilterProduct[]> = crudInitialState(productInitialData);
-
-// productInitialData
+const productInitialState: IState<IProduct[]> = crudInitialState(productInitialData);
 
 const filter = createSlice({
-    slice: productFilterUrl.filter,
+    name: productFilterUrl.filter,
     initialState: filterInitialState,
     reducers: {
-        getPending: (state: IState<IProductFilterFilter>, action: IAction<IProductFilterFilter>) => {
+        getPending: (state: IState<IProductFilterFilter>) => {
             pending(state);
         },
-        getSucceeded: (state: IState<IProductFilterFilter>, action: IAction<IProductFilterFilter>) => {
-            state.data = action.payload.content;
+        getSucceeded: (state: IState<IProductFilterFilter>, action: PayloadAction<IProductFilterFilter>) => {
+            state.data = action.payload;
             succeeded(state);
         },
-        getFailed: (state: IState<IProductFilterFilter>, action: IAction<IProductFilterFilter>) => {
+        getFailed: (state: IState<IProductFilterFilter>, action: PayloadAction<IProductFilterFilter>) => {
             failed(state, action);
         },
-        getIdle: (state: IState<IProductFilterFilter>, action: IAction<IProductFilterFilter>) => {
+        getIdle: (state: IState<IProductFilterFilter>) => {
             idle(state, filterInitialState);
         },
     }
 });
 
 const product = createSlice({
-    slice: productFilterUrl.product,
+    name: productFilterUrl.product,
     initialState: productInitialState,
     reducers: {
-        getPending: (state: IState<IProductFilterProduct[]>, action: IAction<IProductFilterProduct[]>) => {
-            pending(state);
+        getPending: (state: IState<IProduct[]>) => {
+            pending(state); 
         },
-        getSucceeded: (state: IState<IProductFilterProduct[]>, action: IAction<IProductFilterProduct[]>) => {
-            state.data = action.payload.content;
+        getSucceeded: (state: IState<IProduct[]>, action: PayloadAction<IProduct[]>) => {
+            state.data = action.payload;
             succeeded(state);
         },
-        getFailed: (state: IState<IProductFilterProduct[]>, action: IAction<IProductFilterProduct[]>) => {
+        getFailed: (state: IState<IProduct[]>, action: PayloadAction<IProduct[]>) => {
             failed(state, action);
         },
-        getIdle: (state: IState<IProductFilterProduct[]>, action: IAction<IProductFilterProduct[]>) => {
+        getIdle: (state: IState<IProduct[]>) => {
             idle(state, productInitialState);
         },
     }
 });
 
 const choice = createSlice({
-    slice: productFilterUrl.choice,
+    name: productFilterUrl.choice,
     initialState: choiceInitialState,
     reducers: {
-        apply: (state: IProductFilterChoice, action: IAction<IProductFilterChoice>) => {
-            state = action.payload.content;
+        apply: (state: IProductFilterChoice, action: PayloadAction<IProductFilterChoice>) => {
+            state = action.payload;
         },
     },
 });

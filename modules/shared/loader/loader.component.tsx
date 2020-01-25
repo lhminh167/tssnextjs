@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function Loader(props) {
     const classes = useStyles(props);
-    const isLoading = useSelector((state: IRootState) => state.mainLoader.isLoading);
+    // const isLoading = useSelector((state: IRootState) => state.mainLoader.isLoading);
+    const isLoading = false;
     const dispatch = useDispatch();
 
     // useEffect(() => {

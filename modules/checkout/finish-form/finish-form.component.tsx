@@ -1,11 +1,16 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import Typography from '@material-ui/core/Typography';
+import Router from 'next/router'
+import React from 'react';
+import ActionButtonsComponent from '../shared/action-buttons.component';
 
-export default function FinishForm() {
+interface Props {
+    back: any;
+}
+
+export default function FinishFormComponent({
+    back,
+}: Props) {
     return (
         <React.Fragment>
             <Typography variant="h5" gutterBottom>
@@ -15,6 +20,14 @@ export default function FinishForm() {
                 Your order number is #2001539. We have emailed your order confirmation, and will
                 send you an update when your order has shipped.
                 </Typography>
+            <Grid item xs={12}>
+                <ActionButtonsComponent
+                    backButtonText={'Back'}
+                    nextButtonText={'Back to Shop'}
+                    back={back}
+                    next={() => Router.push('/')}
+                />
+            </Grid>
         </React.Fragment>
     );
 }

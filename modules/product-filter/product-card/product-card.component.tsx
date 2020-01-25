@@ -1,16 +1,15 @@
-import { Fab, Theme } from '@material-ui/core';
+import { Theme } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Link from 'next/link';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { getUrlFromString } from '../../shared/helpers/string.helper';
 import Image from '../../shared/image/image';
-import shoppingCart from '../../shopping-cart/shopping-cart.slice';
-import { IProductFilterProduct } from '../product-filter.model';
+import { IProduct } from '../../shared/models/product.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,57 +28,51 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IProps {
-    data: IProductFilterProduct;
+    data: IProduct;
 }
 
 function ProductCard(props: IProps) {
     const classes = useStyles(props);
     const { data } = props;
-    const dispatch = useDispatch();
-
-
-    function addToCart()
-    {
-        dispatch(shoppingCart.actions.addItemPending({content: {
-            productId: data.productId,
-            quantity: 1,
-            attributes: "Color/Size:White/XL"
-        }}));
-    }
 
     return (
-        <div>
-            <Card>
-                <CardActionArea className={classes.root}>
-                    <CardMedia>
-                        {
+        <Card>
+            <Link
+                href={{
+                    pathname: 'product/[productName]',
+                    query: {
+                        productId: data.productId
+                    }
+                }}
+                as={`product/${getUrlFromString(data.name)}?productId=${data.productId}`}
+                passHref
+            >
+                <Typography
+                    component="a"
+                    color="inherit"
+                >
+                    <CardActionArea className={classes.root}>
+                        <CardMedia>
                             <Image
                                 imageName={data.thumbnail}
                                 imageStyles={{
                                     width: "100%"
                                 }}
                             />
-                        }
-                    </CardMedia>
-                    <CardContent className={classes.cardContent}>
-                        <Typography variant="subtitle1" gutterBottom>
-                            {data.name}
-                        </Typography>
+                        </CardMedia>
+                        <CardContent className={classes.cardContent}>
+                            <Typography variant="subtitle1" gutterBottom>
+                                {data.name}
+                            </Typography>
 
-                        <Typography variant="subtitle2" gutterBottom>
-                            {data.price}
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
-                <CardActions className={classes.cardActions}>
-                    <Fab variant="extended" color="primary"
-                    onClick={addToCart}
-                    >
-                        Add To Cart
-                    </Fab>
-                </CardActions>
-            </Card >
-        </div>
+                            <Typography variant="subtitle2" gutterBottom>
+                                {data.price}
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                </Typography>
+            </Link>
+        </Card >
     );
 }
 
