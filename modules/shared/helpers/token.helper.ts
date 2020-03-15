@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
-import { ICurrentUser } from "../../customer/customer.model";
-import { currentUserInitialData } from "../../customer/customer.slice";
+import { ICurrentUser, defaultCustomer } from "../../customer/customer.model";
+import { getCustomerIdNumberFromLoginToken } from "./auth.helper";
 
 export function setLoginToken(loginToken: string) {
     if (typeof window === 'undefined') return;
@@ -12,8 +12,14 @@ export function getLoginToken() {
     return localStorage.getItem("loginToken");
 }
 
+export function getValidLoginToken() {
+    return getCustomerIdNumberFromLoginToken() > 0
+        ? getLoginToken()
+        : null;
+}
+
 export function setTokenHeader(options: RequestInit) {
-    const token = getLoginToken();
+    const token = getValidLoginToken();
     if (token) options.headers["Authorization"] = `Bearer ${token}`;
 }
 
@@ -24,14 +30,17 @@ export function removeLoginToken() {
 
 export function decodeLoginToken(): ICurrentUser {
     try {
-        const tokenPayload: ITokenPayload = jwtDecode<ITokenPayload>(localStorage.loginToken);
-        return {
-            customerId: tokenPayload.nameid,
-            name: tokenPayload.unique_name,
-            role: tokenPayload.role
-        }
+        const tokenPayload: ITokenPayload = jwtDecode<ITokenPayload>(getLoginToken());
+        if (new Date(tokenPayload.exp) < new Date())
+            return {
+                customerId: tokenPayload.nameid,
+                name: tokenPayload.unique_name,
+                role: tokenPayload.role
+            };
+
+        return defaultCustomer;
     } catch (err) {
-        return currentUserInitialData;
+        return defaultCustomer;
     }
 }
 
@@ -39,4 +48,7 @@ interface ITokenPayload {
     nameid: string,
     unique_name: string,
     role: string,
+    nbf: Date,
+    exp: Date,
+    iat: Date
 }

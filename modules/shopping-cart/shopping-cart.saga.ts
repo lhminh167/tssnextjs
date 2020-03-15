@@ -7,7 +7,9 @@ import {
   getTotalQuantity,
   removeItem,
   saveItemForLater,
-  updateItem
+  updateItem,
+  getWishList,
+  moveItemToCart
 } from "./shopping-cart.service";
 import {
   shoppingCartItemCountSlice,
@@ -18,15 +20,15 @@ function* getTotalQuantityWorker() {
   const response = yield call(getTotalQuantity);
   response.status < 300
     ? yield put(
-        shoppingCartItemCountSlice.actions.getTotalQuantitySucceeded(
-          response.content
-        )
+      shoppingCartItemCountSlice.actions.getTotalQuantitySucceeded(
+        response.content
       )
+    )
     : yield put(
-        shoppingCartItemCountSlice.actions.getTotalQuantityFailed(
-          response.title
-        )
-      );
+      shoppingCartItemCountSlice.actions.getTotalQuantityFailed(
+        response.title
+      )
+    );
 }
 
 function* getCartWorker() {
@@ -35,13 +37,6 @@ function* getCartWorker() {
     ? yield put(shoppingCartSlice.actions.getCartSucceeded(response.content))
     : yield put(shoppingCartSlice.actions.getCartFailed(response.title));
 }
-
-// function* getWishlistWorker() {
-//   const { response= yield call(getWishlist)
-//     response.status < 300 ?
-//         yield put(shoppingCartSlice.actions.getWishlistSucceeded(response.content)) :
-//         yield put(shoppingCartSlice.actions.getWishlistFailed(response.title));
-// }
 
 function* addItemWorker(action) {
   const response = yield call(addItem, action.payload);
@@ -57,7 +52,6 @@ function* updateItemWorker(action) {
   yield put(mainLoader.actions.show());
   const response = yield call(updateItem, action.payload.item);
   if (response.status < 300) {
-    debugger;
     yield put(
       shoppingCartSlice.actions.updateItemSucceeded({
         item: response.content,
@@ -82,11 +76,11 @@ function* saveItemForLaterWorker(action) {
   const response = yield call(saveItemForLater, action.payload);
   response.status < 300
     ? yield put(
-        shoppingCartSlice.actions.saveItemForLaterSucceeded(response.content)
-      )
+      shoppingCartSlice.actions.saveItemForLaterSucceeded(response.content)
+    )
     : yield put(
-        shoppingCartSlice.actions.saveItemForLaterFailed(response.title)
-      );
+      shoppingCartSlice.actions.saveItemForLaterFailed(response.title)
+    );
 }
 
 export const shoppingCartWatchers = [
@@ -101,5 +95,5 @@ export const shoppingCartWatchers = [
   takeLatest(
     shoppingCartSlice.actions.saveItemForLaterPending,
     saveItemForLaterWorker
-  )
+  ),
 ];

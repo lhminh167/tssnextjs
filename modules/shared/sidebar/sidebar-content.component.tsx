@@ -1,59 +1,33 @@
-import { createStyles, makeStyles, Theme, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ForumIcon from '@material-ui/icons/Forum';
-import InfoIcon from '@material-ui/icons/Info';
-import Label from '@material-ui/icons/Label';
-import LocalOfferIcon from '@material-ui/icons/LocalOffer';
-import MailIcon from '@material-ui/icons/Mail';
+import { Avatar, Badge, Grid, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText } from '@material-ui/core';
+import MuiLink from '@material-ui/core/Link';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import AppsIcon from '@material-ui/icons/Apps';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import HomeIcon from '@material-ui/icons/Home';
+import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import TreeView from '@material-ui/lab/TreeView';
-import React, { Fragment } from 'react';
-import TreeItem from '@material-ui/lab/TreeItem';
-import theme, { themeColor } from '../layout/layout.theme';
-import { Typography, Container, Avatar, Grid, Paper, Box } from '@material-ui/core';
-import { SidebarTreeItemLabelComponent } from './sidebar-tree-item-label.component';
 import Link from 'next/link';
-
-const sidebarContentTheme = createMuiTheme({
-    ...theme,
-    overrides: {
-        // @ts-ignore
-        MuiTreeView: {
-            root: {
-                maxWidth: 400,
-                minWidth: 250,
-                padding: theme.spacing(1, 0)
-            }
-        },
-        // @ts-ignore
-        MuiTreeItem: {
-            content: {
-                padding: theme.spacing(1),
-                flexDirection: 'row-reverse',
-                borderRadius: theme.spacing(0.5),
-            },
-            label: {
-                fontWeight: 'inherit',
-                color: 'inherit',
-            }
-        },
-    },
-});
+import React, { Fragment } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { currentUser } from '../../customer/customer.slice';
+import { IRootState } from '../../root/root.model';
+import { getRole, toNumber } from '../helpers/auth.helper';
+import { toUrl } from '../helpers/string.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        primaryText: {
-            color: themeColor.primary
+        list: {
+            width: 250,
         },
-        login: {
-            marginLeft: theme.spacing(1)
+        user: {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.primary.contrastText
         },
-        seperator: {
-            margin: theme.spacing(0,1)
+        firstListItem: {
+            marginTop: '1rem'
         }
-
     })
 );
 
@@ -61,98 +35,251 @@ interface ITreeViewProps {
     onClose: any;
 }
 
-function SideBarContentComponent(props: ITreeViewProps) {
+export default function SideBarContentComponent(props: ITreeViewProps) {
     const classes = useStyles({});
+    const dispatch = useDispatch();
     const { onClose } = props;
     const [open, setOpen] = React.useState(true);
+    const userEmail = useSelector<IRootState, string>(
+        state => state.currentUser.data.email
+    );
+    const userName = useSelector<IRootState, string>(
+        state => state.currentUser.data.name
+    );
+    const userId = useSelector<IRootState, number>(
+        state => toNumber(state.currentUser.data.customerId)
+    );
+    const isLoggedIn = useSelector<IRootState, boolean>(
+        state => toNumber(state.currentUser.data.customerId) > 0
+    );
+    const itemCount = useSelector<IRootState, number>(
+        state => state.shoppingCartItemCount.data
+    );
+    const isAdmin = useSelector<IRootState, boolean>(
+        state => getRole(state.currentUser.data) === "Admin"
+    );
 
-    const handleClick = () => {
-        setOpen(!open);
-    };
-
-    const closeSideBar = (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (
-            event.type === 'keydown' &&
-            (
-                (event as React.KeyboardEvent).key === 'Tab'
-                || (event as React.KeyboardEvent).key === 'Shift'
-            )
-        ) return;
-
-        onClose();
-    };
+    function logout() {
+        dispatch(currentUser.actions.logout());
+    }
 
     return (
-        <ThemeProvider theme={sidebarContentTheme}>
-            <TreeView
-                defaultCollapseIcon={<ArrowDropUpIcon />}
-                defaultExpandIcon={<ArrowDropDownIcon />}
+        <List
+            className={classes.list}
+            component="nav"
+            disablePadding
+        >
+            <ListItem
+                button
+                className={classes.user}
             >
-                <TreeItem nodeId="2"
-                    label={
-                        <SidebarTreeItemLabelComponent
-                            Icon={<Avatar alt="Username" src="/static/images/avatar/1.jpg" />}
-                            Title={
-                                <Grid container direction="row">
-                                    <Grid item className={classes.login+' '+classes.primaryText}>
-                                        <Link href="/login" as="/login" passHref>
-                                            <Typography
-                                                variant="body2"
-                                            >
-                                                Login
-                                            </Typography>
-                                        </Link>
-                                    </Grid>
-                                    <Grid item 
-                                        className={classes.seperator}
+                <ListItemAvatar>
+                    <Avatar>
+                        {userName[0]}
+                    </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                    primary={
+                        <Fragment>
+                            {
+                                isLoggedIn &&
+                                <Link
+                                    href={{
+                                        pathname: 'user/[userId]',
+                                        query: {
+                                            userId
+                                        }
+                                    }}
+                                    as={`product/${toUrl(userName)}?userId=${userId}`}
+                                    passHref
+                                >
+                                    <Grid item
+                                        component={MuiLink}
+                                        color="inherit"
                                     >
-                                        {/* &nbsp;or&nbsp; */}
+                                        {userName}
+                                    </Grid>
+                                </Link>
+                            }
+                            {
+                                !isLoggedIn &&
+                                <Grid
+                                    container
+                                    direction="row"
+                                    alignItems="center"
+                                    spacing={1}
+                                >
+                                    <Link
+                                        href="/user/login"
+                                        as="/user/login"
+                                        passHref
+                                    >
+                                        <Grid item
+                                            component={MuiLink}
+                                            color="inherit"
+                                        >
+                                            Login
+                                </Grid>
+                                    </Link>
+                                    <Grid item
+                                    >
                                         |
-                                    </Grid>
-                                    <Grid item className={classes.primaryText}>
-                                        <Link href="/register" as="/register" passHref>
-                                            <Typography
-                                                variant="body2"
-                                            >
-                                                Register
-                                            </Typography>
-                                        </Link>
-                                    </Grid>
+                            </Grid>
+                                    <Link
+                                        href="/user/register"
+                                        as="/user/register"
+                                        passHref
+                                    >
+                                        <Grid item
+                                            component={MuiLink}
+                                            color="inherit"
+                                        >
+                                            Register
+                            </Grid>
+                                    </Link>
                                 </Grid>
                             }
-                        />
+                        </Fragment>
                     }
-                />
-                <TreeItem nodeId="1"
-                    label={
-                        <SidebarTreeItemLabelComponent
-                            Title="Mail"
-                            Icon={<MailIcon />}
-                        />
+                    secondary={
+                        isLoggedIn &&
+                        <Link
+                            href={{
+                                pathname: 'user/[userId]',
+                                query: {
+                                    userId
+                                }
+                            }}
+                            as={`product/${toUrl(userName)}?userId=${userId}`}
+                            passHref
+                        >
+                            <Grid item
+                                component={MuiLink}
+                                color="inherit"
+                            >
+                                {userEmail}
+                            </Grid>
+                        </Link>
                     }
                 >
-                    <TreeItem nodeId="2" label="Calendar" />
-                    <TreeItem nodeId="3" label="Chrome" />
-                    <TreeItem nodeId="4" label="Webstorm" />
-                </TreeItem>
-                <TreeItem nodeId="5" label="Documents">
-                    <TreeItem nodeId="6" label="Material-UI">
-                        <TreeItem nodeId="7" label="src">
-                            <TreeItem nodeId="8"
-                                label={
-                                    <SidebarTreeItemLabelComponent
-                                        Title="Mail"
-                                        Icon={MailIcon}
-                                    />
-                                }
+                </ListItemText>
+            </ListItem>
+            <Link
+                href="/shopping-cart"
+                as="/shopping-cart"
+                passHref
+            >
+                <ListItem button component="a"
+                    className={classes.firstListItem}
+                >
+                    <ListItemIcon
+                    >
+                        <Badge
+                            badgeContent={itemCount ?? 0}
+                            color="primary"
+                        >
+                            <ShoppingCartOutlinedIcon
+                                color="primary"
                             />
-                            <TreeItem nodeId="9" label="tree-view.js" />
-                        </TreeItem>
-                    </TreeItem>
-                </TreeItem>
-            </TreeView>
-        </ThemeProvider>
+                        </Badge>
+                    </ListItemIcon>
+                    <ListItemText
+                        primary="Shopping Cart"
+                        primaryTypographyProps={{
+                            color: 'primary'
+                        }}
+                    />
+                </ListItem>
+            </Link>
+            <Link
+                href="/"
+                as="/"
+                passHref
+            >
+                <ListItem button component="a"
+                >
+                    <ListItemIcon>
+                        <HomeIcon
+                            color="primary"
+                        />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary="Home"
+                        primaryTypographyProps={{
+                            color: 'primary'
+                        }}
+                    />
+                </ListItem>
+            </Link>
+            <Link
+                href="/wish-list"
+                as="/wish-list"
+                passHref
+            >
+                <ListItem button component="a"
+                >
+                    <ListItemIcon>
+                        <FavoriteIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Wishlist" />
+                </ListItem>
+            </Link>
+            {
+                isLoggedIn &&
+                <Link
+                    href="/order"
+                    as="/order"
+                    passHref
+                >
+                    <ListItem button component="a"
+                    >
+                        <ListItemIcon>
+                            <AssignmentTurnedInIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Order" />
+                    </ListItem>
+                </Link>
+            }
+            {
+                isAdmin && isLoggedIn &&
+                <Link
+                    href="/admin"
+                    as="/admin"
+                    passHref
+                >
+                    <ListItem button component="a"
+                    >
+                        <ListItemIcon>
+                            <SupervisorAccountIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Admin" />
+                    </ListItem>
+                </Link>
+            }
+            <Link
+                href="/department"
+                as="/department"
+                passHref
+            >
+                <ListItem button component="a"
+                >
+                    <ListItemIcon>
+                        <AppsIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Department" />
+                </ListItem>
+            </Link>
+            {
+                isLoggedIn &&
+                <ListItem button
+                    onClick={logout}
+                >
+                    <ListItemIcon>
+                        <ExitToAppIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Logout" />
+                </ListItem>
+            }
+        </List>
     );
 }
-
-export default SideBarContentComponent;

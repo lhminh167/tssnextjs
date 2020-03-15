@@ -4,7 +4,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from "@material-ui/core/FormLabel";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { ChangeEvent } from 'react';
-import { useDispatch } from 'react-redux';
+import { IProductFilterCategory } from '../../product/filter/product-filter.model';
 import { themeColor } from '../layout/layout.theme';
 
 export const CheckBoxBlankIcon = <svg width="24px" height="24px" viewBox="0 0 24 24">
@@ -12,59 +12,47 @@ export const CheckBoxBlankIcon = <svg width="24px" height="24px" viewBox="0 0 24
 </svg>
 
 const useStyles = makeStyles((theme: Theme) => ({
-    group: {
-        // maxHeight: '200px',
-        // overflow: 'scroll'
-    },
-    formControlLabel: {
-        // display: 'block'
-    }
 }));
 
+interface Props {
+    state: string[],
+    data: IProductFilterCategory[],
+    output: any
+}
 
-function BrandPicker(props) {
-    const classes = useStyles(props);
-    // const { productFilter: { filter: { data } } } = useTrackedState<IRootState>();
-    // const data = useSelector(state => state.productFilter.filter.data)
-    const dispatch = useDispatch();
-
-    const brands = props.categories;
-    const chosenCategoryIds = props.chosenCategoryIds;
-
-    // const brands = data.categories;
-    // const chosenCategoryIds = data.chosenCategoryIds;
+function BrandPicker({
+    state,
+    data,
+    output
+}: Props) {
+    const classes = useStyles({});
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const eventValue = Number((event.target as HTMLInputElement).value);
-
-        const toBeUnchecked = chosenCategoryIds.some(chosenCategoryId => chosenCategoryId === eventValue)
-
-        // toBeUnchecked ?
-
-        //     dispatch(productFilter.actions.removeCategory(eventValue)) :
-
-        //     dispatch(productFilter.actions.chooseCategory(eventValue));
+        const name = (event.target as HTMLInputElement).value;
+        const index = state.findIndex(chosen => chosen === name);
+        const newState = [...state];
+        index >= 0 ? newState.splice(index, 1) : newState.push(name);
+        output(newState);
     };
 
-    const checkboxes = brands.map(brand => (
+    const checkboxes = data.map(entry => (
         <FormControlLabel
-            className={classes.formControlLabel}
-            key={brand.categoryId}
+            key={entry.name}
             control={
                 <Checkbox
-                    checked={chosenCategoryIds.some(chosenId => chosenId === brand.categoryId)}
+                    checked={state.some(chosen => chosen === entry.name)}
                     onChange={handleChange}
-                    value={brand.categoryId}
+                    value={entry.name}
                     color="secondary"
                     icon={CheckBoxBlankIcon}
                 />
             }
-            label={brand.name}
+            label={entry.name}
         />
     ));
 
     return (
-        <FormGroup className={classes.group}>
+        <FormGroup>
             <FormLabel component="legend" >Brand</FormLabel>
             {checkboxes}
         </FormGroup>

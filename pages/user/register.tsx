@@ -1,7 +1,8 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import RegisterComponent from '../../modules/customer/register/register.component';
+import RegisterComponent from '../../modules/customer/create/create-customer.component';
+import { getCustomerIdNumberFromStore, redirect } from '../../modules/shared/helpers/auth.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,16 +26,18 @@ function RegisterPage(props) {
     );
 }
 
-// RegisterPage.getInitialProps = function(props) {
-//     const { store, isServer } = props.ctx;
-
-//     if (
-//         store.getState().Register.data.length === 0
-//     ) {
-//         store.dispatch(Register.actions.getCartPending());
-//     }
-
-//     return { isServer }
-// }
+RegisterPage.getInitialProps = async function ({
+    ctx: {
+        isServer,
+        store
+    },
+    ctx
+}) {
+    if (
+        !isServer &&
+        getCustomerIdNumberFromStore(store) > 0
+    )
+        redirect(ctx, ctx.req.originalUrl);
+}
 
 export default RegisterPage

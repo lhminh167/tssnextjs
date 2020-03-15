@@ -1,14 +1,14 @@
-import { IProduct, defaultProduct } from "../shared/models/product.model";
-import { Validator } from "fluentvalidation-ts";
+import { defaultProduct, IProduct } from "../shared/models/product.model";
 
 const shoppingCartBaseUrl = 'shoppingCart';
 
 export const ShoppingCartUrl = {
     baseUrl: shoppingCartBaseUrl,
-    saveItemForLater: shoppingCartBaseUrl+'/'+'saveItemForLater',
-    moveItemToCart: shoppingCartBaseUrl+'/'+'MoveItemToCart',
-    totalCost: shoppingCartBaseUrl+'/'+'TotalCost',
-    totalQuantity: shoppingCartBaseUrl+'/'+'TotalQuantity',
+    saveItemForLater: shoppingCartBaseUrl + '/' + 'saveItemForLater',
+    moveItemToCart: shoppingCartBaseUrl + '/' + 'MoveItemToCart',
+    totalCost: shoppingCartBaseUrl + '/' + 'TotalCost',
+    totalQuantity: shoppingCartBaseUrl + '/' + 'TotalQuantity',
+    wishList: shoppingCartBaseUrl + '/' + 'WishList',
 }
 
 export interface IShopingCartItem {

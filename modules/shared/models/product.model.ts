@@ -1,7 +1,10 @@
-import { IReview } from "./review.model";
+import { IReview, IReviewGetResponse } from "./review.model";
 import { IAttributeValue } from "./attribute-value.model";
+import { IProductFilterCategory, defaultProductFilterCategory } from "../../product/filter/product-filter.model";
+import { defaultCategory } from "./category.model";
+import { PaginatedList, defaultPaginationList } from "../crud/crud.model";
 
-export const productUrl = 'products';
+export const productUrl = 'product';
 
 export interface IProduct {
     productId: number;
@@ -13,8 +16,10 @@ export interface IProduct {
     image2: string;
     thumbnail: string;
     display: number;
-    review: IReview[];
     attributes: IAttributeValue[];
+    category: IProductFilterCategory;
+    review: IReviewGetResponse;
+    recommendation: PaginatedList<IProduct>;
 }
 
 export const defaultProduct: IProduct = {
@@ -27,6 +32,8 @@ export const defaultProduct: IProduct = {
     image2: '',
     thumbnail: '',
     display: 0,
-    review: [],
-    attributes: []
+    attributes: [],
+    category: defaultProductFilterCategory,
+    review: defaultPaginationList,
+    recommendation: defaultPaginationList
 }

@@ -5,15 +5,13 @@ import withRedux from 'next-redux-wrapper'
 import App from 'next/app'
 import React from 'react'
 import { Provider } from 'react-redux'
-import { currentUser, currentUserInitialData } from '../modules/customer/customer.slice'
+import { currentUser } from '../modules/customer/customer.slice'
 import createStore, { TssStore } from '../modules/root/root.store'
-import { decodeLoginToken, setTokenHeader, getLoginToken } from '../modules/shared/helpers/token.helper'
+import { getCustomerIdNumberFromLoginToken } from '../modules/shared/helpers/auth.helper'
+import { decodeLoginToken, getLoginToken, getValidLoginToken } from '../modules/shared/helpers/token.helper'
 import Layout from '../modules/shared/layout/layout.component'
-import theme from '../modules/shared/layout/layout.theme'
-import { getTotalQuantity } from '../modules/shopping-cart/shopping-cart.service'
-import { Response } from '../modules/shared/crud/crud.model'
+import theme, { GlobalCss } from '../modules/shared/layout/layout.theme'
 import { shoppingCartItemCountSlice } from '../modules/shopping-cart/shopping-cart.slice'
-import { getCustomerIdFromLoginToken } from '../modules/shared/helpers/auth.helper'
 
 interface IProps {
     store: TssStore;
@@ -39,13 +37,13 @@ class MyApp extends App<IProps> {
     }
 
     getCurrentUser() {
+        if (!getValidLoginToken()) return;
+
         const { store } = this.props;
 
-        if (!getLoginToken()) return;
-        console.log(getLoginToken())
         store.dispatch(shoppingCartItemCountSlice.actions.getTotalQuantityPending());
 
-        const customerId = getCustomerIdFromLoginToken();
+        const customerId = getCustomerIdNumberFromLoginToken();
         customerId
             ? store.dispatch(currentUser.actions.getCustomerPending(customerId))
             : store.dispatch(currentUser.actions.setCurrentUser(decodeLoginToken()));;
@@ -55,15 +53,14 @@ class MyApp extends App<IProps> {
         const { Component, pageProps, store } = this.props;
         return (
             <ThemeProvider theme={theme}>
-
                 <CssBaseline />
+                <GlobalCss />
                 <Provider store={store}>
                     <Layout>
                         <Component {...pageProps} />
                     </Layout>
                 </Provider>
             </ThemeProvider>
-
         )
     }
 }

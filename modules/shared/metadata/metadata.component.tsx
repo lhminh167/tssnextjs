@@ -1,0 +1,38 @@
+import { Fragment } from 'react';
+import { useSelector } from 'react-redux';
+import { Router } from 'next/router';
+import { Metadata } from './metadata.model';
+
+
+
+export function MetadataComponent({
+    title,
+    description
+}: Metadata) {
+    // const userLanguage = useSelector(state => state.options.userLanguage);
+
+
+    return (
+        <Fragment>
+            <title>{title}</title>
+            <meta name="description" content={description} />
+            <link rel="canonical" href="https://yourwebsite.com/" />
+            {/* Twitter */}
+            <meta name="twitter:card" content="summary" />
+            <meta name="twitter:site" content="@MaterialUI" />
+            <meta name="twitter:title" content={title} />
+            <meta name="twitter:description" content={description} />
+            <meta name="twitter:image" content="https://material-ui.com/static/logo.png" />
+            {/* Facebook */}
+            <meta property="og:type" content="website" />
+            <meta property="og:title" content={title} />
+            <meta
+                property="og:url"
+            // content={`https://material-ui.com${Router._rewriteUrlForNextExport(router.asPath)}`}
+            />
+            <meta property="og:description" content={description} />
+            <meta property="og:image" content="https://material-ui.com/static/logo.png" />
+            <meta property="og:ttl" content="604800" />
+        </Fragment>
+    )
+}

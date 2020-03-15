@@ -4,18 +4,16 @@ import ShoppingCartItemList from "./item-list/item-list.component";
 import { IShopingCartItem } from "./shopping-cart.model";
 
 export const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-  })
+    createStyles({
+    })
 );
 
 interface IProps {
-  data: IShopingCartItem[];
+    data: IShopingCartItem[];
 }
 
-function ShoppingCartComponent(props: IProps) {
-  const classes = useStyles({});
-  const { data } = props;
-  return <ShoppingCartItemList data={data} />;
+export default function ShoppingCartComponent(props: IProps) {
+    const classes = useStyles({});
+    const { data } = props;
+    return <ShoppingCartItemList data={data} />;
 }
-
-export default ShoppingCartComponent;

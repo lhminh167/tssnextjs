@@ -10,6 +10,9 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Link from 'next/link';
 import React, { Fragment } from 'react';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../root/root.model';
+import { toNumber } from '../../shared/helpers/auth.helper';
 import { IShopingCartItem } from '../shopping-cart.model';
 import ShoppingCartItemDetail from './item-detail/item-detail.component';
 import ShoppingCartQuantityPicker from './shopping-cart-quantity-picker.component';
@@ -40,6 +43,9 @@ interface IProps {
 
 function ShoppingCartItemList({ data }: IProps) {
     const classes = useShoppingCartStyles({});
+    const isLoggedIn = useSelector<IRootState, boolean>(
+        state => toNumber(state.currentUser.data.customerId) > 0
+    );
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     let numOfItems: number = data.map(x => x.quantity).reduce((acc, cur) => { return acc + cur }, 0);
@@ -69,7 +75,7 @@ function ShoppingCartItemList({ data }: IProps) {
                     />
                     <TableBody>
                         {
-                            data?.length ?
+                            data ?.length ?
                                 <ShoppingCartTableRow
                                     data={data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)}
                                 />
@@ -80,11 +86,11 @@ function ShoppingCartItemList({ data }: IProps) {
 
 
                         }
-                        {emptyRows > 0 && (
+                        {/* {emptyRows > 0 && (
                             <TableRow style={{ height: 49 * emptyRows }}>
                                 <TableCell colSpan={6} />
                             </TableRow>
-                        )}
+                        )} */}
                     </TableBody>
                 </Table>
             </div>
@@ -111,8 +117,16 @@ function ShoppingCartItemList({ data }: IProps) {
                 <Grid item
                     className={classes.footerButton}
                 >
-                    <Link href="/" as="/">
-                        <Fab variant="extended" color="default">
+                    <Link
+                        href="/"
+                        as="/"
+                        passHref
+                    >
+                        <Fab
+                            component="a"
+                            variant="extended"
+                            color="default"
+                        >
                             Back to Shop
                         </Fab>
                     </Link>
@@ -120,10 +134,15 @@ function ShoppingCartItemList({ data }: IProps) {
                 <Grid item
                     className={classes.footerButton}
                 >
-                    <Link href="/checkout" as="/checkout">
+                    <Link
+                        href={isLoggedIn ? "/order/new" : "/user/login"}
+                        passHref
+                    >
                         <Fab
+                            component="a"
                             variant="extended"
                             color="primary"
+                            disabled={data.length === 0}
                         >
                             Checkout
                         </Fab>
@@ -146,9 +165,9 @@ function ShoppingCartTableRow(props: ShoppingCartTableRowProps) {
     return (
         <Fragment>
             {
-                data.map((row, index) => {
+                data ?.map((row, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
-                    const attributes: string[] = row?.attributes?.split(':')[1].split('/');
+                    const attributes: string[] = row ?.attributes ?.split(':')[1].split('/');
                     const color: string = attributes[0];
                     const size: string = attributes[1];
 
@@ -172,8 +191,9 @@ function ShoppingCartTableRow(props: ShoppingCartTableRowProps) {
                             </TableCell>
                             <TableCell align="center">
                                 {
-                                    row?.product?.discountedPrice
-                                    ?? row?.product?.price
+                                    row ?.product ?.discountedPrice > 0
+                                        ? row ?.product ?.discountedPrice
+                                            : row ?.product ?.price
                                 }
                             </TableCell>
                         </TableRow>

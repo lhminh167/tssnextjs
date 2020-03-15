@@ -4,29 +4,18 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ILoginResquest, LoginRequestValidator } from '../customer.model';
+import { ILoginRequest, LoginRequestValidator } from '../customer.model';
 import { currentUser } from '../customer.slice';
 import { isValidForm } from '../../shared/validator/validator';
+import Link from 'next/link';
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="/">
-                T-Shirt Shop
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -50,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function LoginComponent() {
     const classes = useStyles({});
-    const [state, setState] = useState<ILoginResquest>({
+    const [state, setState] = useState<ILoginRequest>({
         email: "",
         password: ""
     });
@@ -65,18 +54,18 @@ export default function LoginComponent() {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-        
+
         setState({
             ...state,
             [name]: value,
-        });        
+        });
     }
 
     function submit(event): void {
         setSubmitted(true);
 
         if (!isValidForm(errors)) return;
-        
+
         dispatch(currentUser.actions.loginPending(state));
     }
 
@@ -138,22 +127,39 @@ export default function LoginComponent() {
                         Sign In
                     </Button>
                     <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
+                        {/* <Grid item xs>
+                            <Link
+                                href="/"
+                                passHref
+                            >
+                                <Typography
+                                    variant="body2"
+                                    component="a"
+                                    color="primary"
+
+                                >
+                                    Forgot password?
+                                </Typography>
                             </Link>
-                        </Grid>
+                        </Grid> */}
                         <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
+                            <Link
+                                href="/user/register"
+                                passHref
+                            >
+                                <Typography
+                                    component="a"
+                                    variant="body2"
+                                    color="primary"
+
+                                >
+                                    Don't have an account? Sign Up
+                                </Typography>
                             </Link>
                         </Grid>
                     </Grid>
                 </form>
             </div>
-            <Box mt={8}>
-                <Copyright />
-            </Box>
         </Container>
     );
 }

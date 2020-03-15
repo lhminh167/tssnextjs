@@ -17,6 +17,10 @@ export async function removeItem(item: IShopingCartItem) {
     return await remove(ShoppingCartUrl.baseUrl, item.itemId, null);
 }
 
+export async function getWishList() {
+    return await get(ShoppingCartUrl.wishList, 0);
+}
+
 export async function saveItemForLater(item: IShopingCartItem) {
     return await put(ShoppingCartUrl.saveItemForLater, item.itemId, item);
 }

@@ -7,7 +7,7 @@ import { transitionWidth } from './layout.theme';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         main: {
-            marginTop: theme.spacing(14),
+            marginTop: theme.spacing(18),
             [theme.breakpoints.up(transitionWidth)]: {
                 marginTop: theme.spacing(8)
             },

@@ -1,60 +1,89 @@
 import es6promise from "es6-promise";
 import "isomorphic-unfetch";
-import { HttpMethod } from "../crud/crud.model";
+import { HttpMethod, UploadRequest, ImageGetUploadTokensRequest, mediaUrl } from "../crud/crud.model";
 import { setTokenHeader } from "../helpers/token.helper";
 import { setContentType } from "../helpers/http.helper";
 
 es6promise.polyfill();
 
-// const baseUrl = process.env.API_URL;
+const baseUrl = process.env.API_URL;
+const uploadUrl = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`;
 
-// if (process.env.NODE_ENV === 'production')
-const baseUrl = 'https://tssnetcore.herokuapp.com/api/';
+export async function get(url: string, id: number = 0) {
+    url = `${baseUrl}${url}`;
 
-export async function get(url: string, id: number) {
-  url = `${baseUrl}${url}`;
+    url += id > 0 ? `/${id}` : "";
 
-  url += id > 0 ? `/${id}` : "";
-
-  return await callApi(url);
+    return await callApi(url);
 }
 
 export async function post(url: string, body: any) {
-  url = `${baseUrl}${url}`;
+    url = `${baseUrl}${url}`;
 
-  return await callApi(url, {
-    method: HttpMethod.POST,
-    body: JSON.stringify(body)
-  });
+    return await callApi(url, {
+        method: HttpMethod.POST,
+        body: JSON.stringify(body)
+    });
 }
 
-export async function put(url: string, id: number, body: any) {
-  url = `${baseUrl}${url}`;
+export async function put(url: string, id: number = 0, body: any) {
+    url = `${baseUrl}${url}`;
 
-  url += id > 0 ? `/${id}` : "";
+    url += id > 0 ? `/${id}` : "";
 
-  return await callApi(url, {
-    method: HttpMethod.PUT,
-    body: JSON.stringify(body)
-  });
+    return await callApi(url, {
+        method: HttpMethod.PUT,
+        body: JSON.stringify(body)
+    });
 }
 
-export async function remove(url: string, id: number, body: any) {
-  url = `${baseUrl}${url}`;
+export async function remove(url: string, id: number = 0, body: any) {
+    url = `${baseUrl}${url}`;
 
-  url += id > 0 ? `/${id}` : "";
+    url += id > 0 ? `/${id}` : "";
 
-  return await callApi(url, {
-    method: HttpMethod.DELETE,
-    body: JSON.stringify(body)
-  });
+    return await callApi(url, {
+        method: HttpMethod.DELETE,
+        body: JSON.stringify(body)
+    });
 }
 
 async function callApi(url: string, options: RequestInit = {}) {
-  options.headers = {};
-  setTokenHeader(options);
-  setContentType(options, "application/json");
+    options.headers = {};
+    setTokenHeader(options);
+    setContentType(options, "application/json");
 
-  const response = await fetch(url, options);
-  return await response.json();
+    const response = await fetch(url, options);
+    return await response.json();
+}
+
+async function getImageUploadAuthToken(input: ImageGetUploadTokensRequest) {
+    return await post(mediaUrl.imageUploadToken, input);
+}
+
+export async function upload(input: UploadRequest[]) {
+    const tokenResponse = await getImageUploadAuthToken({
+        content: input.map(entry => ({
+            name: entry.name,
+            settings: 'f_auto,w_auto,c_scale,q_auto,dpr_auto'
+        }))
+    });
+
+    input.map(async (entry, index) => {
+        const body = new FormData();
+        body.append('api_key', process.env.CLOUDINARY_API_KEY);
+        body.append('upload_preset', 'tss');
+        body.append('file', entry.file);
+        body.append('public_id', entry.name);
+        body.append('signature', tokenResponse.content[index].uploadToken);
+        body.append('timestamp', tokenResponse.content[index].creationTime);
+        body.append('eager', 'f_auto,w_auto,c_scale,q_auto,dpr_auto');
+
+        const options = {
+            method: HttpMethod.POST,
+            body
+        };
+        const response = await fetch(uploadUrl, options);
+        return await response.json();
+    });
 }

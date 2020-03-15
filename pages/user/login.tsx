@@ -2,7 +2,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import LoginComponent from '../../modules/customer/login/login.component';
-import { getCustomerIdFromStore, redirect } from '../../modules/shared/helpers/auth.helper';
+import { getCustomerIdNumberFromStore, redirect } from '../../modules/shared/helpers/auth.helper';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,11 +34,13 @@ LoginPage.getInitialProps = async function ({
     },
     ctx
 }) {
-    if (
-        !isServer &&
-        getCustomerIdFromStore(store) > 0
-    )
-        redirect(ctx, ctx.req.originalUrl);
+    // if (
+    //     !isServer &&
+    //     getCustomerIdNumberFromStore(store) > 0
+    // ) {
+    //     redirect(ctx, ctx.req.originalUrl);
+    //     return
+    // }
 }
 
 export default LoginPage

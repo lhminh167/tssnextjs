@@ -12,7 +12,7 @@ export function succeeded(state: IState<any>) {
 
 export function failed(state: IState<any>, action: any) {
     state.isLoading = false;
-    state.error = action;
+    state.error = action.payload;
 }
 
 export function idle(state: IState<any>, initialState: IState<any>) {

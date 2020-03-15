@@ -1,5 +1,6 @@
 import { Validator } from 'fluentvalidation-ts';
 import { IAttributeValue } from "../shared/models/attribute-value.model";
+import { ShippingRegion, defaultShippingRegion } from '../shared/models/shipping-region.model';
 
 const customerBaseUrl = 'Customer';
 
@@ -22,6 +23,7 @@ export class Customer {
     postalCode?: string;
     country?: string;
     shippingRegionId?: number;
+    shippingRegion?: ShippingRegion;
     dayPhone?: string;
     evePhone?: string;
     mobPhone?: string;
@@ -29,7 +31,29 @@ export class Customer {
     role?: string;
 }
 
-export interface ILoginResquest {
+export const defaultCustomer: Customer = {
+    customerId: "0",
+    name: "Visitor",
+    email: "",
+    // password: "",
+    // creditCard: "",
+    address1: "",
+    address2: "",
+    city: "",
+    region: "",
+    postalCode: "",
+    country: "",
+    shippingRegionId: 2,
+    shippingRegion: defaultShippingRegion,
+    dayPhone: "",
+    evePhone: "",
+    mobPhone: "",
+    attributes: [],
+    role: "Customer"
+};
+
+
+export interface ILoginRequest {
     email?: string;
     password?: string;
 }
@@ -46,12 +70,12 @@ export interface ILoginResponse {
 }
 
 
-export interface ILoginResquest {
+export interface ILoginRequest {
     email?: string;
     password?: string;
 }
 
-export class LoginRequestValidator extends Validator<ILoginResquest> {
+export class LoginRequestValidator extends Validator<ILoginRequest> {
     constructor() {
         super();
 
@@ -61,4 +85,36 @@ export class LoginRequestValidator extends Validator<ILoginResquest> {
         this.ruleFor('password')
             .notEmpty();
     }
+}
+
+export interface ICreateCustomerRequest {
+    name?: string;
+    email?: string;
+    password?: string;
+    role?: string;
+}
+
+export class CreateCustomerRequestValidator extends Validator<ICreateCustomerRequest> {
+    constructor() {
+        super();
+
+        this.ruleFor('email')
+            .notEmpty().emailAddress();
+
+        this.ruleFor('name')
+            .notEmpty();
+
+        this.ruleFor('password')
+            .notEmpty();
+
+        this.ruleFor('role')
+            .notEmpty();
+    }
+}
+
+export const defaultCreateCustomerRequest = {
+    email: "",
+    name: "",
+    password: "",
+    role: "Customer"
 }

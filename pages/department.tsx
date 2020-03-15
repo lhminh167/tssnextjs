@@ -1,10 +1,8 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import ProductFilter from '../modules/product-filter/product-filter.component';
-import { productFilter } from '../modules/product-filter/product-filter.slice';
 import { IRootState } from '../modules/root/root.model';
-import DepartmentComponent from '../modules/department/department.component';
+import DepartmentListComponent from '../modules/department/list/department-list.component';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -13,16 +11,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function DepartmentPage(props) {
     const classes = useStyles(props);
-    const data = useSelector(
-        (state: IRootState) => state.productFilter
-    )
-
-    return <DepartmentComponent data={data} />
+    return <DepartmentListComponent />
 }
 
-DepartmentPage.getInitialProps = function (props) {
-    const { store, isServer } = props.ctx;
-    return { isServer }
+DepartmentPage.getInitialProps = function ({ }) {
 }
 
 export default DepartmentPage;

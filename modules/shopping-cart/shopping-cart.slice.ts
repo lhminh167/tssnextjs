@@ -38,25 +38,6 @@ export const shoppingCartSlice = createSlice({
       idle(state, shoppingCartInitialState);
     },
 
-    getWishlistPending(state: IState<IShopingCartItem[]>) {
-      pending(state);
-    },
-    getWishlistSucceeded(
-      state: IState<IShopingCartItem[]>,
-      action: PayloadAction<IShopingCartItem[]>
-    ) {
-      state.data = action.payload;
-      succeeded(state);
-    },
-    getWishlistFailed(
-      state: IState<IShopingCartItem[]>,
-      action: PayloadAction<IShopingCartItem[]>
-    ) {
-      failed(state, action);
-    },
-    getWishlistIdle(state: IState<IShopingCartItem[]>) {
-      idle(state, shoppingCartInitialState);
-    },
 
     addItemPending(
       state: IState<IShopingCartItem[]>,
@@ -154,26 +135,6 @@ export const shoppingCartSlice = createSlice({
     saveItemForLaterIdle(state: IState<IShopingCartItem[]>) {
       idle(state, shoppingCartInitialState);
     },
-
-    moveItemToCartPending(state: IState<IShopingCartItem[]>) {
-      pending(state);
-    },
-    moveItemToCartSucceeded(
-      state: IState<IShopingCartItem[]>,
-      action: PayloadAction<IShopingCartItem>
-    ) {
-      state.data = state.data.filter(x => x.itemId !== action.payload.itemId);
-      succeeded(state);
-    },
-    moveItemToCartFailed(
-      state: IState<IShopingCartItem[]>,
-      action: PayloadAction<IShopingCartItem>
-    ) {
-      failed(state, action);
-    },
-    moveItemToCartIdle(state: IState<IShopingCartItem[]>) {
-      idle(state, shoppingCartInitialState);
-    }
   }
 });
 
