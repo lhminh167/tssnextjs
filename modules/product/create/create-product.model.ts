@@ -31,7 +31,7 @@ export const defaultCreateProductState: ICreateProductState = {
 
 export class CreateProductStateValidator extends Validator<
   ICreateProductState
-> {
+  > {
   constructor() {
     super();
 
@@ -42,7 +42,6 @@ export class CreateProductStateValidator extends Validator<
     this.ruleFor("price").must(value => toNumber(value) > 0);
 
     this.ruleFor("discountedPrice")
-      .must(discountedPrice => toNumber(discountedPrice) > 0)
       .must(
         (discountedPrice, model) =>
           toNumber(discountedPrice) < toNumber(model.price)

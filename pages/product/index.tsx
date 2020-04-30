@@ -3,6 +3,7 @@ import querystring from 'query-string';
 import ProductFilterComponent from "../../modules/product/filter/product-filter.component";
 import { defaultProductSearchRequest } from "../../modules/product/filter/product-filter.model";
 import productFilterSlice from "../../modules/product/filter/product-filter.slice";
+import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -13,8 +14,10 @@ export default function ProductSearchPage(props) {
     const classes = useStyles(props);
     return (
         <Container>
-            <ProductFilterComponent
-            />
+            <ErrorBoundary>
+                <ProductFilterComponent
+                />
+            </ErrorBoundary>
         </Container>
     );
 }

@@ -25,3 +25,7 @@ export function formatDatetime(input: string): string {
 export function formatPercent(number: number, total: number): string {
     return Math.round(number * 100 / total).toFixed(0) + '%';
 }
+
+export const phoneNumberRegex = RegExp('^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+
+export const postalCodeRegex = RegExp('10[0-9]{2}');

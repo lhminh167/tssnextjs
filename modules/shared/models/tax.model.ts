@@ -1,6 +1,6 @@
 import { Shipping } from "./shipping.model";
 
-export class Tax {
+export interface Tax {
     taxId: number;
     taxType: string;
     taxPercentage: number;

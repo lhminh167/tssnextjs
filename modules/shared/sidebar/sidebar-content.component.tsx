@@ -6,16 +6,15 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import HomeIcon from '@material-ui/icons/Home';
+import SearchIcon from '@material-ui/icons/Search';
 import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import Link from 'next/link';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { currentUserSlice } from '../../customer/customer.slice';
 import { IRootState } from '../../root/root.model';
-import { getRole, toNumber } from '../helpers/auth.helper';
-import { toUrl } from '../helpers/string.helper';
-import SearchIcon from '@material-ui/icons/Search';
+import { toNumber } from '../helpers/auth.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,16 +38,11 @@ interface ITreeViewProps {
 export default function SideBarContentComponent(props: ITreeViewProps) {
     const classes = useStyles({});
     const dispatch = useDispatch();
-    const { onClose } = props;
-    const [open, setOpen] = React.useState(true);
     const userEmail = useSelector<IRootState, string>(
         state => state.currentUser.data.email
     );
     const userName = useSelector<IRootState, string>(
         state => state.currentUser.data.name
-    );
-    const userId = useSelector<IRootState, number>(
-        state => toNumber(state.currentUser.data.customerId)
     );
     const isLoggedIn = useSelector<IRootState, boolean>(
         state => toNumber(state.currentUser.data.customerId) > 0
@@ -57,7 +51,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
         state => state.shoppingCartItemCount.data
     );
     const isAdmin = useSelector<IRootState, boolean>(
-        state => getRole(state.currentUser.data) === "Admin"
+        state => state.currentUser.data.role === "Admin"
     );
 
     function logout() {
@@ -70,101 +64,99 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
             component="nav"
             disablePadding
         >
-            <ListItem
-                button
-                className={classes.user}
-            >
-                <ListItemAvatar>
-                    <Avatar>
-                        {userName[0]}
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                    primary={
-                        <Fragment>
-                            {
-                                isLoggedIn &&
+            {
+                !isLoggedIn &&
+                <ListItem
+                    button
+                    className={classes.user}
+                >
+                    <ListItemAvatar>
+                        <Avatar>
+                            {userName[0]}
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={
+                            <Grid
+                                container
+                                direction="row"
+                                alignItems="center"
+                                spacing={1}
+                            >
                                 <Link
-                                    href={{
-                                        pathname: 'user/[userId]',
-                                        query: {
-                                            userId
-                                        }
-                                    }}
-                                    as={`product/${toUrl(userName)}?userId=${userId}`}
+                                    href="/user/login"
+                                    as="/user/login"
                                     passHref
                                 >
                                     <Grid item
                                         component={MuiLink}
                                         color="inherit"
                                     >
-                                        {userName}
-                                    </Grid>
+                                        Login
+                                </Grid>
                                 </Link>
-                            }
-                            {
-                                !isLoggedIn &&
-                                <Grid
-                                    container
-                                    direction="row"
-                                    alignItems="center"
-                                    spacing={1}
+                                <Grid item
                                 >
-                                    <Link
-                                        href="/user/login"
-                                        as="/user/login"
-                                        passHref
-                                    >
-                                        <Grid item
-                                            component={MuiLink}
-                                            color="inherit"
-                                        >
-                                            Login
-                                </Grid>
-                                    </Link>
+                                    |
+                                    </Grid>
+                                <Link
+                                    href="/user/register"
+                                    as="/user/register"
+                                    passHref
+                                >
                                     <Grid item
+                                        component={MuiLink}
+                                        color="inherit"
                                     >
-                                        |
+                                        Register
+                                        </Grid>
+                                </Link>
                             </Grid>
-                                    <Link
-                                        href="/user/register"
-                                        as="/user/register"
-                                        passHref
-                                    >
-                                        <Grid item
-                                            component={MuiLink}
-                                            color="inherit"
-                                        >
-                                            Register
-                            </Grid>
-                                    </Link>
+                        }
+                    >
+                    </ListItemText>
+                </ListItem>
+            }
+            {
+                isLoggedIn &&
+                <Link
+                    href={{
+                        pathname: '/user'
+                    }}
+                    as={`/user`}
+                    passHref
+                >
+                    <ListItem button component="a"
+                        className={classes.user}
+                    >
+                        <ListItemAvatar>
+                            <Avatar>
+                                {userName[0]}
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={
+                                <Grid item
+                                    component={MuiLink}
+                                    color="inherit"
+                                >
+                                    {userName}
+                                </Grid>
+
+                            }
+                            secondary={
+                                <Grid item
+                                    component={MuiLink}
+                                    color="inherit"
+                                >
+                                    {userEmail}
                                 </Grid>
                             }
-                        </Fragment>
-                    }
-                    secondary={
-                        isLoggedIn &&
-                        <Link
-                            href={{
-                                pathname: 'user/[userId]',
-                                query: {
-                                    userId
-                                }
-                            }}
-                            as={`product/${toUrl(userName)}?userId=${userId}`}
-                            passHref
                         >
-                            <Grid item
-                                component={MuiLink}
-                                color="inherit"
-                            >
-                                {userEmail}
-                            </Grid>
-                        </Link>
-                    }
-                >
-                </ListItemText>
-            </ListItem>
+                        </ListItemText>
+                    </ListItem>
+                </Link>
+            }
             <Link
                 href="/shopping-cart"
                 as="/shopping-cart"

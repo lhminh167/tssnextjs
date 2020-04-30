@@ -2,8 +2,8 @@ import { Button, createStyles, Grid, makeStyles, Theme } from "@material-ui/core
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../../root/root.model";
-import { getRole, toNumber } from "../../../shared/helpers/auth.helper";
-import { bold, mb2, mr } from "../../../shared/layout/layout.style";
+import { toNumber } from "../../../shared/helpers/auth.helper";
+import { bold, mb2, mr, mt } from "../../../shared/layout/layout.style";
 import { IReview } from "../../../shared/models/review.model";
 import ProductReviewDeleteComponent from "../delete/product-review-delete.component";
 import ProductReviewEditComponent from "../edit/product-review-edit.component";
@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         bold: bold,
         mb2: mb2,
+        mt: mt,
         mr: mr
     }),
 );
@@ -31,7 +32,7 @@ export default function ProductReviewDetailComponent({
     const classes = useStyles({});
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const isAdmin = useSelector<IRootState, boolean>(
-        state => getRole(state.currentUser.data) === "Admin"
+        state => state.currentUser.data.role === "Admin"
     );
     const isCreator = useSelector<IRootState, boolean>(
         state => toNumber(state.currentUser.data.customerId) === data.customerId
@@ -63,6 +64,7 @@ export default function ProductReviewDetailComponent({
                     container
                     item
                     xs={12}
+                    className={classes.mt}
                 >
                     <Grid
                         item
@@ -76,8 +78,9 @@ export default function ProductReviewDetailComponent({
                         sm={8}
                     >
                         <Button
+                            variant='outlined'
                             onClick={() => { setIsEditMode(true) }}
-                        // className={classes.mr}
+                            className={classes.mr}
                         >
                             Edit
                         </Button>

@@ -1,11 +1,11 @@
+import { Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { getCustomerIdNumberFromStore, redirect } from '../../modules/shared/helpers/auth.helper';
-import CategoryDetailComponent from '../../modules/category/detail/category-detail.component';
-import { ICategory } from '../../modules/shared/models/category.model';
 import { getCategory } from '../../modules/category/category.service';
-import { Container } from '@material-ui/core';
+import CategoryDetailComponent from '../../modules/category/detail/category-detail.component';
 import CategoryDetailProductListComponent from '../../modules/category/detail/product-list/category-detail-product-list.component';
+import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
+import { ICategory } from '../../modules/shared/models/category.model';
 
 const useStyles = makeStyles({
 });
@@ -20,12 +20,19 @@ export default function CategoryDetailPage({
     const classes = useStyles({});
     return (
         <Container>
-            <CategoryDetailComponent
-                data={data}
-            />
-            <CategoryDetailProductListComponent
-                data={data}
-            />
+            <ErrorBoundary>
+
+                <CategoryDetailComponent
+                    data={data}
+                />
+            </ErrorBoundary>
+            <ErrorBoundary>
+
+                <CategoryDetailProductListComponent
+                    data={data}
+                />
+            </ErrorBoundary>
+
         </Container>
 
     );

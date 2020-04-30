@@ -4,6 +4,7 @@ import {
   redirect,
   getCustomerIdNumberFromStore
 } from "../../modules/shared/helpers/auth.helper";
+import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
@@ -11,12 +12,15 @@ function NewOrderPage() {
   const classes = useStyles({});
   return (
     <Container>
-      <NewOrderComponent />
+      <ErrorBoundary>
+        <NewOrderComponent />
+      </ErrorBoundary>
+
     </Container>
   );
 }
 
-NewOrderPage.getInitialProps = async function({
+NewOrderPage.getInitialProps = async function ({
   ctx: { isServer, store },
   ctx
 }) {

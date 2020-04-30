@@ -13,12 +13,24 @@ export const p: CreateCSSProperties<{}> = {
     padding: theme.spacing(2)
 }
 
+export const pt: CreateCSSProperties<{}> = {
+    paddingTop: theme.spacing(2)
+}
+
+export const pt2: CreateCSSProperties<{}> = {
+    paddingTop: theme.spacing(4)
+}
+
 export const m: CreateCSSProperties<{}> = {
     margin: theme.spacing(2)
 }
 
 export const mr: CreateCSSProperties<{}> = {
     marginRight: theme.spacing(2)
+}
+
+export const mt: CreateCSSProperties<{}> = {
+    marginTop: theme.spacing(2)
 }
 
 export const mb: CreateCSSProperties<{}> = {
@@ -51,4 +63,12 @@ export const mlAuto: CreateCSSProperties<{}> = {
 
 export const mrAuto: CreateCSSProperties<{}> = {
     marginRight: 'auto'
+}
+
+export const mtAuto: CreateCSSProperties<{}> = {
+    marginTop: 'auto'
+}
+
+export const bgWhite: CreateCSSProperties<{}> = {
+    backgroundColor: themeColor.white
 }

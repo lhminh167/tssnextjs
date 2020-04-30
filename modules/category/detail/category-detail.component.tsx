@@ -31,7 +31,11 @@ export default function CategoryDetailComponent({
                     />
                 </Grid>
             }
-            <Grid item container xs={12} sm={7}>
+            <Grid
+                item
+                xs={12}
+                sm={7}
+            >
                 <Grid item xs={12}>
                     <Typography
                         component="h1"

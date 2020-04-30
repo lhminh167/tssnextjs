@@ -1,6 +1,6 @@
 import { Validator } from "fluentvalidation-ts";
 
-export class ShippingRegion {
+export interface ShippingRegion {
     shippingRegionId: number;
     shippingRegion1: string;
 }

@@ -145,6 +145,7 @@ export default function LoginComponent() {
                         <Grid item>
                             <Link
                                 href="/user/register"
+                                as='/user/register'
                                 passHref
                             >
                                 <Typography

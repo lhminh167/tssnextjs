@@ -1,6 +1,7 @@
-import { createStyles, makeStyles } from "@material-ui/core";
+import { Container, createStyles, makeStyles } from "@material-ui/core";
 import { getProduct } from "../../../modules/product/detail/product-detail.service";
 import EditProductComponent from "../../../modules/product/edit/edit-product.component";
+import ErrorBoundary from "../../../modules/shared/error-boundary/error-boundary.component";
 import { IProduct } from "../../../modules/shared/models/product.model";
 
 const useStyles = makeStyles(() =>
@@ -18,9 +19,13 @@ export default function ProductEditPage({
     const classes = useStyles({});
 
     return (
-        <EditProductComponent
-            data={data}
-        />
+        <Container>
+            <ErrorBoundary>
+                <EditProductComponent
+                    data={data}
+                />
+            </ErrorBoundary>
+        </Container>
     );
 }
 

@@ -3,7 +3,7 @@ import { Shipping } from "../../shared/models/shipping.model";
 import { ShippingRegion } from "../../shared/models/shipping-region.model";
 import { Tax } from "../../shared/models/tax.model";
 
-export class OrderCreateRequest {
+export interface OrderCreateRequest {
   customerId?: number;
   name?: string;
   // creditCard?: string;
@@ -45,7 +45,7 @@ export class OrderCreateRequestValidator extends Validator<OrderCreateRequest> {
   }
 }
 
-export class OrderCreateForm {
+export interface OrderCreateForm {
   shippings?: Shipping[];
   shippingRegions?: ShippingRegion[];
   taxes: Tax[]

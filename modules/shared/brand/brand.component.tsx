@@ -9,10 +9,10 @@ function BrandComponent(props: IProps) {
     const { className } = props;
 
     return (
-        <Link 
-            href="/" 
-            as="/" 
-            passHref 
+        <Link
+            href="/"
+            as="/"
+            passHref
         >
             <Typography
                 className={className}
@@ -20,7 +20,7 @@ function BrandComponent(props: IProps) {
                 component="a"
                 color="primary"
             >
-                SHOPMATE
+                {process.env.SITE_NAME.toUpperCase()}
             </Typography>
         </Link>
     );

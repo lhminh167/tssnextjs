@@ -69,5 +69,3 @@ export const defaultOrder: Order = {
     orderDetail: [],
     orderStatus: defaultOrderStatus,
 };
-
-// export class 

@@ -6,7 +6,6 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Link from 'next/link';
 import React from 'react';
-import { PaginationRequest } from '../crud/crud.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -22,7 +21,10 @@ export interface PaginationProps {
     page: number;
     rowsPerPage: number;
     onChangePage: (event: React.MouseEvent<HTMLButtonElement>, newPage: number) => void;
-    // data: PaginationRequest,
+    firstPageUrl?: any;
+    previousPageUrl?: any;
+    nextPageUrl?: any;
+    lastPageUrl?: any;
 }
 
 export default function PaginationComponent({
@@ -30,7 +32,10 @@ export default function PaginationComponent({
     page,
     rowsPerPage,
     onChangePage,
-    // data
+    firstPageUrl,
+    previousPageUrl,
+    nextPageUrl,
+    lastPageUrl
 }: PaginationProps) {
     const classes = useStyles();
     const theme = useTheme();
@@ -53,38 +58,106 @@ export default function PaginationComponent({
 
     return (
         <div className={classes.root}>
-            <IconButton
-                disabled={page === 0}
-                aria-label="first page"
-                component="a"
-                onClick={toFirstPage}
-            >
-                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-            </IconButton>
-            <IconButton
-                disabled={page === 0}
-                aria-label="previous page"
-                component="a"
-                onClick={toPreviousPage}
-            >
-                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-            </IconButton>
-            <IconButton
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="next page"
-                component="a"
-                onClick={toNextPage}
-            >
-                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-            </IconButton>
-            <IconButton
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="last page"
-                component="a"
-                onClick={toLastPage}
-            >
-                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-            </IconButton>
+            {
+                firstPageUrl &&
+                <Link
+                    href={firstPageUrl}
+                    passHref
+                >
+                    <IconButton
+                        disabled={page === 0}
+                        aria-label="first page"
+                        component="a"
+                    >
+                        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+                    </IconButton>
+                </Link>
+            }
+            {
+                !firstPageUrl &&
+                <IconButton
+                    disabled={page === 0}
+                    aria-label="first page"
+                    onClick={toFirstPage}
+                >
+                    {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+                </IconButton>
+            }
+            {
+                previousPageUrl &&
+                <Link
+                    href={previousPageUrl}
+                    passHref
+                >
+                    <IconButton
+                        disabled={page === 0}
+                        aria-label="previous page"
+                        component="a"
+                    >
+                        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                    </IconButton>
+                </Link>
+            }
+            {
+                !previousPageUrl &&
+                <IconButton
+                    disabled={page === 0}
+                    aria-label="previous page"
+                    onClick={toPreviousPage}
+                >
+                    {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                </IconButton>
+            }
+            {
+                nextPageUrl &&
+                <Link
+                    href={nextPageUrl}
+                    passHref
+                >
+                    <IconButton
+                        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                        aria-label="next page"
+                        component="a"
+                    >
+                        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                    </IconButton>
+                </Link>
+            }
+            {
+                !nextPageUrl &&
+                <IconButton
+                    disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                    aria-label="next page"
+                    onClick={toNextPage}
+                >
+                    {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                </IconButton>
+            }
+            {
+                lastPageUrl &&
+                <Link
+                    href={lastPageUrl}
+                    passHref
+                >
+                    <IconButton
+                        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                        aria-label="last page"
+                        component="a"
+                    >
+                        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+                    </IconButton>
+                </Link>
+            }
+            {
+                !lastPageUrl &&
+                <IconButton
+                    disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                    aria-label="last page"
+                    onClick={toLastPage}
+                >
+                    {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+                </IconButton>
+            }
         </div>
     );
 }

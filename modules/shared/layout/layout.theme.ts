@@ -11,8 +11,11 @@ export const themeColor = {
     secondaryGrey: "#e0e0e0",
     lightGrey: '#EFEFEF',
     secondary: "#1976d2",
-    white: 'white'
+    white: 'white',
+    black: 'black'
 };
+
+export const boxShadow: string = '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)';
 
 const theme: Theme = createMuiTheme({
     palette: {
@@ -26,12 +29,19 @@ const theme: Theme = createMuiTheme({
     overrides: {
         MuiAppBar: {
             colorDefault: {
-                backgroundColor: "white"
+                backgroundColor: themeColor.white
             }
         },
         MuiLink: {
             root: {
                 textDecoration: 'none'
+            }
+        },
+        MuiTooltip: {
+            tooltip: {
+                backgroundColor: themeColor.white,
+                color: themeColor.black,
+                boxShadow: boxShadow
             }
         }
     }

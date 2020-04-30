@@ -2,6 +2,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import React, { Fragment } from "react";
 import LazyLoad from "react-lazyload";
 import { w100 } from "../layout/layout.style";
+import { getImageUrl } from "../helpers/http.helper";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,16 +22,9 @@ interface Props {
 
 export default function Image({ cloudName, imageName, imageStyles, imageUrl }: Props) {
   const classes = useStyles(imageStyles);
-  const src =
-    imageUrl ??
-    "https://res.cloudinary.com/" +
-    (cloudName ? cloudName : "lhminh167") +
-    "/image/upload/f_auto,w_auto,c_scale,q_auto,dpr_auto/tss/" +
-    (imageName ? imageName.replace(/\.[^/.]+$/, "") : "placeholder");
-
   const image = (
     <img
-      src={src}
+      src={getImageUrl(imageName, imageUrl, cloudName)}
       className={classes.image}
       alt={imageName}
       style={imageStyles}

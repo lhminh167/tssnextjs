@@ -45,6 +45,7 @@ export default function ProductReviewComponent({
                 </Typography>
                 <Typography
                     variant="subtitle2"
+                    component='time'
                 >
                     {formatDatetime(data.createdOn)}
                 </Typography>

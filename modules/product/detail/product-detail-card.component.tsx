@@ -1,4 +1,4 @@
-import { Button, createStyles, Fab, Grid, Paper, Theme } from '@material-ui/core';
+import { Button, createStyles, Fab, Grid, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -9,19 +9,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../root/root.model';
 import ColorPicker from '../../shared/color-picker/color-picker.component';
 import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmation-dialog.component';
-import { getRole } from '../../shared/helpers/auth.helper';
+import { encodeAttributes } from '../../shared/helpers/product.helper';
 import { formatCurrency, toUrl } from '../../shared/helpers/string.helper';
+import { mb, mb2, mr, p } from '../../shared/layout/layout.style';
 import { defaultAttributeValue } from '../../shared/models/attribute-value.model';
 import { IProduct } from '../../shared/models/product.model';
 import QuantityPicker from '../../shared/quantity-picker/quantity-picker.component';
 import SizePicker from '../../shared/size-picker/size-picker.component';
+import { addShoppingCartItem } from '../../shopping-cart/shopping-cart.service';
+import { shoppingCartItemCountSlice } from '../../shopping-cart/shopping-cart.slice';
 import { ProductFilterFilterEnum } from '../filter/product-filter.model';
 import ProductDetailImageComponent from './product-detail-image.component';
 import { removeProduct } from './product-detail.service';
-import { addShoppingCartItem } from '../../shopping-cart/shopping-cart.service';
-import { encodeAttributes } from '../../shared/helpers/product.helper';
-import { shoppingCartItemCountSlice } from '../../shopping-cart/shopping-cart.slice';
-import { mr, mb, mb2, p } from '../../shared/layout/layout.style';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,7 +49,7 @@ export default function ProductDetailCardComponent({
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const isAdmin = useSelector<IRootState, boolean>(
-        state => getRole(state.currentUser.data) === "Admin"
+        state => state.currentUser.data.role === "Admin"
     );
 
     async function handleAddToCart(buyNow: boolean) {

@@ -120,7 +120,9 @@ export default function ProductHorizontalGallery({
 
   return (
     <ThemeProvider theme={horizontalGalleryTheme}>
-      <Grid container>
+      <Grid container
+        component='article'
+      >
         <GalleryHeaderComponent
           title={title}
           titleIcon={titleIcon}
@@ -140,9 +142,11 @@ export default function ProductHorizontalGallery({
             cellHeight={"auto"}
             cols={pageSize}
             className={classes.gridList}
+            component='div'
           >
             {items.map((entry, index) => (
               <GridListTile
+                component='section'
                 key={entry.productId}
                 classes={{
                   tile: classes.gridListTile,

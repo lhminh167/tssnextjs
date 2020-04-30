@@ -85,9 +85,12 @@ export default function ProductCarouselComponent({
         direction="row"
         justify="center"
         className={classes.dots}
+        component='ul'
       >
         {data.items.map((entry, index) => (
-          <Grid item key={entry.productId}>
+          <Grid item key={entry.productId}
+            component='li'
+          >
             <IconButton
               size="small"
               onClick={() =>

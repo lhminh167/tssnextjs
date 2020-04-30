@@ -1,6 +1,7 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import LoginComponent from '../../modules/customer/login/login.component';
+import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -12,7 +13,9 @@ export default function LoginPage(props) {
     const classes = useStyles(props);
 
     return (
-        <LoginComponent />
+        <ErrorBoundary>
+            <LoginComponent />
+        </ErrorBoundary>
     );
 }
 

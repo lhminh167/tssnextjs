@@ -52,7 +52,7 @@ export interface IProductFilterState {
   choice: IProductSearchRequest;
 }
 
-export class IProductFilterCategory {
+export interface IProductFilterCategory {
   categoryId: number;
   name: string;
 }

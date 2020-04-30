@@ -141,6 +141,7 @@ export default function CreateCustomerComponent() {
                         <Grid item>
                             <Link
                                 href="/user/login"
+                                as='/user/login'
                                 passHref
                             >
                                 <Typography

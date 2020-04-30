@@ -1,9 +1,9 @@
-import { createStyles, Grid, TablePagination, Theme, Divider } from "@material-ui/core";
+import { createStyles, Divider, Grid, TablePagination, Theme } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { defaultRowsPerPageOptions } from "../../../shared/crud/crud.model";
-import { bgGrey, bold, mb, mb2, p, pl0, mlAuto } from "../../../shared/layout/layout.style";
+import { bgGrey, bold, mb, mb2, mlAuto, p, pl0 } from "../../../shared/layout/layout.style";
 import { IProduct } from "../../../shared/models/product.model";
 import { defaultReviewGetRequest, IReview, IReviewGetRequest, IReviewGetResponse } from "../../../shared/models/review.model";
 import PaginationComponent from "../../../shared/pagination/pagination.component";
@@ -36,15 +36,11 @@ export default function ProductReviewListComponent({ data }: Props) {
     productId: data.productId
   });
 
-  useEffect(() => {
-    setState(data.review);
-    setChoice({ ...defaultReviewGetRequest, productId: data.productId });
-  }, [data]);
-
   async function setNewState() {
     const response = await getReviews(choice);
     setState(response.content);
   }
+
   async function changePageIndex(event, newPageIndex: number) {
     const newChoice: IReviewGetRequest = {
       ...choice,

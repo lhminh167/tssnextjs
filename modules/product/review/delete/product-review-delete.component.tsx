@@ -41,6 +41,7 @@ export default function ProductReviewDeleteComponent({
     return (
         <Fragment>
             <Button
+                variant='outlined'
                 onClick={open}
             >
                 Delete

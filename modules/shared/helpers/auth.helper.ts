@@ -22,10 +22,6 @@ export function toNumber(customerId: string) {
     return parsed;
 }
 
-export function getRole(customer: Customer) {
-    return customer ?.attributes ?.find(a => a.name === 'Role')?.value;
-}
-
 export function getCustomerIdNumberFromLoginToken(): number {
     return toNumber(decodeLoginToken() ?.customerId);
 }

@@ -18,9 +18,6 @@ export const currentUserSlice = createSlice({
         },
         loginSucceeded(state: IState<Customer>, action: PayloadAction<Customer>) {
             state.data = action.payload;
-            state.data.role = action.payload.attributes.find(
-                a => a.name === "Role"
-            ).value;
             succeeded(state);
         },
         loginFailed(state: IState<Customer>, action: PayloadAction<Customer>) {
@@ -41,9 +38,6 @@ export const currentUserSlice = createSlice({
         },
         createCustomerSucceeded(state: IState<Customer>, action: PayloadAction<Customer>) {
             state.data = action.payload;
-            state.data.role = action.payload.attributes?.find(
-                a => a.name === "Role"
-            ).value;
             succeeded(state);
         },
         createCustomerFailed(state: IState<Customer>, action: PayloadAction<Customer>) {

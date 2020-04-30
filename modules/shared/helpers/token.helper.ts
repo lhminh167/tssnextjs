@@ -1,5 +1,6 @@
 import jwtDecode from "jwt-decode";
-import { ICurrentUser, defaultCustomer } from "../../customer/customer.model";
+import { Customer, defaultCustomer } from "../../customer/customer.model";
+import { defaultAttributeValue } from "../models/attribute-value.model";
 import { getCustomerIdNumberFromLoginToken } from "./auth.helper";
 
 export function setLoginToken(loginToken: string) {
@@ -28,7 +29,7 @@ export function removeLoginToken() {
     return localStorage.removeItem("loginToken");
 }
 
-export function decodeLoginToken(): ICurrentUser {
+export function decodeLoginToken(): Customer {
     try {
         const tokenPayload: ITokenPayload = jwtDecode<ITokenPayload>(getLoginToken());
         if (new Date(tokenPayload.exp) < new Date())

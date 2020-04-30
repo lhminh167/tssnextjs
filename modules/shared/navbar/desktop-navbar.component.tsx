@@ -11,9 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { currentUserSlice } from "../../customer/customer.slice";
 import { IRootState } from "../../root/root.model";
 import BrandComponent from "../brand/brand.component";
-import { toNumber, getRole } from "../helpers/auth.helper";
-import { transitionWidth } from "../layout/layout.theme";
+import { toNumber } from "../helpers/auth.helper";
+import { transitionWidth, themeColor } from "../layout/layout.theme";
 import SearchComponent from "../search/search.component";
+import { Avatar, Popover, List, ListItem, ListItemText, Tooltip, ListItemSecondaryAction, ListSubheader } from "@material-ui/core";
+import { Customer } from "../../customer/customer.model";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,7 +30,16 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         seperator: {
             marginLeft: theme.spacing(2)
-        }
+        },
+        avatar: {
+            width: theme.spacing(3),
+            height: theme.spacing(3),
+            background: themeColor.primary
+        },
+        tooltip: {
+            minWidth: '300px',
+        },
+
     })
 );
 
@@ -64,8 +75,12 @@ const LoggedInComponent = () => {
     const classes = useStyles({});
     const dispatch = useDispatch();
     const isAdmin = useSelector<IRootState, boolean>(
-        state => getRole(state.currentUser.data) === "Admin"
+        state => state.currentUser.data.role === "Admin"
     );
+    const userId = useSelector<IRootState, number>(
+        state => toNumber(state.currentUser.data.customerId)
+    );
+
     function logout() {
         dispatch(currentUserSlice.actions.logout());
     }
@@ -105,16 +120,6 @@ const LoggedInComponent = () => {
                     Wishlist
             </Typography>
             </Link>
-            <Link href="/user" as="/user" passHref>
-                <Typography
-                    variant="subtitle2"
-                    component="a"
-                    color="primary"
-                    className={classes.seperator}
-                >
-                    Account
-                </Typography>
-            </Link>
             <Typography
                 variant="subtitle2"
                 component="a"
@@ -136,6 +141,10 @@ export default function DesktopNavbarComponent() {
     const itemCount = useSelector<IRootState, number>(
         state => state.shoppingCartItemCount.data
     );
+    const currentUser = useSelector<IRootState, Customer>(
+        state => state.currentUser.data
+    );
+
     return (
         <AppBar className={classes.sectionDesktop} color="default">
             <Toolbar>
@@ -182,6 +191,79 @@ export default function DesktopNavbarComponent() {
                         </Badge>
                     </IconButton>
                 </Link>
+                {
+                    isLoggedIn &&
+                    <Link
+                        href={{
+                            pathname: '/user'
+                        }}
+                        as={`/user`}
+                        passHref
+                    >
+                        <IconButton
+                            component="a"
+                            className={classes.seperator}
+                        >
+                            <Tooltip
+                                classes={{ tooltip: classes.tooltip }}
+                                title={
+                                    <Fragment>
+                                        <List
+                                            subheader={
+                                                <ListSubheader
+                                                    color='primary'
+                                                >
+                                                    Account Details
+                                                </ListSubheader>
+                                            }
+                                        >
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary="Name:"
+                                                />
+                                                <ListItemSecondaryAction>
+                                                    <Typography
+                                                    >
+                                                        {currentUser.name}
+                                                    </Typography>
+                                                </ListItemSecondaryAction>
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary="Email:"
+                                                />
+                                                <ListItemSecondaryAction>
+                                                    <Typography
+                                                    >
+                                                        {currentUser.email}
+                                                    </Typography>
+                                                </ListItemSecondaryAction>
+                                            </ListItem>
+
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary="Role:"
+                                                />
+                                                <ListItemSecondaryAction>
+                                                    <Typography
+                                                    >
+                                                        {currentUser.role}
+                                                    </Typography>
+                                                </ListItemSecondaryAction>
+                                            </ListItem>
+                                        </List>
+                                    </Fragment>
+                                }
+                            >
+                                <Avatar
+                                    className={classes.avatar}
+                                >
+                                    {currentUser.name[0]}
+                                </Avatar>
+                            </Tooltip>
+                        </IconButton>
+                    </Link>
+                }
             </Toolbar>
         </AppBar>
     );

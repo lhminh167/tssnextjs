@@ -1,0 +1,52 @@
+import { Container } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import React from 'react';
+import CustomerEditComponent from '../../../modules/customer/edit/edit-customer.component';
+import { redirect, toNumber } from '../../../modules/shared/helpers/auth.helper';
+import ErrorBoundary from '../../../modules/shared/error-boundary/error-boundary.component';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+    }),
+);
+
+interface Props {
+    userId: number;
+}
+
+export default function CustomerEditPage({
+    userId
+}: Props) {
+
+    const classes = useStyles({});
+    return (
+        <Container>
+            <ErrorBoundary>
+                <CustomerEditComponent
+                    userId={userId}
+                />
+            </ErrorBoundary>
+        </Container>
+    );
+}
+
+CustomerEditPage.getInitialProps = async function ({
+    ctx: {
+        isServer,
+        store,
+        query
+    },
+    ctx
+}) {
+    const userId = toNumber(query.userId);
+    // const currentUser = store.getState().currentUser.data;
+    // const currentUserId = toNumber(currentUser.customerId);
+
+    // const isNotLoggedIn = !isServer && currentUserId === 0;
+    // const isNotAdminAccessingOtherUser = !isServer && currentUser.role !== 'Admin' && userId !== currentUserId;
+    // if (isNotLoggedIn || isNotAdminAccessingOtherUser) redirect(ctx, ctx.req.originalUrl);
+
+    return {
+        userId
+    };
+}

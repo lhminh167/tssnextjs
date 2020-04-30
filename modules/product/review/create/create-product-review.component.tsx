@@ -52,12 +52,12 @@ export default function CreateReviewComponent({
     const [submitted, setSubmitted] = useState<boolean>(false);
     const errors = new CreateReviewRequestValidator().validate(state);
 
-    useEffect(() => {
-        setState({
-            ...state,
-            customerId
-        })
-    }, [customerId]);
+    // useEffect(() => {
+    //     setState({
+    //         ...state,
+    //         customerId
+    //     })
+    // }, [customerId]);
 
     function change(event) {
         const target = event.target;
@@ -203,7 +203,7 @@ export default function CreateReviewComponent({
                                         <Rating
                                             name="create-rating"
                                             value={state.rating}
-                                            onChange={change}
+                                            onClick={change}
                                         />
                                         {
                                             errors.rating && submitted &&

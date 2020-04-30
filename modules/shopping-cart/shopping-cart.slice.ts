@@ -39,5 +39,10 @@ export const shoppingCartItemCountSlice = createSlice({
         change(state: IState<number>, action: PayloadAction<number>) {
             state.data += action.payload;
         },
+    },
+    extraReducers: builder => {
+        builder.addCase(currentUserSlice.actions.logout, (state) => {
+            state.data = 0;
+        })
     }
 });

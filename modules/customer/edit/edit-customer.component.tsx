@@ -1,47 +1,71 @@
-import { createStyles, FormControl, FormHelperText, Grid, InputLabel, makeStyles, MenuItem, Select, TextField, Theme, Typography } from "@material-ui/core";
-import next from "next";
+import { Button, createStyles, FormControl, FormHelperText, Grid, InputLabel, makeStyles, MenuItem, Paper, Select, TextField, Theme, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import useSWR from 'swr';
+import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "../../root/root.model";
-import { callApi, getUrl } from "../../shared/crud/crud.service";
-import { Customer, customerUrl, defaultCustomer, CreateCustomerRequestValidator } from "../customer.model";
-import { getCustomer } from "../customer.service";
+import { toNumber } from "../../shared/helpers/auth.helper";
+import { p, mb, mb2 } from "../../shared/layout/layout.style";
+import { defaultCatalogGetRequest, defaultCatalogGetResponse, ICatalogGetResponse } from "../../shared/models/catalog.model";
+import { getCatalog } from "../../shared/services/catalog.service";
 import { isValidForm } from "../../shared/validator/validator";
-import { p } from "../../shared/layout/layout.style";
+import { getCustomer, updateCustomer } from "../customer.service";
+import { Customer, CustomerUpdateRequest, defaultCustomerUpdateRequest, CustomerUpdateRequestValidator } from "../customer.model";
+import { useRouter } from "next/router";
+import { currentUserSlice } from "../customer.slice";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         p: p,
+        mb: mb,
+        mb2: mb2
     })
 );
 
 interface Props {
-    // data: OrderCreateRequest;
     userId: number;
 }
 
-export default function OrderCreateRequestComponent({
-    // data,
+export default function CustomerEditComponent({
     userId
 }: Props) {
     const classes = useStyles({});
     const currentUser = useSelector<IRootState, Customer>(state => state.currentUser.data);
-    const [state, setState] = useState<Customer>(defaultCustomer);
+    const currentUserId = toNumber(currentUser.customerId);
+    const [state, setState] = useState<CustomerUpdateRequest>(defaultCustomerUpdateRequest);
+    const [form, setForm] = useState<ICatalogGetResponse>(defaultCatalogGetResponse);
     const [submitted, setSubmitted] = useState<boolean>(false);
-    const shouldFetch: boolean = userId.toString() !== currentUser.customerId
-        && currentUser.role === 'Admin';
-    const { data, error } = useSWR(
-        shouldFetch ? getUrl(customerUrl.baseUrl, userId) : null,
-        {
-            onSuccess: (data) => setState(data)
-        }
-    );
-    const errors = new CreateCustomerRequestValidator().validate(state);
+    const errors = new CustomerUpdateRequestValidator().validate(state);
+    const router = useRouter();
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!shouldFetch) setState(currentUser);
-    }, []);
+
+        getCatalog({
+            ...defaultCatalogGetRequest,
+            shippingRegion: true,
+            role: true
+        }).then(res => {
+            setForm(res.content);
+        });
+
+        if (currentUser.role === 'Admin' && userId !== currentUserId) {
+
+            getCustomer(userId).then(res => {
+                setState(res.content);
+            });
+        }
+        else {
+            const newState: CustomerUpdateRequest = {
+                ...currentUser,
+                shippingRegionId: currentUser.shippingRegion.shippingRegionId,
+                customerId: toNumber(currentUser.customerId)
+            };
+
+            delete newState['shippingRegion'];
+
+            setState(newState);
+        }
+
+    }, [currentUser.customerId])
 
     function change(event) {
         const target = event.target;
@@ -49,30 +73,44 @@ export default function OrderCreateRequestComponent({
         const name = target.name;
 
         setState({
-            ...data,
+            ...state,
             [name]: value
         });
     }
 
     async function submit() {
         setSubmitted(true);
-        // if (isValidForm(errors))
-        // next();
+        if (!isValidForm(errors)) return;
+        const response = await updateCustomer(state);
+
+        if (userId === currentUserId)
+            dispatch(currentUserSlice.actions.setCurrentUser({
+                ...response.content,
+                shippingRegion: form.shippingRegion.find(e => e.shippingRegionId === state.shippingRegionId)
+            }));
+
+        router.push(
+            `/user/[userId]`,
+            `/user/${userId}`
+        );
     }
 
     return (
         <Grid
             container
-            item
             spacing={2}
             className={classes.p}
-        // component={Paper}
+            component={Paper}
         >
-            {/* <Grid
+            <Grid
                 item
                 xs={12}
             >
-                <Typography component="h1" variant="h4" align="left">
+                <Typography
+                    component="h1"
+                    variant="h4"
+                    align="left"
+                >
                     Edit User
                 </Typography>
             </Grid>
@@ -85,7 +123,7 @@ export default function OrderCreateRequestComponent({
                     label="Name"
                     fullWidth
                     autoComplete="name"
-                    value={data.name}
+                    value={state.name}
                     onChange={change}
                     error={errors.name && submitted}
                     helperText={errors.name && submitted ? errors.name : null}
@@ -99,7 +137,7 @@ export default function OrderCreateRequestComponent({
                     label="Address line 1"
                     fullWidth
                     autoComplete="billing address-line1"
-                    value={data.address1}
+                    value={state.address1}
                     onChange={change}
                     error={errors.address1 && submitted}
                     helperText={errors.address1 && submitted ? errors.address1 : null}
@@ -112,7 +150,7 @@ export default function OrderCreateRequestComponent({
                     label="Address line 2"
                     fullWidth
                     autoComplete="billing address-line2"
-                    value={data.address2}
+                    value={state.address2}
                     onChange={change}
                     error={errors.address2 && submitted}
                     helperText={errors.address2 && submitted ? errors.address2 : null}
@@ -126,7 +164,7 @@ export default function OrderCreateRequestComponent({
                     label="City"
                     fullWidth
                     autoComplete="billing address-level2"
-                    value={data.city}
+                    value={state.city}
                     onChange={change}
                     error={errors.city && submitted}
                     helperText={errors.city && submitted ? errors.city : null}
@@ -138,7 +176,7 @@ export default function OrderCreateRequestComponent({
                     name="region"
                     label="State/Province/Region"
                     fullWidth
-                    value={data.region}
+                    value={state.region}
                     onChange={change}
                     error={errors.region && submitted}
                     helperText={errors.region && submitted ? errors.region : null}
@@ -152,7 +190,7 @@ export default function OrderCreateRequestComponent({
                     label="Zip / Postal code"
                     fullWidth
                     autoComplete="billing postal-code"
-                    value={data.postalCode}
+                    value={state.postalCode}
                     onChange={change}
                     error={errors.postalCode && submitted}
                     helperText={errors.postalCode && submitted ? errors.postalCode : null}
@@ -166,49 +204,47 @@ export default function OrderCreateRequestComponent({
                     label="Country"
                     fullWidth
                     autoComplete="billing country"
-                    value={data.country}
+                    value={state.country}
                     onChange={change}
                     error={errors.country && submitted}
                     helperText={errors.country && submitted ? errors.country : null}
                 />
             </Grid>
-            <Grid item
-                xs={12}
-                sm={6}
-            >
-                <FormControl
+            <Grid item xs={12} sm={6}>
+                <TextField
+                    id="dayPhone"
+                    name="dayPhone"
+                    label="Day Phone Number"
                     fullWidth
-                >
-                    <InputLabel
-                        id="shippingRegionId"
-                    >
-                        Shipping
-              </InputLabel>
-                    <Select
-                        name="shippingId"
-                        labelId="shippingRegionId"
-                        id="shippingRegionId"
-                        value={data.shippingId}
-                        onChange={change}
-                    >
-                        {form.shippings.map(entry =>
-                            <MenuItem
-                                key={entry.shippingId}
-                                value={entry.shippingId}
-                            >
-                                {entry.shippingType}
-                            </MenuItem>
-                        )}
-                    </Select>
-                    {
-                        errors.shippingId && submitted &&
-                        <FormHelperText
-                            error
-                        >
-                            {errors.shippingId}
-                        </FormHelperText>
-                    }
-                </FormControl>
+                    value={state.dayPhone}
+                    onChange={change}
+                    error={errors.dayPhone && submitted}
+                    helperText={errors.dayPhone && submitted ? errors.dayPhone : null}
+                />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <TextField
+                    id="evePhone"
+                    name="evePhone"
+                    label="Evening Phone Number"
+                    fullWidth
+                    value={state.evePhone}
+                    onChange={change}
+                    error={errors.evePhone && submitted}
+                    helperText={errors.evePhone && submitted ? errors.evePhone : null}
+                />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <TextField
+                    id="mobPhone"
+                    name="mobPhone"
+                    label="Mobile Phone Number"
+                    fullWidth
+                    value={state.mobPhone}
+                    onChange={change}
+                    error={errors.mobPhone && submitted}
+                    helperText={errors.mobPhone && submitted ? errors.mobPhone : null}
+                />
             </Grid>
             <Grid item
                 xs={12} sm={6}
@@ -221,22 +257,24 @@ export default function OrderCreateRequestComponent({
                         id="shippingRegionId"
                     >
                         Shipping Region
-              </InputLabel>
+                    </InputLabel>
                     <Select
                         name="shippingRegionId"
                         labelId="shippingRegionId"
                         id="shippingRegionId"
-                        value={data.shippingRegionId}
+                        value={state.shippingRegionId}
                         onChange={change}
                     >
-                        {form.shippingRegions.map(entry =>
-                            <MenuItem
-                                key={entry.shippingRegionId}
-                                value={entry.shippingRegionId}
-                            >
-                                {entry.shippingRegion1}
-                            </MenuItem>
-                        )}
+                        {form.shippingRegion.map(entry => {
+                            return (
+                                <MenuItem
+                                    key={entry.shippingRegionId}
+                                    value={entry.shippingRegionId}
+                                >
+                                    {entry.shippingRegion1}
+                                </MenuItem>
+                            )
+                        })}
                     </Select>
                     {
                         errors.shippingRegionId && submitted &&
@@ -247,8 +285,64 @@ export default function OrderCreateRequestComponent({
                         </FormHelperText>
                     }
                 </FormControl>
-            </Grid> */}
+            </Grid>
+            {
+                currentUser.role === 'Admin' &&
+                <Grid item
+                    xs={12} sm={6}
+                >
+                    <FormControl
+                        fullWidth
+                        error={errors.role && submitted}
+                    >
+                        <InputLabel
+                            id="role"
+                        >
+                            Role
+                    </InputLabel>
+                        <Select
+                            name="role"
+                            labelId="role"
+                            id="role"
+                            value={state.role}
+                            onChange={change}
+                        >
+                            {form.role.map(entry => {
+                                return (
+                                    <MenuItem
+                                        key={entry.value}
+                                        value={entry.value}
+                                    >
+                                        {entry.value}
+                                    </MenuItem>
+                                )
+                            })}
+                        </Select>
+                        {
+                            errors.role && submitted &&
+                            <FormHelperText
+                                error
+                            >
+                                {errors.role}
+                            </FormHelperText>
+                        }
+                    </FormControl>
+                </Grid>
+            }
+            <Grid item
+                xs={12}
+                className={classes.mb}
+            >
+                <Button
+                    type="button"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    onClick={submit}
+                >
+                    Submit
+                </Button>
+            </Grid>
         </Grid>
-
     );
 }

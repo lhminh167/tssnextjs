@@ -1,14 +1,14 @@
 import { Button, createStyles, makeStyles, TablePagination, Theme, Typography } from "@material-ui/core";
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { defaultRowsPerPageOptions, PaginatedList } from "../../shared/crud/crud.model";
 import GalleryHeaderComponent from "../../shared/gallery-header/gallery-header.component";
 import { IProduct } from "../../shared/models/product.model";
 import PaginationComponent from "../../shared/pagination/pagination.component";
 import ProductListComponent from "../../shared/product-list/product-list.component";
+import { NewIcon } from "../../shared/svg/svg.component";
 import { defaultProductSearchRequest, IProductSearchRequest, SortByEnum } from "../filter/product-filter.model";
 import { getProducts } from "../filter/product-filter.service";
-import { NewIcon } from "../../shared/svg/svg.component";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -56,7 +56,7 @@ export default function NewestProductList({
     }
 
     return (
-        <Fragment>
+        <article>
             <GalleryHeaderComponent
                 title={
                     <Typography variant="h6" component="h2">
@@ -98,7 +98,7 @@ export default function NewestProductList({
                 onChangeRowsPerPage={changePageSize}
                 ActionsComponent={PaginationComponent}
             />
-        </Fragment>
+        </article>
     );
 }
 

@@ -18,11 +18,14 @@ export default class ErrorBoundary extends Component {
         this.state = { hasError: false };
     }
 
-    static getDerivedStateFromError() {
+    static getDerivedStateFromError(error) {
         return { hasError: true };
     }
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+
+        console.log(error, errorInfo);
+
         this.setState({
             ...this.state,
             error,

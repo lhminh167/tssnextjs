@@ -154,7 +154,7 @@ export default function ProductReviewEditComponent({
                             <Rating
                                 name="edit-rating"
                                 value={state.rating}
-                                onChange={change}
+                                onClick={change}
                                 max={5}
                             />
                             {

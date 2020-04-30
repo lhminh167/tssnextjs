@@ -29,7 +29,8 @@ export default function ProductCard({ data }: IProps) {
   const classes = useStyles();
 
   return (
-    <Card>
+    <Card
+    >
       <Link
         href={{
           pathname: "/product/[productName]",
@@ -48,11 +49,15 @@ export default function ProductCard({ data }: IProps) {
               />
             </CardMedia>
             <CardContent>
-              <Typography variant="subtitle1" gutterBottom noWrap>
+              <Typography variant="subtitle1" gutterBottom noWrap
+                component='h3'
+              >
                 {data.name}
               </Typography>
 
-              <Typography variant="subtitle2" gutterBottom>
+              <Typography variant="subtitle2" gutterBottom
+                component='h4'
+              >
                 {formatCurrency(data.price)}
               </Typography>
             </CardContent>

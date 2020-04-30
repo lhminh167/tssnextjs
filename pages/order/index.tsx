@@ -1,10 +1,8 @@
+import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
 import OrderListComponent from "../../modules/order/list/order-list.component";
-import {
-  getCustomerIdNumberFromStore,
-  redirect
-} from "../../modules/shared/helpers/auth.helper";
-import { makeStyles, Theme, createStyles, Container } from "@material-ui/core";
+import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
+import { redirect, getCustomerIdNumberFromStore } from "../../modules/shared/helpers/auth.helper";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
@@ -12,12 +10,16 @@ export default function OrderListPage() {
   const classes = useStyles({});
   return (
     <Container>
-      <OrderListComponent />
+      <ErrorBoundary>
+
+        <OrderListComponent />
+      </ErrorBoundary>
+
     </Container>
   );
 }
 
-OrderListPage.getInitialProps = async function({
+OrderListPage.getInitialProps = async function ({
   ctx: { isServer, store },
   ctx
 }) {

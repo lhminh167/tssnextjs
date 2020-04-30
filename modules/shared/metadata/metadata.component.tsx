@@ -1,38 +1,44 @@
-import { Fragment } from 'react';
-import { useSelector } from 'react-redux';
-import { Router } from 'next/router';
+import Head from 'next/head';
 import { Metadata } from './metadata.model';
 
-
+export interface Props {
+    data: Metadata;
+}
 
 export function MetadataComponent({
-    title,
-    description
-}: Metadata) {
-    // const userLanguage = useSelector(state => state.options.userLanguage);
-
+    data
+}: Props) {
 
     return (
-        <Fragment>
-            <title>{title}</title>
-            <meta name="description" content={description} />
-            <link rel="canonical" href="https://yourwebsite.com/" />
-            {/* Twitter */}
-            <meta name="twitter:card" content="summary" />
-            <meta name="twitter:site" content="@MaterialUI" />
-            <meta name="twitter:title" content={title} />
-            <meta name="twitter:description" content={description} />
-            <meta name="twitter:image" content="https://material-ui.com/static/logo.png" />
-            {/* Facebook */}
-            <meta property="og:type" content="website" />
-            <meta property="og:title" content={title} />
-            <meta
-                property="og:url"
-            // content={`https://material-ui.com${Router._rewriteUrlForNextExport(router.asPath)}`}
-            />
-            <meta property="og:description" content={description} />
-            <meta property="og:image" content="https://material-ui.com/static/logo.png" />
-            <meta property="og:ttl" content="604800" />
-        </Fragment>
+        <Head>
+            <title key="title">{data.title}</title>
+            <meta name="description" key="description" content={data.description} />
+
+            <meta property="og:type" key="og_type" content={data.type} />
+            <meta property="og:title" key="og_title" content={data.title} />
+            <meta property="og:description" key="og_description" content={data.description} />
+            <meta property="og:url" key="og_URL" content={data.og_URL ? data.og_URL : data.canonical} />
+            <meta property="og:image" key="og_image" content={data.og_image ? data.og_image : data.image} />
+            <meta property="og:site_name" key="og_site_name"
+                content={data.og_site_name ? data.og_site_name : data.title} />
+
+            {data.twitter_site ?
+                <meta name="twitter:card" key="twitter_card" content="summary" /> : null}
+            {data.description ?
+                <meta name="twitter:description" key="twitter_description" content={data.description} /> : null}
+            {data.twitter_site ?
+                <meta name="twitter:site" key="twitter_site" content={data.twitter_site} /> : null
+            }
+            {data.twitter_domain ?
+                <meta name="twitter:domain" key="twitter_domain" content={data.twitter_domain} />
+                : null
+            }
+            {data.twitter_site ?
+                <meta name="twitter:image:src" key="twitter_img" content={data.image} /> : null}
+
+            <meta name="robots" content={`${data.robots}`} />
+            <link rel="canonical" key="canonical" href={data.canonical} />
+
+        </Head>
     )
 }
