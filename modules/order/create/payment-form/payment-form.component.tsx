@@ -1,7 +1,9 @@
-import React from 'react';
-import { Elements, StripeProvider } from 'react-stripe-elements';
-import CreditCardComponent from './credit-card.component';
-import { OrderCreateRequest } from '../create-order.model';
+import { OrderCreateRequest } from "../create-order.model";
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import CreditCardComponent from "./credit-card.component";
+
+const stripePromise = loadStripe(process.env.STRIPE_API_KEY);
 
 interface Props {
   data: OrderCreateRequest;
@@ -14,15 +16,14 @@ export default function PaymentFormComponent({
   back,
   next
 }: Props) {
+
   return (
-    <StripeProvider apiKey={process.env.STRIPE_API_KEY}>
-      <Elements>
-        <CreditCardComponent
-          data={data}
-          next={next}
-          back={back}
-        />
-      </Elements>
-    </StripeProvider>
+    <Elements stripe={stripePromise}>
+      <CreditCardComponent
+        data={data}
+        next={next}
+        back={back}
+      />
+    </Elements>
   );
 }

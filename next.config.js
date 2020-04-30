@@ -5,6 +5,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const withOffline = require("next-offline");
 
 const nextConfig = {
+  compress: false,
   env: {
     API_URL: process.env.API_URL,
     STRIPE_API_KEY: process.env.STRIPE_API_KEY,

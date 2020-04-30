@@ -17,14 +17,12 @@ import { IRootState } from "../../root/root.model";
 import BrandPicker from "../../shared/brand-picker/brand-picker.component";
 import ColorPicker from "../../shared/color-picker/color-picker.component";
 import { defaultRowsPerPageOptions } from "../../shared/crud/crud.model";
-import { formatCurrency } from "../../shared/helpers/string.helper";
 import { defaultAttributeValue, IAttributeValue } from "../../shared/models/attribute-value.model";
 import { IProduct } from "../../shared/models/product.model";
 import PaginationComponent, { PaginationProps } from "../../shared/pagination/pagination.component";
+import ProductListComponent from "../../shared/product-list/product-list.component";
 import SizePicker from "../../shared/size-picker/size-picker.component";
 import { defaultIsDescendingOptions, defaultProductSearchRequest, defaultSortByOptions, IProductFilterCategory, IProductSearchRequest, ProductFilterFilterEnum } from "./product-filter.model";
-import ProductListComponent from "../../shared/product-list/product-list.component";
-
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -90,7 +88,7 @@ export default function ProductFilterComponent({
 
     const apply = () => {
         router.push({
-            pathname: '/',
+            pathname: router.pathname,
             query: {
                 ...choice,
                 color: color.value,
@@ -114,7 +112,7 @@ export default function ProductFilterComponent({
         ]);
 
         router.push({
-            pathname: '/',
+            pathname: router.pathname,
             query: { ...defaultProductSearchRequest }
         });
     };
@@ -124,7 +122,7 @@ export default function ProductFilterComponent({
         newPageIndex: number
     ) {
         router.push({
-            pathname: '/',
+            pathname: router.pathname,
             query: {
                 ...choice,
                 pageIndex: newPageIndex,
@@ -136,7 +134,7 @@ export default function ProductFilterComponent({
         event
     ) {
         router.push({
-            pathname: '/',
+            pathname: router.pathname,
             query: {
                 ...choice,
                 pageSize: parseInt(event.target.value, 10),
@@ -173,6 +171,38 @@ export default function ProductFilterComponent({
         event: any
     ) {
         setIsDescending(event.target.value);
+    }
+
+    function ProductFilterPaginationComponent({
+        count,
+        page,
+        rowsPerPage,
+        onChangePage
+    }: PaginationProps) {
+        return (
+            <PaginationComponent
+                count={count}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                onChangePage={onChangePage}
+                firstPageUrl={{
+                    pathname: router.pathname,
+                    query: {
+                        ...choice,
+                        pageIndex: defaultProductSearchRequest.pageIndex,
+                    }
+                }}
+                // previousPageUrl={count}
+                // nextPageUrl={count}
+                lastPageUrl={{
+                    pathname: router.pathname,
+                    query: {
+                        ...choice,
+                        pageIndex: Math.max(0, Math.ceil(count / choice.pageSize) - 1),
+                    }
+                }}
+            />
+        )
     }
 
     return (
@@ -314,7 +344,7 @@ export default function ProductFilterComponent({
                 page={choice.pageIndex}
                 onChangePage={changePageIndex}
                 onChangeRowsPerPage={changePageSize}
-                ActionsComponent={PaginationComponent}
+                ActionsComponent={ProductFilterPaginationComponent}
             />
         </Fragment>
     );
