@@ -22,7 +22,10 @@ export interface PaginationProps {
     page: number;
     rowsPerPage: number;
     onChangePage: (event: React.MouseEvent<HTMLButtonElement>, newPage: number) => void;
-    // data: PaginationRequest,
+    firstPageUrl?: any;
+    previousPageUrl?: any;
+    nextPageUrl?: any;
+    lastPageUrl?: any;
 }
 
 export default function PaginationComponent({
@@ -30,7 +33,10 @@ export default function PaginationComponent({
     page,
     rowsPerPage,
     onChangePage,
-    // data
+    firstPageUrl,
+    previousPageUrl,
+    nextPageUrl,
+    lastPageUrl
 }: PaginationProps) {
     const classes = useStyles();
     const theme = useTheme();
@@ -53,14 +59,32 @@ export default function PaginationComponent({
 
     return (
         <div className={classes.root}>
-            <IconButton
-                disabled={page === 0}
-                aria-label="first page"
-                component="a"
-                onClick={toFirstPage}
-            >
-                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-            </IconButton>
+            {
+                firstPageUrl &&
+                <Link
+                    href={firstPageUrl}
+                    passHref
+                >
+                    <IconButton
+                        disabled={page === 0}
+                        aria-label="first page"
+                        component="a"
+                    >
+                        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+                    </IconButton>
+                </Link>
+            }
+            {
+                !firstPageUrl &&
+                <IconButton
+                    disabled={page === 0}
+                    aria-label="first page"
+                    component="a"
+                    onClick={toFirstPage}
+                >
+                    {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+                </IconButton>
+            }
             <IconButton
                 disabled={page === 0}
                 aria-label="previous page"

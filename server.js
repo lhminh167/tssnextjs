@@ -1,28 +1,58 @@
-const { createServer } = require('http')
-const { join } = require('path')
-const { parse } = require('url')
-const next = require('next')
+const fastify = require('fastify')({
+  logger: { level: 'error' },
+  maxParamLength: 5000000,
+  pluginTimeout: 5000000
 
-const app = next({ dev: process.env.NODE_ENV !== 'production' })
-const handle = app.getRequestHandler()
-const port = process.env.NODE_ENV === 'production' ? process.env.PORT : 3000;
+})
+const Next = require('next')
 
-app.prepare()
-  .then(() => {
-    createServer((req, res) => {
-      const parsedUrl = parse(req.url, true)
-      const { pathname } = parsedUrl
+const port = parseInt(process.env.PORT, 10) || 3000
+const dev = process.env.NODE_ENV !== 'production'
 
-      // handle GET request to /service-worker.js
-      if (pathname === '/service-worker.js') {
-        const filePath = join(__dirname, '.next', pathname)
-
-        app.serveStatic(req, res, filePath)
-      } else {
-        handle(req, res, parsedUrl)
+fastify.register((fastify, opts, next) => {
+  const app = Next({ dev })
+  const handle = app.getRequestHandler()
+  app
+    .prepare()
+    .then(() => {
+      if (dev) {
+        fastify.get('/_next/*', (req, reply) => {
+          return handle(req.req, reply.res).then(() => {
+            reply.sent = true
+          })
+        })
       }
+
+      fastify.get('/a', (req, reply) => {
+        return app.render(req.req, reply.res, '/a', req.query).then(() => {
+          reply.sent = true
+        })
+      })
+
+      fastify.get('/b', (req, reply) => {
+        return app.render(req.req, reply.res, '/b', req.query).then(() => {
+          reply.sent = true
+        })
+      })
+
+      fastify.all('/*', (req, reply) => {
+        return handle(req.req, reply.res).then(() => {
+          reply.sent = true
+        })
+      })
+
+      fastify.setNotFoundHandler((request, reply) => {
+        return app.render404(request.req, reply.res).then(() => {
+          reply.sent = true
+        })
+      })
+
+      next()
     })
-    .listen(port, () => {
-      console.log(`> Ready on http://localhost:${port}`)
-    })
-  })
+    .catch(err => next(err))
+})
+
+fastify.listen(port, err => {
+  if (err) throw err
+  console.log(`> Ready on http://localhost:${port}`)
+})
