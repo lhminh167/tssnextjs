@@ -1,7 +1,16 @@
-import { createOrder } from "../../order.service";
-import { Typography } from "@material-ui/core";
-import ActionButtonsComponent from "../shared/action-buttons.component";
+import { createStyles, Grid, makeStyles } from "@material-ui/core";
+import React from "react";
 import { CardElement, injectStripe } from 'react-stripe-elements';
+import ActionButtonsComponent from "../../../shared/action-buttons/action-buttons.component";
+import { w100, p } from "../../../shared/layout/layout.style";
+import { createOrder } from "../../order.service";
+
+const useStyles = makeStyles(theme =>
+    createStyles({
+        w100: w100,
+        p: p
+    })
+);
 
 interface Props {
     data: any
@@ -18,6 +27,7 @@ function CreditCardComponent({
     next,
     back
 }: Props) {
+    const classes = useStyles({});
 
     const submit = async (ev) => {
         ev.preventDefault();
@@ -38,22 +48,31 @@ function CreditCardComponent({
             const cardActionResponse = await stripe.confirmCardPayment(orderResponse.content.paymentSecret);
         }
 
-        next();
+        next(orderResponse.content);
     };
 
     return (
-        <form>
-            <Typography variant="h6" gutterBottom>
+        <form
+            className={classes.w100}
+        >
+            {/* <Typography variant="h6" gutterBottom>
                 Payment method
-            </Typography>
+            </Typography> */}
             <CardElement
+                className={classes.p}
             />
-            <ActionButtonsComponent
-                backButtonText={'Back'}
-                nextButtonText={'Next Step'}
-                back={back}
-                next={submit}
-            />
+            <Grid
+                item
+                container
+                xs={12}
+            >
+                <ActionButtonsComponent
+                    backButtonText={'Back'}
+                    nextButtonText={'Next Step'}
+                    back={back}
+                    next={submit}
+                />
+            </Grid>
         </form>
     );
 

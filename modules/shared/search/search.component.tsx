@@ -65,7 +65,7 @@ export default function SearchComponent({
         if (e.key !== 'Enter') return;
         e.preventDefault();
         router.push({
-            pathname: '/',
+            pathname: '/product',
             query: {
                 ...defaultProductSearchRequest,
                 keyword

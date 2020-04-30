@@ -1,7 +1,16 @@
-import { OrderCreateRequest, OrderCreateForm, OrderCreateRequestValidator } from "../create-order.model";
-import { Grid, Typography, TextField, FormControlLabel, Checkbox, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
-import ActionButtonsComponent from "../shared/action-buttons.component";
+import { FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, makeStyles, Theme, createStyles, FormHelperText } from "@material-ui/core";
 import Router from "next/router";
+import ActionButtonsComponent from "../../../shared/action-buttons/action-buttons.component";
+import { OrderCreateForm, OrderCreateRequest, OrderCreateRequestValidator } from "../create-order.model";
+import { Fragment, useState } from "react";
+import { p } from "../../../shared/layout/layout.style";
+import { isValidForm } from "../../../shared/validator/validator";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    p: p,
+  })
+);
 
 interface Props {
   data: OrderCreateRequest;
@@ -16,11 +25,11 @@ export default function OrderCreateRequestComponent({
   output,
   next
 }: Props) {
-
+  const classes = useStyles({});
   const errors = new OrderCreateRequestValidator().validate(data);
+  const [submitted, setSubmitted] = useState<boolean>(false);
 
   function change(event) {
-
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
@@ -31,106 +40,120 @@ export default function OrderCreateRequestComponent({
     });
   }
 
+  function nextStep() {
+    setSubmitted(true);
+    if (isValidForm(errors))
+      next();
+  }
+
   return (
-    <Grid container>
-      <Grid item xs={12}>
-        <Typography variant="h6" gutterBottom>
-          Shipping address
-        </Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          required
-          id="name"
-          name="name"
-          label="Name"
-          fullWidth
-          autoComplete="name"
-          value={data.name}
-          onChange={change}
-          error={errors.name !== null}
-          helperText={errors.name ? errors.name : null}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          required
-          id="address1"
-          name="address1"
-          label="Address line 1"
-          fullWidth
-          autoComplete="billing address-line1"
-          value={data.address1}
-          onChange={change}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          id="address2"
-          name="address2"
-          label="Address line 2"
-          fullWidth
-          autoComplete="billing address-line2"
-          value={data.address2}
-          onChange={change}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-          required
-          id="city"
-          name="city"
-          label="City"
-          fullWidth
-          autoComplete="billing address-level2"
-          value={data.city}
-          onChange={change}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-          id="region"
-          name="region"
-          label="State/Province/Region"
-          fullWidth
-          value={data.region}
-          onChange={change}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-          required
-          id="postalCode"
-          name="postalCode"
-          label="Zip / Postal code"
-          fullWidth
-          autoComplete="billing postal-code"
-          value={data.postalCode}
-          onChange={change}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-          required
-          id="country"
-          name="country"
-          label="Country"
-          fullWidth
-          autoComplete="billing country"
-          value={data.country}
-          onChange={change}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <FormControlLabel
-          control={
-            <Checkbox color="secondary" name="saveAddress" value="yes" />
-          }
-          label="Use this address for payment details"
-        />
-      </Grid>
-      <Grid item container xs={12}>
-        <Grid item xs={6}>
+    <Fragment>
+      <Grid
+        container
+        item
+        spacing={2}
+        className={classes.p}
+      >
+        <Grid item xs={12}
+        >
+          <TextField
+            required
+            id="name"
+            name="name"
+            label="Name"
+            fullWidth
+            autoComplete="name"
+            value={data.name}
+            onChange={change}
+            error={errors.name && submitted}
+            helperText={errors.name && submitted ? errors.name : null}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            required
+            id="address1"
+            name="address1"
+            label="Address line 1"
+            fullWidth
+            autoComplete="billing address-line1"
+            value={data.address1}
+            onChange={change}
+            error={errors.address1 && submitted}
+            helperText={errors.address1 && submitted ? errors.address1 : null}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id="address2"
+            name="address2"
+            label="Address line 2"
+            fullWidth
+            autoComplete="billing address-line2"
+            value={data.address2}
+            onChange={change}
+            error={errors.address2 && submitted}
+            helperText={errors.address2 && submitted ? errors.address2 : null}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="city"
+            name="city"
+            label="City"
+            fullWidth
+            autoComplete="billing address-level2"
+            value={data.city}
+            onChange={change}
+            error={errors.city && submitted}
+            helperText={errors.city && submitted ? errors.city : null}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="region"
+            name="region"
+            label="State/Province/Region"
+            fullWidth
+            value={data.region}
+            onChange={change}
+            error={errors.region && submitted}
+            helperText={errors.region && submitted ? errors.region : null}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="postalCode"
+            name="postalCode"
+            label="Zip / Postal code"
+            fullWidth
+            autoComplete="billing postal-code"
+            value={data.postalCode}
+            onChange={change}
+            error={errors.postalCode && submitted}
+            helperText={errors.postalCode && submitted ? errors.postalCode : null}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="country"
+            name="country"
+            label="Country"
+            fullWidth
+            autoComplete="billing country"
+            value={data.country}
+            onChange={change}
+            error={errors.country && submitted}
+            helperText={errors.country && submitted ? errors.country : null}
+          />
+        </Grid>
+        <Grid item
+          xs={12}
+          sm={6}
+        >
           <FormControl
             fullWidth
           >
@@ -155,11 +178,22 @@ export default function OrderCreateRequestComponent({
                 </MenuItem>
               )}
             </Select>
+            {
+              errors.shippingId && submitted &&
+              <FormHelperText
+                error
+              >
+                {errors.shippingId}
+              </FormHelperText>
+            }
           </FormControl>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item
+          xs={12} sm={6}
+        >
           <FormControl
             fullWidth
+            error={errors.shippingRegionId && submitted}
           >
             <InputLabel
               id="shippingRegionId"
@@ -182,17 +216,29 @@ export default function OrderCreateRequestComponent({
                 </MenuItem>
               )}
             </Select>
+            {
+              errors.shippingRegionId && submitted &&
+              <FormHelperText
+                error
+              >
+                {errors.shippingRegionId}
+              </FormHelperText>
+            }
           </FormControl>
         </Grid>
       </Grid>
-      <Grid item xs={12}>
+      <Grid
+        item
+        container
+        xs={12}
+      >
         <ActionButtonsComponent
           backButtonText={"Back to Your Cart"}
           nextButtonText={"Next Step"}
           back={() => Router.push("/shopping-cart")}
-          next={next}
+          next={nextStep}
         />
       </Grid>
-    </Grid>
+    </Fragment>
   );
 }

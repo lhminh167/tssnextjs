@@ -32,12 +32,12 @@ export class OrderCreateRequestValidator extends Validator<OrderCreateRequest> {
     this.ruleFor("address1").notEmpty();
     this.ruleFor("address2").notEmpty();
     this.ruleFor("city").notEmpty();
-    this.ruleFor("region").notEmpty();
+    // this.ruleFor("region").notEmpty();
     this.ruleFor("postalCode").notEmpty();
     this.ruleFor("country").notEmpty();
-    this.ruleFor("dayPhone").notEmpty();
-    this.ruleFor("evePhone").notEmpty();
-    this.ruleFor("mobPhone").notEmpty();
+    // this.ruleFor("dayPhone").notEmpty();
+    // this.ruleFor("evePhone").notEmpty();
+    // this.ruleFor("mobPhone").notEmpty();
     this.ruleFor("comments").notEmpty();
     this.ruleFor("paymentMethodId").notEmpty();
     this.ruleFor('shippingId').greaterThan(0);

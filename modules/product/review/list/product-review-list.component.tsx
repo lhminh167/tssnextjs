@@ -1,156 +1,135 @@
-import { createStyles, Grid, TablePagination, Theme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import React, { useState } from 'react';
-import { defaultRowsPerPageOptions, PaginatedList } from '../../../shared/crud/crud.model';
-import { themeColor } from '../../../shared/layout/layout.theme';
-import { IProduct } from '../../../shared/models/product.model';
-import { defaultReviewGetRequest, IReview, IReviewGetRequest, IReviewGetResponse } from '../../../shared/models/review.model';
-import PaginationComponent from '../../../shared/pagination/pagination.component';
-import { defaultProductSearchRequest } from '../../filter/product-filter.model';
-import CreateReviewComponent from '../create/create-product-review.component';
-import ProductReviewDetailComponent from '../detail/product-review-detail.component';
-import { getReviews } from '../review.service';
+import { createStyles, Grid, TablePagination, Theme, Divider } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import React, { Fragment, useEffect, useState } from "react";
+import { defaultRowsPerPageOptions } from "../../../shared/crud/crud.model";
+import { bgGrey, bold, mb, mb2, p, pl0, mlAuto } from "../../../shared/layout/layout.style";
+import { IProduct } from "../../../shared/models/product.model";
+import { defaultReviewGetRequest, IReview, IReviewGetRequest, IReviewGetResponse } from "../../../shared/models/review.model";
+import PaginationComponent from "../../../shared/pagination/pagination.component";
+import { defaultProductSearchRequest } from "../../filter/product-filter.model";
+import CreateReviewComponent from "../create/create-product-review.component";
+import ProductReviewDetailComponent from "../detail/product-review-detail.component";
+import { getReviews } from "../review.service";
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        bold: {
-            fontWeight: 'bold'
-        },
-        card: {
-            padding: theme.spacing(2),
-            background: themeColor.secondaryGrey
-        }
-    }),
+  createStyles({
+    bold: bold,
+    bgGrey: bgGrey,
+    p: p,
+    pl0: pl0,
+    mb2: mb2,
+    mb: mb,
+    mlAuto: mlAuto
+  })
 );
 
 interface Props {
-    data: IProduct;
+  data: IProduct;
 }
 
-export default function ProductReviewListComponent({
-    data
-}: Props) {
-    const classes = useStyles({});
-    const [state, setState] = useState<IReviewGetResponse>(data.review);
-    const [choice, setChoice] = useState<IReviewGetRequest>({ ...defaultReviewGetRequest, productId: data.productId });
+export default function ProductReviewListComponent({ data }: Props) {
+  const classes = useStyles({});
+  const [state, setState] = useState<IReviewGetResponse>(data.review);
+  const [choice, setChoice] = useState<IReviewGetRequest>({
+    ...defaultReviewGetRequest,
+    productId: data.productId
+  });
 
-    function setNewState(input: IReview[]) {
-        setState({
-            ...state,
-            count: input.length,
-            items: input
-        });
-    }
+  useEffect(() => {
+    setState(data.review);
+    setChoice({ ...defaultReviewGetRequest, productId: data.productId });
+  }, [data]);
 
-    function onRemove(input: IReview) {
-        debugger
-        const items = state.items.filter(e => e.reviewId !== input.reviewId);
-        setState({
-            ...state,
-            count: state.count - 1,
-            items: items
-        });
+  async function setNewState() {
+    const response = await getReviews(choice);
+    setState(response.content);
+  }
+  async function changePageIndex(event, newPageIndex: number) {
+    const newChoice: IReviewGetRequest = {
+      ...choice,
+      pageIndex: newPageIndex
+    };
+    const response = await getReviews(newChoice);
+    setState(response.content);
+    setChoice(newChoice);
+  }
 
-    }
+  async function changePageSize(event) {
+    const newChoice: IReviewGetRequest = {
+      ...choice,
+      pageSize: parseInt(event.target.value, 10),
+      pageIndex: defaultProductSearchRequest.pageIndex
+    };
+    const response = await getReviews(newChoice);
+    setState(response.content);
+    setChoice(newChoice);
+  }
 
-    function onUpdate(input: IReview) {
-        debugger
-        const index: number = state.items.findIndex(e => e.reviewId === input.reviewId);
-        const newState: PaginatedList<IReview> = state;
-        newState[index] = input;
-        setState(newState);
-    }
-
-    function onCreate(input: IReview) {
-        debugger
-        if (state.pageIndex > 0) return;
-        const items: IReview[] = state.items;
-        if (state.items.length === state.pageSize) items.pop();
-        items.unshift(input);
-        setState({
-            ...state,
-            count: state.count + 1,
-            items: items
-        });
-
-    }
-
-    async function changePageIndex(
-        event,
-        newPageIndex: number
-    ) {
-        debugger
-        const newChoice: IReviewGetRequest = {
-            ...choice,
-            pageIndex: newPageIndex,
-        }
-        const response = await getReviews(newChoice)
-        setState(response.content);
-        setChoice(newChoice);
-    }
-
-    async function changePageSize(
-        event
-    ) {
-        debugger
-        const newChoice: IReviewGetRequest = {
-            ...choice,
-            pageSize: parseInt(event.target.value, 10),
-            pageIndex: defaultProductSearchRequest.pageIndex,
-        }
-        const response = await getReviews(newChoice);
-        debugger
-        setState(response.content);
-        setChoice(newChoice);
-
-    }
-
-    return (
-        <Grid container>
-            <Grid item xs={12}>
-                <CreateReviewComponent
-                    data={data}
-                    output={onCreate}
-                />
-            </Grid>
-            {
-                state.count > 0 &&
-                <Grid item xs={12}>
-                    <Typography
-                        component="h2"
-                        variant="h6"
-                        className={classes.bold}
-
-                    >
-                        Product reviews
-                </Typography>
-                </Grid>
-            }
-            <Grid item container
-                component="ul"
-                xs={12}
+  return (
+    <Grid
+      container
+      className={classes.bgGrey + ' ' + classes.p}
+    >
+      <Grid item xs={12}>
+        <CreateReviewComponent
+          data={data}
+          output={setNewState}
+        />
+      </Grid>
+      {
+        state.count > 0 && (
+          <Fragment>
+            <Grid item xs={12}
+              className={classes.mb2}
             >
-                {state.items.map((entry: IReview) =>
-                    <ProductReviewDetailComponent
-                        key={entry.reviewId}
-                        data={entry}
-                        onRemove={onRemove}
-                        onUpdate={onUpdate}
-                    />
-                )}
+              <Divider
+                variant='fullWidth'
+              />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              className={classes.mb2}
+            >
+              <Typography
+                component="h2"
+                variant="h5"
+                className={classes.bold}
+              >
+                Product reviews
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              container
+              component="ul"
+              xs={12}
+              className={classes.pl0}
+            >
+              {state.items.map((entry: IReview) => (
+                <ProductReviewDetailComponent
+                  key={entry.reviewId}
+                  data={entry}
+                  onRemove={setNewState}
+                  onUpdate={setNewState}
+                />
+              ))}
             </Grid>
             <TablePagination
-                rowsPerPageOptions={defaultRowsPerPageOptions}
-                component="div"
-                count={state.count}
-                rowsPerPage={choice.pageSize}
-                page={choice.pageIndex}
-                onChangePage={changePageIndex}
-                onChangeRowsPerPage={changePageSize}
-                ActionsComponent={PaginationComponent}
+              rowsPerPageOptions={defaultRowsPerPageOptions}
+              component="div"
+              count={state.count}
+              rowsPerPage={choice.pageSize}
+              page={choice.pageIndex}
+              onChangePage={changePageIndex}
+              onChangeRowsPerPage={changePageSize}
+              ActionsComponent={PaginationComponent}
+              className={classes.mlAuto}
             />
-        </Grid>
-    );
+          </Fragment>
+        )
+      }
+    </Grid >
+  );
 }
-

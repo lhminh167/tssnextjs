@@ -1,114 +1,129 @@
 export interface IState<T> {
-    data: T;
-    error: IResponse<T>;
-    isLoading: boolean;
+  data: T;
+  error: IResponse<T>;
+  isLoading: boolean;
 }
 
 export interface PaginatedList<T> {
-    items: T[],
-    isPagingEnabled: boolean,
-    pageIndex: number,
-    pageSize: number,
-    totalPages: number,
-    count: number,
-    hasPreviousPage: boolean,
-    hasNextPage: boolean
+  items: T[];
+  isPagingEnabled: boolean;
+  pageIndex: number;
+  pageSize: number;
+  totalPages: number;
+  count: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 }
 
 export const defaultPaginationList: PaginatedList<any> = {
-    items: [],
-    isPagingEnabled: false,
-    pageIndex: 0,
-    pageSize: 0,
-    totalPages: 0,
-    count: 0,
-    hasPreviousPage: false,
-    hasNextPage: false
-}
+  items: [],
+  isPagingEnabled: false,
+  pageIndex: 0,
+  pageSize: 0,
+  totalPages: 0,
+  count: 0,
+  hasPreviousPage: false,
+  hasNextPage: false
+};
 
 export interface PaginationRequest {
-    isPagingEnabled?: boolean;
-    pageIndex?: number;
-    pageSize?: number;
-    sortBy?: string;
-    isDescending?: boolean;
+  isPagingEnabled?: boolean;
+  pageIndex?: number;
+  pageSize?: number;
+  sortBy?: string;
+  isDescending?: boolean;
 }
 
 export const defaultPaginationRequest: PaginationRequest = {
-    isPagingEnabled: false,
-    pageIndex: 0,
-    pageSize: 0,
-    sortBy: null,
-    isDescending: null,
-}
+  isPagingEnabled: false,
+  pageIndex: 0,
+  pageSize: 0,
+  sortBy: null,
+  // isDescending: null,
+  isDescending: true
+};
 
-export const defaultRowsPerPageOptions: number[] = [
-    8,
-    16,
-    32
-]
+export const defaultRowsPerPageOptions: number[] = [8, 16, 32];
 
 export interface IResponse<T> {
-    status?: number;
-    type?: string;
-    title?: string;
-    detail?: string;
-    content?: T;
-    instance?: string;
-    errors?: any[];
+  content?: T;
+  status?: number;
+  type?: string;
+  title?: string;
+  detail?: string;
+  instance?: string;
+  errors?: any[];
 }
 
-export class Response<T> implements IResponse<T>
-{
-    constructor(content: T) {
-        this.content = content;
-    }
+export class Response<T> implements IResponse<T> {
+  constructor(
+    content?: T,
+    status?: number,
+    title?: string,
+    type?: string,
+    detail?: string,
+    instance?: string,
+    errors?: any[]
+  ) {
+    this.content = content;
+    this.status = status;
+    this.type = type;
+    this.title = title;
+    this.detail = detail;
+    this.instance = instance;
+    this.errors = errors;
+  }
 
-    content?: T;
+  content?: T;
+  status?: number;
+  type?: string;
+  title?: string;
+  detail?: string;
+  instance?: string;
+  errors?: any[];
 }
-
 
 export interface PayloadAction<T> {
-    type?: string;
-    payload: IResponse<T>;
+  type?: string;
+  payload: IResponse<T>;
 }
 
 export enum HttpMethod {
-    DELETE = 'DELETE',
-    GET = 'GET',
-    HEAD = 'HEAD',
-    POST = 'POST',
-    OPTIONS = 'OPTIONS',
-    PUT = 'PUT',
-    PATCH = 'PATCH',
+  DELETE = "DELETE",
+  GET = "GET",
+  HEAD = "HEAD",
+  POST = "POST",
+  OPTIONS = "OPTIONS",
+  PUT = "PUT",
+  PATCH = "PATCH"
 }
 
 export interface UploadRequest {
-    name: string;
-    file: File;
+  name: string;
+  file: File;
 }
 
 export interface ImageGetUploadTokenRequest {
-    name: string;
-    settings: string;
+  name: string;
+  settings: string;
 }
 
 export interface ImageGetUploadTokensRequest {
-    content: ImageGetUploadTokenRequest[];
+  content: ImageGetUploadTokenRequest[];
 }
 
 export interface ImageRenameRequest {
-    oldName: string;
-    newName: string;
+  oldName: string;
+  newName: string;
 }
 
 export interface ImagesRenameRequest {
-    content: ImageRenameRequest[];
+  content: ImageRenameRequest[];
 }
 
-const mediaBaseUrl = 'Media';
+const mediaBaseUrl = "Media";
 
 export const mediaUrl = {
-    imageUploadToken: mediaBaseUrl + '/' + 'ImageUploadToken',
-    baseUrl: mediaBaseUrl
-}
+  imageUploadToken: mediaBaseUrl + "/" + "ImageUploadToken",
+  baseUrl: mediaBaseUrl
+};

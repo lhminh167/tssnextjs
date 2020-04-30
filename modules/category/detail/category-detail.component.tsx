@@ -1,12 +1,8 @@
-import { Breadcrumbs, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography } from "@material-ui/core";
+import { Paper, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Link from "next/link";
-import { ChangeEvent, Fragment, useState, useEffect } from "react";
 import { ICategory } from "../../shared/models/category.model";
-import { getCategory } from "../category.service";
+import ProductDetailImageComponent from "../../product/detail/product-detail-image.component";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -14,67 +10,47 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IProps {
-    data: any,
+    data: ICategory,
 }
 
-export default function CategoryDetailComponent(props: IProps) {
+export default function CategoryDetailComponent({
+    data
+}: IProps) {
     const classes = useStyles({});
-    const { data } = props;
-    // const [state, setState] = useState<ICategory>(defaultCategory);
-    // const router = r
-    useEffect(() => {
-        getCategory(data.cate)
-    }
-
-    )
-
-    const handleChange = (panel: string) => (event: ChangeEvent<{}>, isExpanded: boolean) => {
-        // setExpanded(isExpanded ? panel : false);
-    };
 
     return (
-        <Fragment>
-            <Grid container>
-                <Grid item xs={12}>
-                    <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-                        <Link
-                            href="/"
-                            passHref
-                        >
-                            <Typography
-                                component="a"
-                                color="inherit"
-                            >
-                                Home
-                            </Typography>
-                        </Link>
-                        <Link
-                            href="/"
-                            passHref
-                        >
-                            <Typography
-                                component="a"
-                                color="inherit"
-                            >
-                                Category
-                            </Typography>
-                        </Link>
-                        <Link
-                            href="/"
-                            passHref
-                        >
-                            <Typography
-                                component="a"
-                                color="inherit"
-                            >
-
-                            </Typography>
-                        </Link>
-                        <Typography color="textPrimary">Department</Typography>
-                    </Breadcrumbs>
+        <Grid container
+            component={Paper}
+            spacing={2}
+        >
+            {
+                data.product.items.length &&
+                <Grid item xs={12} sm={5}>
+                    <ProductDetailImageComponent
+                        data={data.product.items[0]}
+                    />
                 </Grid>
-
+            }
+            <Grid item container xs={12} sm={7}>
+                <Grid item xs={12}>
+                    <Typography
+                        component="h1"
+                        variant="h5"
+                        gutterBottom
+                    >
+                        {data.name}
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography
+                        component="p"
+                        variant="subtitle2"
+                        gutterBottom
+                    >
+                        {data.description}
+                    </Typography>
+                </Grid>
             </Grid>
-        </Fragment>
+        </Grid>
     );
 }

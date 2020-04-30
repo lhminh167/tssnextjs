@@ -12,6 +12,7 @@ import { IProduct } from '../../../shared/models/product.model';
 import { CreateReviewRequestValidator, IReview } from '../../../shared/models/review.model';
 import { isValidForm } from '../../../shared/validator/validator';
 import { createReview } from '../review.service';
+import { bold, mb, mb2 } from '../../../shared/layout/layout.style';
 
 const inputTheme = createMuiTheme({
     ...theme,
@@ -22,6 +23,9 @@ const inputTheme = createMuiTheme({
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        bold: bold,
+        mb: mb,
+        mb2: mb2
     }),
 );
 
@@ -58,11 +62,11 @@ export default function CreateReviewComponent({
     function change(event) {
         const target = event.target;
         const name = target.name;
-        const value = target.name === 'rating' ? Number(target.value) : target.value;
+        const value = name === 'create-rating' ? Number(target.value) : target.value;
 
         setState({
             ...state,
-            [name]: value,
+            [name === 'create-rating' ? 'rating' : name]: value,
         });
     }
 
@@ -78,136 +82,166 @@ export default function CreateReviewComponent({
         }
     }
 
-    if (customerId <= 0)
-        return (
-            <Grid
-                container
-                component={Paper}
-            >
-                <Grid item xs={12}>
-                    <Typography
-                        component="h2"
-                        variant="subtitle1"
-                        gutterBottom
-                    >
-                        Add a review
-                    </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    <Typography
-                        component="span"
-                        variant="subtitle2"
-                        gutterBottom
-                    >
-                        Please <Link
-                            href="/user/login"
-                            as="/user/login"
-                            passHref
-                        >
-                            <Typography
-                                color="primary"
-                                variant="subtitle2"
-                                component="a"
-                            >
-                                login
-                            </Typography>
-                        </Link> or <Link
-                            href="/user/register"
-                            as="/user/register"
-                            passHref
-                        >
-                            <Typography
-                                color="primary"
-                                variant="subtitle2"
-                                component="a"
-                            >
-                                register
-                            </Typography>
-                        </Link> to add a review.
-                    </Typography>
-                </Grid>
-            </Grid>
-        );
-
     return (
-        <Grid container spacing={3}>
-            <Grid item xs={12}>
+        <Grid
+            container
+        >
+            <Grid item xs={12}
+                className={classes.mb2}
+            >
                 <Typography
                     component="h2"
-                    variant="subtitle1"
-                    gutterBottom
+                    variant="h5"
+                    className={classes.bold}
                 >
                     Add a review
-                    </Typography>
+                </Typography>
             </Grid>
-            <Grid item container xs={12}
-                component="form"
-                noValidate
-            >
-                <Grid
-                    item container xs={12}
-                >
-                    <Grid item sm={5}>
-                        Your Review
-                        </Grid>
-                    <Grid item sm={7}>
-                        <ThemeProvider theme={inputTheme}>
-                            <TextField
-                                multiline
-                                name="review1"
-                                variant="outlined"
-                                margin="dense"
-                                value={state.review1}
-                                onChange={change}
-                                error={errors.review1 && submitted}
-                                helperText={errors.review1 && submitted ? errors.review1 : null}
-                            />
-                        </ThemeProvider>
-                    </Grid>
-                </Grid>
-                <Grid
-                    item container xs={12}
-                >
-                    <Grid item sm={5}>
-                        Overall Rating
-                        </Grid>
-                    <Grid item sm={7}>
-                        <FormControl
-                            error
-                        >
-                            <Rating
-                                id="rating"
-                                name="rating"
-                                value={state.rating}
-                                onChange={change}
-                            />
-                            {
-                                errors.rating && submitted &&
-                                < FormHelperText
+            {
+                customerId <= 0 ?
+                    (
+                        <Grid item xs={12}>
+                            <Typography
+                                component="span"
+                                variant="subtitle2"
+                            >
+                                Please <Link
+                                    href="/user/login"
+                                    as="/user/login"
+                                    passHref
                                 >
-                                    {errors.rating}
-                                </FormHelperText>
-                            }
-                        </FormControl>
-                    </Grid>
-                </Grid>
-                <Grid
-                    item container xs={12}
-                >
-                    <Grid item sm={5}>
-                    </Grid>
-                    <Grid item sm={7}>
-                        <Fab
-                            variant="extended"
-                            color="primary"
-                            size="small"
-                            onClick={submit}
+                                    <Typography
+                                        color="primary"
+                                        variant="subtitle2"
+                                        component="a"
+                                    >
+                                        login
+                                </Typography>
+                                </Link> or <Link
+                                    href="/user/register"
+                                    as="/user/register"
+                                    passHref
+                                >
+                                    <Typography
+                                        color="primary"
+                                        variant="subtitle2"
+                                        component="a"
+                                    >
+                                        register
+                                    </Typography>
+                                </Link> to add a review.
+                            </Typography>
+                        </Grid>
+                    )
+                    :
+                    (
+                        <Grid
+                            item
+                            container
+                            xs={12}
+                            component="form"
+                            noValidate
                         >
-                            Submit
-                        </Fab>
-                    </Grid>
-                </Grid>
-            </Grid>
+                            <Grid
+                                item
+                                container
+                                xs={12}
+                                className={classes.mb}
+                            >
+                                <Grid
+                                    item
+                                    sm={4}
+                                    className={classes.bold}
+                                    component={Typography}
+                                >
+                                    Your Review
+                                </Grid>
+                                <Grid
+                                    item
+                                    sm={8}
+                                >
+                                    <ThemeProvider theme={inputTheme}>
+                                        <TextField
+                                            placeholder='Your review must be at least 50 characters.'
+                                            multiline
+                                            fullWidth
+                                            rows={4}
+                                            name="review1"
+                                            variant="outlined"
+                                            margin="dense"
+                                            value={state.review1}
+                                            onChange={change}
+                                            error={errors.review1 && submitted}
+                                            helperText={errors.review1 && submitted ? errors.review1 : null}
+                                        />
+                                    </ThemeProvider>
+                                </Grid>
+                            </Grid>
+                            <Grid
+                                item
+                                container
+                                xs={12}
+                                className={classes.mb}
+                            >
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={4}
+                                    className={classes.bold}
+                                    component={Typography}
+                                >
+                                    Overall Rating
+                                </Grid>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={8}
+                                >
+                                    <FormControl
+                                        error
+                                    >
+                                        <Rating
+                                            name="create-rating"
+                                            value={state.rating}
+                                            onChange={change}
+                                        />
+                                        {
+                                            errors.rating && submitted &&
+                                            < FormHelperText
+                                            >
+                                                {errors.rating}
+                                            </FormHelperText>
+                                        }
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
+                            <Grid
+                                item
+                                container
+                                xs={12}
+                                className={classes.mb2}
+                            >
+                                <Grid
+                                    item
+                                    sm={4}
+                                >
+                                </Grid>
+                                <Grid
+                                    item
+                                    sm={8}
+                                >
+                                    <Fab
+                                        variant="extended"
+                                        color="primary"
+                                        onClick={submit}
+                                    >
+                                        Submit
+                                    </Fab>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    )
+            }
         </Grid>
     );
 }

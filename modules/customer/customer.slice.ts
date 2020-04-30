@@ -6,7 +6,7 @@ import { Customer, customerUrl, defaultCustomer, ICreateCustomerRequest, ILoginR
 
 const initialState: IState<Customer> = crudInitialState(defaultCustomer);
 
-export const currentUser = createSlice({
+export const currentUserSlice = createSlice({
     name: customerUrl.baseUrl,
     initialState,
     reducers: {
@@ -41,7 +41,7 @@ export const currentUser = createSlice({
         },
         createCustomerSucceeded(state: IState<Customer>, action: PayloadAction<Customer>) {
             state.data = action.payload;
-            state.data.role = action.payload.attributes ?.find(
+            state.data.role = action.payload.attributes?.find(
                 a => a.name === "Role"
             ).value;
             succeeded(state);

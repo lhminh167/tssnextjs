@@ -1,95 +1,113 @@
-import { IState, PaginatedList, PaginationRequest, defaultPaginationRequest } from '../../shared/crud/crud.model';
-import { IAttributeValue } from '../../shared/models/attribute-value.model';
-import { ICategory } from '../../shared/models/category.model';
-import { IProduct } from '../../shared/models/product.model';
-import { SelectOption } from '../../shared/models/shared.model';
+import {
+  IState,
+  PaginatedList,
+  PaginationRequest,
+  defaultPaginationRequest
+} from "../../shared/crud/crud.model";
+import { IAttributeValue } from "../../shared/models/attribute-value.model";
+import { ICategory } from "../../shared/models/category.model";
+import { IProduct } from "../../shared/models/product.model";
+import { SelectOption } from "../../shared/models/shared.model";
 
-const productFilterBaseUrl = 'Product';
+const productFilterBaseUrl = "Product";
 
 export const productFilterUrl = {
-    filter: productFilterBaseUrl + '/' + 'Filter',
-    choice: productFilterBaseUrl + '/' + 'Choice',
-    recommendation: (productId: number) => `${productFilterBaseUrl}/${productId}/Recommendation`,
-    product: productFilterBaseUrl
-}
+  filter: productFilterBaseUrl + "/" + "Filter",
+  choice: productFilterBaseUrl + "/" + "Choice",
+  recommendation: (productId: number) =>
+    `${productFilterBaseUrl}/${productId}/Recommendation`,
+  product: productFilterBaseUrl,
+  homepage: productFilterBaseUrl + "/" + "Homepage",
+};
 
 export enum ProductFilterFilterEnum {
-    Size = 1,
-    Color = 2,
+  Size = 'Size',
+  Color = 'Color'
 }
 
 export interface IProductFilterFilter {
-    attributes: IAttributeValue[];
-    categories: IProductFilterCategory[];
-    minPrice: number;
-    maxPrice: number;
+  attributes: IAttributeValue[];
+  categories: IProductFilterCategory[];
+  minPrice: number;
+  maxPrice: number;
 }
 
 export const filterInitialData: IProductFilterFilter = {
-    attributes: [],
-    categories: [],
-    minPrice: 0,
-    maxPrice: 100
+  attributes: [],
+  categories: [],
+  minPrice: 0,
+  maxPrice: 100
 };
 
 export interface IProductFilterChoice {
-    attributes: IAttributeValue[];
-    categories: IAttributeValue[];
-    minPrice: number;
-    maxPrice: number;
+  attributes: IAttributeValue[];
+  categories: IAttributeValue[];
+  minPrice: number;
+  maxPrice: number;
 }
 
 export interface IProductFilterState {
-    filter: IState<IProductFilterFilter>;
-    product: IState<PaginatedList<IProduct>>;
-    choice: IProductSearchRequest;
+  filter: IState<IProductFilterFilter>;
+  product: IState<PaginatedList<IProduct>>;
+  choice: IProductSearchRequest;
 }
 
 export class IProductFilterCategory {
-    categoryId: number;
-    name: string;
+  categoryId: number;
+  name: string;
 }
 
 export const defaultProductFilterCategory = {
-    categoryId: 0,
-    name: ''
-}
-
+  categoryId: 0,
+  name: ""
+};
 
 export interface IProductSearchRequest extends PaginationRequest {
-    keyword: string;
-    color: string;
-    size: string;
-    category: string[];
-    minPrice: number;
-    maxPrice: number;
+  keyword: string;
+  color: string;
+  size: string;
+  category: string[];
+  minPrice: number;
+  maxPrice: number;
+  display: number;
 }
 
 export const defaultProductSearchRequest: IProductSearchRequest = {
-    keyword: '',
-    color: null,
-    size: null,
-    category: [],
-    minPrice: 0,
-    maxPrice: 0,
-    isPagingEnabled: true,
-    isDescending: true,
-    pageIndex: 0,
-    pageSize: 8,
-    sortBy: null
+  keyword: "",
+  color: null,
+  size: null,
+  category: [],
+  minPrice: 0,
+  maxPrice: 0,
+  isPagingEnabled: true,
+  isDescending: true,
+  pageIndex: 0,
+  pageSize: 8,
+  sortBy: null,
+  display: 0
+};
+
+export enum SortByEnum {
+  None = "None",
+  Name = "Name",
+  Price = "Price",
+  BestSelling = "BestSelling",
+  TopRated = "TopRated",
+  MostDiscounted = "MostDiscounted",
+  Newest = "Newest"
 }
 
 export const defaultSortByOptions: SelectOption[] = [
-    { label: 'None', value: 'None' },
-    { label: 'Name', value: 'Name' },
-    { label: 'Price', value: 'Price' },
-    { label: 'Best Selling', value: 'BestSelling' },
-    { label: 'Top Rated', value: 'TopRated' },
-    { label: 'Most Discounted', value: 'MostDiscounted' },
-    { label: 'Newest Arrivals', value: 'Newest' },
-]
+  { label: "None", value: SortByEnum.None },
+  { label: "Name", value: SortByEnum.Name },
+  { label: "Price", value: SortByEnum.Price },
+  { label: "Best Selling", value: SortByEnum.BestSelling },
+  { label: "Top Rated", value: SortByEnum.TopRated },
+  { label: "Most Discounted", value: SortByEnum.MostDiscounted },
+  { label: "Newest Arrivals", value: SortByEnum.Newest }
+];
 
 export const defaultIsDescendingOptions: SelectOption[] = [
-    { label: 'Descending', value: true },
-    { label: 'Ascending', value: false },
-]
+  { label: "Descending", value: true },
+  { label: "Ascending", value: false }
+];

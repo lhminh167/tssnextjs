@@ -1,4 +1,6 @@
 import { defaultProduct, IProduct } from "../shared/models/product.model";
+import { PaginationRequest, defaultPaginationRequest, PaginatedList, defaultPaginationList } from "../shared/crud/crud.model";
+import querystring from 'query-string';
 
 const shoppingCartBaseUrl = 'shoppingCart';
 
@@ -7,8 +9,11 @@ export const ShoppingCartUrl = {
     saveItemForLater: shoppingCartBaseUrl + '/' + 'saveItemForLater',
     moveItemToCart: shoppingCartBaseUrl + '/' + 'MoveItemToCart',
     totalCost: shoppingCartBaseUrl + '/' + 'TotalCost',
-    totalQuantity: shoppingCartBaseUrl + '/' + 'TotalQuantity',
-    wishList: shoppingCartBaseUrl + '/' + 'WishList',
+    totalQuantity: (buyNow: boolean) => shoppingCartBaseUrl + '/TotalQuantity?buyNow=' + buyNow,
+    shoppingCart: (input: ShopingCartGetRequest) => shoppingCartBaseUrl + '?' +
+        querystring.stringify(input),
+    wishList: `${shoppingCartBaseUrl}?buyNow=false`,
+    recommendation: `${shoppingCartBaseUrl}/Recommendation`,
 }
 
 export interface IShopingCartItem {
@@ -46,4 +51,26 @@ export interface IShopingCartAddItemResponse {
 export interface IShopingCartAddItemPayload {
     previousItem?: IShopingCartItem;
     item?: IShopingCartItem;
+}
+
+export interface ShopingCartGetRequest extends PaginationRequest {
+    buyNow?: boolean;
+}
+
+export const defaultShopingCartGetRequest: ShopingCartGetRequest = {
+    ...defaultPaginationRequest,
+    buyNow: true,
+    isPagingEnabled: true,
+    pageSize: 8
+}
+
+export interface IShopingCart extends PaginatedList<IShopingCartItem> {
+    totalQuantity: number;
+    totalCost: number;
+}
+
+export const defaultShoppingCart: IShopingCart = {
+    ...defaultPaginationList,
+    totalCost: 0,
+    totalQuantity: 0
 }

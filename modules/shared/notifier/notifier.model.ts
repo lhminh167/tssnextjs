@@ -1,9 +1,14 @@
+import { Response } from "../crud/crud.model";
+import { Color } from "@material-ui/lab";
+
 export interface INotifierState {
-    notifications: Notification[],
+  isOpen: boolean;
+  data: Response<any>;
+  color: Color;
 }
 
-export interface Notification{
-    key: string,
-    message: string,
-    options: any,
-}
+export const defaultNotifierState: INotifierState = {
+  isOpen: false,
+  data: new Response(),
+  color: 'success'
+};

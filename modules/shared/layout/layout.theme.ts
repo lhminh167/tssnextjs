@@ -1,5 +1,4 @@
 import { createMuiTheme, Theme } from "@material-ui/core/styles";
-import { colors } from "@material-ui/core";
 import withStyles from "@material-ui/styles/withStyles";
 
 /**
@@ -10,7 +9,9 @@ export const transitionWidth = 'md';
 export const themeColor = {
     primary: "#F62F5E",
     secondaryGrey: "#e0e0e0",
-    secondary: "#1976d2"
+    lightGrey: '#EFEFEF',
+    secondary: "#1976d2",
+    white: 'white'
 };
 
 const theme: Theme = createMuiTheme({

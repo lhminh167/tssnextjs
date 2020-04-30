@@ -118,3 +118,34 @@ export const defaultCreateCustomerRequest = {
     password: "",
     role: "Customer"
 }
+
+export class CustomerUpdateRequestValidator extends Validator<Customer> {
+    constructor() {
+        super();
+
+        // customerId: "0",
+        //     name: "Visitor",
+        //         email: "",
+        //             // password: "",
+        //             // creditCard: "",
+        //             address1: "",
+        //                 address2: "",
+        //                     city: "",
+        //                         region: "",
+        //                             postalCode: "",
+        //                                 country: "",
+        //                                     shippingRegionId: 2,
+        //                                         shippingRegion: defaultShippingRegion,
+        //                                             dayPhone: "",
+        //                                                 evePhone: "",
+        //                                                     mobPhone: "",
+        //                                                         attributes: [],
+        //                                                             role: "Customer"
+
+        // this.ruleFor('email')
+        //     .notEmpty().emailAddress();
+
+        // this.ruleFor('password')
+        //     .notEmpty();
+    }
+}

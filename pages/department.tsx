@@ -1,20 +1,30 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../modules/root/root.model';
 import DepartmentListComponent from '../modules/department/list/department-list.component';
+import { getDepartments } from '../modules/department/department.service';
+import { IDepartment } from '../modules/shared/models/department.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
     }),
 );
 
-function DepartmentPage(props) {
-    const classes = useStyles(props);
-    return <DepartmentListComponent />
+interface Props {
+    data: IDepartment[]
 }
 
-DepartmentPage.getInitialProps = function ({ }) {
+export default function DepartmentListPage({
+    data
+}: Props) {
+    const classes = useStyles({});
+    return <DepartmentListComponent
+        data={data}
+    />
 }
 
-export default DepartmentPage;
+DepartmentListPage.getInitialProps = async function ({ ctx }) {
+    const { query } = ctx;
+    const response: any = await getDepartments();
+    
+    return { data: response.content };
+}

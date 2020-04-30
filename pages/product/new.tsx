@@ -1,34 +1,22 @@
-import { makeStyles, Theme, createStyles } from "@material-ui/core";
-import productFilterSlice from "../../modules/product/filter/product-filter.slice";
-import { defaultProductSearchRequest, IProductSearchRequest } from "../../modules/product/filter/product-filter.model";
-import ProductFilterComponent from "../../modules/product/filter/product-filter.component";
-import Router from "next/router";
+import { createStyles, makeStyles, Theme, Container } from "@material-ui/core";
 import CreateProductComponent from "../../modules/product/create/create-product.component";
+import { redirect } from "../../modules/shared/helpers/auth.helper";
+import { getLoginToken } from "../../modules/shared/helpers/token.helper";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
 export default function CreateProductPage(props) {
-    const classes = useStyles(props);
-    return (
-        <CreateProductComponent
-        />
-    );
+  const classes = useStyles(props);
+  return (
+    <Container>
+      <CreateProductComponent />
+    </Container>
+  );
 }
 
-CreateProductPage.getInitialProps = async function ({
-    ctx: {
-        isServer,
-        store,
-        query
-    },
-    ctx
+CreateProductPage.getInitialProps = async function({
+  ctx: { isServer, store, query },
+  ctx
 }) {
-    if (
-        isServer
-        || !store.getState().productFilter.filter.data.attributes.length
-    )
-        store.dispatch(productFilterSlice.actions.getFilterPending());
-}
+  if (!isServer && !getLoginToken()) redirect(ctx, "/user/login");
+};

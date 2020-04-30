@@ -8,7 +8,7 @@ import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
 import Link from "next/link";
 import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { currentUser } from "../../customer/customer.slice";
+import { currentUserSlice } from "../../customer/customer.slice";
 import { IRootState } from "../../root/root.model";
 import BrandComponent from "../brand/brand.component";
 import { toNumber, getRole } from "../helpers/auth.helper";
@@ -67,7 +67,7 @@ const LoggedInComponent = () => {
         state => getRole(state.currentUser.data) === "Admin"
     );
     function logout() {
-        dispatch(currentUser.actions.logout());
+        dispatch(currentUserSlice.actions.logout());
     }
 
     return (
@@ -140,6 +140,16 @@ export default function DesktopNavbarComponent() {
         <AppBar className={classes.sectionDesktop} color="default">
             <Toolbar>
                 <BrandComponent />
+                <Link href="/product" as="/product" passHref>
+                    <Typography
+                        variant="subtitle2"
+                        component="a"
+                        color="primary"
+                        className={classes.seperator}
+                    >
+                        Search
+                    </Typography>
+                </Link>
                 <Link href="/department" as="/department" passHref>
                     <Typography
                         variant="subtitle2"
@@ -148,7 +158,7 @@ export default function DesktopNavbarComponent() {
                         className={classes.seperator}
                     >
                         Departments
-                        </Typography>
+                    </Typography>
                 </Link>
                 {isLoggedIn ? <LoggedInComponent /> : <NotLoggedInComponent />}
                 <div className={classes.grow} />

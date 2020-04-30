@@ -11,10 +11,11 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import Link from 'next/link';
 import React, { Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { currentUser } from '../../customer/customer.slice';
+import { currentUserSlice } from '../../customer/customer.slice';
 import { IRootState } from '../../root/root.model';
 import { getRole, toNumber } from '../helpers/auth.helper';
 import { toUrl } from '../helpers/string.helper';
+import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,7 +61,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
     );
 
     function logout() {
-        dispatch(currentUser.actions.logout());
+        dispatch(currentUserSlice.actions.logout());
     }
 
     return (
@@ -205,6 +206,26 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                     </ListItemIcon>
                     <ListItemText
                         primary="Home"
+                        primaryTypographyProps={{
+                            color: 'primary'
+                        }}
+                    />
+                </ListItem>
+            </Link>
+            <Link
+                href="/product"
+                as="/product"
+                passHref
+            >
+                <ListItem button component="a"
+                >
+                    <ListItemIcon>
+                        <SearchIcon
+                            color="primary"
+                        />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary="Search"
                         primaryTypographyProps={{
                             color: 'primary'
                         }}

@@ -1,29 +1,44 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import OrderDetailComponent from '../../modules/order/detail/order-detail.component';
 import { getCustomerIdNumberFromStore, redirect } from '../../modules/shared/helpers/auth.helper';
+import CategoryDetailComponent from '../../modules/category/detail/category-detail.component';
+import { ICategory } from '../../modules/shared/models/category.model';
+import { getCategory } from '../../modules/category/category.service';
+import { Container } from '@material-ui/core';
+import CategoryDetailProductListComponent from '../../modules/category/detail/product-list/category-detail-product-list.component';
 
 const useStyles = makeStyles({
 });
 
-export default function OrderDetailPage() {
+interface Props {
+    data: ICategory
+}
+
+export default function CategoryDetailPage({
+    data
+}: Props) {
     const classes = useStyles({});
     return (
-        <OrderDetailComponent />
+        <Container>
+            <CategoryDetailComponent
+                data={data}
+            />
+            <CategoryDetailProductListComponent
+                data={data}
+            />
+        </Container>
+
     );
 }
 
-OrderDetailPage.getInitialProps = async function ({
+CategoryDetailPage.getInitialProps = async function ({
     ctx: {
-        isServer,
-        store
-    },
-    ctx
-}) {
-    if (isServer) return;
-    const customerId = getCustomerIdNumberFromStore(store);
-    if (customerId <= 0) {
-        redirect(ctx, '/user/login');
-        return;
+        query
     }
+}) {
+
+    // const { query } = ctx;
+    const response: any = await getCategory(Number(query.categoryId));
+
+    return { data: response.content };
 }

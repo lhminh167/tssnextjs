@@ -1,20 +1,21 @@
 import { Button, Grid, InputAdornment, makeStyles, MenuItem, TextField, Typography } from "@material-ui/core";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../root/root.model";
+import { ConfirmationDialog } from "../../shared/confirmation-dialog/confirmation-dialog.component";
+import { UploadRequest } from "../../shared/crud/crud.model";
 import { upload } from "../../shared/crud/crud.service";
 import { toNumber } from "../../shared/helpers/auth.helper";
-import { IAttributeValue } from "../../shared/models/attribute-value.model";
-import UploadComponent from "../../shared/upload/upload.component";
-import { IProductFilterCategory, ProductFilterFilterEnum } from "../filter/product-filter.model";
-import { EditProductRequestValidator, defaultEditProductState, IEditProductRequest, IEditProductState } from "./edit-product.model";
-import { UploadRequest, ImageRenameRequest } from "../../shared/crud/crud.model";
-import { isValidForm } from "../../shared/validator/validator";
-import { editProduct, renameImages } from "./edit-product.service";
 import { toUrl } from "../../shared/helpers/string.helper";
-import { ConfirmationDialog } from "../../shared/confirmation-dialog/confirmation-dialog.component";
-import { useRouter } from "next/router";
-import { IProduct } from "../../shared/models/product.model";
+import { IAttributeValue } from "../../shared/models/attribute-value.model";
+import { IProduct, productDisplayOptions } from "../../shared/models/product.model";
+import UploadComponent from "../../shared/upload/upload.component";
+import { isValidForm } from "../../shared/validator/validator";
+import { IProductFilterCategory, ProductFilterFilterEnum } from "../filter/product-filter.model";
+import { defaultEditProductState, EditProductRequestValidator, IEditProductRequest, IEditProductState, defaultFile } from "./edit-product.model";
+import { editProduct } from "./edit-product.service";
+import productFilterSlice from "../filter/product-filter.slice";
 
 
 const useStyles = makeStyles(theme => ({
@@ -39,9 +40,9 @@ export default function EditProductComponent({
         description: data.description,
         price: data.price.toString(),
         discountedPrice: data.discountedPrice.toString(),
-        image: window ? new File([''], data.image) : null,
-        image2: window ? new File([''], data.image2) : null,
-        thumbnail: window ? new File([''], data.thumbnail) : null,
+        image: { ...defaultFile, name: data.image },
+        image2: { ...defaultFile, name: data.image2 },
+        thumbnail: { ...defaultFile, name: data.thumbnail },
         display: data.display.toString(),
         size: data.attributes.filter(a => a.name === 'Size').map(a => a.attributeValueId),
         color: data.attributes.filter(a => a.name === 'Color').map(a => a.attributeValueId),
@@ -53,17 +54,22 @@ export default function EditProductComponent({
     let errors: any = {};
 
     const colors = useSelector<IRootState, IAttributeValue[]>(
-        state => state.productFilter.filter ?.data ?.attributes.filter(a => a.attributeId === ProductFilterFilterEnum.Color)
+        state => state.productFilter.filter?.data?.attributes.filter(a => a.name === ProductFilterFilterEnum.Color)
     );
     const sizes = useSelector<IRootState, IAttributeValue[]>(
-        state => state.productFilter.filter ?.data ?.attributes.filter(a => a.attributeId === ProductFilterFilterEnum.Size)
+        state => state.productFilter.filter?.data?.attributes.filter(a => a.name === ProductFilterFilterEnum.Size)
     );
     const categories = useSelector<IRootState, IProductFilterCategory[]>(
-        state => state.productFilter.filter ?.data ?.categories
+        state => state.productFilter.filter?.data?.categories
     );
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (!categories.length)
+            dispatch(productFilterSlice.actions.getFilterPending());
+    }, []);
 
     function change(event) {
-        
+
         const target = event.target;
         const name = target.name;
         let value: any = target.value;
@@ -94,11 +100,9 @@ export default function EditProductComponent({
         };
         setSubmitted(true);
         errors = new EditProductRequestValidator().validate(dataToSubmit);
-        
+
         if (!isValidForm(errors)) return;
         try {
-            
-            // await renameImage(dataToSubmit)
             await updateImages(dataToSubmit);
             const response = await editProduct(dataToSubmit);
             setIsDialogOpen(true);
@@ -106,28 +110,13 @@ export default function EditProductComponent({
         }
     }
 
-    // async function renameImage(input: IEditProductRequest) {
-    //     
-    //     if (state.name === data.name) return;
-    //     const images: ImageRenameRequest[] = [
-    //         { oldName: data.thumbnail, newName: data.thumbnail },
-    //         { oldName: data.image, newName: data.image },
-    //         { oldName: data.image2, newName: input.image2 },
-    //     ];
-    //     await renameImages(images);
-    // }
-
     async function updateImages(input: IEditProductRequest) {
-        
-
         const images: UploadRequest[] = [
             { name: input.thumbnail, file: state.thumbnail },
             { name: input.image, file: state.image },
             { name: input.image2, file: state.image2 },
-        ].filter(i => i ?.file ?.size);
-
+        ].filter(i => i?.file?.size);
         if (!images.length) return;
-
         await upload(images);
     }
 
@@ -314,6 +303,29 @@ export default function EditProductComponent({
                     {sizes.map(entry => (
                         <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}>
                             {entry.value}
+                        </MenuItem>
+                    ))}
+                </TextField>
+            </Grid>
+            <Grid item xs={12}>
+                <TextField
+                    select
+                    variant="outlined"
+                    required
+                    fullWidth
+                    size="small"
+                    label="Display"
+                    name="display"
+                    autoComplete="display"
+                    value={state.display}
+                    onChange={change}
+                    InputLabelProps={{ shrink: true }}
+                    error={errors.display && submitted}
+                    helperText={errors.display && submitted ? errors.display : null}
+                >
+                    {productDisplayOptions.map(entry => (
+                        <MenuItem key={entry.value} value={entry.value}>
+                            {entry.label}
                         </MenuItem>
                     ))}
                 </TextField>

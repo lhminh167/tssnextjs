@@ -1,12 +1,12 @@
+import { Container } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { IRootState } from "../modules/root/root.model";
+import React from "react";
+import LazyLoad from "react-lazyload";
+import ErrorBoundary from "../modules/shared/error-boundary/error-boundary.component";
 import { redirect } from "../modules/shared/helpers/auth.helper";
 import { getLoginToken } from "../modules/shared/helpers/token.helper";
-import { IShopingCartItem } from "../modules/shopping-cart/shopping-cart.model";
-import WishListComponent from "../modules/wish-list/wish-list.component";
-import { wishListSlice } from "../modules/wish-list/wish-list.slice";
+import ShoppingCartProductRecommendationGalleryComponent from "../modules/shopping-cart/recommendation/shopping-cart-recommendation-gallery.component";
+import WishListComponent from "../modules/shopping-cart/wish-list/wish-list.component";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -14,27 +14,27 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function WishListPage() {
-    const dispatch = useDispatch();
-    const data: IShopingCartItem[] = useSelector(
-        (state: IRootState) => state.wishList.data
-    );
-    useEffect(() => {
-        if (data.length === 0)
-            dispatch(wishListSlice.actions.getWishlistPending());
-    }, [])
+    const classes = useStyles();
 
-    return <WishListComponent data={data} />;
+    return (
+        <Container>
+            <ErrorBoundary>
+                <WishListComponent />
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <LazyLoad>
+                    <ShoppingCartProductRecommendationGalleryComponent />
+                </LazyLoad>
+            </ErrorBoundary>
+        </Container>
+    );
 }
 
 WishListPage.getInitialProps = async function ({
     ctx: {
-        isServer,
-        store
+        isServer
     },
     ctx
 }) {
-    if (!isServer && !getLoginToken()) {
-        redirect(ctx, '/user/login');
-        return;
-    }
+    if (!isServer && !getLoginToken()) redirect(ctx, "/user/login");
 }

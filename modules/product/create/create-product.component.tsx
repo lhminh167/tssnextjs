@@ -1,19 +1,21 @@
 import { Button, Grid, InputAdornment, makeStyles, MenuItem, TextField, Typography } from "@material-ui/core";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../root/root.model";
+import { ConfirmationDialog } from "../../shared/confirmation-dialog/confirmation-dialog.component";
+import { UploadRequest } from "../../shared/crud/crud.model";
 import { upload } from "../../shared/crud/crud.service";
 import { toNumber } from "../../shared/helpers/auth.helper";
-import { IAttributeValue } from "../../shared/models/attribute-value.model";
-import UploadComponent from "../../shared/upload/upload.component";
-import { IProductFilterCategory, ProductFilterFilterEnum } from "../filter/product-filter.model";
-import { CreateProductRequestValidator, defaultCreateProductState, ICreateProductRequest, ICreateProductState } from "./create-product.model";
-import { UploadRequest } from "../../shared/crud/crud.model";
-import { isValidForm } from "../../shared/validator/validator";
-import { createProduct } from "./create-product.service";
 import { toUrl } from "../../shared/helpers/string.helper";
-import { ConfirmationDialog } from "../../shared/confirmation-dialog/confirmation-dialog.component";
-import { useRouter } from "next/router";
+import { IAttributeValue } from "../../shared/models/attribute-value.model";
+import { productDisplayOptions } from "../../shared/models/product.model";
+import UploadComponent from "../../shared/upload/upload.component";
+import { isValidForm } from "../../shared/validator/validator";
+import { IProductFilterCategory, ProductFilterFilterEnum } from "../filter/product-filter.model";
+import productFilterSlice from "../filter/product-filter.slice";
+import { CreateProductStateValidator, defaultCreateProductState, ICreateProductRequest, ICreateProductState } from "./create-product.model";
+import { createProduct } from "./create-product.service";
 
 
 const useStyles = makeStyles(theme => ({
@@ -29,20 +31,24 @@ export default function CreateProductComponent() {
     const [submitted, setSubmitted] = useState<boolean>(false);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [productId, setProductId] = useState<number>(0);
-    let errors: any = {};
-
+    let errors = new CreateProductStateValidator().validate(state);;
     const colors = useSelector<IRootState, IAttributeValue[]>(
-        state => state.productFilter.filter ?.data ?.attributes.filter(a => a.attributeId === ProductFilterFilterEnum.Color)
+        state => state.productFilter.filter?.data?.attributes.filter(a => a.name === ProductFilterFilterEnum.Color)
     );
     const sizes = useSelector<IRootState, IAttributeValue[]>(
-        state => state.productFilter.filter ?.data ?.attributes.filter(a => a.attributeId === ProductFilterFilterEnum.Size)
+        state => state.productFilter.filter?.data?.attributes.filter(a => a.name === ProductFilterFilterEnum.Size)
     );
     const categories = useSelector<IRootState, IProductFilterCategory[]>(
-        state => state.productFilter.filter ?.data ?.categories
+        state => state.productFilter.filter?.data?.categories
     );
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (!categories.length)
+            dispatch(productFilterSlice.actions.getFilterPending());
+    }, []);
 
     function change(event) {
-        
+
         const target = event.target;
         const name = target.name;
         let value: any = target.value;
@@ -75,11 +81,12 @@ export default function CreateProductComponent() {
             image2: images[2].name,
         };
         setSubmitted(true);
-        errors = new CreateProductRequestValidator().validate(data);
+
         if (!isValidForm(errors)) return;
         try {
             await upload(images);
             const response = await createProduct(data);
+
             setProductId(response.content.productId);
             setIsDialogOpen(true);
         } catch (e) {
@@ -269,6 +276,29 @@ export default function CreateProductComponent() {
                     {sizes.map(entry => (
                         <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}>
                             {entry.value}
+                        </MenuItem>
+                    ))}
+                </TextField>
+            </Grid>
+            <Grid item xs={12}>
+                <TextField
+                    select
+                    variant="outlined"
+                    required
+                    fullWidth
+                    size="small"
+                    label="Display"
+                    name="display"
+                    autoComplete="display"
+                    value={state.display}
+                    onChange={change}
+                    InputLabelProps={{ shrink: true }}
+                    error={errors.display && submitted}
+                    helperText={errors.display && submitted ? errors.display : null}
+                >
+                    {productDisplayOptions.map(entry => (
+                        <MenuItem key={entry.value} value={entry.value}>
+                            {entry.label}
                         </MenuItem>
                     ))}
                 </TextField>

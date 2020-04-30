@@ -1,24 +1,20 @@
-import { makeStyles, createStyles, Grid, Typography, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@material-ui/core";
-import { OrderCreateRequest, OrderCreateForm } from "../create-order.model";
-import { useSelector, useDispatch } from "react-redux";
-import { IRootState } from "../../../root/root.model";
-import { IShopingCartItem } from "../../../shopping-cart/shopping-cart.model";
-import React, { useEffect } from "react";
-import { shoppingCartSlice } from "../../../shopping-cart/shopping-cart.slice";
+import { createStyles, Divider, Grid, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
+import React, { useEffect, useState, Fragment } from "react";
+import ActionButtonsComponent from "../../../shared/action-buttons/action-buttons.component";
 import { decodeAttributes } from "../../../shared/helpers/product.helper";
-import ActionButtonsComponent from "../shared/action-buttons.component";
+import { formatCurrency } from "../../../shared/helpers/string.helper";
+import { defaultShippingRegion, ShippingRegion } from "../../../shared/models/shipping-region.model";
+import { defaultShipping, Shipping } from "../../../shared/models/shipping.model";
+import { defaultTax, getTaxId, Tax } from "../../../shared/models/tax.model";
+import { defaultShopingCartGetRequest, IShopingCartItem } from "../../../shopping-cart/shopping-cart.model";
+import { getShoppingCart } from "../../../shopping-cart/shopping-cart.service";
+import { OrderCreateForm, OrderCreateRequest } from "../create-order.model";
+import { bold, p } from "../../../shared/layout/layout.style";
 
 const useStyles = makeStyles(theme =>
     createStyles({
-        listItem: {
-            // padding: theme.spacing(1, 0)
-        },
-        total: {
-            // fontWeight: 700
-        },
-        title: {
-            // marginTop: theme.spacing(2)
-        }
+        bold: bold,
+        p: p
     })
 );
 
@@ -36,92 +32,200 @@ export default function OrderConfirmationComponent({
     back
 }: Props) {
     const classes = useStyles({});
-    const state = useSelector<IRootState, IShopingCartItem[]>(
-        state => state.shoppingCart.data
-    );
-    const dispatch = useDispatch();
+    const [state, setState] = useState<IShopingCartItem[]>([]);
+    const [shipping, setShipping] = useState<Shipping>(defaultShipping);
+    const [shippingRegion, setShippingRegion] = useState<ShippingRegion>(defaultShippingRegion);
+    const [tax, setTax] = useState<Tax>(defaultTax);
+    const [subTotal, setSubTotal] = useState<number>(0);
+    const [grandTotal, setGrandTotal] = useState<number>(0);
+
     useEffect(() => {
-        if (state.length) return;
-        dispatch(shoppingCartSlice.actions.getCartPending());
-    }, []);
+        getShoppingCart({
+            ...defaultShopingCartGetRequest,
+            isPagingEnabled: false,
+            pageSize: 0
+        })
+            .then(response => update(response.content.items));
+    }, [])
+
+    function update(input: IShopingCartItem[]) {
+        setState(input);
+
+        const shippingResult = form.shippings.find(s => s.shippingId === data.shippingId);
+        if (!shippingResult) return;
+        setShipping(shippingResult);
+
+        const shippingRegionResult = form.shippingRegions.find(s => s.shippingRegionId === data.shippingRegionId);
+        if (!shippingRegionResult) return;
+        setShippingRegion(shippingRegionResult);
+
+        const taxResult = form.taxes.find(t => t.taxId === getTaxId(shipping));
+        if (!taxResult) return;
+        setTax(taxResult);
+
+        const subtotalResult = input.reduce((total, item, index, arr) =>
+            total + (item.product.discountedPrice > 0 ? item.product.discountedPrice : item.product.price) * item.quantity
+            , 0);
+        setSubTotal(subtotalResult ?? 0);
+
+        const grandtotalResult = subtotalResult
+            + shippingResult.shippingCost
+            + subtotalResult * taxResult.taxPercentage / 100;
+        setGrandTotal(grandtotalResult ?? 0);
+    }
+
     return (
-        <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-                <Typography variant="h6" gutterBottom>
-                    Order summary
-                </Typography>
-                <TableContainer component={Paper}>
-                    <Table
+        <Fragment>
+            <Grid
+                container
+                spacing={2}
+                className={classes.p}
+            >
+                <Grid item xs={12} sm={7}>
+                    <Typography
+                        className={classes.bold}
+                        gutterBottom
                     >
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Item</TableCell>
-                                <TableCell align="right">Qty</TableCell>
-                                <TableCell align="right">Price</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {state.map(row => {
-                                return (
-                                    <TableRow key={row.itemId}>
-                                        <TableCell component="th" scope="row">
-                                            {decodeAttributes(row.attributes).map(a => a.value).join(' ')} {row.product.name}
-                                        </TableCell>
-                                        <TableCell align="right">{row.quantity}</TableCell>
-                                        <TableCell
-                                            align="right"
-                                            color="primary"
-                                        >
-                                            {row.product.discountedPrice > 0 ? row.product.discountedPrice : row.product.price}
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <Typography variant="subtitle1" className={classes.total}>
-                    $34.06
+                        Order summary
                 </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <Typography
-                    variant="h6"
+                    <TableContainer
+                        component={Paper}
+                    >
+                        <Table
+                        >
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Item</TableCell>
+                                    <TableCell align="right">Qty</TableCell>
+                                    <TableCell align="right">Price</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {state.map(row => {
+                                    return (
+                                        <TableRow key={row.itemId}>
+                                            <TableCell component="th" scope="row">
+                                                {decodeAttributes(row.attributes).map(a => a.value).join(' ')} {row.product.name}
+                                            </TableCell>
+                                            <TableCell align="right">{row.quantity}</TableCell>
+                                            <TableCell
+                                                align="right"
+                                            >
+                                                <Typography
+                                                    color="primary"
+                                                    className={classes.bold}
+                                                >
+                                                    {
+                                                        formatCurrency(
+                                                            row.product.discountedPrice > 0
+                                                                ? row.product.discountedPrice
+                                                                : row.product.price
+                                                        )
+                                                    }
+                                                </Typography>
+
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Grid>
+                <Grid item xs={12} sm={5}>
+                    <Typography
+                        gutterBottom
+                        className={classes.bold}
+                    >
+                        Delivery
+                </Typography>
+                    <Typography
+                        color='textSecondary'
+                        className={classes.bold}
+                    >
+                        Address
+                </Typography>
+                    <Typography
+                    >
+                        {data.address1}
+                    </Typography>
+                    <Typography
+                        gutterBottom
+                    >
+                        {data.address2}
+                    </Typography>
+                    <Typography
+                        color='textSecondary'
+                        className={classes.bold}
+                    >
+                        Shipping
+                </Typography>
+                    <Typography
+                        gutterBottom
+                    >
+                        {shipping.shippingType}
+                    </Typography>
+                    <Typography
+                        color='textSecondary'
+                        className={classes.bold}
+                    >
+                        Shipping Region
+                    </Typography>
+                    <Typography
+                    >
+                        {shippingRegion.shippingRegion1}
+                    </Typography>
+                    <Typography
+                        color='textSecondary'
+                        className={classes.bold}
+                    >
+                        Tax
+                </Typography>
+                    <Typography
+                    >
+                        {tax.taxType}
+                    </Typography>
+                </Grid>
+                <Grid
+                    xs={12}
+                    item
                 >
-                    Delivery
-                </Typography>
-                <Typography
+                    <Divider
+                    // variant="middle" 
+                    />
+
+                </Grid>
+                <Grid item xs={7}
                 >
-                    Address
-                </Typography>
-                <Typography
+                    <Typography
+                        color='textSecondary'
+                        className={classes.bold}
+                    >
+                        Subtotal
+                    </Typography>
+
+                    <Typography
+
+                        className={classes.bold}
+                    >
+                        {formatCurrency(subTotal)}
+                    </Typography>
+                </Grid>
+                <Grid item xs={5}
                 >
-                    {data.address1}
-                </Typography>
-                <Typography
-                >
-                    {data.address2}
-                </Typography>
-                <Typography
-                >
-                    Delivery options
-                </Typography>
-                <Typography
-                >
-                    Shipping
-                </Typography>
-                <Typography
-                >
-                    {form.shippings.find(s => s.shippingId === data.shippingId) ?.shippingType}
-                </Typography>
-                <Typography
-                >
-                    Shipping Region
-                </Typography>
-                <Typography
-                >
-                    {form.shippingRegions.find(s => s.shippingRegionId === data.shippingRegionId) ?.shippingRegion1}
-                </Typography>
+                    <Typography
+                        color='textSecondary'
+                        className={classes.bold}
+                    >
+                        Grandtotal
+                    </Typography>
+                    <Typography
+                        variant='h5'
+                        className={classes.bold}
+                    >
+                        {formatCurrency(grandTotal)}
+                    </Typography>
+                </Grid>
             </Grid>
             <Grid item xs={12}>
                 <ActionButtonsComponent
@@ -131,6 +235,6 @@ export default function OrderConfirmationComponent({
                     next={next}
                 />
             </Grid>
-        </Grid>
+        </Fragment>
     );
 }

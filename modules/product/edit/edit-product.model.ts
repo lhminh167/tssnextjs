@@ -99,3 +99,9 @@ export const defaultEditProductRequest: IEditProductRequest = {
     attributes: [],
     categoryId: 0,
 }
+
+export const defaultFile: File = {
+    name: null,
+    lastModified: null, size: null, type: null, arrayBuffer: null,
+    slice: null, stream: null, text: null
+}

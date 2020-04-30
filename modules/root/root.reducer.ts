@@ -1,18 +1,11 @@
 import { combineReducers } from '@reduxjs/toolkit';
-// import { mainLoader } from '../shared/loader/loader.redux';
-// import { notifier } from '../shared/notifier/notifier.redux';
-import { currentUser } from '../customer/customer.slice';
-import { shoppingCartSlice, shoppingCartItemCountSlice } from '../shopping-cart/shopping-cart.slice';
-import { wishListSlice } from '../wish-list/wish-list.slice';
+import { currentUserSlice } from '../customer/customer.slice';
 import productFilterSlice from '../product/filter/product-filter.slice';
-
+import { shoppingCartItemCountSlice } from '../shopping-cart/shopping-cart.slice';
 
 export const rootReducer = combineReducers({
     // mainLoader: mainLoader.reducer,
-    // notifier: notifier.reducer,
-    currentUser: currentUser.reducer,
+    currentUser: currentUserSlice.reducer,
     productFilter: productFilterSlice.reducer,
     shoppingCartItemCount: shoppingCartItemCountSlice.reducer,
-    shoppingCart: shoppingCartSlice.reducer,
-    wishList: wishListSlice.reducer
 });

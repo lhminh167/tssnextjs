@@ -1,6 +1,6 @@
 import { get } from "../shared/crud/crud.service";
-import { departmentUrl } from "../shared/models/department.model";
+import { categoryUrl } from "../shared/models/category.model";
 
 export async function getCategory(categoryId: number) {
-    return await get(departmentUrl, categoryId);
+    return await get(categoryUrl, categoryId);
 }

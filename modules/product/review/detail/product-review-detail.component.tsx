@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../../root/root.model";
 import { getRole, toNumber } from "../../../shared/helpers/auth.helper";
+import { bold, mb2, mr } from "../../../shared/layout/layout.style";
 import { IReview } from "../../../shared/models/review.model";
 import ProductReviewDeleteComponent from "../delete/product-review-delete.component";
 import ProductReviewEditComponent from "../edit/product-review-edit.component";
@@ -10,9 +11,9 @@ import ProductReviewComponent from "./product-review.component";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        bold: {
-            fontWeight: 'bold'
-        }
+        bold: bold,
+        mb2: mb2,
+        mr: mr
     }),
 );
 
@@ -36,11 +37,19 @@ export default function ProductReviewDetailComponent({
         state => toNumber(state.currentUser.data.customerId) === data.customerId
     );
 
+    function update() {
+
+        setIsEditMode(false);
+        onUpdate();
+    }
     return (
-        <Grid item container
+        <Grid
+            item
+            container
             component="li"
             xs={12}
             key={data.reviewId}
+            className={classes.mb2}
         >
             {
                 !isEditMode &&
@@ -50,16 +59,33 @@ export default function ProductReviewDetailComponent({
             }
             {
                 !isEditMode && (isCreator || isAdmin) &&
-                <Grid item xs={6}>
-                    <Button
-                        onClick={() => { setIsEditMode(true) }}
+                <Grid
+                    container
+                    item
+                    xs={12}
+                >
+                    <Grid
+                        item
+                        xs={12}
+                        sm={4}
                     >
-                        Edit
-                    </Button>
-                    <ProductReviewDeleteComponent
-                        data={data}
-                        output={onRemove}
-                    />
+                    </Grid>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={8}
+                    >
+                        <Button
+                            onClick={() => { setIsEditMode(true) }}
+                        // className={classes.mr}
+                        >
+                            Edit
+                        </Button>
+                        <ProductReviewDeleteComponent
+                            data={data}
+                            output={onRemove}
+                        />
+                    </Grid>
                 </Grid>
             }
             {
@@ -67,7 +93,7 @@ export default function ProductReviewDetailComponent({
                 <Grid item xs={12}>
                     <ProductReviewEditComponent
                         data={data}
-                        output={onUpdate}
+                        output={update}
                         close={() => { setIsEditMode(false) }}
                     />
                 </Grid>

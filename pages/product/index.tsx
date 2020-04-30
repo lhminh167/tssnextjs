@@ -1,4 +1,5 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme, Container } from "@material-ui/core";
+import querystring from 'query-string';
 import ProductFilterComponent from "../../modules/product/filter/product-filter.component";
 import { defaultProductSearchRequest } from "../../modules/product/filter/product-filter.model";
 import productFilterSlice from "../../modules/product/filter/product-filter.slice";
@@ -11,8 +12,10 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function ProductSearchPage(props) {
     const classes = useStyles(props);
     return (
-        <ProductFilterComponent
-        />
+        <Container>
+            <ProductFilterComponent
+            />
+        </Container>
     );
 }
 
@@ -20,20 +23,29 @@ ProductSearchPage.getInitialProps = async function ({
     ctx: {
         isServer,
         store,
-        query
+        query,
+        req
     },
     ctx
 }) {
-    
-    store.dispatch(productFilterSlice.actions.getFilterPending());
+
+    const parsedQuery = querystring.parse(
+        querystring.stringify(query),
+        {
+            parseNumbers: true,
+            parseBooleans: true,
+            // skipNull: true
+        }
+    );
+
+    if (
+        isServer
+        || !store.getState().productFilter.filter.data.attributes.length
+    )
+        store.dispatch(productFilterSlice.actions.getFilterPending());
+
     store.dispatch(productFilterSlice.actions.getProductsPending({
         ...defaultProductSearchRequest,
-        ...query as any,
-        minPrice: Number(query.minPrice),
-        maxPrice: Number(query.maxPrice),
-        isPagingEnabled: Boolean(query.isPagingEnabled),
-        isDescending: Boolean(query.isDescending),
-        pageIndex: Number(query.pageIndex),
-        pageSize: Number(query.pageSize),
+        ...parsedQuery as any,
     }));
 }

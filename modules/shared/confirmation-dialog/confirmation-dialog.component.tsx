@@ -15,14 +15,12 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(2),
         },
         closeButton: {
-            // position: 'absolute',
             right: theme.spacing(1),
             top: theme.spacing(1),
             color: theme.palette.grey[500],
         },
         backdrop: {
             zIndex: theme.zIndex.modal + 1,
-            // color: '#fff',
         },
     }),
 );

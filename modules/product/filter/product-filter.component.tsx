@@ -22,8 +22,8 @@ import { defaultAttributeValue, IAttributeValue } from "../../shared/models/attr
 import { IProduct } from "../../shared/models/product.model";
 import PaginationComponent, { PaginationProps } from "../../shared/pagination/pagination.component";
 import SizePicker from "../../shared/size-picker/size-picker.component";
-import ProductFilterProductListComponent from "./list/product-list.component";
 import { defaultIsDescendingOptions, defaultProductSearchRequest, defaultSortByOptions, IProductFilterCategory, IProductSearchRequest, ProductFilterFilterEnum } from "./product-filter.model";
+import ProductListComponent from "../../shared/product-list/product-list.component";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -67,25 +67,25 @@ export default function ProductFilterComponent({
         state => state.productFilter.choice
     );
     const colors = useSelector<IRootState, IAttributeValue[]>(
-        state => state.productFilter.filter ?.data ?.attributes.filter(a => a.attributeId === ProductFilterFilterEnum.Color)
+        state => state.productFilter.filter?.data?.attributes.filter(a => a.name === ProductFilterFilterEnum.Color)
     );
     const sizes = useSelector<IRootState, IAttributeValue[]>(
-        state => state.productFilter.filter ?.data ?.attributes.filter(a => a.attributeId === ProductFilterFilterEnum.Size)
+        state => state.productFilter.filter?.data?.attributes.filter(a => a.name === ProductFilterFilterEnum.Size)
     );
     const minPrice = useSelector<IRootState, number>(
-        state => state.productFilter.filter ?.data ?.minPrice
+        state => state.productFilter.filter?.data?.minPrice
     );
     const maxPrice = useSelector<IRootState, number>(
-        state => state.productFilter.filter ?.data ?.maxPrice
+        state => state.productFilter.filter?.data?.maxPrice
     );
     const categories = useSelector<IRootState, IProductFilterCategory[]>(
-        state => state.productFilter.filter ?.data ?.categories
+        state => state.productFilter.filter?.data?.categories
     );
     const products = useSelector<IRootState, IProduct[]>(
-        state => state.productFilter.product ?.data ?.items
+        state => state.productFilter.product?.data?.items
     );
     const count = useSelector<IRootState, number>(
-        state => state.productFilter.product ?.data ?.count
+        state => state.productFilter.product?.data?.count
     );
 
     const apply = () => {
@@ -303,7 +303,7 @@ export default function ProductFilterComponent({
                     </Button>
                 </ExpansionPanelActions>
             </ExpansionPanel>
-            <ProductFilterProductListComponent
+            <ProductListComponent
                 data={products}
             />
             <TablePagination

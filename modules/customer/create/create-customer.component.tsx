@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { isValidForm } from '../../shared/validator/validator';
 import { CreateCustomerRequestValidator, ICreateCustomerRequest, defaultCreateCustomerRequest } from '../customer.model';
-import { currentUser } from '../customer.slice';
+import { currentUserSlice } from '../customer.slice';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -37,11 +37,8 @@ const useStyles = makeStyles(theme => ({
 export default function CreateCustomerComponent() {
     const classes = useStyles({});
     const [state, setState] = useState<ICreateCustomerRequest>(defaultCreateCustomerRequest);
-
     const [submitted, setSubmitted] = useState<boolean>(false);
-
     const errors = new CreateCustomerRequestValidator().validate(state);
-
     const dispatch = useDispatch();
 
     function change(event) {
@@ -60,7 +57,7 @@ export default function CreateCustomerComponent() {
 
         if (!isValidForm(errors)) return;
 
-        dispatch(currentUser.actions.createCustomerPending(state));
+        dispatch(currentUserSlice.actions.createCustomerPending(state));
     }
 
     return (

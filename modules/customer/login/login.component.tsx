@@ -11,7 +11,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ILoginRequest, LoginRequestValidator } from '../customer.model';
-import { currentUser } from '../customer.slice';
+import { currentUserSlice } from '../customer.slice';
 import { isValidForm } from '../../shared/validator/validator';
 import Link from 'next/link';
 
@@ -66,7 +66,7 @@ export default function LoginComponent() {
 
         if (!isValidForm(errors)) return;
 
-        dispatch(currentUser.actions.loginPending(state));
+        dispatch(currentUserSlice.actions.loginPending(state));
     }
 
     return (

@@ -1,43 +1,37 @@
+import { Container } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { IRootState } from "../modules/root/root.model";
-import ShoppingCartComponent from "../modules/shopping-cart/shopping-cart.component";
-import { IShopingCartItem } from "../modules/shopping-cart/shopping-cart.model";
-import { shoppingCartSlice } from "../modules/shopping-cart/shopping-cart.slice";
-import { getCustomerIdNumberFromStore, redirect } from "../modules/shared/helpers/auth.helper";
+import React from "react";
+import LazyLoad from "react-lazyload";
+import ErrorBoundary from "../modules/shared/error-boundary/error-boundary.component";
+import { redirect } from "../modules/shared/helpers/auth.helper";
 import { getLoginToken } from "../modules/shared/helpers/token.helper";
+import ShoppingCartComponent from "../modules/shopping-cart/detail/shopping-cart.component";
+import ShoppingCartProductRecommendationGalleryComponent from "../modules/shopping-cart/recommendation/shopping-cart-recommendation-gallery.component";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-  })
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
 function ShoppingCartPage(props) {
   const classes = useStyles(props);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (data.length === 0)
-      dispatch(shoppingCartSlice.actions.getCartPending());
-  }, [])
-  const data: IShopingCartItem[] = useSelector(
-    (state: IRootState) => state.shoppingCart.data
-  );
 
-  return <ShoppingCartComponent data={data} />;
+  return (
+    <Container>
+      <ErrorBoundary>
+        <ShoppingCartComponent />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <LazyLoad>
+          <ShoppingCartProductRecommendationGalleryComponent />
+        </LazyLoad>
+      </ErrorBoundary>
+    </Container>
+  );
 }
 
 ShoppingCartPage.getInitialProps = async function ({
-  ctx: {
-    isServer,
-    store
-  },
+  ctx: { isServer, store },
   ctx
 }) {
-  if (!isServer && !getLoginToken()) {
-    redirect(ctx, '/user/login');
-    return;
-  }
-}
+  if (!isServer && !getLoginToken()) redirect(ctx, "/user/login");
+};
 
 export default ShoppingCartPage;
