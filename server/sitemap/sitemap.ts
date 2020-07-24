@@ -17,15 +17,12 @@ export default async function getSiteMap(req: NextApiRequest, res: NextApiRespon
         res.setHeader('Content-Encoding', 'gzip');
 
         const smStream = new SitemapStream({
-            hostname: 'https://tssnextjs.herokuapp.com',
+            hostname: process.env.SITE_URL,
         });
 
         const pipeline = smStream.pipe(createGzip());
 
-        smStream.write({ url: '/', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.WEEKLY });
-        smStream.write({ url: '/about', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.MONTHLY });
-        smStream.write({ url: '/contact', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.MONTHLY });
-
+        const others = await writeOthers(smStream);
         const products = await writeProducts(smStream);
         const categories = await writeCategories(smStream);
 
@@ -68,4 +65,13 @@ async function writeCategories(smStream: SitemapStream) {
         });
     });
 
+}
+
+async function writeOthers(smStream: SitemapStream) {
+    smStream.write({ url: '/', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.WEEKLY });
+    smStream.write({ url: '/department', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.MONTHLY });
+    smStream.write({ url: '/product', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.MONTHLY });
+    smStream.write({ url: '/user/login', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.MONTHLY });
+    smStream.write({ url: '/user/register', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.MONTHLY });
+    smStream.write({ url: '/user/forgot-password', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.MONTHLY });
 }

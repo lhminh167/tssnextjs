@@ -1,8 +1,10 @@
 import { createStyles, Grid, makeStyles } from "@material-ui/core";
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React from "react";
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { useDispatch } from "react-redux";
 import ActionButtonsComponent from "../../../shared/action-buttons/action-buttons.component";
-import { w100, p } from "../../../shared/layout/layout.style";
+import { p, w100 } from "../../../shared/layout/layout.style";
+import { shoppingCartItemCountSlice } from "../../../shopping-cart/shopping-cart.slice";
 import { createOrder } from "../../order.service";
 
 const useStyles = makeStyles(theme =>
@@ -23,10 +25,11 @@ export default function CreditCardComponent({
     next,
     back
 }: Props) {
-    
+
     const classes = useStyles({});
     const stripe = useStripe();
     const elements = useElements();
+    const dispatch = useDispatch();
 
     const submit = async (ev) => {
         // Block native form submission.
@@ -46,17 +49,20 @@ export default function CreditCardComponent({
             card: cardElement,
             billing_details: { name: "cardholderName.value" }
         });
-        if (error?.message) return;
+        if (!paymentMethod) return;
 
         const orderResponse = await createOrder({
             ...data,
-            paymentMethodId: paymentMethod?.id
+            paymentMethodId: paymentMethod.id
         });
+        if (orderResponse.status >= 300) return;
 
         if (orderResponse.content.paymentStatus === 'requires_action') {
             const { error, paymentIntent } = await stripe.confirmCardPayment(orderResponse.content.paymentSecret);
-            if (error?.message) return;
+            if (!paymentIntent) return;
         }
+
+        dispatch(shoppingCartItemCountSlice.actions.change(0));
 
         next(orderResponse.content);
     };

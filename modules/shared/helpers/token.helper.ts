@@ -8,15 +8,13 @@ export function setLoginToken(loginToken: string) {
     localStorage.setItem("loginToken", loginToken)
 }
 
-export function getLoginToken() {
+export function getLoginToken(): string {
     if (typeof window === 'undefined') return;
-    return localStorage.getItem("loginToken");
+    return localStorage.getItem("loginToken") ?? null;
 }
 
-export function getValidLoginToken() {
-    return getCustomerIdNumberFromLoginToken() > 0
-        ? getLoginToken()
-        : null;
+export function getValidLoginToken(): string {
+    return getLoginToken();
 }
 
 export function setTokenHeader(options: RequestInit) {

@@ -61,7 +61,7 @@ export default function FooterComponent(props) {
                                     color="textSecondary"
                                     align="center"
                                 >
-                                    {`© ${new Date().getFullYear()} ${process.env.SITE_NAME.toLowerCase()} Ltd Contact Privacy Policy`}
+                                    {`© ${new Date().getFullYear()} ${process.env.SITE_NAME.toLowerCase()} Ltd`}
                                 </Typography>
                             </Link>
 

@@ -16,7 +16,8 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     dots: {
       position: "absolute",
-      bottom: 0
+      bottom: 0,
+      listStyle: 'none'
     }
   })
 );

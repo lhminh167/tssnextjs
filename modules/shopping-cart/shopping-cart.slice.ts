@@ -37,6 +37,9 @@ export const shoppingCartItemCountSlice = createSlice({
             idle(state, shoppingCartItemCountInitialState);
         },
         change(state: IState<number>, action: PayloadAction<number>) {
+            state.data = action.payload;
+        },
+        add(state: IState<number>, action: PayloadAction<number>) {
             state.data += action.payload;
         },
     },

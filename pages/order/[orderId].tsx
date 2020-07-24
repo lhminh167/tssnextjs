@@ -3,6 +3,7 @@ import React from 'react';
 import OrderDetailComponent from '../../modules/order/detail/order-detail.component';
 import { getCustomerIdNumberFromStore, redirect } from '../../modules/shared/helpers/auth.helper';
 import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
+import { Container } from '@material-ui/core';
 
 const useStyles = makeStyles({
 });
@@ -10,9 +11,11 @@ const useStyles = makeStyles({
 export default function OrderDetailPage() {
     const classes = useStyles({});
     return (
-        <ErrorBoundary>
-            <OrderDetailComponent />
-        </ErrorBoundary>
+        <Container>
+            <ErrorBoundary>
+                <OrderDetailComponent />
+            </ErrorBoundary>
+        </Container>
     );
 }
 

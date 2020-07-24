@@ -72,3 +72,7 @@ export const mtAuto: CreateCSSProperties<{}> = {
 export const bgWhite: CreateCSSProperties<{}> = {
     backgroundColor: themeColor.white
 }
+
+export const bgPrimary: CreateCSSProperties<{}> = {
+    backgroundColor: themeColor.primary
+}

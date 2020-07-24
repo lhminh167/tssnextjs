@@ -4,9 +4,12 @@ import React from 'react';
 import CustomerEditComponent from '../../../modules/customer/edit/edit-customer.component';
 import { redirect, toNumber } from '../../../modules/shared/helpers/auth.helper';
 import ErrorBoundary from '../../../modules/shared/error-boundary/error-boundary.component';
+import { mb, mt } from '../../../modules/shared/layout/layout.style';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        mb: mb,
+        mt: mt
     }),
 );
 
@@ -20,7 +23,9 @@ export default function CustomerEditPage({
 
     const classes = useStyles({});
     return (
-        <Container>
+        <Container
+            className={classes.mb + ' ' + classes.mt}
+        >
             <ErrorBoundary>
                 <CustomerEditComponent
                     userId={userId}

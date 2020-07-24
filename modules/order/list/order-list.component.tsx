@@ -60,8 +60,8 @@ export default function OrderListComponent() {
                             <TableCell component="th" scope="row">
                                 {row.orderId}
                             </TableCell>
-                            <TableCell>{row.orderStatus?.message}</TableCell>
-                            <TableCell>{row.customer?.name}</TableCell>
+                            <TableCell>{row.orderStatus.message}</TableCell>
+                            <TableCell>{row.customer.name}</TableCell>
                             <TableCell>{formatDatetime(row.createdOn)}</TableCell>
                             <TableCell>{formatDatetime(row.shippedOn)}</TableCell>
                         </TableRow>

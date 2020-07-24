@@ -78,7 +78,7 @@ export default function WishListComponent({
     async function moveItemToCart(input: IShopingCartItem) {
         await moveShoppingCartItemToCart(input);
         await getData(choice);
-        dispatch(shoppingCartItemCountSlice.actions.change(input.quantity));
+        dispatch(shoppingCartItemCountSlice.actions.add(input.quantity));
     }
 
     function back() {

@@ -5,8 +5,6 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const withOffline = require("next-offline");
 
 const nextConfig = {
-  poweredByHeader: false,
-  distDir: "_next",
   generateBuildId: async () => {
     if (process.env.BUILD_ID) {
       return process.env.BUILD_ID;

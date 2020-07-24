@@ -1,7 +1,6 @@
-User-agent: Googlebot
-Disallow: /nogooglebot/
+Sitemap: https://eshopmate.herokuapp.com/sitemap.xml
 
 User-agent: *
-Allow: /
+Allow: /*
 
-# Sitemap: http://tssnextjs.herokuapp.com/sitemap.xml
+Disallow: /api/*

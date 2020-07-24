@@ -21,6 +21,7 @@ import { shoppingCartItemCountSlice } from '../../shopping-cart/shopping-cart.sl
 import { ProductFilterFilterEnum } from '../filter/product-filter.model';
 import ProductDetailImageComponent from './product-detail-image.component';
 import { removeProduct } from './product-detail.service';
+import { setLoginToken } from '../../shared/helpers/token.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -53,7 +54,7 @@ export default function ProductDetailCardComponent({
     );
 
     async function handleAddToCart(buyNow: boolean) {
-        await addShoppingCartItem({
+        const response = await addShoppingCartItem({
             productId: data.productId,
             quantity,
             attributes: encodeAttributes([
@@ -62,7 +63,9 @@ export default function ProductDetailCardComponent({
             buyNow
         });
 
-        if (buyNow) dispatch(shoppingCartItemCountSlice.actions.change(quantity));
+        if (buyNow) dispatch(shoppingCartItemCountSlice.actions.add(quantity));
+        setLoginToken(response.content.loginToken);
+
     }
 
     function openDialog() {

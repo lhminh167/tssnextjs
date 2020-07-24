@@ -71,7 +71,7 @@ export function ProductDetailMetadataComponent({
             <ErrorBoundary>
                 <MetadataComponent
                     data={{
-                        title: data.name + ' ' + process.env.SITE_NAME,
+                        title: data.name,
                         description: data.description,
                         canonical: url,
                         type: PageType.Website,

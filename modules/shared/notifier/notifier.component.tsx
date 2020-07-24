@@ -1,4 +1,4 @@
-import { Snackbar } from "@material-ui/core";
+import { Snackbar, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -10,6 +10,7 @@ import fetchIntercept from 'fetch-intercept';
 import React, { Fragment, useState } from "react";
 import { defaultNotifierState } from "./notifier.model";
 import { Response as AppResponse } from "../crud/crud.model";
+import * as Sentry from '@sentry/browser';
 
 export default function Notifier() {
   const [state, setState] = useState(defaultNotifierState);
@@ -96,9 +97,21 @@ export default function Notifier() {
             Error!
           </DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              {state.data.title}
+            <DialogContentText>
+              Description: {state.data.title}
             </DialogContentText>
+            <DialogContentText>
+              Error ID: {state.data.instance}
+            </DialogContentText>
+            {
+              process.env.NODE_ENV === 'production' &&
+              <Button
+                onClick={() => Sentry.showReportDialog()}
+              >
+                Report feedback
+              </Button>
+            }
+
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary" autoFocus>
@@ -111,18 +124,18 @@ export default function Notifier() {
 
   return null
 
-  // return (
-  //   <Snackbar
-  //     open={state.isOpen}
-  //     autoHideDuration={6000}
-  //     onClose={handleClose}
-  //   >
-  //     <Alert
-  //       onClose={handleClose}
-  //       severity={state.color}
-  //     >
-  //       {state.data.title}
-  //     </Alert>
-  //   </Snackbar>
-  // );
+  return (
+    <Snackbar
+      open={state.isOpen}
+      autoHideDuration={6000}
+      onClose={handleClose}
+    >
+      <Alert
+        onClose={handleClose}
+        severity={state.color}
+      >
+        {state.data.title}
+      </Alert>
+    </Snackbar>
+  );
 }

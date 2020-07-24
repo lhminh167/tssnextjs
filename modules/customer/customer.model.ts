@@ -8,6 +8,8 @@ export const customerUrl = {
     register: customerBaseUrl + '/' + 'register',
     login: customerBaseUrl + '/' + 'login',
     updatePassword: (customerId: number) => `${customerBaseUrl}/${customerId}/Password`,
+    forgotPassword: `${customerBaseUrl}/ForgotPassword`,
+    resetPassword: (customerId: number, resetPasswordToken: string) => `${customerBaseUrl}/${customerId}/ResetPassword/${resetPasswordToken}`,
 }
 
 export interface Customer {
@@ -190,4 +192,49 @@ export interface CustomerUpdatePasswordRequest {
     customerId: number;
     currentPassword: string;
     newPassword: string;
+}
+
+export interface CustomerForgotPasswordRequest {
+    email: string;
+}
+
+export const defaultCustomerForgotPasswordRequest: CustomerForgotPasswordRequest = {
+    email: ''
+};
+
+export class CustomerForgotPasswordRequestValidator extends Validator<CustomerForgotPasswordRequest> {
+    constructor() {
+        super();
+        this.ruleFor('email').notNull().notEmpty().emailAddress();
+    }
+}
+
+export interface CustomerPasswordResetTokenValidationRequest {
+    customerId: number;
+    resetPasswordToken: string;
+}
+
+export interface CustomerPasswordResetRequest {
+    customerId: number;
+    resetPasswordToken: string;
+    newPassword: string;
+}
+
+export interface CustomerPasswordResetState {
+    newPassword: string;
+    confirmNewPassword: string;
+}
+
+export const defaultCustomerPasswordResetState: CustomerPasswordResetState = {
+    newPassword: '',
+    confirmNewPassword: ''
+};
+
+export class CustomerPasswordResetStateValidator extends Validator<CustomerPasswordResetState> {
+    constructor() {
+        super();
+        this.ruleFor('newPassword').notNull().notEmpty();
+        this.ruleFor('confirmNewPassword').notNull().notEmpty()
+            .must((value, model) => value === model.newPassword);
+    }
 }

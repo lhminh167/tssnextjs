@@ -31,13 +31,18 @@ export default function OrderCreateRequestComponent({
 
   function change(event) {
     const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
+    const value = target.value;
     const name = target.name;
 
-    output({
+    const result = {
       ...data,
       [name]: value
-    });
+    }
+
+    if (name === "shippingId")
+      result.shippingRegionId = form.shippings.find(e => e.shippingId === value).shippingRegionId;
+
+    output(result);
   }
 
   function nextStep() {
@@ -206,6 +211,7 @@ export default function OrderCreateRequestComponent({
               id="shippingRegionId"
               value={data.shippingRegionId}
               onChange={change}
+              disabled
             >
               {form.shippingRegions.map(entry =>
                 <MenuItem

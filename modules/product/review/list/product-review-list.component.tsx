@@ -11,6 +11,7 @@ import { defaultProductSearchRequest } from "../../filter/product-filter.model";
 import CreateReviewComponent from "../create/create-product-review.component";
 import ProductReviewDetailComponent from "../detail/product-review-detail.component";
 import { getReviews } from "../review.service";
+import { Rating } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,6 +77,37 @@ export default function ProductReviewListComponent({ data }: Props) {
       {
         state.count > 0 && (
           <Fragment>
+            <Grid item xs={12}
+              className={classes.mb2}
+            >
+              <Divider
+                variant='fullWidth'
+              />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              className={classes.mb2}
+            >
+              <Typography
+                component="h3"
+                variant="h5"
+                className={classes.bold}
+              >
+                Average Rating
+              </Typography>
+              <Rating
+                value={state.averageRating}
+                readOnly
+                max={5}
+              />
+              <Typography
+              // component="h2"
+              // variant="h5"
+              >
+                {state.count} ratings
+              </Typography>
+            </Grid>
             <Grid item xs={12}
               className={classes.mb2}
             >

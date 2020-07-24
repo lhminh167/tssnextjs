@@ -70,14 +70,14 @@ export default function ShoppingCartComponent({
     async function removeItem(input: IShopingCartItem) {
         await removeShoppingCartItem(input);
         await getData(choice);
-        dispatch(shoppingCartItemCountSlice.actions.change(-input.quantity));
+        dispatch(shoppingCartItemCountSlice.actions.add(-input.quantity));
 
     }
 
     async function saveItemForLater(input: IShopingCartItem) {
         await saveShoppingCartItemForLater(input);
         await getData(choice);
-        dispatch(shoppingCartItemCountSlice.actions.change(-input.quantity));
+        dispatch(shoppingCartItemCountSlice.actions.add(-input.quantity));
     }
 
     function back() {

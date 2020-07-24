@@ -5,19 +5,20 @@ import { getProduct } from "../../../modules/product/detail/product-detail.servi
 import ProductRecommendationComponent from "../../../modules/product/recommendation/product-recommendation.component";
 import ProductReviewListComponent from "../../../modules/product/review/list/product-review-list.component";
 import ErrorBoundary from "../../../modules/shared/error-boundary/error-boundary.component";
-import { mb, p } from "../../../modules/shared/layout/layout.style";
+import { mb, mt } from "../../../modules/shared/layout/layout.style";
 import { IProduct } from "../../../modules/shared/models/product.model";
 
 const useStyles = makeStyles(() => createStyles({
-    p: p,
-    mb: mb
-
+    mb: mb,
+    mt: mt
 }));
 
 function ProductDetailPage(data: IProduct) {
     const classes = useStyles({});
     return (
-        <Container>
+        <Container
+            className={classes.mb + ' ' + classes.mt}
+        >
             <Paper>
                 <ErrorBoundary>
                     <ProductDetailCardComponent data={data} />
