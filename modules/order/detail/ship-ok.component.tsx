@@ -1,17 +1,18 @@
-import { Button, createStyles, Grid, TextField, Theme, Typography } from '@material-ui/core';
+import { Button, Grid, Typography, Theme, createStyles, TextField } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState, Fragment } from 'react';
 import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 import { defaultOrder, Order } from '../order.model';
-import { getOrder, shipOk } from '../order.service';
-import { mb, p } from '../../shared/layout/layout.style';
+import { getOrder, shipNotOk, shipOk } from '../order.service';
+import { mb, p, mr } from '../../shared/layout/layout.style';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         mb: mb,
-        p: p
+        p: p,
+        mr: mr
     }),
 );
 
@@ -26,6 +27,8 @@ export default function ShipOkComponent({
     const [state, setState] = React.useState<Order>(defaultOrder);
     const [open, setOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [submitted, setSubmitted] = useState<boolean>(false);
+    const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
 
     const router = useRouter();
     const { orderId } = router.query;
@@ -33,12 +36,17 @@ export default function ShipOkComponent({
     useEffect(() => {
         if (state.orderId > 0) return;
         getOrder(Number(orderId)).then(data => {
-
             setState(data.content);
         })
     }, [])
 
-    function openDialog() {
+    function openSuccessDialog() {
+        setIsSuccessful(true);
+        setOpen(true);
+    }
+
+    function openFailureDialog() {
+        setIsSuccessful(false);
         setOpen(true);
     }
 
@@ -46,81 +54,97 @@ export default function ShipOkComponent({
         setOpen(false);
     }
 
-    function confirm() {
+    function confirmSuccess() {
         setIsLoading(true);
         shipOk(state.orderId).then(data => {
-            setState(data.content);
             setOpen(false);
             setIsLoading(false);
         })
     }
 
-    function decline() {
-
-    }
-
-
-    function change(event) {
-        setState({
-            ...state,
-            [event.target.name]: event.target.value
+    function confirmFailure() {
+        setSubmitted(true);
+        if (!state.comments) return;
+        shipNotOk(state.orderId, {
+            comments: state.comments
+        }).then(data => {
+            setOpen(false);
+            setIsLoading(false);
         })
     }
 
+    function change(event) {
+        const target = event.target;
+        setState({
+            ...state,
+            [target.name]: target.value
+        });
+    }
+
     return (
-
         <Fragment>
-
-            <Grid item xs={12}>
+            <Grid item xs={12}
+                className={classes.mb}
+            >
                 <Typography
                     variant="h5"
                     component="h2"
-                    className={classes.mb}
                 >
-                    Shipping Cofirmation
-                    </Typography>
+                    Order Confirmation
+                </Typography>
             </Grid>
-            <Grid item xs={12}>
-                <Typography >
-                    Please proceed this order by confirming that shipment process was finished.
-                    </Typography>
-                <Typography >
-                    Attention: By clicking the "Yes" button, this order proceeds to the next stage. You can then ship the goods to customer. Also, a notification email is sent to customer to notify this event.
-                    </Typography>
-                <Typography >
-                    Attention: If you click "No" button, this order is cancelled and reverted back to a shopping cart, so that the customer can adjust their cart. Also, a notification email is sent to customer to notify this event.
-                    </Typography>
+            <Grid item xs={12}
+                className={classes.mb}
+            >
+                <Typography variant='subtitle1'>
+                    Please confirm the order has been shipped.
+                </Typography>
+            </Grid>
+            <Grid item xs={12}
+                className={classes.mb}
+            >
                 <TextField
                     multiline
-                    name="comment"
+                    name="comments"
                     variant="outlined"
                     margin="dense"
                     value={state.comments}
                     onChange={change}
-                // error={errors.review1 && submitted}
-                // helperText={errors.review1 && submitted ? errors.review1 : null}
+                    error={!state.comments && submitted}
+                    helperText={!state.comments && submitted && !isSuccessful ? 'Please specify the reasons for shipment incompleteness.' : null}
+                    fullWidth
+                    rows={4}
+                    placeholder="If the shipment is in complete, please specify the reasons for that."
                 />
             </Grid>
             <Grid item xs={12}
             >
                 <Button
                     variant="contained"
-                    color="secondary"
-                    onClick={openDialog}
+                    color="primary"
+                    onClick={openSuccessDialog}
+                    className={classes.mr}
                 >
-                    Confirm
-                    </Button>
+                    Yes, the order has been shipped
+                </Button>
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={openFailureDialog}
+                >
+                    No, the shipment is incomplete
+                </Button>
             </Grid>
             <ConfirmationDialog
                 open={open}
-                close={closeDialog}
-                confirm={confirm}
-                content="Are you sure that ?"
-                decline={decline}
+                close={null}
+                confirm={isSuccessful ? confirmSuccess : confirmFailure}
+                content={"Please confirm this action by clicking the Submit button"}
+                decline={closeDialog}
                 isLoading={isLoading}
-                confirmText="Confirm"
-                declineText="Deciline"
+                confirmText="Submit"
+                declineText="Close"
             />
-        </Fragment>
+        </Fragment >
     );
 }

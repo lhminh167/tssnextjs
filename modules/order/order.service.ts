@@ -1,6 +1,7 @@
 import { post, put, get } from "../shared/crud/crud.service";
 import { orderUrl } from "./order.model";
 import { OrderCreateRequest } from "./create/create-order.model";
+import { OrderUpdateRequest } from "./detail/order-detail.model";
 
 export async function getOrderCreateForm() {
   return await get(orderUrl.new, 0);
@@ -22,10 +23,14 @@ export async function stockOk(orderId: number) {
   return await put(orderUrl.stockOk, orderId, null);
 }
 
-export async function stockNotOk(orderId: number) {
-  return await put(orderUrl.stockNotOk, orderId, null);
+export async function stockNotOk(orderId: number, input: OrderUpdateRequest) {
+  return await put(orderUrl.stockNotOk, orderId, input);
 }
 
 export async function shipOk(orderId: number) {
   return await put(orderUrl.shipOk, orderId, null);
+}
+
+export async function shipNotOk(orderId: number, input: OrderUpdateRequest) {
+  return await put(orderUrl.shipNotOk, orderId, input);
 }
