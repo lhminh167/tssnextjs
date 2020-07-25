@@ -10,7 +10,8 @@ export const orderUrl = {
     new: orderBaseUrl + "/new",
     stockOk: orderBaseUrl + "/stockOk",
     stockNotOk: orderBaseUrl + "/stockNotOk",
-    shipOk: orderBaseUrl + "/shipOk"
+    shipOk: orderBaseUrl + "/shipOk",
+    shipNotOk: orderBaseUrl + "/shipNotOk"
 };
 
 export interface Order {

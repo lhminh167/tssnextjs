@@ -6,12 +6,13 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 import { defaultOrder, Order } from '../order.model';
 import { getOrder, stockNotOk, stockOk } from '../order.service';
-import { mb, p } from '../../shared/layout/layout.style';
+import { mb, p, mr } from '../../shared/layout/layout.style';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         mb: mb,
-        p: p
+        p: p,
+        mr: mr
     }),
 );
 
@@ -27,6 +28,7 @@ export default function StockOkComponent({
     const [open, setOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [submitted, setSubmitted] = useState<boolean>(false);
+    const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
 
     const router = useRouter();
     const { orderId } = router.query;
@@ -34,12 +36,17 @@ export default function StockOkComponent({
     useEffect(() => {
         if (state.orderId > 0) return;
         getOrder(Number(orderId)).then(data => {
-
             setState(data.content);
         })
     }, [])
 
-    function openDialog() {
+    function openSuccessDialog() {
+        setIsSuccessful(true);
+        setOpen(true);
+    }
+
+    function openFailureDialog() {
+        setIsSuccessful(false);
         setOpen(true);
     }
 
@@ -47,22 +54,20 @@ export default function StockOkComponent({
         setOpen(false);
     }
 
-
-
-    function confirm() {
+    function confirmSuccess() {
         setIsLoading(true);
         stockOk(state.orderId).then(data => {
-            setState(data.content);
             setOpen(false);
             setIsLoading(false);
         })
     }
 
-    function decline() {
+    function confirmFailure() {
         setSubmitted(true);
         if (!state.comments) return;
-        stockNotOk(state.orderId).then(data => {
-            setState(data.content);
+        stockNotOk(state.orderId, {
+            comments: state.comments
+        }).then(data => {
             setOpen(false);
             setIsLoading(false);
         })
@@ -78,56 +83,84 @@ export default function StockOkComponent({
 
     return (
         <Fragment>
-            <Grid item xs={12}>
+            <Grid item xs={12}
+                className={classes.mb}
+            >
                 <Typography
                     variant="h5"
                     component="h2"
-                    className={classes.mb}
                 >
                     Order Confirmation
                 </Typography>
             </Grid>
-            <Grid item xs={12}>
-                <Typography >
-                    Please proceed this order by confirming that all of its products is in stock.
-                    </Typography>
-                <Typography >
-                    Attention: By clicking the "Yes" button, this order proceeds to the next stage. You can then ship the goods to customer. Also, a notification email is sent to customer to notify this event.
-                    </Typography>
-                <Typography >
-                    Attention: If you click "No" button, this order is cancelled and reverted back to a shopping cart, so that the customer can adjust their cart. Also, a notification email is sent to customer to notify this event.
-                    </Typography>
+            <Grid item xs={12}
+                className={classes.mb}
+            >
+                <Typography variant='subtitle1'>
+                    Please proceed this order by confirming that all of its products are in stock. Also, please specify which products are out of stock, if any. For example:
+                </Typography>
+            </Grid>
+            <Grid item xs={12}
+                className={classes.mb}
+            >
+                <Typography variant='subtitle2'>
+                    The following products are out of stock:
+                </Typography>
+                <Typography variant='subtitle2'>
+                    - Green XL Birds T-Shirt. Required Quantity: 10. Available Quantity: 09.
+                </Typography>
+                <Typography variant='subtitle2'>
+                    - Blue L Wreath T-Shirt. Required Quantity: 05. Available Quantity: 02.
+                </Typography>
+                <Typography variant='subtitle2'>
+                    - etc.
+                </Typography>
+            </Grid>
+            <Grid item xs={12}
+                className={classes.mb}
+            >
                 <TextField
                     multiline
-                    name="review1"
+                    name="comments"
                     variant="outlined"
                     margin="dense"
                     value={state.comments}
                     onChange={change}
                     error={!state.comments && submitted}
-                    helperText={!state.comments && submitted ? state.comments : null}
+                    helperText={!state.comments && submitted && !isSuccessful ? 'Please specify which products are out of stock.' : null}
+                    fullWidth
+                    rows={4}
+                // placeholder="The following products are out of stock:&#10;- Green XL Birds T-Shirt. Required Quantity: 10. Avalable Quantity: 09.&#10;- Blue L Wreath T-Shirt. Required Quantity: 05. Avalable Quantity: 02.&#10;- etc."
                 />
             </Grid>
             <Grid item xs={12}
             >
                 <Button
                     variant="contained"
-                    color="secondary"
-                    onClick={openDialog}
+                    color="primary"
+                    onClick={openSuccessDialog}
+                    className={classes.mr}
                 >
-                    Confirm
-                    </Button>
+                    Yes, they are all in stock
+                </Button>
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={openFailureDialog}
+                >
+                    No, some of them are out of stock
+                </Button>
             </Grid>
             <ConfirmationDialog
                 open={open}
-                close={closeDialog}
-                confirm={confirm}
-                content="Are all products of this order in stock?"
-                decline={decline}
+                close={null}
+                confirm={isSuccessful ? confirmSuccess : confirmFailure}
+                content={"Please confirm this action by clicking the Submit button"}
+                decline={closeDialog}
                 isLoading={isLoading}
-                confirmText="Yes"
-                declineText="No"
+                confirmText="Submit"
+                declineText="Close"
             />
-        </Fragment>
+        </Fragment >
     );
 }

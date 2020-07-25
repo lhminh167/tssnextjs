@@ -1,4 +1,4 @@
-import { IconButton, Typography, Backdrop, CircularProgress } from '@material-ui/core';
+import { IconButton, Typography, Backdrop, CircularProgress, Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,15 +10,6 @@ import React, { ReactNode } from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: {
-            margin: 0,
-            padding: theme.spacing(2),
-        },
-        closeButton: {
-            right: theme.spacing(1),
-            top: theme.spacing(1),
-            color: theme.palette.grey[500],
-        },
         backdrop: {
             zIndex: theme.zIndex.modal + 1,
         },
@@ -64,23 +55,36 @@ export function ConfirmationDialog({
             </Backdrop>
             <DialogTitle
                 disableTypography
-                className={classes.root}
             >
-                <Typography
-                    variant="h6"
+                <Grid
+                    container
+                    direction="row"
+                    justify="space-between"
+                    alignItems="center"
                 >
-                    {
-                        title ?? 'Confirmation'
-                    }
-                </Typography>
-                {close &&
-                    <IconButton
-                        className={classes.closeButton}
-                        onClick={close}
+                    <Grid
+                        item
                     >
-                        <CloseIcon />
-                    </IconButton>
-                }
+                        <Typography
+                            variant="h6"
+                        >
+                            {
+                                title ?? 'Confirmation'
+                            }
+                        </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                    >
+                        {close &&
+                            <IconButton
+                                onClick={close}
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                        }
+                    </Grid>
+                </Grid>
             </DialogTitle>
             <DialogContent dividers>
                 {
