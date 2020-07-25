@@ -68,10 +68,10 @@ async function writeCategories(smStream: SitemapStream) {
 }
 
 async function writeOthers(smStream: SitemapStream) {
-    smStream.write({ url: '/', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.WEEKLY });
-    smStream.write({ url: '/department', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.MONTHLY });
-    smStream.write({ url: '/product', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.MONTHLY });
-    smStream.write({ url: '/user/login', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.MONTHLY });
-    smStream.write({ url: '/user/register', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.MONTHLY });
-    smStream.write({ url: '/user/forgot-password', lastmod: process.env.siteUpdatedAt, changefreq: EnumChangefreq.MONTHLY });
+    smStream.write({ url: '/', lastmod: new Date(), changefreq: EnumChangefreq.WEEKLY });
+    smStream.write({ url: '/department', lastmod: new Date(), changefreq: EnumChangefreq.MONTHLY });
+    smStream.write({ url: '/product', lastmod: new Date(), changefreq: EnumChangefreq.MONTHLY });
+    smStream.write({ url: '/user/login', lastmod: new Date(), changefreq: EnumChangefreq.MONTHLY });
+    smStream.write({ url: '/user/register', lastmod: new Date(), changefreq: EnumChangefreq.MONTHLY });
+    smStream.write({ url: '/user/forgot-password', lastmod: new Date(), changefreq: EnumChangefreq.MONTHLY });
 }

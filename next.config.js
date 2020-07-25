@@ -5,6 +5,42 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const withOffline = require("next-offline");
 
 const nextConfig = {
+
+  workboxOpts: {
+    swDest: process.env.NEXT_EXPORT
+      ? 'service-worker.js'
+      : 'static/service-worker.js',
+    runtimeCaching: [
+      {
+        urlPattern: /^https?.*/,
+        handler: 'NetworkFirst',
+        options: {
+          cacheName: 'offlineCache',
+          expiration: {
+            maxEntries: 200,
+          },
+        },
+      },
+    ],
+  },
+
+  experimental: {
+    modern: true,
+    async rewrites() {
+      return [
+        {
+          source: '/service-worker.js',
+          destination: '/.next/static/service-worker.js',
+        },
+        {
+          source: '/sitemap.xml',
+          destination: '/api/sitemap'
+        },
+      ]
+    },
+    catchAllRouting: true
+  },
+
   generateBuildId: async () => {
     if (process.env.BUILD_ID) {
       return process.env.BUILD_ID;
@@ -12,6 +48,7 @@ const nextConfig = {
       return `${new Date().getTime()}`;
     }
   },
+
   env: {
     API_URL: process.env.API_URL,
     STRIPE_API_KEY: process.env.STRIPE_API_KEY,

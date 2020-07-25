@@ -58,7 +58,7 @@ export default function Notifier() {
       return response;
     },
 
-    responseError: function (error: Response) {
+    responseError: function (error) {
 
       error?.clone().json().then((data) => {
         setState({

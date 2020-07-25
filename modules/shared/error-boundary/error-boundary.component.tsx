@@ -34,7 +34,7 @@ export default class ErrorBoundary extends Component {
 
         if (process.env.NODE_ENV !== 'production') return;
         Sentry.withScope((scope) => {
-            scope.setExtras(errorInfo);
+            scope.setExtras(errorInfo as any);
             const eventId = Sentry.captureException(error);
             this.setState({
                 ...this.state,
