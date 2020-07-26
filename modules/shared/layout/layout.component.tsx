@@ -5,6 +5,7 @@ import { transitionWidth } from "./layout.theme";
 import ErrorBoundary from "../error-boundary/error-boundary.component";
 import Notifier from "../notifier/notifier.component";
 import FooterComponent from "../footer/footer.component";
+import { mb } from "./layout.style";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -12,7 +13,8 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(18),
             [theme.breakpoints.up(transitionWidth)]: {
                 marginTop: theme.spacing(12)
-            }
+            },
+            ...mb
         },
         root: {
             display: 'flex',
@@ -36,7 +38,10 @@ export default function Layout(props) {
                 <Notifier />
             </ErrorBoundary>
             <ErrorBoundary>
-                <main className={classes.main} children={props.children} />
+                <main
+                    className={classes.main}
+                    children={props.children}
+                />
             </ErrorBoundary>
             <ErrorBoundary>
                 <FooterComponent />
