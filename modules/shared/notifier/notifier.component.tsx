@@ -104,7 +104,7 @@ export default function Notifier() {
               Error ID: {state.data.instance}
             </DialogContentText>
             {
-              process.env.NODE_ENV === 'production' &&
+              process.env.ENV === 'production' &&
               <Button
                 onClick={() => Sentry.showReportDialog()}
               >

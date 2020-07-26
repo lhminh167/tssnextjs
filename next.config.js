@@ -56,6 +56,7 @@ const nextConfig = {
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     SITE_URL: process.env.SITE_URL,
     SITE_NAME: process.env.SITE_NAME,
+    ENV: process.env.NODE_ENV,
   },
 
   webpack(config) {

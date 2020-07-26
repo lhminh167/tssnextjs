@@ -7,7 +7,7 @@ import { rootReducer } from './root.reducer'
 import rootSaga from './root.saga'
 
 const bindMiddleware = middleware => {
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.ENV !== 'production') {
         // const { composeWithDevTools } = require('redux-devtools-extension')
         return composeWithDevTools(applyMiddleware(...middleware))
     }

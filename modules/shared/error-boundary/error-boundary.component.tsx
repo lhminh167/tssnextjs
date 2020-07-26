@@ -32,7 +32,7 @@ export default class ErrorBoundary extends Component {
             errorInfo
         });
 
-        if (process.env.NODE_ENV !== 'production') return;
+        if (process.env.ENV !== 'production') return;
         Sentry.withScope((scope) => {
             scope.setExtras(errorInfo as any);
             const eventId = Sentry.captureException(error);
@@ -64,7 +64,7 @@ export default class ErrorBoundary extends Component {
                         Where it occured: {this.state.errorInfo.componentStack}
                     </Typography>
                     {
-                        process.env.NODE_ENV === 'production' &&
+                        process.env.ENV === 'production' &&
                         <Button
                             onClick={() => Sentry.showReportDialog({ eventId: this.state.eventId })}
                         >

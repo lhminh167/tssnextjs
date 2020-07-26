@@ -31,7 +31,7 @@ class MyApp extends App<IProps> {
     }
 
     componentDidMount() {
-        if (process.env.NODE_ENV !== 'production')
+        if (process.env.ENV !== 'production')
             Sentry.init({ dsn: "https://092f990227db4c81b121d898afcd93dc@sentry.io/5189172" });
 
         this.getCurrentUser();
