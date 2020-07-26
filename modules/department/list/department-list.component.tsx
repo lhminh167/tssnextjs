@@ -1,4 +1,4 @@
-import { Breadcrumbs, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography } from "@material-ui/core";
+import { Breadcrumbs, Accordion, AccordionDetails, AccordionSummary, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -73,11 +73,11 @@ function DepartmentOverviewComponent({
                         xs={12}
                         key={entry.departmentId}
                     >
-                        <ExpansionPanel
+                        <Accordion
                             expanded={expanded === entry.departmentId}
                             onChange={handleChange(entry.departmentId)}
                         >
-                            <ExpansionPanelSummary
+                            <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
                             >
                                 <Typography
@@ -86,8 +86,8 @@ function DepartmentOverviewComponent({
                                 >
                                     {entry.name}
                                 </Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
+                            </AccordionSummary>
+                            <AccordionDetails>
                                 <Grid container>
                                     <Grid
                                         item
@@ -103,8 +103,8 @@ function DepartmentOverviewComponent({
                                         data={entry.category}
                                     />
                                 </Grid>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                            </AccordionDetails>
+                        </Accordion>
                     </Grid>
                 ))
             }

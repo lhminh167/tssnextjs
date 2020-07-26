@@ -1,4 +1,4 @@
-import { Breadcrumbs, createStyles, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Theme, Typography } from '@material-ui/core';
+import { Breadcrumbs, createStyles, Accordion, AccordionDetails, AccordionSummary, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Theme, Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -105,19 +105,19 @@ export default function OrderDetailComponent() {
                     />
                 }
             </Grid>
-            <ExpansionPanel
+            <Accordion
                 expanded={expanded === 'orderSummary'}
                 onChange={handleChange('orderSummary')}
             >
-                <ExpansionPanelSummary
+                <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <Typography
                     >
                         Order Summary
                     </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                </AccordionSummary>
+                <AccordionDetails>
                     <Grid
                         container
                     >
@@ -210,21 +210,21 @@ export default function OrderDetailComponent() {
                         </Grid>
                     </Grid>
 
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel
+                </AccordionDetails>
+            </Accordion>
+            <Accordion
                 expanded={expanded === 'orderItems'}
                 onChange={handleChange('orderItems')}
             >
-                <ExpansionPanelSummary
+                <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <Typography
                     >
                         Order Items
                     </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                </AccordionSummary>
+                <AccordionDetails>
                     <TableContainer>
                         <Table
                             size='small'
@@ -253,13 +253,13 @@ export default function OrderDetailComponent() {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel
+                </AccordionDetails>
+            </Accordion>
+            <Accordion
                 expanded={expanded === 'customer'}
                 onChange={handleChange('customer')}
             >
-                <ExpansionPanelSummary
+                <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <Typography
@@ -267,8 +267,8 @@ export default function OrderDetailComponent() {
                     >
                         Customer Details
                     </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                </AccordionSummary>
+                <AccordionDetails>
                     <Grid container>
                         <Grid item xs={12} sm={6}
                         >
@@ -432,20 +432,20 @@ export default function OrderDetailComponent() {
                             </Typography>
                         </Grid> */}
                     </Grid>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel
+                </AccordionDetails>
+            </Accordion>
+            <Accordion
                 expanded={expanded === 'audit'}
                 onChange={handleChange('audit')}
             >
-                <ExpansionPanelSummary
+                <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <Typography >
                         Audit
                     </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                </AccordionSummary>
+                <AccordionDetails>
                     <TableContainer>
                         <Table
                             size='small'
@@ -483,8 +483,8 @@ export default function OrderDetailComponent() {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
+                </AccordionDetails>
+            </Accordion>
         </Fragment>
     );
 }

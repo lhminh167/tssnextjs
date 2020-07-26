@@ -1,10 +1,10 @@
 import { FormControl, Grid, InputLabel, MenuItem, Select, Slider, TablePagination } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionActions from "@material-ui/core/AccordionActions";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Fab from "@material-ui/core/Fab";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -31,10 +31,10 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             flexGrow: 1
         },
-        expansionPanelDetails: {
+        AccordionDetails: {
             display: 'inline-block',
         },
-        expansionPanelActions: {
+        AccordionActions: {
             justifyContent: 'center'
         },
         extendedIcon: {
@@ -70,25 +70,25 @@ export default function ProductFilterComponent({
         state => state.productFilter.choice
     );
     const colors = useSelector<IRootState, IAttributeValue[]>(
-        state => state.productFilter.filter ?.data ?.attributes.filter(a => a.name === ProductFilterFilterEnum.Color)
+        state => state.productFilter.filter?.data?.attributes.filter(a => a.name === ProductFilterFilterEnum.Color)
     );
     const sizes = useSelector<IRootState, IAttributeValue[]>(
-        state => state.productFilter.filter ?.data ?.attributes.filter(a => a.name === ProductFilterFilterEnum.Size)
+        state => state.productFilter.filter?.data?.attributes.filter(a => a.name === ProductFilterFilterEnum.Size)
     );
     const minPrice = useSelector<IRootState, number>(
-        state => state.productFilter.filter ?.data ?.minPrice
+        state => state.productFilter.filter?.data?.minPrice
     );
     const maxPrice = useSelector<IRootState, number>(
-        state => state.productFilter.filter ?.data ?.maxPrice
+        state => state.productFilter.filter?.data?.maxPrice
     );
     const categories = useSelector<IRootState, IProductFilterCategory[]>(
-        state => state.productFilter.filter ?.data ?.categories
+        state => state.productFilter.filter?.data?.categories
     );
     const products = useSelector<IRootState, IProduct[]>(
-        state => state.productFilter.product ?.data ?.items
+        state => state.productFilter.product?.data?.items
     );
     const count = useSelector<IRootState, number>(
-        state => state.productFilter.product ?.data ?.count
+        state => state.productFilter.product?.data?.count
     );
 
     const apply = () => {
@@ -224,19 +224,19 @@ export default function ProductFilterComponent({
 
     return (
         <Fragment>
-            <ExpansionPanel
+            <Accordion
                 className={classes.mb}
             >
-                <ExpansionPanelSummary
+                <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <Typography>
                         Filter {count} items
                     </Typography>
-                </ExpansionPanelSummary>
+                </AccordionSummary>
                 <Divider />
-                <ExpansionPanelDetails
-                    className={classes.expansionPanelDetails}
+                <AccordionDetails
+                    className={classes.AccordionDetails}
                 >
                     <Grid
                         container
@@ -365,9 +365,9 @@ export default function ProductFilterComponent({
                             </FormControl>
                         </Grid>
                     </Grid>
-                </ExpansionPanelDetails>
+                </AccordionDetails>
                 <Divider />
-                <ExpansionPanelActions className={classes.expansionPanelActions}>
+                <AccordionActions className={classes.AccordionActions}>
                     <Fab
                         variant="extended"
                         color="primary"
@@ -386,8 +386,8 @@ export default function ProductFilterComponent({
                         />
                         Clear All
                     </Button>
-                </ExpansionPanelActions>
-            </ExpansionPanel>
+                </AccordionActions>
+            </Accordion>
             <ProductListComponent
                 data={products}
             />
