@@ -11,10 +11,8 @@ export default function OrderListPage() {
   return (
     <Container>
       <ErrorBoundary>
-
         <OrderListComponent />
       </ErrorBoundary>
-
     </Container>
   );
 }

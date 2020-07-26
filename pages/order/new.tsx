@@ -15,7 +15,6 @@ function NewOrderPage() {
       <ErrorBoundary>
         <NewOrderComponent />
       </ErrorBoundary>
-
     </Container>
   );
 }

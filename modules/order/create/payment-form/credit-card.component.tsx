@@ -63,8 +63,7 @@ export default function CreditCardComponent({
         }
 
         dispatch(shoppingCartItemCountSlice.actions.change(0));
-
-        next(orderResponse.content);
+        next(orderResponse.content.order);
     };
 
     return (

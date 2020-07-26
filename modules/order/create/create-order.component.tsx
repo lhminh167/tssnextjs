@@ -131,18 +131,17 @@ export default function NewOrderComponent() {
     <Grid
       container
       component={Paper}
+      className={classes.p}
     >
       <Grid
-        className={classes.p}
         item
         xs={12}
       >
         <Typography component="h1" variant="h4" align="left">
           Checkout
-      </Typography>
+        </Typography>
       </Grid>
       <Grid
-        className={classes.p}
         item
         xs={12}
       >
