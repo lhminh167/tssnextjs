@@ -3,6 +3,7 @@ import { getProduct } from "../../../modules/product/detail/product-detail.servi
 import EditProductComponent from "../../../modules/product/edit/edit-product.component";
 import ErrorBoundary from "../../../modules/shared/error-boundary/error-boundary.component";
 import { IProduct } from "../../../modules/shared/models/product.model";
+import { EditProductMetadataComponent } from "../../../modules/product/edit/edit-product-metadata.component";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -22,6 +23,11 @@ export default function ProductEditPage({
         <Container>
             <ErrorBoundary>
                 <EditProductComponent
+                    data={data}
+                />
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <EditProductMetadataComponent
                     data={data}
                 />
             </ErrorBoundary>

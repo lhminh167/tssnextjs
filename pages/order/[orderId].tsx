@@ -4,6 +4,7 @@ import OrderDetailComponent from '../../modules/order/detail/order-detail.compon
 import { getCustomerIdNumberFromStore, redirect } from '../../modules/shared/helpers/auth.helper';
 import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
 import { Container } from '@material-ui/core';
+import { OrderDetailMetadataComponent } from '../../modules/order/detail/order-detail-metadata.component';
 
 const useStyles = makeStyles({
 });
@@ -14,6 +15,9 @@ export default function OrderDetailPage() {
         <Container>
             <ErrorBoundary>
                 <OrderDetailComponent />
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <OrderDetailMetadataComponent />
             </ErrorBoundary>
         </Container>
     );

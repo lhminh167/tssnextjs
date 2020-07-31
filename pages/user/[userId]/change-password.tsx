@@ -3,6 +3,7 @@ import ErrorBoundary from '../../../modules/shared/error-boundary/error-boundary
 import { toNumber } from '../../../modules/shared/helpers/auth.helper';
 import { Container } from '@material-ui/core';
 import ChangePasswordComponent from '../../../modules/customer/change-password/change-password.component';
+import { ChangePasswordMetadataComponent } from '../../../modules/customer/change-password/change-password-metadata.component';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,6 +24,10 @@ export default function CustomerChangePasswordPage({
                 <ChangePasswordComponent
                     userId={userId}
                 ></ChangePasswordComponent>
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <ChangePasswordMetadataComponent
+                />
             </ErrorBoundary>
         </Container>
     );

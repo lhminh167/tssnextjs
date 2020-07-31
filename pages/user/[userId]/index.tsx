@@ -3,6 +3,7 @@ import CustomerDetailComponent from '../../../modules/customer/detail/customer-d
 import ErrorBoundary from '../../../modules/shared/error-boundary/error-boundary.component';
 import { toNumber } from '../../../modules/shared/helpers/auth.helper';
 import { Container } from '@material-ui/core';
+import { CustomerDetailMetadataComponent } from '../../../modules/customer/detail/customer-detail-metadata.component';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,6 +24,9 @@ export default function CustomerDetailPage({
                 <CustomerDetailComponent
                     userId={userId}
                 ></CustomerDetailComponent>
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <CustomerDetailMetadataComponent />
             </ErrorBoundary>
         </Container>
     );

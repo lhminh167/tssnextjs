@@ -6,6 +6,7 @@ import CategoryDetailComponent from '../../modules/category/detail/category-deta
 import CategoryDetailProductListComponent from '../../modules/category/detail/product-list/category-detail-product-list.component';
 import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
 import { ICategory } from '../../modules/shared/models/category.model';
+import { CategoryDetailMetadataComponent } from '../../modules/category/detail/category-detail-metadata.component';
 
 const useStyles = makeStyles({
 });
@@ -21,7 +22,6 @@ export default function CategoryDetailPage({
     return (
         <Container>
             <ErrorBoundary>
-
                 <CategoryDetailComponent
                     data={data}
                 />
@@ -32,7 +32,11 @@ export default function CategoryDetailPage({
                     data={data}
                 />
             </ErrorBoundary>
-
+            <ErrorBoundary>
+                <CategoryDetailMetadataComponent
+                    data={data}
+                />
+            </ErrorBoundary>
         </Container>
 
     );

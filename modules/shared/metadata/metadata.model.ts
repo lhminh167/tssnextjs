@@ -29,4 +29,5 @@ export interface Metadata {
     twitter_site?: string;
     twitter_domain?: string;
     twitter_img?: string;
+    shouldPrefixSiteName?: boolean;
 };

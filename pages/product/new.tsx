@@ -3,6 +3,7 @@ import CreateProductComponent from "../../modules/product/create/create-product.
 import { redirect } from "../../modules/shared/helpers/auth.helper";
 import { getLoginToken } from "../../modules/shared/helpers/token.helper";
 import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
+import { CreateProductMetadataComponent } from "../../modules/product/create/create-product-metadata.component";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
@@ -12,6 +13,9 @@ export default function CreateProductPage(props) {
     <Container>
       <ErrorBoundary>
         <CreateProductComponent />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <CreateProductMetadataComponent />
       </ErrorBoundary>
     </Container>
   );

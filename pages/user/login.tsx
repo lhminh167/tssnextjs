@@ -3,6 +3,7 @@ import React from 'react';
 import LoginComponent from '../../modules/customer/login/login.component';
 import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
 import { Container } from '@material-ui/core';
+import { LoginMetadataComponent } from '../../modules/customer/login/login-metadata.component';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -16,10 +17,12 @@ export default function LoginPage(props) {
     return (
         <Container
             maxWidth='sm'
-
         >
             <ErrorBoundary>
                 <LoginComponent />
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <LoginMetadataComponent />
             </ErrorBoundary>
         </Container>
     );

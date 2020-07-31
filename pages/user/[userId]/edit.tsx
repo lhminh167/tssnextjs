@@ -5,6 +5,7 @@ import CustomerEditComponent from '../../../modules/customer/edit/edit-customer.
 import { redirect, toNumber } from '../../../modules/shared/helpers/auth.helper';
 import ErrorBoundary from '../../../modules/shared/error-boundary/error-boundary.component';
 import { mb, mt } from '../../../modules/shared/layout/layout.style';
+import { CustomerEditMetadataComponent } from '../../../modules/customer/edit/edit-customer-metadata.component';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,6 +31,9 @@ export default function CustomerEditPage({
                 <CustomerEditComponent
                     userId={userId}
                 />
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <CustomerEditMetadataComponent />
             </ErrorBoundary>
         </Container>
     );

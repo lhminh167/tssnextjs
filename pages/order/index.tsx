@@ -3,6 +3,7 @@ import React from "react";
 import OrderListComponent from "../../modules/order/list/order-list.component";
 import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
 import { redirect, getCustomerIdNumberFromStore } from "../../modules/shared/helpers/auth.helper";
+import { OrderListMetadataComponent } from "../../modules/order/list/order-list-metadata.component";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
@@ -12,6 +13,9 @@ export default function OrderListPage() {
     <Container>
       <ErrorBoundary>
         <OrderListComponent />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <OrderListMetadataComponent />
       </ErrorBoundary>
     </Container>
   );

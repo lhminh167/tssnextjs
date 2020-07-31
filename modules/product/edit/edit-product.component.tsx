@@ -157,7 +157,7 @@ export default function EditProductComponent({
                     variant="h5"
 
                 >
-                    Add New Product
+                    Edit Product
                 </Typography>
             </Grid>
             <Grid item xs={12}>

@@ -84,7 +84,7 @@ function ActiveStepComponent({
   }
 }
 
-export default function NewOrderComponent() {
+export default function CreateOrderComponent() {
   const classes = useStyles({});
   const currentUser = useSelector(
     (state: IRootState) => state.currentUser.data

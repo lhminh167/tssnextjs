@@ -7,6 +7,7 @@ import { redirect } from "../modules/shared/helpers/auth.helper";
 import { getLoginToken } from "../modules/shared/helpers/token.helper";
 import ShoppingCartProductRecommendationGalleryComponent from "../modules/shopping-cart/recommendation/shopping-cart-recommendation-gallery.component";
 import WishListComponent from "../modules/shopping-cart/wish-list/wish-list.component";
+import { WishListMetadataComponent } from "../modules/shopping-cart/wish-list/wish-list-metadata.component";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,6 +26,9 @@ export default function WishListPage() {
                 <LazyLoad>
                     <ShoppingCartProductRecommendationGalleryComponent />
                 </LazyLoad>
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <WishListMetadataComponent />
             </ErrorBoundary>
         </Container>
     );

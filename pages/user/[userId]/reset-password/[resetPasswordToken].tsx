@@ -2,6 +2,8 @@ import { Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import ResetPasswordComponent from '../../../../modules/customer/reset-password/reset-password.component';
+import ErrorBoundary from '../../../../modules/shared/error-boundary/error-boundary.component';
+import { ResetPasswordMetadataComponent } from '../../../../modules/customer/reset-password/reset-password-metadata.component';
 
 const useStyles = makeStyles(theme => ({
 }));
@@ -16,8 +18,12 @@ export default function ResetPasswordPage({
 
     return (
         <Container>
-            <ResetPasswordComponent
-            />
+            <ErrorBoundary>
+                <ResetPasswordComponent />
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <ResetPasswordMetadataComponent />
+            </ErrorBoundary>
         </Container >
     );
 }

@@ -14,6 +14,7 @@ import { decodeLoginToken, getValidLoginToken } from "../modules/shared/helpers/
 import Layout from "../modules/shared/layout/layout.component";
 import theme, { GlobalCss } from "../modules/shared/layout/layout.theme";
 import { shoppingCartItemCountSlice } from "../modules/shopping-cart/shopping-cart.slice";
+import Head from "next/head";
 
 interface IProps {
     store: TssStore;
@@ -60,6 +61,12 @@ class MyApp extends App<IProps> {
         const { Component, pageProps, store } = this.props;
         return (
             <ErrorBoundary>
+                <Head>
+                    <meta
+                        name="viewport"
+                        content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+                    />
+                </Head>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
                     <GlobalCss />

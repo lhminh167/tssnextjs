@@ -5,6 +5,7 @@ import { getDepartments } from '../modules/department/department.service';
 import { IDepartment } from '../modules/shared/models/department.model';
 import { Container } from '@material-ui/core';
 import ErrorBoundary from '../modules/shared/error-boundary/error-boundary.component';
+import { DepartmentListMetadataComponent } from '../modules/department/list/department-list-metadata.component';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -24,6 +25,10 @@ export default function DepartmentListPage({
             <ErrorBoundary>
                 <DepartmentListComponent
                     data={data}
+                />
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <DepartmentListMetadataComponent
                 />
             </ErrorBoundary>
         </Container>

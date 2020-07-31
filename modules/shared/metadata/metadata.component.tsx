@@ -8,7 +8,9 @@ export interface Props {
 export function MetadataComponent({
     data
 }: Props) {
-    const title = data.title + ' | ' + process.env.SITE_NAME;
+    const title = data.shouldPrefixSiteName ?
+        process.env.SITE_NAME + ' | ' + data.title :
+        data.title + ' | ' + process.env.SITE_NAME;
 
     return (
         <Head>

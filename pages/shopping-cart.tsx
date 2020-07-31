@@ -7,6 +7,7 @@ import { redirect } from "../modules/shared/helpers/auth.helper";
 import { getLoginToken } from "../modules/shared/helpers/token.helper";
 import ShoppingCartComponent from "../modules/shopping-cart/detail/shopping-cart.component";
 import ShoppingCartProductRecommendationGalleryComponent from "../modules/shopping-cart/recommendation/shopping-cart-recommendation-gallery.component";
+import { ShoppingCartMetadataComponent } from "../modules/shopping-cart/detail/shopping-cart-metadata.component";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
@@ -22,6 +23,9 @@ function ShoppingCartPage(props) {
         <LazyLoad>
           <ShoppingCartProductRecommendationGalleryComponent />
         </LazyLoad>
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <ShoppingCartMetadataComponent />
       </ErrorBoundary>
     </Container>
   );

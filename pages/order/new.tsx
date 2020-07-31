@@ -1,10 +1,11 @@
-import NewOrderComponent from "../../modules/order/create/create-order.component";
+import CreateOrderComponent from "../../modules/order/create/create-order.component";
 import { makeStyles, Theme, createStyles, Container } from "@material-ui/core";
 import {
   redirect,
   getCustomerIdNumberFromStore
 } from "../../modules/shared/helpers/auth.helper";
 import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
+import { CreateOrderMetadataComponent } from "../../modules/order/create/create-order-metadata.component";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
@@ -13,7 +14,10 @@ function NewOrderPage() {
   return (
     <Container>
       <ErrorBoundary>
-        <NewOrderComponent />
+        <CreateOrderComponent />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <CreateOrderMetadataComponent />
       </ErrorBoundary>
     </Container>
   );

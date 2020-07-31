@@ -155,6 +155,7 @@ export default function DesktopNavbarComponent() {
                         component="a"
                         color="primary"
                         className={classes.seperator}
+                        title={`Search for products on ${process.env.SITE_NAME}`}
                     >
                         Search
                     </Typography>
@@ -165,6 +166,7 @@ export default function DesktopNavbarComponent() {
                         component="a"
                         color="primary"
                         className={classes.seperator}
+                        title="List of Departments and Categories"
                     >
                         Departments
                     </Typography>
@@ -180,6 +182,7 @@ export default function DesktopNavbarComponent() {
                     <IconButton
                         component="a"
                         className={classes.seperator}
+                        title="Shopping Cart"
                     >
                         <Badge
                             badgeContent={itemCount ?? 0}
@@ -202,6 +205,7 @@ export default function DesktopNavbarComponent() {
                     >
                         <IconButton
                             component="a"
+                            title="Customer Area"
                             className={classes.seperator}
                         >
                             <Tooltip

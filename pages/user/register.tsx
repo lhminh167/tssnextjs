@@ -4,6 +4,7 @@ import RegisterComponent from '../../modules/customer/create/create-customer.com
 import { getCustomerIdNumberFromStore, redirect } from '../../modules/shared/helpers/auth.helper';
 import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
 import { Container } from '@material-ui/core';
+import { CreateCustomerMetadataComponent } from '../../modules/customer/create/create-customer-metadata.component';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -19,6 +20,9 @@ function RegisterPage(props) {
         >
             <ErrorBoundary>
                 <RegisterComponent />
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <CreateCustomerMetadataComponent />
             </ErrorBoundary>
         </Container>
     );

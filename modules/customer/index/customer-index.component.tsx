@@ -30,7 +30,7 @@ export default function CustomerIndexComponent(props) {
                 variant="h6"
                 gutterBottom
             >
-                Customer Area
+                User Area
             </Typography>
             <List
                 component={Paper}

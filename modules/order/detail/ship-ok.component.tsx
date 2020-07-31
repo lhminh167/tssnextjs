@@ -127,13 +127,13 @@ export default function ShipOkComponent({
                 >
                     Yes, the order has been shipped
                 </Button>
-                <Button
+                {/* <Button
                     variant="outlined"
                     color="primary"
                     onClick={openFailureDialog}
                 >
                     No, the shipment is incomplete
-                </Button>
+                </Button> */}
             </Grid>
             <ConfirmationDialog
                 open={open}
