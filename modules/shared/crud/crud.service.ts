@@ -1,5 +1,4 @@
 import es6promise from "es6-promise";
-import "isomorphic-unfetch";
 import {
   HttpMethod,
   UploadRequest,
