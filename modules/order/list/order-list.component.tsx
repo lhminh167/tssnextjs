@@ -11,8 +11,12 @@ import React, { useEffect } from 'react';
 import { Order } from '../order.model';
 import { getOrders } from '../order.service';
 import { formatDatetime } from '../../shared/helpers/string.helper';
+import { textWarning, textSuccess, textDanger } from '../../shared/layout/layout.style';
 
 const useStyles = makeStyles({
+    textSuccess: textSuccess,
+    textDanger: textDanger,
+    textWarning: textWarning
 });
 
 export default function OrderListComponent() {
@@ -60,7 +64,11 @@ export default function OrderListComponent() {
                             <TableCell component="th" scope="row">
                                 {row.orderId}
                             </TableCell>
-                            <TableCell>{row.orderStatus.message}</TableCell>
+                            <TableCell
+                                className={classes[row.orderStatus.cssClass]}
+                            >
+                                {row.orderStatus.message}
+                            </TableCell>
                             <TableCell>{row.customer.name}</TableCell>
                             <TableCell>{formatDatetime(row.createdOn)}</TableCell>
                             <TableCell>{formatDatetime(row.shippedOn)}</TableCell>

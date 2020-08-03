@@ -46,9 +46,9 @@ export default function OrderCreateRequestComponent({
   }
 
   function nextStep() {
+
     setSubmitted(true);
-    if (isValidForm(errors))
-      next();
+    if (isValidForm(errors)) next();
   }
 
   return (
@@ -153,6 +153,46 @@ export default function OrderCreateRequestComponent({
             onChange={change}
             error={errors.country && submitted}
             helperText={errors.country && submitted ? errors.country : null}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="mobPhone"
+            name="mobPhone"
+            label="Mobile Phone"
+            fullWidth
+            autoComplete="phone"
+            value={data.mobPhone}
+            onChange={change}
+            error={errors.mobPhone && submitted}
+            helperText={errors.mobPhone && submitted ? errors.mobPhone : null}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="dayPhone"
+            name="dayPhone"
+            label="Day Phone"
+            fullWidth
+            autoComplete="phone"
+            value={data.dayPhone}
+            onChange={change}
+            error={errors.dayPhone && submitted}
+            helperText={errors.dayPhone && submitted ? errors.dayPhone : null}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="evePhone"
+            name="evePhone"
+            label="Evening Phone"
+            fullWidth
+            autoComplete="phone"
+            value={data.evePhone}
+            onChange={change}
+            error={errors.evePhone && submitted}
+            helperText={errors.evePhone && submitted ? errors.evePhone : null}
           />
         </Grid>
         <Grid item

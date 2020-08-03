@@ -76,3 +76,15 @@ export const bgWhite: CreateCSSProperties<{}> = {
 export const bgPrimary: CreateCSSProperties<{}> = {
     backgroundColor: themeColor.primary
 }
+
+export const textSuccess: CreateCSSProperties<{}> = {
+    color: theme.palette.success.main
+}
+
+export const textDanger: CreateCSSProperties<{}> = {
+    color: theme.palette.error.main
+}
+
+export const textWarning: CreateCSSProperties<{}> = {
+    color: theme.palette.warning.main
+}

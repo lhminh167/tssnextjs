@@ -1,13 +1,12 @@
-import { Breadcrumbs, createStyles, Accordion, AccordionDetails, AccordionSummary, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Theme, Typography } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Breadcrumbs, createStyles, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Theme, Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Link from "next/link";
-import { useRouter } from 'next/router';
 import React, { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { formatCurrency, formatDatetime } from '../../shared/helpers/string.helper';
-import { bold, mb, p } from '../../shared/layout/layout.style';
+import { bold, mb, p, textDanger, textSuccess, textWarning } from '../../shared/layout/layout.style';
 import { defaultOrder, Order } from '../order.model';
 import { getOrder } from '../order.service';
 import ShipOkComponent from './ship-ok.component';
@@ -17,30 +16,34 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         bold: bold,
         p: p,
-        mb: mb
+        mb: mb,
+        textSuccess: textSuccess,
+        textDanger: textDanger,
+        textWarning: textWarning
     }),
 );
 
-export default function OrderDetailComponent() {
+interface Props {
+    orderId: number;
+}
+
+export default function OrderDetailComponent({
+    orderId
+}: Props) {
     const classes = useStyles({});
     const [state, setState] = React.useState<Order>(defaultOrder);
     const [expanded, setExpanded] = useState<string | false>(false);
-    const router = useRouter();
-    const { orderId } = router.query;
-
-    const handleChange = (panel: string) => (event: ChangeEvent<{}>, isExpanded: boolean) => {
-        setExpanded(isExpanded ? panel : false);
-    };
-
 
     useEffect(() => {
-        if (state.orderId > 0) return;
-
-        getOrder(Number(orderId)).then(data => {
+        getOrder(orderId).then(data => {
 
             setState(data.content);
         })
     }, [])
+
+    const handleChange = (panel: string) => (event: ChangeEvent<{}>, isExpanded: boolean) => {
+        setExpanded(isExpanded ? panel : false);
+    };
 
     return (
         <Fragment>
@@ -83,28 +86,34 @@ export default function OrderDetailComponent() {
             >
                 Order Details
             </Typography>
-
-            <Grid
-                container
-                component={Paper}
-                className={classes.p + ' ' + classes.mb}
-            >
-
-                {
-                    state.orderStatus.id === 4
-                    &&
+            {
+                state.orderStatus.message === 'Awaiting stock confirmation'
+                &&
+                <Grid
+                    container
+                    component={Paper}
+                    className={classes.p + ' ' + classes.mb}
+                >
                     <StockOkComponent
                         data={state}
+                        output={setState}
                     />
-                }
-                {
-                    state.orderStatus.id === 7
-                    &&
+                </Grid>
+            }
+            {
+                state.orderStatus.message === 'Awaiting shipment confirmation'
+                &&
+                <Grid
+                    container
+                    component={Paper}
+                    className={classes.p + ' ' + classes.mb}
+                >
                     <ShipOkComponent
                         data={state}
+                        output={setState}
                     />
-                }
-            </Grid>
+                </Grid>
+            }
             <Accordion
                 expanded={expanded === 'orderSummary'}
                 onChange={handleChange('orderSummary')}
@@ -113,6 +122,7 @@ export default function OrderDetailComponent() {
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <Typography
+                        component='h2'
                     >
                         Order Summary
                     </Typography>
@@ -123,68 +133,51 @@ export default function OrderDetailComponent() {
                     >
                         <Grid item xs={12} sm={6}>
                             <Typography
-                                variant="subtitle2"
-                                component="label"
                                 className={classes.bold}
                             >
                                 Status
                             </Typography>
                             <Typography
-                                variant="subtitle1"
-                                component="p"
+                                className={classes[state.orderStatus.cssClass]}
                             >
                                 {state.orderStatus.message}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography
-                                variant="subtitle2"
-                                component="label"
                                 className={classes.bold}
                             >
                                 Total Amount
                         </Typography>
                             <Typography
-                                variant="subtitle1"
-                                component="p"
                             >
                                 {formatCurrency(state.totalAmount)}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography
-                                variant="subtitle2"
-                                component="label"
                                 className={classes.bold}
                             >
                                 Tax
                         </Typography>
                             <Typography
-                                variant="subtitle1"
-                                component="p"
                             >
                                 {state.tax.taxType}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography
-                                variant="subtitle2"
-                                component="label"
                                 className={classes.bold}
                             >
                                 Created On
                             </Typography>
                             <Typography
-                                variant="subtitle1"
-                                component="p"
                             >
                                 {formatDatetime(state.createdOn)}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography
-                                variant="subtitle2"
-                                component="label"
                                 className={classes.bold}
                             >
                                 Shipping
@@ -195,15 +188,11 @@ export default function OrderDetailComponent() {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography
-                                variant="subtitle2"
-                                component="label"
                                 className={classes.bold}
                             >
                                 Comments
                         </Typography>
                             <Typography
-                                variant="subtitle1"
-                                component="p"
                             >
                                 {state.comments ?? 'No Comments'}
                             </Typography>
@@ -274,7 +263,6 @@ export default function OrderDetailComponent() {
                         >
                             <Typography
                                 className={classes.bold}
-                                component='h3'
                             >
                                 Full Name
                             </Typography>
@@ -288,7 +276,6 @@ export default function OrderDetailComponent() {
                         >
                             <Typography
                                 className={classes.bold}
-                                component='h3'
                             >
                                 Email Address
                             </Typography>
@@ -302,7 +289,6 @@ export default function OrderDetailComponent() {
                         >
                             <Typography
                                 className={classes.bold}
-                                component='h3'
                             >
                                 Mobile Phone Number
                             </Typography>
@@ -315,7 +301,6 @@ export default function OrderDetailComponent() {
                         <Grid item xs={12} sm={6}>
                             <Typography
                                 className={classes.bold}
-                                component='h3'
                             >
                                 Evening Phone Number
                             </Typography>
@@ -329,7 +314,6 @@ export default function OrderDetailComponent() {
                         >
                             <Typography
                                 className={classes.bold}
-                                component='h3'
                             >
                                 Day Phone Number
                             </Typography>
@@ -343,7 +327,6 @@ export default function OrderDetailComponent() {
                         >
                             <Typography
                                 className={classes.bold}
-                                component='h3'
                             >
                                 Address Line 1
                             </Typography>
@@ -357,7 +340,6 @@ export default function OrderDetailComponent() {
                         >
                             <Typography
                                 className={classes.bold}
-                                component='h3'
                             >
                                 Address Line 2
                             </Typography>
@@ -371,7 +353,6 @@ export default function OrderDetailComponent() {
                         >
                             <Typography
                                 className={classes.bold}
-                                component='h3'
                             >
                                 City
                             </Typography>
@@ -385,7 +366,6 @@ export default function OrderDetailComponent() {
                         >
                             <Typography
                                 className={classes.bold}
-                                component='h3'
                             >
                                 Region
                             </Typography>
@@ -399,7 +379,6 @@ export default function OrderDetailComponent() {
                         >
                             <Typography
                                 className={classes.bold}
-                                component='h3'
                             >
                                 Country
                             </Typography>
@@ -413,7 +392,6 @@ export default function OrderDetailComponent() {
                         >
                             <Typography
                                 className={classes.bold}
-                                component='h3'
                             >
                                 Postal Code
                             </Typography>

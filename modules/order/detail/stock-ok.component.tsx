@@ -1,12 +1,10 @@
-import { Button, Grid, Typography, Theme, createStyles, TextField } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
+import { Button, createStyles, Grid, TextField, Theme, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmation-dialog.component';
-import { defaultOrder, Order } from '../order.model';
-import { getOrder, stockNotOk, stockOk } from '../order.service';
-import { mb, p, mr } from '../../shared/layout/layout.style';
+import { mb, mr, p } from '../../shared/layout/layout.style';
+import { Order } from '../order.model';
+import { stockNotOk, stockOk } from '../order.service';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -18,27 +16,19 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     data: Order;
+    output: any;
 }
 
 export default function StockOkComponent({
-    data
+    data,
+    output
 }: Props) {
     const classes = useStyles({});
-    const [state, setState] = React.useState<Order>(defaultOrder);
+    const [state, setState] = React.useState<Order>(data);
     const [open, setOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [submitted, setSubmitted] = useState<boolean>(false);
     const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
-
-    const router = useRouter();
-    const { orderId } = router.query;
-
-    useEffect(() => {
-        if (state.orderId > 0) return;
-        getOrder(Number(orderId)).then(data => {
-            setState(data.content);
-        })
-    }, [])
 
     function openSuccessDialog() {
         setIsSuccessful(true);
@@ -52,24 +42,25 @@ export default function StockOkComponent({
 
     function closeDialog() {
         setOpen(false);
+        setIsLoading(false);
     }
 
     function confirmSuccess() {
         setIsLoading(true);
         stockOk(state.orderId).then(data => {
-            setOpen(false);
-            setIsLoading(false);
+            output(data.content);
+            closeDialog();
         })
     }
 
     function confirmFailure() {
         setSubmitted(true);
         if (!state.comments) return;
-        stockNotOk(state.orderId, {
-            comments: state.comments
-        }).then(data => {
-            setOpen(false);
-            setIsLoading(false);
+        stockNotOk(state.orderId,
+            state.comments
+        ).then(data => {
+            output(data.content);
+            closeDialog();
         })
     }
 

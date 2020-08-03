@@ -1,12 +1,10 @@
-import { Button, Grid, Typography, Theme, createStyles, TextField } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
+import { Button, createStyles, Grid, TextField, Theme, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmation-dialog.component';
+import { mb, mr, p } from '../../shared/layout/layout.style';
 import { defaultOrder, Order } from '../order.model';
-import { getOrder, shipNotOk, shipOk } from '../order.service';
-import { mb, p, mr } from '../../shared/layout/layout.style';
+import { shipOk, shipNotOk } from '../order.service';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -18,58 +16,51 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     data: Order;
+    output: any;
 }
 
 export default function ShipOkComponent({
-    data
+    data,
+    output
 }: Props) {
     const classes = useStyles({});
-    const [state, setState] = React.useState<Order>(defaultOrder);
+    const [state, setState] = React.useState<Order>(data);
     const [open, setOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [submitted, setSubmitted] = useState<boolean>(false);
     const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
-
-    const router = useRouter();
-    const { orderId } = router.query;
-
-    useEffect(() => {
-        if (state.orderId > 0) return;
-        getOrder(Number(orderId)).then(data => {
-            setState(data.content);
-        })
-    }, [])
 
     function openSuccessDialog() {
         setIsSuccessful(true);
         setOpen(true);
     }
 
-    function openFailureDialog() {
-        setIsSuccessful(false);
-        setOpen(true);
-    }
+    // function openFailureDialog() {
+    //     setIsSuccessful(false);
+    //     setOpen(true);
+    // }
 
     function closeDialog() {
         setOpen(false);
+        setIsLoading(false);
     }
 
     function confirmSuccess() {
         setIsLoading(true);
         shipOk(state.orderId).then(data => {
-            setOpen(false);
-            setIsLoading(false);
+            output(data.content);
+            closeDialog();
         })
     }
 
     function confirmFailure() {
         setSubmitted(true);
         if (!state.comments) return;
-        shipNotOk(state.orderId, {
-            comments: state.comments
-        }).then(data => {
-            setOpen(false);
-            setIsLoading(false);
+        shipNotOk(state.orderId,
+            state.comments
+        ).then(data => {
+            output(data.content);
+            closeDialog();
         })
     }
 
@@ -114,7 +105,7 @@ export default function ShipOkComponent({
                     helperText={!state.comments && submitted && !isSuccessful ? 'Please specify the reasons for shipment incompleteness.' : null}
                     fullWidth
                     rows={4}
-                    placeholder="If the shipment is in complete, please specify the reasons for that."
+                    placeholder="If the shipment is incomplete, please specify the reasons for that."
                 />
             </Grid>
             <Grid item xs={12}

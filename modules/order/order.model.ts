@@ -31,6 +31,7 @@ export interface Order {
 export interface OrderStatus {
     id: number;
     message: string;
+    cssClass: string;
 }
 
 export interface OrderDetail {
@@ -54,7 +55,8 @@ export interface Audit {
 
 export const defaultOrderStatus: OrderStatus = {
     id: 0,
-    message: ''
+    message: '',
+    cssClass: ''
 };
 
 export const defaultOrder: Order = {

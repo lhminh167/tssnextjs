@@ -27,19 +27,19 @@ export class OrderCreateRequestValidator extends Validator<OrderCreateRequest> {
     super();
 
     this.ruleFor("customerId").greaterThan(0);
-    this.ruleFor("name").notEmpty();
+    this.ruleFor("name").notNull().notEmpty();
     // this.ruleFor('creditCard').notEmpty();
-    this.ruleFor("address1").notEmpty();
-    this.ruleFor("address2").notEmpty();
-    this.ruleFor("city").notEmpty();
-    // this.ruleFor("region").notEmpty();
-    this.ruleFor("postalCode").notEmpty();
-    this.ruleFor("country").notEmpty();
-    // this.ruleFor("dayPhone").notEmpty();
-    // this.ruleFor("evePhone").notEmpty();
-    // this.ruleFor("mobPhone").notEmpty();
-    this.ruleFor("comments").notEmpty();
-    this.ruleFor("paymentMethodId").notEmpty();
+    this.ruleFor("address1").notNull().notEmpty();
+    this.ruleFor("address2").notNull().notEmpty();
+    this.ruleFor("city").notNull().notEmpty();
+    this.ruleFor("region").notNull().notEmpty();
+    this.ruleFor("postalCode").notNull().notEmpty();
+    this.ruleFor("country").notNull().notEmpty();
+    // this.ruleFor("dayPhone").notNull().notEmpty();
+    // this.ruleFor("evePhone").notNull().notEmpty();
+    this.ruleFor("mobPhone").notNull().notEmpty();
+    // this.ruleFor("comments").notNull().notEmpty();
+    // this.ruleFor("paymentMethodId").notNull().notEmpty();
     this.ruleFor('shippingId').greaterThan(0);
     this.ruleFor('shippingRegionId').greaterThan(1);
   }
