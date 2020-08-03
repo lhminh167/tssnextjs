@@ -35,9 +35,9 @@ export class CreateProductStateValidator extends Validator<
   constructor() {
     super();
 
-    this.ruleFor("name").notEmpty();
+    this.ruleFor("name").notNull().notEmpty();
 
-    this.ruleFor("description").notEmpty();
+    this.ruleFor("description").notNull().notEmpty();
 
     this.ruleFor("price").must(value => toNumber(value) > 0);
 
