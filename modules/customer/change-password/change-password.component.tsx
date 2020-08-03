@@ -44,14 +44,14 @@ export default function ChangePasswordComponent({
 
         if (!isValidForm(errors)) return;
 
-        debugger
+
 
         const response = await updatePassword({
             customerId: userId,
             currentPassword: state.currentPassword,
             newPassword: state.newPassword
         })
-        debugger
+
     }
 
     return (

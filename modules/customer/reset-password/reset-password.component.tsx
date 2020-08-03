@@ -57,14 +57,14 @@ export default function ResetPasswordComponent({
 
         if (!isValidForm(errors)) return;
 
-        debugger
+
 
         const response = await resetPassword({
             customerId,
             resetPasswordToken,
             newPassword: state.newPassword
         })
-        debugger
+
     }
 
     if (isValidToken) return (

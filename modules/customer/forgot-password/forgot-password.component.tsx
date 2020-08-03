@@ -42,10 +42,10 @@ export default function ForgotPasswordComponent({
 
         if (!isValidForm(errors)) return;
 
-        debugger
+
 
         const response = await forgotPassword(state);
-        debugger
+
     }
 
     return (
