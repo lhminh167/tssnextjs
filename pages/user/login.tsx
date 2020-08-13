@@ -1,29 +1,30 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import LoginComponent from '../../modules/customer/login/login.component';
-import { getCustomerIdFromStore, redirect } from '../../modules/shared/helpers/auth.helper';
+import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
+import { Container } from '@material-ui/core';
+import { LoginMetadataComponent } from '../../modules/customer/login/login-metadata.component';
 
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: {
-        },
-        gridList: {
-        },
-        icon: {
-        },
     }),
 );
 
-function LoginPage(props) {
+export default function LoginPage(props) {
     const classes = useStyles(props);
-    // const data = useSelector(
-    //     (state: IRootState) => state.Login.data
-    // )
 
     return (
-        <LoginComponent />
+        <Container
+            maxWidth='sm'
+        >
+            <ErrorBoundary>
+                <LoginComponent />
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <LoginMetadataComponent />
+            </ErrorBoundary>
+        </Container>
     );
 }
 
@@ -34,11 +35,11 @@ LoginPage.getInitialProps = async function ({
     },
     ctx
 }) {
-    if (
-        !isServer &&
-        getCustomerIdFromStore(store) > 0
-    )
-        redirect(ctx, ctx.req.originalUrl);
+    // if (
+    //     !isServer &&
+    //     getCustomerIdNumberFromStore(store) > 0
+    // ) {
+    //     redirect(ctx, ctx.req.originalUrl);
+    //     return
+    // }
 }
-
-export default LoginPage

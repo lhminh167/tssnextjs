@@ -49,20 +49,31 @@ function ColorPicker(props: Props) {
     }
 
     function icon(color: Color) {
-        const icon = (<div className={classes.iconBorder}>
-            <div className={classes.icon} style={{ background: color }}></div>
+        const icon = (<div
+            className={classes.iconBorder}
+        >
+            <div
+                className={classes.icon} style={{ background: color }}
+            ></div>
         </div>);
         return icon;
     }
 
     function checkedIcon(color: Color) {
-        const checkedIcon = (<div className={classes.checkedIcon + ' ' + classes.iconBorder}>
-            <div className={classes.icon} style={{ background: color }}></div>
-        </div>);
+        const checkedIcon = (
+            <div
+                className={classes.checkedIcon + ' ' + classes.iconBorder}
+            >
+                <div
+                    className={classes.icon}
+                    style={{ background: color }}
+                ></div>
+            </div>
+        );
         return checkedIcon;
     }
 
-    const colorRadios = data? data.map(color => (
+    const colorRadios = data ? data.map(color => (
         <FormControlLabel
             key={color.attributeValueId}
             value={color.attributeValueId.toString()}
@@ -72,10 +83,16 @@ function ColorPicker(props: Props) {
     )) : null;
 
     return (
-        <FormControl component="fieldset" className={classes.formControl}>
-            <FormLabel component="legend">Color</FormLabel>
+        <FormControl
+            component="fieldset"
+        // className={classes.formControl}
+        >
+            <FormLabel
+                component="legend"
+            >
+                Color
+            </FormLabel>
             <RadioGroup
-                aria-label="Color"
                 name="Color"
                 className={classes.group}
                 value={state.attributeValueId.toString()}

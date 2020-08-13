@@ -3,12 +3,12 @@ import { Customer } from '../../customer/customer.model';
 import { Url } from 'url';
 import { decodeLoginToken } from './token.helper';
 
-export function redirect(ctx: any, toUrl: string) {
+export function redirect(ctx: any, toUrl: string, fromUrl: string = '/') {
     const { req, res } = ctx;
     const isServer = !!req;
     if (isServer) {
         res.writeHead(302, {
-            Location: `${toUrl}?next=${req.originalUrl}`,
+            Location: `${toUrl}?next=${req ?.originalUrl ?? fromUrl}`,
         });
         res.end();
     } else {
@@ -16,20 +16,16 @@ export function redirect(ctx: any, toUrl: string) {
     }
 }
 
-export function getCustomerId(customerId: string) {
+export function toNumber(customerId: string) {
     const parsed = parseInt(customerId);
     if (isNaN(parsed)) return 0;
     return parsed;
 }
 
-export function getRole(customer: Customer) {
-    return customer?.attributes?.find(a => a.name === 'Role');
+export function getCustomerIdNumberFromLoginToken(): number {
+    return toNumber(decodeLoginToken() ?.customerId);
 }
 
-export function getCustomerIdFromLoginToken(): number {
-    return getCustomerId(decodeLoginToken().customerId);
-}
-
-export function getCustomerIdFromStore(store): number {
-    return store?.getState()?.currentUser?.data?.customerId;
+export function getCustomerIdNumberFromStore(store): number {
+    return toNumber(store ?.getState() ?.currentUser ?.data ?.customerId);
 }

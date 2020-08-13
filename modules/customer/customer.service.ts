@@ -1,6 +1,5 @@
 import { get, post, put, remove } from '../shared/crud/crud.service';
-import { Customer, ILoginResquest, customerUrl } from './customer.model';
-import { getCustomerId } from '../shared/helpers/auth.helper';
+import { Customer, CustomerUpdatePasswordRequest, CustomerUpdateRequest, customerUrl, ILoginRequest, CustomerForgotPasswordRequest, CustomerPasswordResetRequest, CustomerPasswordResetTokenValidationRequest } from './customer.model';
 
 export async function getCustomers() {
     return await get(customerUrl.baseUrl, 0);
@@ -14,14 +13,30 @@ export async function createCustomer(input: Customer) {
     return await post(customerUrl.baseUrl, input);
 }
 
-export async function login(input: ILoginResquest) {
+export async function login(input: ILoginRequest) {
     return await post(customerUrl.login, input);
 }
 
-export async function updateCustomer(input: Customer) {
-    return await put(customerUrl.baseUrl, getCustomerId(input.customerId), input);
+export async function updateCustomer(input: CustomerUpdateRequest) {
+    return await put(customerUrl.baseUrl, input.customerId, input);
 }
 
 export async function removeCustomer(input: Customer) {
     return await remove(customerUrl.baseUrl, 0, input.customerId);
+}
+
+export async function updatePassword(input: CustomerUpdatePasswordRequest) {
+    return await put(customerUrl.updatePassword(input.customerId), 0, input);
+}
+
+export async function forgotPassword(input: CustomerForgotPasswordRequest) {
+    return await put(customerUrl.forgotPassword, 0, input);
+}
+
+export async function validateResetPasswordToken(input: CustomerPasswordResetTokenValidationRequest) {
+    return await put(customerUrl.resetPassword(input.customerId, input.resetPasswordToken), 0, input);
+}
+
+export async function resetPassword(input: CustomerPasswordResetRequest) {
+    return await put(customerUrl.resetPassword(input.customerId, input.resetPasswordToken), 0, input);
 }

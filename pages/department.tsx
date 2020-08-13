@@ -1,28 +1,43 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import ProductFilter from '../modules/product-filter/product-filter.component';
-import { productFilter } from '../modules/product-filter/product-filter.slice';
-import { IRootState } from '../modules/root/root.model';
-import DepartmentComponent from '../modules/department/department.component';
+import DepartmentListComponent from '../modules/department/list/department-list.component';
+import { getDepartments } from '../modules/department/department.service';
+import { IDepartment } from '../modules/shared/models/department.model';
+import { Container } from '@material-ui/core';
+import ErrorBoundary from '../modules/shared/error-boundary/error-boundary.component';
+import { DepartmentListMetadataComponent } from '../modules/department/list/department-list-metadata.component';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
     }),
 );
 
-function DepartmentPage(props) {
-    const classes = useStyles(props);
-    const data = useSelector(
-        (state: IRootState) => state.productFilter
-    )
-
-    return <DepartmentComponent data={data} />
+interface Props {
+    data: IDepartment[]
 }
 
-DepartmentPage.getInitialProps = function (props) {
-    const { store, isServer } = props.ctx;
-    return { isServer }
+export default function DepartmentListPage({
+    data
+}: Props) {
+    const classes = useStyles({});
+    return (
+        <Container>
+            <ErrorBoundary>
+                <DepartmentListComponent
+                    data={data}
+                />
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <DepartmentListMetadataComponent
+                />
+            </ErrorBoundary>
+        </Container>
+    );
 }
 
-export default DepartmentPage;
+DepartmentListPage.getInitialProps = async function ({ ctx }) {
+    const { query } = ctx;
+    const response: any = await getDepartments();
+
+    return { data: response.content };
+}
