@@ -1,54 +1,54 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import ProductFilter from '../modules/product-filter/product-filter.component';
-import { productFilter } from '../modules/product-filter/product-filter.slice';
-import { IRootState } from '../modules/root/root.model';
+import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
+import BestSellingProductGalleryComponent from "../modules/product/best-selling/best-selling-product.component";
+import { getHomepageProducts } from "../modules/product/filter/product-filter.service";
+import TopPanelComponent from "../modules/product/top-panel/top-panel.component";
+import TopRatedProductGalleryComponent from "../modules/product/top-rated/top-rated-product-gallery.component";
+import ErrorBoundary from "../modules/shared/error-boundary/error-boundary.component";
+import { HomepageProducts } from "../modules/shared/models/product.model";
+import MostDiscountedProductGallery from "../modules/product/most-discounted/most-discounted-product-gallery.component";
+import NewestProductList from "../modules/product/newest/newest-product-list.component";
+import { HomePageMetadataComponent } from "../modules/product/home-page-metadata/home-page-metadata.component";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-around',
-            overflow: 'hidden',
-            backgroundColor: theme.palette.background.paper,
-        },
-        gridList: {
-            // width: 500,
-            // height: 450,
-        },
-        icon: {
-            color: 'rgba(255, 255, 255, 0.54)',
-        },
-    }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
-function Home(props) {
-    const classes = useStyles(props);
-    const data = useSelector(
-        (state: IRootState) => state.productFilter
-    )
-
-    return (
-        <ProductFilter data={data} />
-    );
+interface Props {
+  data: HomepageProducts
 }
 
-Home.getInitialProps = function(props) {
-    const { store, isServer } = props.ctx;
-    if (
-        store.getState().productFilter.filter.data.attributes.length === 0 ||
-        store.getState().productFilter.filter.data.categories.length === 0
-    ) {
-        store.dispatch(productFilter.filter.actions.getPending());
-    }
+export default function ProductSearchPage({
+  data
+}: Props) {
+  const classes = useStyles({});
 
-    if (store.getState().productFilter.product.data.length === 0) {
-        store.dispatch(productFilter.product.actions.getPending());
-    }
-
-    return { isServer }
+  return data && (
+    <Container>
+      <ErrorBoundary>
+        <TopPanelComponent data={data.topPanel} />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <MostDiscountedProductGallery data={data.mostDiscounted} />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <BestSellingProductGalleryComponent data={data.bestSelling} />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <TopRatedProductGalleryComponent data={data.topRated} />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <NewestProductList data={data.newest} />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <HomePageMetadataComponent data={data} />
+      </ErrorBoundary>
+    </Container>
+  );
 }
 
-export default Home;
+ProductSearchPage.getInitialProps = async function () {
+
+  const response = await getHomepageProducts();
+
+  return {
+    data: response.content
+  };
+};

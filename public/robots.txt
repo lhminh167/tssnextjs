@@ -1,0 +1,6 @@
+Sitemap: https://eshopmate.herokuapp.com/sitemap.xml
+
+User-agent: *
+Allow: /*
+
+Disallow: /api/*

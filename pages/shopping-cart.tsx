@@ -1,47 +1,41 @@
+import { Container } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { IRootState } from "../modules/root/root.model";
-import ShoppingCartComponent from "../modules/shopping-cart/shopping-cart.component";
-import { IShopingCartItem } from "../modules/shopping-cart/shopping-cart.model";
-import { shoppingCartSlice } from "../modules/shopping-cart/shopping-cart.slice";
-import { getCustomerIdFromStore, redirect } from "../modules/shared/helpers/auth.helper";
+import React from "react";
+import LazyLoad from "react-lazyload";
+import ErrorBoundary from "../modules/shared/error-boundary/error-boundary.component";
+import { redirect } from "../modules/shared/helpers/auth.helper";
+import { getLoginToken } from "../modules/shared/helpers/token.helper";
+import ShoppingCartComponent from "../modules/shopping-cart/detail/shopping-cart.component";
+import ShoppingCartProductRecommendationGalleryComponent from "../modules/shopping-cart/recommendation/shopping-cart-recommendation-gallery.component";
+import { ShoppingCartMetadataComponent } from "../modules/shopping-cart/detail/shopping-cart-metadata.component";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {},
-    gridList: {},
-    icon: {}
-  })
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
 function ShoppingCartPage(props) {
   const classes = useStyles(props);
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(shoppingCartSlice.actions.getCartPending());
-  }, []);
-
-  const data: IShopingCartItem[] = useSelector(
-    (state: IRootState) => state.shoppingCart.data
+  return (
+    <Container>
+      <ErrorBoundary>
+        <ShoppingCartComponent />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <LazyLoad>
+          <ShoppingCartProductRecommendationGalleryComponent />
+        </LazyLoad>
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <ShoppingCartMetadataComponent />
+      </ErrorBoundary>
+    </Container>
   );
-
-  return <ShoppingCartComponent data={data} />;
 }
 
 ShoppingCartPage.getInitialProps = async function ({
-  ctx: {
-    isServer,
-    store
-  },
+  ctx: { isServer, store },
   ctx
 }) {
-  if (
-    !isServer &&
-    getCustomerIdFromStore(store) <= 0
-  )
-    redirect(ctx, '/user/login');
-}
+  if (!isServer && !getLoginToken()) redirect(ctx, "/user/login");
+};
 
 export default ShoppingCartPage;

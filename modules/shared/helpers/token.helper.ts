@@ -1,19 +1,24 @@
 import jwtDecode from "jwt-decode";
-import { ICurrentUser } from "../../customer/customer.model";
-import { currentUserInitialData } from "../../customer/customer.slice";
+import { Customer, defaultCustomer } from "../../customer/customer.model";
+import { defaultAttributeValue } from "../models/attribute-value.model";
+import { getCustomerIdNumberFromLoginToken } from "./auth.helper";
 
 export function setLoginToken(loginToken: string) {
     if (typeof window === 'undefined') return;
     localStorage.setItem("loginToken", loginToken)
 }
 
-export function getLoginToken() {
+export function getLoginToken(): string {
     if (typeof window === 'undefined') return;
-    return localStorage.getItem("loginToken");
+    return localStorage.getItem("loginToken") ?? null;
+}
+
+export function getValidLoginToken(): string {
+    return getLoginToken();
 }
 
 export function setTokenHeader(options: RequestInit) {
-    const token = getLoginToken();
+    const token = getValidLoginToken();
     if (token) options.headers["Authorization"] = `Bearer ${token}`;
 }
 
@@ -22,16 +27,19 @@ export function removeLoginToken() {
     return localStorage.removeItem("loginToken");
 }
 
-export function decodeLoginToken(): ICurrentUser {
+export function decodeLoginToken(): Customer {
     try {
-        const tokenPayload: ITokenPayload = jwtDecode<ITokenPayload>(localStorage.loginToken);
-        return {
-            customerId: tokenPayload.nameid,
-            name: tokenPayload.unique_name,
-            role: tokenPayload.role
-        }
+        const tokenPayload: ITokenPayload = jwtDecode<ITokenPayload>(getLoginToken());
+        if (new Date(tokenPayload.exp) < new Date())
+            return {
+                customerId: tokenPayload.nameid,
+                name: tokenPayload.unique_name,
+                role: tokenPayload.role
+            };
+
+        return defaultCustomer;
     } catch (err) {
-        return currentUserInitialData;
+        return defaultCustomer;
     }
 }
 
@@ -39,4 +47,7 @@ interface ITokenPayload {
     nameid: string,
     unique_name: string,
     role: string,
+    nbf: Date,
+    exp: Date,
+    iat: Date
 }

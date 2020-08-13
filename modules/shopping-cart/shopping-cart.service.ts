@@ -1,34 +1,45 @@
 import { get, post, put, remove } from '../shared/crud/crud.service';
-import { ShoppingCartUrl, IShopingCartItem } from './shopping-cart.model';
+import { ShoppingCartUrl, IShopingCartItem, ShopingCartGetRequest } from './shopping-cart.model';
+import { IProductRecommendationGetRequest } from '../shared/models/product.model';
+import querystring from 'query-string';
+import { PaginationRequest } from '../shared/crud/crud.model';
 
-export async function getCart() {
-    return await get(ShoppingCartUrl.baseUrl, 0);
+export async function getShoppingCart(input: ShopingCartGetRequest) {
+    return await get(ShoppingCartUrl.shoppingCart(input), 0);
 }
 
-export async function addItem(item: IShopingCartItem) {
+export async function addShoppingCartItem(item: IShopingCartItem) {
     return await post(ShoppingCartUrl.baseUrl, item);
 }
 
-export async function updateItem(item: IShopingCartItem) {
+export async function updateShoppingCartItem(item: IShopingCartItem) {
     return await put(ShoppingCartUrl.baseUrl, item.itemId, item);
 }
 
-export async function removeItem(item: IShopingCartItem) {
+export async function removeShoppingCartItem(item: IShopingCartItem) {
     return await remove(ShoppingCartUrl.baseUrl, item.itemId, null);
 }
 
-export async function saveItemForLater(item: IShopingCartItem) {
+export async function getWishList() {
+    return await get(ShoppingCartUrl.wishList, 0);
+}
+
+export async function saveShoppingCartItemForLater(item: IShopingCartItem) {
     return await put(ShoppingCartUrl.saveItemForLater, item.itemId, item);
 }
 
-export async function moveItemToCart(item: IShopingCartItem) {
+export async function moveShoppingCartItemToCart(item: IShopingCartItem) {
     return await put(ShoppingCartUrl.moveItemToCart, item.itemId, item);
 }
 
-export async function getTotalCost() {
+export async function getShoppingCartTotalCost() {
     return await get(ShoppingCartUrl.totalCost, 0);
 }
 
-export async function getTotalQuantity() {
-    return await get(ShoppingCartUrl.totalQuantity, 0);
+export async function getShoppingCartTotalQuantity() {
+    return await get(ShoppingCartUrl.totalQuantity(true), 0);
+}
+
+export async function getShoppingCartRecommendation(input: PaginationRequest) {
+    return await get(ShoppingCartUrl.recommendation + '?' + querystring.stringify(input), 0);
 }

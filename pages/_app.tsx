@@ -1,19 +1,20 @@
-import CssBaseline from '@material-ui/core/CssBaseline'
-import { ThemeProvider } from '@material-ui/styles'
-import withReduxSaga from 'next-redux-saga'
-import withRedux from 'next-redux-wrapper'
-import App from 'next/app'
-import React from 'react'
-import { Provider } from 'react-redux'
-import { currentUser, currentUserInitialData } from '../modules/customer/customer.slice'
-import createStore, { TssStore } from '../modules/root/root.store'
-import { decodeLoginToken, setTokenHeader, getLoginToken } from '../modules/shared/helpers/token.helper'
-import Layout from '../modules/shared/layout/layout.component'
-import theme from '../modules/shared/layout/layout.theme'
-import { getTotalQuantity } from '../modules/shopping-cart/shopping-cart.service'
-import { Response } from '../modules/shared/crud/crud.model'
-import { shoppingCartItemCountSlice } from '../modules/shopping-cart/shopping-cart.slice'
-import { getCustomerIdFromLoginToken } from '../modules/shared/helpers/auth.helper'
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { ThemeProvider } from "@material-ui/styles";
+import * as Sentry from '@sentry/browser';
+import withReduxSaga from "next-redux-saga";
+import withRedux from "next-redux-wrapper";
+import App from "next/app";
+import React from "react";
+import { Provider } from "react-redux";
+import { currentUserSlice } from "../modules/customer/customer.slice";
+import createStore, { TssStore } from "../modules/root/root.store";
+import ErrorBoundary from "../modules/shared/error-boundary/error-boundary.component";
+import { getCustomerIdNumberFromLoginToken } from "../modules/shared/helpers/auth.helper";
+import { decodeLoginToken, getValidLoginToken } from "../modules/shared/helpers/token.helper";
+import Layout from "../modules/shared/layout/layout.component";
+import theme, { GlobalCss } from "../modules/shared/layout/layout.theme";
+import { shoppingCartItemCountSlice } from "../modules/shopping-cart/shopping-cart.slice";
+import Head from "next/head";
 
 interface IProps {
     store: TssStore;
@@ -27,45 +28,57 @@ class MyApp extends App<IProps> {
             pageProps = await Component.getInitialProps({ ctx });
         }
 
-        return { pageProps }
+        return { pageProps };
     }
 
     componentDidMount() {
+        if (process.env.ENV !== 'production')
+            Sentry.init({ dsn: "https://092f990227db4c81b121d898afcd93dc@sentry.io/5189172" });
+
         this.getCurrentUser();
 
         // Remove the server-side injected CSS.
-        const jssStyles = document.querySelector('#jss-server-side');
+        const jssStyles = document.querySelector("#jss-server-side");
         if (jssStyles) jssStyles.parentNode.removeChild(jssStyles);
     }
 
     getCurrentUser() {
+        if (!getValidLoginToken()) return;
+
         const { store } = this.props;
 
-        if (!getLoginToken()) return;
-        console.log(getLoginToken())
-        store.dispatch(shoppingCartItemCountSlice.actions.getTotalQuantityPending());
+        store.dispatch(
+            shoppingCartItemCountSlice.actions.getTotalQuantityPending()
+        );
 
-        const customerId = getCustomerIdFromLoginToken();
+        const customerId = getCustomerIdNumberFromLoginToken();
         customerId
-            ? store.dispatch(currentUser.actions.getCustomerPending(customerId))
-            : store.dispatch(currentUser.actions.setCurrentUser(decodeLoginToken()));;
+            ? store.dispatch(currentUserSlice.actions.getCustomerPending(customerId))
+            : store.dispatch(currentUserSlice.actions.setCurrentUser(decodeLoginToken()));
     }
 
     render() {
         const { Component, pageProps, store } = this.props;
         return (
-            <ThemeProvider theme={theme}>
-
-                <CssBaseline />
-                <Provider store={store}>
-                    <Layout>
-                        <Component {...pageProps} />
-                    </Layout>
-                </Provider>
-            </ThemeProvider>
-
-        )
+            <ErrorBoundary>
+                <Head>
+                    <meta
+                        name="viewport"
+                        content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+                    />
+                </Head>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <GlobalCss />
+                    <Provider store={store}>
+                        <Layout>
+                            <Component {...pageProps} />
+                        </Layout>
+                    </Provider>
+                </ThemeProvider>
+            </ErrorBoundary>
+        );
     }
 }
 
-export default withRedux(createStore)(withReduxSaga(MyApp))
+export default withRedux(createStore)(withReduxSaga(MyApp));
