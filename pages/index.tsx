@@ -44,11 +44,12 @@ export default function ProductSearchPage({
   );
 }
 
-ProductSearchPage.getInitialProps = async function () {
+export async function getStaticProps() {
 
   const response = await getHomepageProducts();
 
   return {
-    data: response.content
-  };
-};
+    props: { data: response.content },
+    revalidate: 5
+  }
+}

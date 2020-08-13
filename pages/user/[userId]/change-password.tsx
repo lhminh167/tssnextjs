@@ -4,6 +4,7 @@ import { toNumber } from '../../../modules/shared/helpers/auth.helper';
 import { Container } from '@material-ui/core';
 import ChangePasswordComponent from '../../../modules/customer/change-password/change-password.component';
 import { ChangePasswordMetadataComponent } from '../../../modules/customer/change-password/change-password-metadata.component';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -11,13 +12,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    userId: number;
 }
 
 export default function CustomerChangePasswordPage({
-    userId
 }: Props) {
     const classes = useStyles({});
+    const router = useRouter();
+    const userId = toNumber(router.query.userId as string);
+
     return (
         <Container>
             <ErrorBoundary>
@@ -31,18 +33,4 @@ export default function CustomerChangePasswordPage({
             </ErrorBoundary>
         </Container>
     );
-}
-
-CustomerChangePasswordPage.getInitialProps = async function ({
-    ctx: {
-        isServer,
-        store,
-        query
-    },
-    ctx
-}) {
-    const userId = toNumber(query.userId);
-    return {
-        userId
-    };
 }

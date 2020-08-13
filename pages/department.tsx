@@ -35,9 +35,12 @@ export default function DepartmentListPage({
     );
 }
 
-DepartmentListPage.getInitialProps = async function ({ ctx }) {
-    const { query } = ctx;
+export async function getStaticProps() {
+
     const response: any = await getDepartments();
 
-    return { data: response.content };
+    return {
+        props: { data: response.content },
+        revalidate: null
+    }
 }

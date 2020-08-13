@@ -27,33 +27,35 @@ export default function ProductSearchPage(props) {
     );
 }
 
-ProductSearchPage.getInitialProps = async function ({
-    ctx: {
-        isServer,
-        store,
-        query,
-        req
-    },
-    ctx
-}) {
 
-    const parsedQuery = querystring.parse(
-        querystring.stringify(query),
-        {
-            parseNumbers: true,
-            parseBooleans: true,
-            // skipNull: true
-        }
-    );
+// export async function getStaticProps({
+//     store,
+//     query,
+//     isServer
+// }) {
 
-    if (
-        isServer
-        || !store.getState().productFilter.filter.data.attributes.length
-    )
-        store.dispatch(productFilterSlice.actions.getFilterPending());
+//     const parsedQuery = querystring.parse(
+//         querystring.stringify(query),
+//         {
+//             parseNumbers: true,
+//             parseBooleans: true,
+//             // skipNull: true
+//         }
+//     );
 
-    store.dispatch(productFilterSlice.actions.getProductsPending({
-        ...defaultProductSearchRequest,
-        ...parsedQuery as any,
-    }));
-}
+//     if (
+//         isServer
+//         || !store.getState().productFilter.filter.data.attributes.length
+//     )
+//         store.dispatch(productFilterSlice.actions.getFilterPending());
+
+//     store.dispatch(productFilterSlice.actions.getProductsPending({
+//         ...defaultProductSearchRequest,
+//         ...parsedQuery as any,
+//     }));
+
+//     return {
+//         props: {},
+//         revalidate: 5
+//     }
+// }

@@ -3,7 +3,6 @@ import EmojiEventsIcon from '@material-ui/icons/EmojiEvents';
 import Link from "next/link";
 import { useState } from "react";
 import { PaginatedList } from "../../shared/crud/crud.model";
-import { themeColor } from "../../shared/layout/layout.theme";
 import { IProduct } from "../../shared/models/product.model";
 import ProductHorizontalGallery from "../../shared/product-horizontal-gallery/product-horizontal-gallery.component";
 import { defaultProductSearchRequest, IProductSearchRequest, SortByEnum } from "../filter/product-filter.model";

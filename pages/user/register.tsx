@@ -1,10 +1,11 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React from 'react';
-import RegisterComponent from '../../modules/customer/create/create-customer.component';
-import { getCustomerIdNumberFromStore, redirect } from '../../modules/shared/helpers/auth.helper';
-import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
 import { Container } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import { CreateCustomerMetadataComponent } from '../../modules/customer/create/create-customer-metadata.component';
+import RegisterComponent from '../../modules/customer/create/create-customer.component';
+import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
+import { getLoginToken } from '../../modules/shared/helpers/token.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -13,6 +14,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function RegisterPage(props) {
     const classes = useStyles(props);
+    const router = useRouter();
+
+    useEffect(() => {
+        if (getLoginToken()) router.push(router.query.next as string);
+    }, []);
 
     return (
         <Container
@@ -26,20 +32,6 @@ function RegisterPage(props) {
             </ErrorBoundary>
         </Container>
     );
-}
-
-RegisterPage.getInitialProps = async function ({
-    ctx: {
-        isServer,
-        store
-    },
-    ctx
-}) {
-    if (
-        !isServer &&
-        getCustomerIdNumberFromStore(store) > 0
-    )
-        redirect(ctx, ctx.req.originalUrl);
 }
 
 export default RegisterPage

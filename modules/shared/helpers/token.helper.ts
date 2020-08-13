@@ -1,7 +1,5 @@
 import jwtDecode from "jwt-decode";
 import { Customer, defaultCustomer } from "../../customer/customer.model";
-import { defaultAttributeValue } from "../models/attribute-value.model";
-import { getCustomerIdNumberFromLoginToken } from "./auth.helper";
 
 export function setLoginToken(loginToken: string) {
     if (typeof window === 'undefined') return;

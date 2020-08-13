@@ -23,13 +23,3 @@ export default function AdminListPage(props) {
         </Container>
     );
 }
-
-// AdminListPage.getInitialProps = async function ({
-//     ctx: {
-//         isServer,
-//         store,
-//         query
-//     },
-//     ctx
-// }) {
-// }

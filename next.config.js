@@ -24,22 +24,23 @@ const nextConfig = {
     ],
   },
 
-  experimental: {
-    modern: true,
-    async rewrites() {
-      return [
-        {
-          source: '/service-worker.js',
-          destination: '/.next/static/service-worker.js',
-        },
-        {
-          source: '/sitemap.xml',
-          destination: '/api/sitemap'
-        },
-      ]
-    },
-    catchAllRouting: true
+
+  async rewrites() {
+    return [
+      {
+        source: '/service-worker.js',
+        destination: '/.next/static/service-worker.js',
+      },
+      {
+        source: '/sitemap.xml',
+        destination: '/api/sitemap'
+      },
+    ]
   },
+
+  catchAllRouting: true,
+  modern: true,
+
 
   generateBuildId: async () => {
     if (process.env.BUILD_ID) {

@@ -1,32 +1,29 @@
-import { applyMiddleware, createStore } from 'redux'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { createStore } from 'redux'
 import createSagaMiddleware, { Task } from 'redux-saga'
-import { composeWithDevTools } from 'redux-devtools-extension';
-
-import { rootInitialState } from './root.state'
 import { rootReducer } from './root.reducer'
 import rootSaga from './root.saga'
-
-const bindMiddleware = middleware => {
-    if (process.env.ENV !== 'production') {
-        // const { composeWithDevTools } = require('redux-devtools-extension')
-        return composeWithDevTools(applyMiddleware(...middleware))
-    }
-    return applyMiddleware(...middleware)
-}
+import { rootInitialState } from './root.state'
 
 export type TssStore = ReturnType<typeof createStore> & {
     sagaTask?: Task
 }
 
-export default function configureStore(initialState = rootInitialState) {
-    const sagaMiddleware = createSagaMiddleware();
-    const store: TssStore = createStore(
-        rootReducer,
-        initialState,
-        bindMiddleware([sagaMiddleware])
-    )
+const dev = process.env.NODE_ENV !== 'production';
 
-    store.sagaTask = sagaMiddleware.run(rootSaga)
+export const makeStore = () => {
+    const sagaMiddleware = createSagaMiddleware();
+
+    const store: TssStore = configureStore({
+        reducer: rootReducer,
+        middleware: [...getDefaultMiddleware(), sagaMiddleware],
+        preloadedState: rootInitialState,
+        devTools: dev
+    })
+
+    store.sagaTask = sagaMiddleware.run(rootSaga);
 
     return store
 }
+
+export const store = makeStore();

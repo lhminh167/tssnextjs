@@ -5,7 +5,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Color } from "csstype";
-import { ChangeEvent, useState, useEffect } from "react";
+import { ChangeEvent } from "react";
 import { IAttributeValue } from "../models/attribute-value.model";
 
 
