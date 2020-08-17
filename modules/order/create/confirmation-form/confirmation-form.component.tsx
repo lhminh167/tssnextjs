@@ -1,15 +1,15 @@
-import { createStyles, Divider, Grid, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
-import React, { useEffect, useState, Fragment } from "react";
-import ActionButtonsComponent from "../../../shared/action-buttons/action-buttons.component";
-import { decodeAttributes } from "../../../shared/helpers/product.helper";
-import { formatCurrency } from "../../../shared/helpers/string.helper";
-import { defaultShippingRegion, ShippingRegion } from "../../../shared/models/shipping-region.model";
-import { defaultShipping, Shipping } from "../../../shared/models/shipping.model";
-import { defaultTax, getTaxId, Tax } from "../../../shared/models/tax.model";
-import { defaultShopingCartGetRequest, IShopingCartItem } from "../../../shopping-cart/shopping-cart.model";
-import { getShoppingCart } from "../../../shopping-cart/shopping-cart.service";
-import { OrderCreateForm, OrderCreateRequest } from "../create-order.model";
-import { bold, p } from "../../../shared/layout/layout.style";
+import { createStyles, Divider, Grid, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
+import React, { useEffect, useState, Fragment } from 'react';
+import ActionButtonsComponent from '../../../shared/action-buttons/action-buttons.component';
+import { decodeAttributes } from '../../../shared/helpers/product.helper';
+import { formatCurrency } from '../../../shared/helpers/string.helper';
+import { defaultShippingRegion, ShippingRegion } from '../../../shared/models/shipping-region.model';
+import { defaultShipping, Shipping } from '../../../shared/models/shipping.model';
+import { defaultTax, getTaxId, Tax } from '../../../shared/models/tax.model';
+import { defaultShopingCartGetRequest, IShopingCartItem } from '../../../shopping-cart/shopping-cart.model';
+import { getShoppingCart } from '../../../shopping-cart/shopping-cart.service';
+import { OrderCreateForm, OrderCreateRequest } from '../create-order.model';
+import { bold, p } from '../../../shared/layout/layout.style';
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -85,6 +85,7 @@ export default function OrderConfirmationComponent({
                     <Typography
                         className={classes.bold}
                         gutterBottom
+                        data-cy='order-summary'
                     >
                         Order summary
                 </Typography>
@@ -96,23 +97,23 @@ export default function OrderConfirmationComponent({
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Item</TableCell>
-                                    <TableCell align="right">Qty</TableCell>
-                                    <TableCell align="right">Price</TableCell>
+                                    <TableCell align='right'>Qty</TableCell>
+                                    <TableCell align='right'>Price</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {state.map(row => {
                                     return (
                                         <TableRow key={row.itemId}>
-                                            <TableCell component="th" scope="row">
+                                            <TableCell component='th' scope='row'>
                                                 {decodeAttributes(row.attributes).map(a => a.value).join(' ')} {row.product.name}
                                             </TableCell>
-                                            <TableCell align="right">{row.quantity}</TableCell>
+                                            <TableCell align='right'>{row.quantity}</TableCell>
                                             <TableCell
-                                                align="right"
+                                                align='right'
                                             >
                                                 <Typography
-                                                    color="primary"
+                                                    color='primary'
                                                     className={classes.bold}
                                                 >
                                                     {
@@ -191,7 +192,7 @@ export default function OrderConfirmationComponent({
                     item
                 >
                     <Divider
-                    // variant="middle" 
+                    // variant='middle' 
                     />
 
                 </Grid>
@@ -222,6 +223,7 @@ export default function OrderConfirmationComponent({
                     <Typography
                         variant='h5'
                         className={classes.bold}
+                        data-cy='grand-total'
                     >
                         {formatCurrency(grandTotal)}
                     </Typography>
@@ -229,8 +231,8 @@ export default function OrderConfirmationComponent({
             </Grid>
             <Grid item xs={12}>
                 <ActionButtonsComponent
-                    backButtonText={"Back"}
-                    nextButtonText={"Next Step"}
+                    backButtonText={'Back'}
+                    nextButtonText={'Next Step'}
                     back={back}
                     next={next}
                 />

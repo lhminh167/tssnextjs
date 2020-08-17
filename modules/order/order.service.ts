@@ -1,7 +1,7 @@
-import { post, put, get } from "../shared/crud/crud.service";
-import { orderUrl } from "./order.model";
-import { OrderCreateRequest } from "./create/create-order.model";
-import { OrderUpdateRequest } from "./detail/order-detail.model";
+import { post, put, get } from '../shared/crud/crud.service';
+import { orderUrl } from './order.model';
+import { OrderCreateRequest } from './create/create-order.model';
+import { OrderUpdateRequest } from './detail/order-detail.model';
 
 export async function getOrderCreateForm() {
   return await get(orderUrl.new, 0);

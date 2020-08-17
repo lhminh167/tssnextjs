@@ -57,7 +57,7 @@ export default function ForgotPasswordComponent({
         >
             <Grid item xs={12}
                 container
-                justify="center"
+                justify='center'
                 className={classes.mt}
             >
                 <Avatar>
@@ -66,37 +66,37 @@ export default function ForgotPasswordComponent({
             </Grid>
             <Grid item xs={12}
                 container
-                justify="center"
+                justify='center'
                 className={classes.mb}
             >
                 <Typography
-                    component="h1"
-                    variant="h5"
+                    component='h1'
+                    variant='h5'
                 >
                     Password assistance
                 </Typography>
             </Grid>
             <Grid item xs={12}
                 container
-            // justify="center"
+            // justify='center'
             // className={classes.mb}
             >
                 <Typography
-                    component="p"
-                    variant="body1"
+                    component='p'
+                    variant='body1'
                 >
                     Please enter email address associated with your account.
                 </Typography>
             </Grid>
             <Grid item xs={12}>
                 <TextField
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    name="email"
-                    label="Email Address"
-                    type="email"
-                    autoComplete="email"
+                    name='email'
+                    label='Email Address'
+                    type='email'
+                    autoComplete='email'
                     value={state.email}
                     onChange={change}
                     error={errors.email && submitted}
@@ -106,8 +106,8 @@ export default function ForgotPasswordComponent({
             <Grid item xs={12}>
                 <Button
                     fullWidth
-                    variant="contained"
-                    color="primary"
+                    variant='contained'
+                    color='primary'
                     onClick={submit}
                 >
                     Submit

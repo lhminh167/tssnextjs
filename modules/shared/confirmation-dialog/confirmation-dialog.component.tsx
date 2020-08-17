@@ -44,29 +44,29 @@ export function ConfirmationDialog({
         <Dialog
             disableBackdropClick
             disableEscapeKeyDown
-            maxWidth="xs"
+            maxWidth='xs'
             open={open}
         >
             <Backdrop
                 className={classes.backdrop}
                 open={isLoading ?? false}
             >
-                <CircularProgress color="inherit" />
+                <CircularProgress color='inherit' />
             </Backdrop>
             <DialogTitle
                 disableTypography
             >
                 <Grid
                     container
-                    direction="row"
-                    justify="space-between"
-                    alignItems="center"
+                    direction='row'
+                    justify='space-between'
+                    alignItems='center'
                 >
                     <Grid
                         item
                     >
                         <Typography
-                            variant="h6"
+                            variant='h6'
                         >
                             {
                                 title ?? 'Confirmation'
@@ -94,13 +94,13 @@ export function ConfirmationDialog({
             <DialogActions>
                 <Button autoFocus
                     onClick={decline}
-                    color="primary"
+                    color='primary'
                 >
                     {
                         declineText ?? 'Cancel'
                     }
                 </Button>
-                <Button onClick={confirm} color="primary">
+                <Button onClick={confirm} color='primary'>
                     {
                         confirmText ?? 'Ok'
                     }

@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { isValidForm } from '../../shared/validator/validator';
@@ -22,14 +23,15 @@ const useStyles = makeStyles(theme => ({
 export default function LoginComponent() {
     const classes = useStyles({});
     const [state, setState] = useState<ILoginRequest>({
-        email: "",
-        password: ""
+        email: '',
+        password: ''
     });
 
     const [submitted, setSubmitted] = useState<boolean>(false);
 
     const errors = new LoginRequestValidator().validate(state);
 
+    const router = useRouter();
     const dispatch = useDispatch();
 
     function change(event) {
@@ -75,66 +77,72 @@ export default function LoginComponent() {
                 className={classes.mb}
 
             >
-                <Typography component="h1" variant="h5">
+                <Typography component='h1' variant='h5'>
                     Sign in
                 </Typography>
             </Grid>
             <TextField
-                variant="outlined"
-                margin="normal"
+                variant='outlined'
+                margin='normal'
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id='email'
+                label='Email Address'
+                name='email'
+                autoComplete='email'
                 autoFocus
                 value={state.email}
                 onChange={change}
                 error={errors.email && submitted}
                 helperText={errors.email && submitted ? errors.email : null}
+                data-cy='email'
+
             />
             <TextField
-                variant="outlined"
-                margin="normal"
+                variant='outlined'
+                margin='normal'
                 required
                 fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
+                name='password'
+                label='Password'
+                type='password'
+                id='password'
+                autoComplete='current-password'
                 value={state.password}
                 onChange={change}
                 error={errors.password && submitted}
                 helperText={errors.password && submitted ? errors.password : null}
                 className={classes.mb2}
+                data-cy='password'
+
             />
             {/* <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
+                        control={<Checkbox value='remember' color='primary' />}
+                        label='Remember me'
                     /> */}
             <Button
-                type="button"
+                type='button'
                 fullWidth
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 className={classes.mb}
                 onClick={submit}
+                data-cy='submit'
             >
                 Sign In
                     </Button>
             <Grid container>
                 <Grid item xs>
                     <Link
-                        href="/user/forgot-password"
+                        href='/user/forgot-password'
                         as='/user/forgot-password'
                         passHref
                     >
                         <Typography
-                            variant="body2"
-                            component="a"
-                            color="primary"
+                            variant='body2'
+                            component='a'
+                            color='primary'
+                            data-cy='forgot-password'
 
                         >
                             Forgot password?
@@ -143,15 +151,20 @@ export default function LoginComponent() {
                 </Grid>
                 <Grid item>
                     <Link
-                        href="/user/register"
+                        href={{
+                            pathname: '/user/register',
+                            query: {
+                                next: router.query.next ?? '/',
+                            }
+                        }}
                         as='/user/register'
                         passHref
                     >
                         <Typography
-                            component="a"
-                            variant="body2"
-                            color="primary"
-
+                            component='a'
+                            variant='body2'
+                            color='primary'
+                            data-cy='register'
                         >
                             Don't have an account? Sign Up
                                 </Typography>

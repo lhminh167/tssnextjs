@@ -15,17 +15,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     group: {
         margin: theme.spacing(1, 0),
-        flexDirection: "row"
+        flexDirection: 'row'
     },
     icon: {
-        borderRadius: "50%",
+        borderRadius: '50%',
         border: 'lightgrey 1px solid',
         width: theme.spacing(2),
         height: theme.spacing(2),
     },
     iconBorder: {
         padding: theme.spacing(0.5),
-        borderRadius: "50%",
+        borderRadius: '50%',
         border: 'transparent 1px solid',
     },
     checkedIcon: {
@@ -79,21 +79,22 @@ function ColorPicker(props: Props) {
             value={color.attributeValueId.toString()}
             control={<Radio icon={icon(color.value)} checkedIcon={checkedIcon(color.value)} />}
             label={null}
+            data-cy='color'
         />
     )) : null;
 
     return (
         <FormControl
-            component="fieldset"
+            component='fieldset'
         // className={classes.formControl}
         >
             <FormLabel
-                component="legend"
+                component='legend'
             >
                 Color
             </FormLabel>
             <RadioGroup
-                name="Color"
+                name='Color'
                 className={classes.group}
                 value={state.attributeValueId.toString()}
                 onChange={handleChange}

@@ -78,8 +78,8 @@ export default function StockOkComponent({
                 className={classes.mb}
             >
                 <Typography
-                    variant="h5"
-                    component="h2"
+                    variant='h5'
+                    component='h2'
                 >
                     Order Confirmation
                 </Typography>
@@ -112,31 +112,31 @@ export default function StockOkComponent({
             >
                 <TextField
                     multiline
-                    name="comments"
-                    variant="outlined"
-                    margin="dense"
+                    name='comments'
+                    variant='outlined'
+                    margin='dense'
                     value={state.comments}
                     onChange={change}
                     error={!state.comments && submitted}
                     helperText={!state.comments && submitted && !isSuccessful ? 'Please specify which products are out of stock.' : null}
                     fullWidth
                     rows={4}
-                // placeholder="The following products are out of stock:&#10;- Green XL Birds T-Shirt. Required Quantity: 10. Avalable Quantity: 09.&#10;- Blue L Wreath T-Shirt. Required Quantity: 05. Avalable Quantity: 02.&#10;- etc."
+                // placeholder='The following products are out of stock:&#10;- Green XL Birds T-Shirt. Required Quantity: 10. Avalable Quantity: 09.&#10;- Blue L Wreath T-Shirt. Required Quantity: 05. Avalable Quantity: 02.&#10;- etc.'
                 />
             </Grid>
             <Grid item xs={12}
             >
                 <Button
-                    variant="contained"
-                    color="primary"
+                    variant='contained'
+                    color='primary'
                     onClick={openSuccessDialog}
                     className={classes.mr}
                 >
                     Yes, they are all in stock
                 </Button>
                 <Button
-                    variant="outlined"
-                    color="primary"
+                    variant='outlined'
+                    color='primary'
                     onClick={openFailureDialog}
                 >
                     No, some of them are out of stock
@@ -146,11 +146,11 @@ export default function StockOkComponent({
                 open={open}
                 close={null}
                 confirm={isSuccessful ? confirmSuccess : confirmFailure}
-                content={"Please confirm this action by clicking the Submit button"}
+                content={'Please confirm this action by clicking the Submit button'}
                 decline={closeDialog}
                 isLoading={isLoading}
-                confirmText="Submit"
-                declineText="Close"
+                confirmText='Submit'
+                declineText='Close'
             />
         </Fragment >
     );

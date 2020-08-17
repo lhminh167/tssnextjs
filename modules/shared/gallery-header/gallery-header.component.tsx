@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
         titleIcon: {
             marginRight: '0.5rem'
         },
-        alignItemsCenter:{
+        alignItemsCenter: {
             alignItems: 'center'
         }
     }),
@@ -41,7 +41,7 @@ export default function GalleryHeaderComponent({
                 &&
                 <Grid container item
                     xs={12}
-                    justify="space-between"
+                    justify='space-between'
                     className={classes.titleBar}
                 >
                     <Grid
@@ -52,7 +52,7 @@ export default function GalleryHeaderComponent({
                     >
                         <Grid
                             className={
-                                classes.titleIcon+' '+classes.alignItemsCenter
+                                classes.titleIcon + ' ' + classes.alignItemsCenter
                             }
                         >
                             {titleIcon}

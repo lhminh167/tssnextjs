@@ -82,20 +82,20 @@ export default function ProductReviewEditComponent({
         <Grid container spacing={3}>
             <Grid item xs={12}>
                 <Typography
-                    component="h3"
-                    variant="subtitle1"
+                    component='h3'
+                    variant='subtitle1'
                     className={classes.bold}
                 >
                     {data.customer.name}
                 </Typography>
                 <Typography
-                    variant="subtitle2"
+                    variant='subtitle2'
                 >
                     {formatDatetime(data.createdOn)}
                 </Typography>
             </Grid>
             <Grid item container xs={12}
-                component="form"
+                component='form'
                 noValidate
             >
                 <Grid
@@ -121,9 +121,9 @@ export default function ProductReviewEditComponent({
                                 multiline
                                 fullWidth
                                 rows={4}
-                                name="review1"
-                                variant="outlined"
-                                margin="dense"
+                                name='review1'
+                                variant='outlined'
+                                margin='dense'
                                 value={state.review1}
                                 onChange={change}
                                 error={errors.review1 && submitted}
@@ -152,7 +152,7 @@ export default function ProductReviewEditComponent({
                         <FormControl
                         >
                             <Rating
-                                name="edit-rating"
+                                name='edit-rating'
                                 value={state.rating}
                                 onClick={change}
                                 max={5}
@@ -160,7 +160,7 @@ export default function ProductReviewEditComponent({
                             {
                                 errors.rating && submitted &&
                                 < FormHelperText
-                                    id="rating"
+                                    id='rating'
                                 >
                                     {errors.rating}
                                 </FormHelperText>
@@ -184,17 +184,17 @@ export default function ProductReviewEditComponent({
                         sm={8}
                     >
                         <Fab
-                            variant="extended"
-                            color="primary"
-                            size="small"
+                            variant='extended'
+                            color='primary'
+                            size='small'
                             onClick={submit}
                             className={classes.mr}
                         >
                             Submit
                         </Fab>
                         <Fab
-                            variant="extended"
-                            size="small"
+                            variant='extended'
+                            size='small'
                             onClick={close}
                         >
                             Cancel

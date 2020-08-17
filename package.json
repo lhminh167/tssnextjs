@@ -7,7 +7,6 @@
         "start": "next start -p $PORT",
         "start:dev": "npm run dev",
         "analyze": "cross-env ANALYZE=true next build",
-        "test": "jest --coverage",
         "coverage:report": "npx nyc report --reporter=text-summary",
         "cy:run": "cypress run",
         "cy:open": "cypress open",
@@ -20,9 +19,9 @@
         "@material-ui/lab": "^4.0.0-alpha.56",
         "@next/bundle-analyzer": "9.2.0",
         "@reduxjs/toolkit": "^1.4.0",
-        "@sentry/browser": "^5.20.1",
+        "@sentry/browser": "^5.21.1",
         "@stripe/react-stripe-js": "^1.1.2",
-        "@stripe/stripe-js": "^1.8.0",
+        "@stripe/stripe-js": "^1.9.0",
         "await-to-js": "2.1.1",
         "dotenv": "^8.2.0",
         "es6-promise": "^4.2.8",
@@ -45,7 +44,6 @@
     "devDependencies": {
         "@cypress/code-coverage": "^1.14.0",
         "@types/chai": "^4.2.12",
-        "@types/jest": "24.0.21",
         "@types/jwt-decode": "^2.2.1",
         "@types/lodash": "^4.14.159",
         "@types/mocha": "^5.2.7",
@@ -56,17 +54,10 @@
         "@types/react-redux": "^7.1.9",
         "cross-env": "^6.0.3",
         "cypress": "^4.12.1",
+        "cypress-wait-until": "^1.7.1",
         "istanbul-lib-coverage": "^2.0.5",
-        "jest": "24.9.0",
         "nyc": "^14.1.1",
         "schema-dts": "^0.5.3",
-        "start-server-and-test": "^1.11.3",
-        "ts-jest": "24.1.0"
-    },
-    "jest": {
-        "collectCoverage": true,
-        "coverageReporters": [
-            "html"
-        ]
+        "start-server-and-test": "^1.11.3"
     }
 }

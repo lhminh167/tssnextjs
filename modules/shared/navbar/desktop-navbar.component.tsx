@@ -1,28 +1,29 @@
-import AppBar from "@material-ui/core/AppBar";
-import Badge from "@material-ui/core/Badge";
-import IconButton from "@material-ui/core/IconButton";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
-import Link from "next/link";
-import React, { Fragment } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { currentUserSlice } from "../../customer/customer.slice";
-import { IRootState } from "../../root/root.model";
-import BrandComponent from "../brand/brand.component";
-import { toNumber } from "../helpers/auth.helper";
-import { transitionWidth, themeColor } from "../layout/layout.theme";
-import SearchComponent from "../search/search.component";
-import { Avatar, Popover, List, ListItem, ListItemText, Tooltip, ListItemSecondaryAction, ListSubheader } from "@material-ui/core";
-import { Customer } from "../../customer/customer.model";
+import { Avatar, List, ListItem, ListItemSecondaryAction, ListItemText, ListSubheader, Tooltip } from '@material-ui/core';
+import AppBar from '@material-ui/core/AppBar';
+import Badge from '@material-ui/core/Badge';
+import IconButton from '@material-ui/core/IconButton';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
+import Link from 'next/link';
+import React, { Fragment } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Customer } from '../../customer/customer.model';
+import { currentUserSlice } from '../../customer/customer.slice';
+import { IRootState } from '../../root/root.model';
+import BrandComponent from '../brand/brand.component';
+import { toNumber } from '../helpers/auth.helper';
+import { themeColor, transitionWidth } from '../layout/layout.theme';
+import SearchComponent from '../search/search.component';
+import { SHOPPING_CART, TOTAL_QUANTITY } from './navbar.tag';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         sectionDesktop: {
-            display: "none",
+            display: 'none',
             [theme.breakpoints.up(transitionWidth)]: {
-                display: "flex"
+                display: 'flex'
             }
         },
         grow: {
@@ -47,21 +48,21 @@ const NotLoggedInComponent = () => {
     const classes = useStyles({});
     return (
         <Fragment>
-            <Link href="/user/login" as="/user/login" passHref>
+            <Link href='/user/login' as='/user/login' passHref>
                 <Typography
-                    variant="subtitle2"
-                    component="a"
-                    color="primary"
+                    variant='subtitle2'
+                    component='a'
+                    color='primary'
                     className={classes.seperator}
                 >
                     Login
                 </Typography>
             </Link>
-            <Link href="/user/register" as="/user/register" passHref>
+            <Link href='/user/register' as='/user/register' passHref>
                 <Typography
-                    variant="subtitle2"
-                    component="a"
-                    color="primary"
+                    variant='subtitle2'
+                    component='a'
+                    color='primary'
                     className={classes.seperator}
                 >
                     Register
@@ -75,7 +76,7 @@ const LoggedInComponent = () => {
     const classes = useStyles({});
     const dispatch = useDispatch();
     const isAdmin = useSelector<IRootState, boolean>(
-        state => state.currentUser.data.role === "Admin"
+        state => state.currentUser.data.role === 'Admin'
     );
     const userId = useSelector<IRootState, number>(
         state => toNumber(state.currentUser.data.customerId)
@@ -89,41 +90,41 @@ const LoggedInComponent = () => {
         <Fragment>
             {
                 isAdmin &&
-                <Link href="/admin" as="/admin" passHref>
+                <Link href='/admin' as='/admin' passHref>
                     <Typography
-                        variant="subtitle2"
-                        component="a"
-                        color="primary"
+                        variant='subtitle2'
+                        component='a'
+                        color='primary'
                         className={classes.seperator}
                     >
                         Admin
                     </Typography>
                 </Link>
             }
-            <Link href="/order" as="/order" passHref>
+            <Link href='/order' as='/order' passHref>
                 <Typography
-                    variant="subtitle2"
-                    component="a"
-                    color="primary"
+                    variant='subtitle2'
+                    component='a'
+                    color='primary'
                     className={classes.seperator}
                 >
                     Orders
             </Typography>
             </Link>
-            <Link href="/wish-list" as="/wish-list" passHref>
+            <Link href='/wish-list' as='/wish-list' passHref>
                 <Typography
-                    variant="subtitle2"
-                    component="a"
-                    color="primary"
+                    variant='subtitle2'
+                    component='a'
+                    color='primary'
                     className={classes.seperator}
                 >
                     Wishlist
             </Typography>
             </Link>
             <Typography
-                variant="subtitle2"
-                component="a"
-                color="primary"
+                variant='subtitle2'
+                component='a'
+                color='primary'
                 className={classes.seperator}
                 onClick={logout}
             >
@@ -146,50 +147,52 @@ export default function DesktopNavbarComponent() {
     );
 
     return (
-        <AppBar className={classes.sectionDesktop} color="default">
+        <AppBar className={classes.sectionDesktop} color='default'>
             <Toolbar>
                 <BrandComponent />
-                <Link href="/product" as="/product" passHref>
+                <Link href='/product' as='/product' passHref>
                     <Typography
-                        variant="subtitle2"
-                        component="a"
-                        color="primary"
+                        variant='subtitle2'
+                        component='a'
+                        color='primary'
                         className={classes.seperator}
                         title={`Search for products on ${process.env.SITE_NAME}`}
                     >
                         Search
                     </Typography>
                 </Link>
-                <Link href="/department" as="/department" passHref>
+                <Link href='/department' as='/department' passHref>
                     <Typography
-                        variant="subtitle2"
-                        component="a"
-                        color="primary"
+                        variant='subtitle2'
+                        component='a'
+                        color='primary'
                         className={classes.seperator}
-                        title="List of Departments and Categories"
+                        title='List of Departments and Categories'
                     >
                         Departments
                     </Typography>
                 </Link>
                 {isLoggedIn ? <LoggedInComponent /> : <NotLoggedInComponent />}
                 <div className={classes.grow} />
-                <SearchComponent className={""} fullWidth={false} />
+                <SearchComponent className={''} fullWidth={false} />
                 <Link
-                    href="/shopping-cart"
-                    as="/shopping-cart"
+                    href='/shopping-cart'
+                    as='/shopping-cart'
                     passHref
                 >
                     <IconButton
-                        component="a"
+                        component='a'
                         className={classes.seperator}
-                        title="Shopping Cart"
+                        title='Shopping Cart'
+                        data-cy={SHOPPING_CART}
                     >
                         <Badge
                             badgeContent={itemCount ?? 0}
-                            color="primary"
+                            color='primary'
+                            data-cy={TOTAL_QUANTITY}
                         >
                             <ShoppingCartOutlinedIcon
-                                color="primary"
+                                color='primary'
                             />
                         </Badge>
                     </IconButton>
@@ -204,8 +207,8 @@ export default function DesktopNavbarComponent() {
                         passHref
                     >
                         <IconButton
-                            component="a"
-                            title="Customer Area"
+                            component='a'
+                            title='Customer Area'
                             className={classes.seperator}
                         >
                             <Tooltip
@@ -223,7 +226,7 @@ export default function DesktopNavbarComponent() {
                                         >
                                             <ListItem>
                                                 <ListItemText
-                                                    primary="Name:"
+                                                    primary='Name:'
                                                 />
                                                 <ListItemSecondaryAction>
                                                     <Typography
@@ -234,7 +237,7 @@ export default function DesktopNavbarComponent() {
                                             </ListItem>
                                             <ListItem>
                                                 <ListItemText
-                                                    primary="Email:"
+                                                    primary='Email:'
                                                 />
                                                 <ListItemSecondaryAction>
                                                     <Typography
@@ -246,7 +249,7 @@ export default function DesktopNavbarComponent() {
 
                                             <ListItem>
                                                 <ListItemText
-                                                    primary="Role:"
+                                                    primary='Role:'
                                                 />
                                                 <ListItemSecondaryAction>
                                                     <Typography

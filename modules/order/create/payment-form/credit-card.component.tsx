@@ -1,11 +1,11 @@
-import { createStyles, Grid, makeStyles } from "@material-ui/core";
+import { createStyles, Grid, makeStyles } from '@material-ui/core';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import React from "react";
-import { useDispatch } from "react-redux";
-import ActionButtonsComponent from "../../../shared/action-buttons/action-buttons.component";
-import { p, w100 } from "../../../shared/layout/layout.style";
-import { shoppingCartItemCountSlice } from "../../../shopping-cart/shopping-cart.slice";
-import { createOrder } from "../../order.service";
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import ActionButtonsComponent from '../../../shared/action-buttons/action-buttons.component';
+import { p, w100 } from '../../../shared/layout/layout.style';
+import { shoppingCartItemCountSlice } from '../../../shopping-cart/shopping-cart.slice';
+import { createOrder } from '../../order.service';
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -47,7 +47,7 @@ export default function CreditCardComponent({
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card: cardElement,
-            billing_details: { name: "cardholderName.value" }
+            billing_details: { name: 'cardholderName.value' }
         });
         if (!paymentMethod) return;
 
@@ -70,7 +70,7 @@ export default function CreditCardComponent({
         <form
             className={classes.w100}
         >
-            {/* <Typography variant="h6" gutterBottom>
+            {/* <Typography variant='h6' gutterBottom>
                 Payment method
             </Typography> */}
             <CardElement

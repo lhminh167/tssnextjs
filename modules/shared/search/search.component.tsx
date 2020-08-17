@@ -2,7 +2,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
-import throttle from "lodash/throttle";
+import throttle from 'lodash/throttle';
 import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import productFilterSlice from '../../product/filter/product-filter.slice';
@@ -21,7 +21,7 @@ const searchTheme = createMuiTheme({
                 border: 'none',
             },
             root: {
-                background: "#fce4ec"
+                background: '#fce4ec'
             }
         },
         MuiIconButton: {
@@ -83,17 +83,17 @@ export default function SearchComponent({
             <TextField
                 InputProps={{
                     startAdornment: (
-                        <InputAdornment position="start">
+                        <InputAdornment position='start'>
                             <SearchIcon
-                                color="primary"
+                                color='primary'
                             />
                         </InputAdornment>
                     ),
                     endAdornment: state ? (
-                        <InputAdornment position="end">
+                        <InputAdornment position='end'>
                             <IconButton
                                 onClick={clear}
-                                size="small"
+                                size='small'
                             >
                                 <ClearIcon
                                 />
@@ -101,8 +101,8 @@ export default function SearchComponent({
                         </InputAdornment>
                     ) : null,
                 }}
-                variant="outlined"
-                margin="dense"
+                variant='outlined'
+                margin='dense'
                 fullWidth={fullWidth}
                 className={className}
                 onChange={change}

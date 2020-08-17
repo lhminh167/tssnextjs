@@ -1,11 +1,11 @@
 import Head from "next/head";
 import React from "react";
-import ErrorBoundary from "../modules/shared/error-boundary/error-boundary.component";
-import Layout from "../modules/shared/layout/layout.component";
 import { Provider } from "react-redux";
 import { store } from "../modules/root/root.store";
+import ErrorBoundary from "../modules/shared/error-boundary/error-boundary.component";
+import Layout from "../modules/shared/layout/layout.component";
 
-function App(props) {
+export default function App(props) {
     return (
         <ErrorBoundary>
             <Head>
@@ -25,4 +25,5 @@ function App(props) {
     );
 }
 
-export default App;
+//@ts-ignore
+if (typeof window !== "undefined" && window.Cypress) window.store = store;

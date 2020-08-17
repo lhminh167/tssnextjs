@@ -66,8 +66,8 @@ export default function PaginationComponent({
                 >
                     <IconButton
                         disabled={page === 0}
-                        aria-label="first page"
-                        component="a"
+                        aria-label='first page'
+                        component='a'
                     >
                         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
                     </IconButton>
@@ -77,7 +77,7 @@ export default function PaginationComponent({
                 !firstPageUrl &&
                 <IconButton
                     disabled={page === 0}
-                    aria-label="first page"
+                    aria-label='first page'
                     onClick={toFirstPage}
                 >
                     {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
@@ -91,8 +91,8 @@ export default function PaginationComponent({
                 >
                     <IconButton
                         disabled={page === 0}
-                        aria-label="previous page"
-                        component="a"
+                        aria-label='previous page'
+                        component='a'
                     >
                         {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
                     </IconButton>
@@ -102,7 +102,7 @@ export default function PaginationComponent({
                 !previousPageUrl &&
                 <IconButton
                     disabled={page === 0}
-                    aria-label="previous page"
+                    aria-label='previous page'
                     onClick={toPreviousPage}
                 >
                     {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
@@ -116,8 +116,8 @@ export default function PaginationComponent({
                 >
                     <IconButton
                         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                        aria-label="next page"
-                        component="a"
+                        aria-label='next page'
+                        component='a'
                     >
                         {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
                     </IconButton>
@@ -127,7 +127,7 @@ export default function PaginationComponent({
                 !nextPageUrl &&
                 <IconButton
                     disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                    aria-label="next page"
+                    aria-label='next page'
                     onClick={toNextPage}
                 >
                     {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
@@ -141,8 +141,8 @@ export default function PaginationComponent({
                 >
                     <IconButton
                         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                        aria-label="last page"
-                        component="a"
+                        aria-label='last page'
+                        component='a'
                     >
                         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
                     </IconButton>
@@ -152,7 +152,7 @@ export default function PaginationComponent({
                 !lastPageUrl &&
                 <IconButton
                     disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                    aria-label="last page"
+                    aria-label='last page'
                     onClick={toLastPage}
                 >
                     {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}

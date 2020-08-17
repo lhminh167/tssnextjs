@@ -1,29 +1,35 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IState } from "../shared/crud/crud.model";
-import { failed, idle, pending, succeeded } from "../shared/crud/crud.reducer";
-import { crudInitialState } from "../shared/crud/crud.state";
-import { Customer, customerUrl, defaultCustomer, ICreateCustomerRequest, ILoginRequest } from "./customer.model";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IState } from '../shared/crud/crud.model';
+import { failed, idle, pending, succeeded } from '../shared/crud/crud.reducer';
+import { crudInitialState } from '../shared/crud/crud.state';
+import { Customer, apiCustomerUrl, defaultCustomer, ICreateCustomerRequest, ILoginRequest } from './customer.model';
+import { IRootState } from '../root/root.model';
 
-const initialState: IState<Customer> = crudInitialState(defaultCustomer);
+type CurrentUserState = IState<Customer>;
+type CurrentUserAction = PayloadAction<Customer>;
+
+const initialState: CurrentUserState = crudInitialState(defaultCustomer);
+
+export const customerIdSelector = (state: IRootState) => state?.currentUser?.data?.customerId;
 
 export const currentUserSlice = createSlice({
-    name: customerUrl.baseUrl,
+    name: apiCustomerUrl.baseUrl,
     initialState,
     reducers: {
         loginPending(
-            state: IState<Customer>,
+            state: CurrentUserState,
             action: PayloadAction<ILoginRequest>
         ) {
             pending(state);
         },
-        loginSucceeded(state: IState<Customer>, action: PayloadAction<Customer>) {
+        loginSucceeded(state: CurrentUserState, action: CurrentUserAction) {
             state.data = action.payload;
             succeeded(state);
         },
-        loginFailed(state: IState<Customer>, action: PayloadAction<Customer>) {
+        loginFailed(state: CurrentUserState, action: CurrentUserAction) {
             failed(state, action);
         },
-        logout(state: IState<Customer>) {
+        logout(state: CurrentUserState) {
             return {
                 ...initialState
             }
@@ -31,46 +37,46 @@ export const currentUserSlice = createSlice({
 
 
         createCustomerPending(
-            state: IState<Customer>,
+            state: CurrentUserState,
             action: PayloadAction<ICreateCustomerRequest>
         ) {
             pending(state);
         },
-        createCustomerSucceeded(state: IState<Customer>, action: PayloadAction<Customer>) {
+        createCustomerSucceeded(state: CurrentUserState, action: CurrentUserAction) {
             state.data = action.payload;
             succeeded(state);
         },
-        createCustomerFailed(state: IState<Customer>, action: PayloadAction<Customer>) {
+        createCustomerFailed(state: CurrentUserState, action: CurrentUserAction) {
             failed(state, action);
         },
 
 
-        setCurrentUser(state: IState<Customer>, action: PayloadAction<Customer>) {
+        setCurrentUser(state: CurrentUserState, action: CurrentUserAction) {
             state.data = action.payload;
         },
 
 
         getCustomerPending(
-            state: IState<Customer>,
+            state: CurrentUserState,
             action: PayloadAction<number>
         ) {
             pending(state);
         },
         getCustomerSucceeded(
-            state: IState<Customer>,
-            action: PayloadAction<Customer>
+            state: CurrentUserState,
+            action: CurrentUserAction
         ) {
             state.data = action.payload;
             succeeded(state);
         },
         getCustomerFailed(
-            state: IState<Customer>,
-            action: PayloadAction<Customer>
+            state: CurrentUserState,
+            action: CurrentUserAction
         ) {
             failed(state, action);
         },
         getCustomerIdle(
-            state: IState<Customer>
+            state: CurrentUserState
         ) {
             idle(state, initialState);
         },

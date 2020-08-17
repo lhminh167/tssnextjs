@@ -1,7 +1,18 @@
 import { Validator } from 'fluentvalidation-ts';
 import { defaultShippingRegion, ShippingRegion } from '../shared/models/shipping-region.model';
 
-const customerBaseUrl = 'Customer';
+const apiCustomerBaseUrl = 'Customer';
+
+export const apiCustomerUrl = {
+    baseUrl: apiCustomerBaseUrl,
+    register: apiCustomerBaseUrl + '/' + 'register',
+    login: apiCustomerBaseUrl + '/' + 'login',
+    updatePassword: (customerId: number) => `${apiCustomerBaseUrl}/${customerId}/Password`,
+    forgotPassword: `${apiCustomerBaseUrl}/ForgotPassword`,
+    resetPassword: (customerId: number, resetPasswordToken: string) => `${apiCustomerBaseUrl}/${customerId}/ResetPassword/${resetPasswordToken}`,
+}
+
+const customerBaseUrl = 'user';
 
 export const customerUrl = {
     baseUrl: customerBaseUrl,
@@ -31,20 +42,20 @@ export interface Customer {
 }
 
 export const defaultCustomer: Customer = {
-    customerId: "0",
-    name: "Visitor",
-    email: "",
-    // creditCard: "",
-    address1: "",
-    address2: "",
-    city: "",
-    region: "",
-    postalCode: "",
-    country: "",
+    customerId: '0',
+    name: 'Visitor',
+    email: '',
+    // creditCard: '',
+    address1: '',
+    address2: '',
+    city: '',
+    region: '',
+    postalCode: '',
+    country: '',
     shippingRegion: defaultShippingRegion,
-    dayPhone: "",
-    evePhone: "",
-    mobPhone: "",
+    dayPhone: '',
+    evePhone: '',
+    mobPhone: '',
     role: '',
 };
 
@@ -98,10 +109,10 @@ export class CreateCustomerRequestValidator extends Validator<ICreateCustomerReq
 }
 
 export const defaultCreateCustomerRequest = {
-    email: "",
-    name: "",
-    password: "",
-    role: "Customer"
+    email: '',
+    name: '',
+    password: '',
+    role: 'Customer'
 }
 
 export interface CustomerUpdateRequest {
@@ -124,20 +135,20 @@ export interface CustomerUpdateRequest {
 
 export const defaultCustomerUpdateRequest: CustomerUpdateRequest = {
     customerId: 0,
-    name: "Visitor",
-    email: "",
-    // creditCard: "",
-    address1: "",
-    address2: "",
-    city: "",
-    region: "",
-    postalCode: "",
-    country: "",
+    name: 'Visitor',
+    email: '',
+    // creditCard: '',
+    address1: '',
+    address2: '',
+    city: '',
+    region: '',
+    postalCode: '',
+    country: '',
     shippingRegionId: 0,
-    dayPhone: "",
-    evePhone: "",
-    mobPhone: "",
-    role: "Customer"
+    dayPhone: '',
+    evePhone: '',
+    mobPhone: '',
+    role: 'Customer'
 }
 
 export class CustomerUpdateRequestValidator extends Validator<CustomerUpdateRequest> {
@@ -172,9 +183,9 @@ export interface CustomerUpdatePasswordState {
 }
 
 export const defaultCustomerUpdatePasswordState: CustomerUpdatePasswordState = {
-    currentPassword: "",
-    newPassword: "",
-    confirmNewPassword: "",
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
 }
 
 export class CustomerUpdatePasswordStateValidator extends Validator<CustomerUpdatePasswordState> {

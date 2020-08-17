@@ -22,6 +22,7 @@ import { ProductFilterFilterEnum } from '../filter/product-filter.model';
 import ProductDetailImageComponent from './product-detail-image.component';
 import { removeProduct } from './product-detail.service';
 import { setLoginToken } from '../../shared/helpers/token.helper';
+import { ADD_TO_CART, ADD_TO_WISH_LIST } from './product-detail.tag';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,7 +51,7 @@ export default function ProductDetailCardComponent({
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const isAdmin = useSelector<IRootState, boolean>(
-        state => state.currentUser.data.role === "Admin"
+        state => state.currentUser.data.role === 'Admin'
     );
 
     async function handleAddToCart(buyNow: boolean) {
@@ -99,8 +100,8 @@ export default function ProductDetailCardComponent({
 
                 >
                     <Typography
-                        component="h1"
-                        variant="h4"
+                        component='h1'
+                        variant='h4'
                         gutterBottom
                     >
                         {data.name}
@@ -109,13 +110,13 @@ export default function ProductDetailCardComponent({
                 <Grid item xs={12}
                     container
                     direction='row'
-                    alignItems="flex-end"
+                    alignItems='flex-end'
                     className={classes.mb}
                 >
                     <Typography
-                        component="h2"
-                        variant="h5"
-                        color="primary"
+                        component='h2'
+                        variant='h5'
+                        color='primary'
                         className={data.discountedPrice > 0 ? classes.mr : null}
                     >
                         {formatCurrency(
@@ -127,9 +128,9 @@ export default function ProductDetailCardComponent({
                     {
                         data.discountedPrice > 0 &&
                         <Typography
-                            component="s"
-                            variant="subtitle1"
-                            color="initial"
+                            component='s'
+                            variant='subtitle1'
+                            color='initial'
                         >
                             {formatCurrency(data.price)}
                         </Typography>
@@ -139,8 +140,8 @@ export default function ProductDetailCardComponent({
                     className={classes.mb}
                 >
                     <Typography
-                        component="p"
-                        variant="subtitle2"
+                        component='p'
+                        variant='subtitle2'
                         gutterBottom
                     >
                         {data.description}
@@ -161,9 +162,9 @@ export default function ProductDetailCardComponent({
                                 passHref
                             >
                                 <Button
-                                    component="a"
-                                    color="primary"
-                                    variant="contained"
+                                    component='a'
+                                    color='primary'
+                                    variant='contained'
                                     className={classes.mr}
                                 >
                                     Edit
@@ -171,8 +172,8 @@ export default function ProductDetailCardComponent({
                             </Link>
                             <Button
                                 onClick={openDialog}
-                                color="inherit"
-                                variant="contained"
+                                color='inherit'
+                                variant='contained'
                             >
                                 Delete
                                 </Button>
@@ -209,13 +210,14 @@ export default function ProductDetailCardComponent({
                 </Grid>
                 <Grid item container
                     xs={12}
-                    alignItems="center"
+                    alignItems='center'
                 >
                     <Fab
-                        variant="extended"
-                        color="primary"
+                        variant='extended'
+                        color='primary'
                         onClick={() => { handleAddToCart(true) }}
                         className={classes.mr + ' ' + classes.mb}
+                        data-cy={ADD_TO_CART}
                     >
                         Add To Cart
                     </Fab>
@@ -224,9 +226,10 @@ export default function ProductDetailCardComponent({
                         onClick={() => { handleAddToCart(false) }}
                         startIcon={
                             <FavoriteBorderIcon
-                                color="primary"
+                                color='primary'
                             />
                         }
+                        data-cy={ADD_TO_WISH_LIST}
                     >
                         Add to Wish List
                     </Button>

@@ -1,33 +1,40 @@
 import Router from 'next/router';
+import { store } from '../../root/root.store';
 import { decodeLoginToken } from './token.helper';
-
-export function redirect(ctx: any, toUrl: string, fromUrl: string = '/') {
-    const { req, res } = ctx;
-    const isServer = !!req;
-    if (isServer) {
-        res.writeHead(302, {
-            Location: `${toUrl}?next=${req?.originalUrl ?? fromUrl}`,
-        });
-        res.end();
-    } else {
-        Router.push(`${toUrl}?next=${ctx.asPath}`);
-    }
-}
+import { customerIdSelector } from '../../customer/customer.slice';
+import { IRootState } from '../../root/root.model';
 
 export function toNumber(string: string) {
     const parsed = parseInt(string);
     return isNaN(parsed) ? 0 : parsed;
 }
 
+export function getCustomerIdStringFromStore(): string {
+    return customerIdSelector(store.getState() as IRootState);
+}
+
 export function getCustomerIdNumberFromLoginToken(): number {
     return toNumber(decodeLoginToken()?.customerId);
 }
 
-export function getCustomerIdNumberFromStore(store): number {
-    return toNumber(store?.getState()?.currentUser?.data?.customerId);
+export function getCustomerIdNumberFromStore(): number {
+    return toNumber(getCustomerIdStringFromStore());
 }
 
 export function goTo(url: string) {
-    Router.push(url);
+    Router.push(url ?? '/');
 }
 
+export function backToPreviousPage() {
+    goTo(Router.query.next as string);
+}
+
+export function allowCustomer() {
+    const customerId = getCustomerIdNumberFromStore();
+    if (customerId <= 0) goTo('/user/login');
+}
+
+export function allowAnonymous() {
+    const customerId = getCustomerIdStringFromStore();
+    if (!customerId) goTo('/user/login');
+}

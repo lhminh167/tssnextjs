@@ -8,6 +8,9 @@ import EditProductComponent from "../../../../modules/product/edit/edit-product.
 import { getProducts } from "../../../../modules/product/filter/product-filter.service";
 import { defaultProductSearchRequest } from "../../../../modules/product/filter/product-filter.model";
 import { getProduct } from "../../../../modules/product/detail/product-detail.service";
+import { defaultPaginationRequest } from "../../../../modules/shared/crud/crud.model";
+import { toUrl } from "../../../../modules/shared/helpers/string.helper";
+import { allowCustomer } from "../../../../modules/shared/helpers/auth.helper";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -24,9 +27,7 @@ export default function ProductEditPage({
     const classes = useStyles({});
     const router = useRouter();
 
-    useEffect(() => {
-        if (!getLoginToken()) router.push("/user/login");
-    }, []);
+    useEffect(() => allowCustomer(), []);
 
     return (
         <Container>
@@ -39,14 +40,15 @@ export default function ProductEditPage({
     );
 }
 
+
 export async function getStaticPaths() {
 
-    const res = await getProducts(defaultProductSearchRequest)
+    const res = await getProducts({ ...defaultProductSearchRequest, ...defaultPaginationRequest })
     const items: IProduct[] = res.content.items;
 
     const paths = items.map((item) => ({
         params: {
-            productName: item.name.toString(),
+            productName: toUrl(item.name),
             productId: item.productId.toString()
         },
     }))
@@ -55,11 +57,10 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-
-    const response = await getProduct(params.productId);
+    const response: any = await getProduct(params.productId);
 
     return {
         props: { data: response.content },
-        revalidate: null
+        revalidate: 5
     }
-}
+};

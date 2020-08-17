@@ -1,13 +1,12 @@
 import { Container } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
-import CustomerEditComponent from '../../../modules/customer/edit/edit-customer.component';
-import { redirect, toNumber } from '../../../modules/shared/helpers/auth.helper';
-import ErrorBoundary from '../../../modules/shared/error-boundary/error-boundary.component';
-import { mb, mt } from '../../../modules/shared/layout/layout.style';
-import { CustomerEditMetadataComponent } from '../../../modules/customer/edit/edit-customer-metadata.component';
 import { useRouter } from 'next/router';
-import { getLoginToken } from '../../../modules/shared/helpers/token.helper';
+import React, { useEffect } from 'react';
+import { CustomerEditMetadataComponent } from '../../../modules/customer/edit/edit-customer-metadata.component';
+import CustomerEditComponent from '../../../modules/customer/edit/edit-customer.component';
+import ErrorBoundary from '../../../modules/shared/error-boundary/error-boundary.component';
+import { allowCustomer, toNumber } from '../../../modules/shared/helpers/auth.helper';
+import { mb, mt } from '../../../modules/shared/layout/layout.style';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,9 +24,7 @@ export default function CustomerEditPage({
     const router = useRouter();
     const userId = toNumber(router.query.userId as string);
 
-    useEffect(() => {
-        if (!getLoginToken()) router.push("/user/login");
-    }, []);
+    useEffect(() => allowCustomer(), []);
 
     return (
         <Container

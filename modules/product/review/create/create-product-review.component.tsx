@@ -90,8 +90,8 @@ export default function CreateReviewComponent({
                 className={classes.mb2}
             >
                 <Typography
-                    component="h2"
-                    variant="h5"
+                    component='h2'
+                    variant='h5'
                     className={classes.bold}
                 >
                     Add a review
@@ -102,30 +102,30 @@ export default function CreateReviewComponent({
                     (
                         <Grid item xs={12}>
                             <Typography
-                                component="span"
-                                variant="subtitle2"
+                                component='span'
+                                variant='subtitle2'
                             >
                                 Please <Link
-                                    href="/user/login"
-                                    as="/user/login"
+                                    href='/user/login'
+                                    as='/user/login'
                                     passHref
                                 >
                                     <Typography
-                                        color="primary"
-                                        variant="subtitle2"
-                                        component="a"
+                                        color='primary'
+                                        variant='subtitle2'
+                                        component='a'
                                     >
                                         login
                                 </Typography>
                                 </Link> or <Link
-                                    href="/user/register"
-                                    as="/user/register"
+                                    href='/user/register'
+                                    as='/user/register'
                                     passHref
                                 >
                                     <Typography
-                                        color="primary"
-                                        variant="subtitle2"
-                                        component="a"
+                                        color='primary'
+                                        variant='subtitle2'
+                                        component='a'
                                     >
                                         register
                                     </Typography>
@@ -139,7 +139,7 @@ export default function CreateReviewComponent({
                             item
                             container
                             xs={12}
-                            component="form"
+                            component='form'
                             noValidate
                         >
                             <Grid
@@ -166,9 +166,9 @@ export default function CreateReviewComponent({
                                             multiline
                                             fullWidth
                                             rows={4}
-                                            name="review1"
-                                            variant="outlined"
-                                            margin="dense"
+                                            name='review1'
+                                            variant='outlined'
+                                            margin='dense'
                                             value={state.review1}
                                             onChange={change}
                                             error={errors.review1 && submitted}
@@ -201,7 +201,7 @@ export default function CreateReviewComponent({
                                         error
                                     >
                                         <Rating
-                                            name="create-rating"
+                                            name='create-rating'
                                             value={state.rating}
                                             onClick={change}
                                         />
@@ -231,8 +231,8 @@ export default function CreateReviewComponent({
                                     sm={8}
                                 >
                                     <Fab
-                                        variant="extended"
-                                        color="primary"
+                                        variant='extended'
+                                        color='primary'
                                         onClick={submit}
                                     >
                                         Submit

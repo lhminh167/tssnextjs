@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Theme, Typography } from "@material-ui/core";
+import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
 import Link from 'next/link';
 
 interface IProps {
@@ -10,15 +10,15 @@ function BrandComponent(props: IProps) {
 
     return (
         <Link
-            href="/"
-            as="/"
+            href='/'
+            as='/'
             passHref
         >
             <Typography
                 className={className}
-                variant="h6"
-                component="a"
-                color="primary"
+                variant='h6'
+                component='a'
+                color='primary'
             >
                 {process.env.SITE_NAME.toUpperCase()}
             </Typography>

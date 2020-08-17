@@ -1,5 +1,5 @@
-import { defaultProduct, IProduct } from "../shared/models/product.model";
-import { PaginationRequest, defaultPaginationRequest, PaginatedList, defaultPaginationList } from "../shared/crud/crud.model";
+import { defaultProduct, IProduct } from '../shared/models/product.model';
+import { PaginationRequest, defaultPaginationRequest, PaginatedList, defaultPaginationList } from '../shared/crud/crud.model';
 import querystring from 'query-string';
 
 const shoppingCartBaseUrl = 'shoppingCart';

@@ -26,8 +26,8 @@ export default function CustomerIndexComponent(props) {
     return (
         <Fragment>
             <Typography
-                component="h1"
-                variant="h6"
+                component='h1'
+                variant='h6'
                 gutterBottom
             >
                 User Area
@@ -44,14 +44,14 @@ export default function CustomerIndexComponent(props) {
                 >
                     <ListItem
                         button
-                        component="a"
+                        component='a'
                     >
                         <ListItemIcon>
                             <VisibilityIcon />
                         </ListItemIcon>
 
                         <ListItemText
-                            primary="View Account"
+                            primary='View Account'
                         />
                     </ListItem>
                 </Link>
@@ -65,14 +65,14 @@ export default function CustomerIndexComponent(props) {
 
                     <ListItem
                         button
-                        component="a"
+                        component='a'
                     >
                         <ListItemIcon>
                             <EditIcon />
                         </ListItemIcon>
 
                         <ListItemText
-                            primary="Edit Account"
+                            primary='Edit Account'
                         />
                     </ListItem>
                 </Link>
@@ -85,14 +85,14 @@ export default function CustomerIndexComponent(props) {
                 >
                     <ListItem
                         button
-                        component="a"
+                        component='a'
                     >
                         <ListItemIcon>
                             <LockOutlinedIcon />
                         </ListItemIcon>
 
                         <ListItemText
-                            primary="Change Password"
+                            primary='Change Password'
                         />
                     </ListItem>
                 </Link>

@@ -1,21 +1,21 @@
-import { Button, Grid, InputAdornment, makeStyles, MenuItem, TextField, Typography } from "@material-ui/core";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { IRootState } from "../../root/root.model";
-import { ConfirmationDialog } from "../../shared/confirmation-dialog/confirmation-dialog.component";
-import { UploadRequest } from "../../shared/crud/crud.model";
-import { upload } from "../../shared/crud/crud.service";
-import { toNumber } from "../../shared/helpers/auth.helper";
-import { toUrl } from "../../shared/helpers/string.helper";
-import { IAttributeValue } from "../../shared/models/attribute-value.model";
-import { IProduct, productDisplayOptions } from "../../shared/models/product.model";
-import UploadComponent from "../../shared/upload/upload.component";
-import { isValidForm } from "../../shared/validator/validator";
-import { IProductFilterCategory, ProductFilterFilterEnum } from "../filter/product-filter.model";
-import { defaultEditProductState, EditProductRequestValidator, IEditProductRequest, IEditProductState, defaultFile } from "./edit-product.model";
-import { editProduct } from "./edit-product.service";
-import productFilterSlice from "../filter/product-filter.slice";
+import { Button, Grid, InputAdornment, makeStyles, MenuItem, TextField, Typography } from '@material-ui/core';
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from '../../root/root.model';
+import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmation-dialog.component';
+import { UploadRequest } from '../../shared/crud/crud.model';
+import { upload } from '../../shared/crud/crud.service';
+import { toNumber } from '../../shared/helpers/auth.helper';
+import { toUrl } from '../../shared/helpers/string.helper';
+import { IAttributeValue } from '../../shared/models/attribute-value.model';
+import { IProduct, productDisplayOptions } from '../../shared/models/product.model';
+import UploadComponent from '../../shared/upload/upload.component';
+import { isValidForm } from '../../shared/validator/validator';
+import { IProductFilterCategory, ProductFilterFilterEnum } from '../filter/product-filter.model';
+import { defaultEditProductState, EditProductRequestValidator, IEditProductRequest, IEditProductState, defaultFile } from './edit-product.model';
+import { editProduct } from './edit-product.service';
+import productFilterSlice from '../filter/product-filter.slice';
 
 
 const useStyles = makeStyles(theme => ({
@@ -142,19 +142,19 @@ export default function EditProductComponent({
 
     return (
         <Grid container spacing={2}
-            component="form"
+            component='form'
             noValidate
         >
             <Grid
                 container
                 item
                 xs={12}
-                justify="center"
+                justify='center'
 
             >
                 <Typography
-                    component="h1"
-                    variant="h5"
+                    component='h1'
+                    variant='h5'
 
                 >
                     Edit Product
@@ -162,13 +162,13 @@ export default function EditProductComponent({
             </Grid>
             <Grid item xs={12}>
                 <TextField
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    size="small"
-                    label="Name"
-                    name="name"
-                    autoComplete="name"
+                    size='small'
+                    label='Name'
+                    name='name'
+                    autoComplete='name'
                     value={state.name}
                     onChange={change}
                     InputLabelProps={{ shrink: true }}
@@ -179,13 +179,13 @@ export default function EditProductComponent({
             <Grid item xs={12}>
                 <TextField
                     multiline
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    size="small"
-                    label="Description"
-                    name="description"
-                    autoComplete="description"
+                    size='small'
+                    label='Description'
+                    name='description'
+                    autoComplete='description'
                     value={state.description}
                     onChange={change}
                     InputLabelProps={{ shrink: true }}
@@ -195,52 +195,52 @@ export default function EditProductComponent({
             </Grid>
             <Grid item xs={12}>
                 <TextField
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    size="small"
-                    label="Price"
-                    name="price"
-                    autoComplete="price"
+                    size='small'
+                    label='Price'
+                    name='price'
+                    autoComplete='price'
                     value={state.price}
                     onChange={change}
                     InputLabelProps={{ shrink: true }}
                     error={errors.price && submitted}
                     helperText={errors.price && submitted ? errors.price : null}
                     InputProps={{
-                        startAdornment: <InputAdornment position="start">$</InputAdornment>
+                        startAdornment: <InputAdornment position='start'>$</InputAdornment>
                     }}
                 />
             </Grid>
             <Grid item xs={12}>
                 <TextField
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    size="small"
-                    label="Discounted Price"
-                    name="discountedPrice"
-                    autoComplete="discountedPrice"
+                    size='small'
+                    label='Discounted Price'
+                    name='discountedPrice'
+                    autoComplete='discountedPrice'
                     value={state.discountedPrice}
                     onChange={change}
                     InputLabelProps={{ shrink: true }}
                     error={errors.discountedPrice && submitted}
                     helperText={errors.discountedPrice && submitted ? errors.discountedPrice : null}
                     InputProps={{
-                        startAdornment: <InputAdornment position="start">$</InputAdornment>
+                        startAdornment: <InputAdornment position='start'>$</InputAdornment>
                     }}
                 />
             </Grid>
             <Grid item xs={12}>
                 <TextField
                     select
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    size="small"
-                    label="Category"
-                    name="categoryId"
-                    autoComplete="categoryId"
+                    size='small'
+                    label='Category'
+                    name='categoryId'
+                    autoComplete='categoryId'
                     value={state.categoryId}
                     onChange={change}
                     InputLabelProps={{ shrink: true }}
@@ -260,13 +260,13 @@ export default function EditProductComponent({
                     SelectProps={{
                         multiple: true
                     }}
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    size="small"
-                    label="Color"
-                    name="color"
-                    autoComplete="color"
+                    size='small'
+                    label='Color'
+                    name='color'
+                    autoComplete='color'
                     value={state.color}
                     onChange={change}
                     InputLabelProps={{ shrink: true }}
@@ -287,13 +287,13 @@ export default function EditProductComponent({
                     SelectProps={{
                         multiple: true
                     }}
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    size="small"
-                    label="Size"
-                    name="size"
-                    autoComplete="size"
+                    size='small'
+                    label='Size'
+                    name='size'
+                    autoComplete='size'
                     value={state.size}
                     onChange={change}
                     InputLabelProps={{ shrink: true }}
@@ -310,13 +310,13 @@ export default function EditProductComponent({
             <Grid item xs={12}>
                 <TextField
                     select
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    size="small"
-                    label="Display"
-                    name="display"
-                    autoComplete="display"
+                    size='small'
+                    label='Display'
+                    name='display'
+                    autoComplete='display'
                     value={state.display}
                     onChange={change}
                     InputLabelProps={{ shrink: true }}
@@ -332,7 +332,7 @@ export default function EditProductComponent({
             </Grid>
             <Grid item xs={12}>
                 <UploadComponent
-                    accept="image/*"
+                    accept='image/*'
                     output={change}
                     data={state.thumbnail}
                     name='thumbnail'
@@ -341,7 +341,7 @@ export default function EditProductComponent({
             </Grid>
             <Grid item xs={12}>
                 <UploadComponent
-                    accept="image/*"
+                    accept='image/*'
                     output={change}
                     data={state.image}
                     name='image'
@@ -350,7 +350,7 @@ export default function EditProductComponent({
             </Grid>
             <Grid item xs={12}>
                 <UploadComponent
-                    accept="image/*"
+                    accept='image/*'
                     output={change}
                     data={state.image2}
                     name='image2'
@@ -360,8 +360,8 @@ export default function EditProductComponent({
             <Grid item xs={12}>
                 <Button
                     fullWidth
-                    variant="contained"
-                    color="primary"
+                    variant='contained'
+                    color='primary'
                     onClick={submit}
                 >
                     Submit

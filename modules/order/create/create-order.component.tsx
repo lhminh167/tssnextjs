@@ -10,24 +10,24 @@ import {
   Container,
   Box,
   Grid
-} from "@material-ui/core";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../root/root.model";
-import { toNumber } from "../../shared/helpers/auth.helper";
-import { getOrderCreateForm } from "../order.service";
-import OrderConfirmationComponent from "./confirmation-form/confirmation-form.component";
-import OrderCreateRequestComponent from "./delivery-form/delivery-form.component";
-import FinishFormComponent from "./finish-form/finish-form.component";
+} from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../root/root.model';
+import { toNumber } from '../../shared/helpers/auth.helper';
+import { getOrderCreateForm } from '../order.service';
+import OrderConfirmationComponent from './confirmation-form/confirmation-form.component';
+import OrderCreateRequestComponent from './delivery-form/delivery-form.component';
+import FinishFormComponent from './finish-form/finish-form.component';
 import {
   defaultOrderCreateForm,
   OrderCreateForm,
   OrderCreateRequest
-} from "./create-order.model";
-import PaymentFormComponent from "./payment-form/payment-form.component";
-import { Order, defaultOrder } from "../order.model";
-import { currentUserSlice } from "../../customer/customer.slice";
-import { p, pl0, pr0 } from "../../shared/layout/layout.style";
+} from './create-order.model';
+import PaymentFormComponent from './payment-form/payment-form.component';
+import { Order, defaultOrder } from '../order.model';
+import { currentUserSlice } from '../../customer/customer.slice';
+import { p, pl0, pr0 } from '../../shared/layout/layout.style';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   pl0: pl0,
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   p: p
 }));
 
-const steps = ["Delivery", "Confirmation", "Payment", "Finish"];
+const steps = ['Delivery', 'Confirmation', 'Payment', 'Finish'];
 
 interface ActiveStepProps {
   step: number;
@@ -80,7 +80,7 @@ function ActiveStepComponent({
     case 3:
       return <FinishFormComponent data={order} back={back} />;
     default:
-      throw new Error("Unknown step");
+      throw new Error('Unknown step');
   }
 }
 
@@ -106,11 +106,15 @@ export default function CreateOrderComponent() {
 
   useEffect(() => {
     getOrderCreateForm().then(data => {
+      debugger
+
       setForm(data.content);
     });
   }, []);
 
   useEffect(() => {
+    debugger
+
     setState(defaultOrderCreateRequest);
   }, [currentUser]);
 
@@ -137,7 +141,7 @@ export default function CreateOrderComponent() {
         item
         xs={12}
       >
-        <Typography component="h1" variant="h4" align="left">
+        <Typography component='h1' variant='h4' align='left'>
           Checkout
         </Typography>
       </Grid>

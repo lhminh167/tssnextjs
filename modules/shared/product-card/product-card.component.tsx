@@ -1,23 +1,19 @@
-import { Theme, Grid } from "@material-ui/core";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Link from "next/link";
-import React from "react";
-import { IProduct } from "../models/product.model";
-import Image from "../image/image";
-import { toUrl, formatCurrency } from "../helpers/string.helper";
+import { Theme } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Link from 'next/link';
+import React from 'react';
+import { productUrl } from '../../product/filter/product-filter.model';
+import { formatCurrency } from '../helpers/string.helper';
+import Image from '../image/image';
+import { IProduct } from '../models/product.model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      // textAlign: "left"
-      // boxShadow:
-      //   "0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)"
-    }
   })
 );
 
@@ -32,30 +28,29 @@ export default function ProductCard({ data }: IProps) {
     <Card
     >
       <Link
-        href={{
-          pathname: "/product/[productName]",
-          query: {
-            productId: data.productId
-          }
-        }}
-        as={`/product/${toUrl(data.name)}?productId=${data.productId}`}
+        href={productUrl.detail(data).href}
+        as={productUrl.detail(data).as}
         passHref
       >
-        <Typography component="a" color="inherit">
-          <CardActionArea className={classes.root}>
+        <Typography component='a' color='inherit'
+          data-cy='productLink'
+        >
+          <CardActionArea
+            data-cy='productCard'
+          >
             <CardMedia>
               <Image
                 imageName={data.thumbnail}
               />
             </CardMedia>
             <CardContent>
-              <Typography variant="subtitle1" gutterBottom noWrap
+              <Typography variant='subtitle1' gutterBottom noWrap
                 component='h3'
               >
                 {data.name}
               </Typography>
 
-              <Typography variant="subtitle2" gutterBottom
+              <Typography variant='subtitle2' gutterBottom
                 component='h4'
               >
                 {formatCurrency(data.price)}

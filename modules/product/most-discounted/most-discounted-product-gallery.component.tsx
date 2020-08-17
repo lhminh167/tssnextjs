@@ -4,27 +4,28 @@ import {
   makeStyles,
   Theme,
   Typography
-} from "@material-ui/core";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import BookmarkIcon from "@material-ui/icons/Bookmark";
-import Link from "next/link";
-import React, { useState } from "react";
-import { PaginatedList } from "../../shared/crud/crud.model";
-import { toUrl, formatCurrency } from "../../shared/helpers/string.helper";
-import Image from "../../shared/image/image";
-import { themeColor } from "../../shared/layout/layout.theme";
-import { IProduct } from "../../shared/models/product.model";
-import ProductHorizontalGallery from "../../shared/product-horizontal-gallery/product-horizontal-gallery.component";
+} from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import { PaginatedList } from '../../shared/crud/crud.model';
+import { toUrl, formatCurrency } from '../../shared/helpers/string.helper';
+import Image from '../../shared/image/image';
+import { themeColor } from '../../shared/layout/layout.theme';
+import { IProduct } from '../../shared/models/product.model';
+import ProductHorizontalGallery from '../../shared/product-horizontal-gallery/product-horizontal-gallery.component';
 import {
   defaultProductSearchRequest,
   IProductSearchRequest,
-  SortByEnum
-} from "../filter/product-filter.model";
-import { getProducts } from "../filter/product-filter.service";
-import { DiscountIcon } from "../../shared/svg/svg.component";
+  SortByEnum,
+  productUrl
+} from '../filter/product-filter.model';
+import { getProducts } from '../filter/product-filter.service';
+import { DiscountIcon } from '../../shared/svg/svg.component';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,21 +60,21 @@ export default function MostDiscountedProductGallery({ data }: Props) {
       data={state}
       output={change}
       title={
-        <Typography variant="h6" component="h2">
+        <Typography variant='h6' component='h2'>
           Most Discounted
         </Typography>
       }
       titleIcon={
         <DiscountIcon
-          color="primary"
+          color='primary'
           style={{
-            fontSize: "4rem"
+            fontSize: '4rem'
           }}
         />
       }
       seeMore={
-        <Link href="/product" as="/product" passHref>
-          <Button component="a">See All Discounted Products</Button>
+        <Link href='/product' as='/product' passHref>
+          <Button component='a'>See All Discounted Products</Button>
         </Link>
       }
       CardElement={MostDiscountedProductCard}
@@ -84,18 +85,18 @@ export default function MostDiscountedProductGallery({ data }: Props) {
 const useCardStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      textAlign: "center"
+      textAlign: 'center'
     },
     cardActions: {
-      justifyContent: "center",
+      justifyContent: 'center',
       paddingTop: theme.spacing(3),
       paddingBottom: theme.spacing(3)
     },
     discountTag: {
-      position: "absolute",
+      position: 'absolute',
       top: 0,
       right: 0,
-      // minWidth: "4.5rem"
+      // minWidth: '4.5rem'
       padding: '0 0.2rem'
     },
   })
@@ -110,22 +111,17 @@ function MostDiscountedProductCard({ data }: MostDiscountedProductCardProps) {
   return (
     <Card>
       <Link
-        href={{
-          pathname: "/product/[productName]",
-          query: {
-            productId: data.productId
-          }
-        }}
-        as={`/product/${toUrl(data.name)}?productId=${data.productId}`}
+        href={productUrl.detail(data).href}
+        as={productUrl.detail(data).as}
         passHref
       >
-        <Typography component="a" color="inherit">
+        <Typography component='a' color='inherit'>
           <CardActionArea className={classes.root}>
             <CardMedia>
               <Button
-                variant="contained"
+                variant='contained'
                 className={classes.discountTag}
-                component="div"
+                component='div'
                 color='primary'
               >
 
@@ -142,10 +138,10 @@ function MostDiscountedProductCard({ data }: MostDiscountedProductCardProps) {
               />
             </CardMedia>
             <CardContent>
-              <Typography variant="subtitle1" gutterBottom noWrap>
+              <Typography variant='subtitle1' gutterBottom noWrap>
                 {data.name}
               </Typography>
-              <Typography variant="subtitle2" gutterBottom>
+              <Typography variant='subtitle2' gutterBottom>
                 {formatCurrency(data.price)}
               </Typography>
             </CardContent>

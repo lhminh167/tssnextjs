@@ -19,7 +19,7 @@ export default function LoginPage(props) {
     const router = useRouter();
 
     useEffect(() => {
-        if (getLoginToken()) router.push(router.query.next as string);
+        if (getLoginToken()) router.push((router.query.next as string) ?? '/');
     }, []);
 
     return (

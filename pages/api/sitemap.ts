@@ -4,9 +4,9 @@ import { createGzip } from 'zlib';
 import { PaginatedList, Response } from '../../modules/shared/crud/crud.model';
 import { IProduct } from '../../modules/shared/models/product.model';
 import { getProducts } from '../../modules/product/filter/product-filter.service';
-import { defaultProductSearchRequest } from '../../modules/product/filter/product-filter.model';
+import { defaultProductSearchRequest, productUrl } from '../../modules/product/filter/product-filter.model';
 import { toUrl } from '../../modules/shared/helpers/string.helper';
-import { ICategory } from '../../modules/shared/models/category.model';
+import { ICategory, categoryUrl } from '../../modules/shared/models/category.model';
 import { getCategories } from '../../modules/category/category.service';
 
 
@@ -46,7 +46,7 @@ async function writeProducts(smStream: SitemapStream) {
 
     response.content.items.map(item => {
         smStream.write({
-            url: `/product/${toUrl(item.name)}?productId=${item.productId}`,
+            url: productUrl.detail(item).as,
             lastmod: new Date(),
             changefreq: EnumChangefreq.WEEKLY,
         });
@@ -59,7 +59,7 @@ async function writeCategories(smStream: SitemapStream) {
 
     response.content.map(item => {
         smStream.write({
-            url: `/category/${toUrl(item.name)}?categoryId=${item.categoryId}`,
+            url: categoryUrl.detail(item).as,
             lastmod: new Date(),
             changefreq: EnumChangefreq.WEEKLY,
         });

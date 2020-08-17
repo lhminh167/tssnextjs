@@ -1,6 +1,6 @@
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import { IRootState } from '../../root/root.model';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 
@@ -53,8 +53,8 @@ function Loader(props) {
 
         <Container className={classes.root}>
             <div className={classes.container}>
-                <CircularProgress className={classes.progress} color="primary" />
-                {/* <Button variant="contained" className={classes.button}
+                <CircularProgress className={classes.progress} color='primary' />
+                {/* <Button variant='contained' className={classes.button}
                 onClick={handleClick}>
                     Cancel
                 </Button> */}

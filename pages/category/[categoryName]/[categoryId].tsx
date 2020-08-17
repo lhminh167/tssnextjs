@@ -6,6 +6,7 @@ import CategoryDetailProductListComponent from "../../../modules/category/detail
 import { CategoryDetailMetadataComponent } from "../../../modules/category/detail/category-detail-metadata.component";
 import { getCategories, getCategory } from "../../../modules/category/category.service";
 import { toNumber } from "../../../modules/shared/helpers/auth.helper";
+import { toUrl } from "../../../modules/shared/helpers/string.helper";
 
 const useStyles = makeStyles({
 });
@@ -47,7 +48,7 @@ export async function getStaticPaths() {
 
     const paths = items.map((item) => ({
         params: {
-            categoryName: item.name.toString(),
+            categoryName: toUrl(item.name),
             categoryId: item.categoryId.toString()
         },
     }))

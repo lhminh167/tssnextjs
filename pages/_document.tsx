@@ -6,22 +6,22 @@ import theme from '../modules/shared/layout/layout.theme';
 class MyDocument extends Document {
   render() {
     return (
-      <Html lang="en">
+      <Html lang='en'>
         <Head>
-          <meta charSet="utf-8" />
+          <meta charSet='utf-8' />
           {/* PWA primary color */}
-          <meta name="theme-color" content={theme.palette.primary.main} />
-          <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-          <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-          <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-          <link rel="manifest" href="/manifest.json" />
+          <meta name='theme-color' content={theme.palette.primary.main} />
+          <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png' />
+          <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png' />
+          <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16x16.png' />
+          <link rel='manifest' href='/manifest.json' />
         </Head>
         <body>
           <Main />
           <NextScript />
           <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            rel='stylesheet'
+            href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
           />
         </body>
       </Html>
@@ -67,7 +67,7 @@ MyDocument.getInitialProps = async ctx => {
     ...initialProps,
     // Styles fragment is rendered after the app and page rendering finish.
     styles: [
-      <React.Fragment key="styles">
+      <React.Fragment key='styles'>
         {initialProps.styles}
         {sheets.getStyleElement()}
       </React.Fragment>,

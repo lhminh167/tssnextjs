@@ -7,7 +7,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
-import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import Link from 'next/link';
 import React from 'react';
@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { currentUserSlice } from '../../customer/customer.slice';
 import { IRootState } from '../../root/root.model';
 import { toNumber } from '../helpers/auth.helper';
+import { TOTAL_QUANTITY, SHOPPING_CART } from '../navbar/navbar.tag';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -51,7 +52,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
         state => state.shoppingCartItemCount.data
     );
     const isAdmin = useSelector<IRootState, boolean>(
-        state => state.currentUser.data.role === "Admin"
+        state => state.currentUser.data.role === 'Admin'
     );
 
     function logout() {
@@ -61,7 +62,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
     return (
         <List
             className={classes.list}
-            component="nav"
+            component='nav'
             disablePadding
         >
             {
@@ -79,18 +80,18 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                         primary={
                             <Grid
                                 container
-                                direction="row"
-                                alignItems="center"
+                                direction='row'
+                                alignItems='center'
                                 spacing={1}
                             >
                                 <Link
-                                    href="/user/login"
-                                    as="/user/login"
+                                    href='/user/login'
+                                    as='/user/login'
                                     passHref
                                 >
                                     <Grid item
                                         component={MuiLink}
-                                        color="inherit"
+                                        color='inherit'
                                     >
                                         Login
                                 </Grid>
@@ -100,13 +101,13 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                                     |
                                     </Grid>
                                 <Link
-                                    href="/user/register"
-                                    as="/user/register"
+                                    href='/user/register'
+                                    as='/user/register'
                                     passHref
                                 >
                                     <Grid item
                                         component={MuiLink}
-                                        color="inherit"
+                                        color='inherit'
                                     >
                                         Register
                                         </Grid>
@@ -126,7 +127,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                     as={`/user`}
                     passHref
                 >
-                    <ListItem button component="a"
+                    <ListItem button component='a'
                         className={classes.user}
                     >
                         <ListItemAvatar>
@@ -138,7 +139,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                             primary={
                                 <Grid item
                                     component={MuiLink}
-                                    color="inherit"
+                                    color='inherit'
                                 >
                                     {userName}
                                 </Grid>
@@ -147,7 +148,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                             secondary={
                                 <Grid item
                                     component={MuiLink}
-                                    color="inherit"
+                                    color='inherit'
                                 >
                                     {userEmail}
                                 </Grid>
@@ -158,26 +159,28 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 </Link>
             }
             <Link
-                href="/shopping-cart"
-                as="/shopping-cart"
+                href='/shopping-cart'
+                as='/shopping-cart'
                 passHref
             >
-                <ListItem button component="a"
+                <ListItem button component='a'
                     className={classes.firstListItem}
+                    data-cy={SHOPPING_CART}
                 >
                     <ListItemIcon
                     >
                         <Badge
                             badgeContent={itemCount ?? 0}
-                            color="primary"
+                            color='primary'
+                            data-cy={TOTAL_QUANTITY}
                         >
                             <ShoppingCartOutlinedIcon
-                                color="primary"
+                                color='primary'
                             />
                         </Badge>
                     </ListItemIcon>
                     <ListItemText
-                        primary="Shopping Cart"
+                        primary='Shopping Cart'
                         primaryTypographyProps={{
                             color: 'primary'
                         }}
@@ -185,19 +188,19 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 </ListItem>
             </Link>
             <Link
-                href="/"
-                as="/"
+                href='/'
+                as='/'
                 passHref
             >
-                <ListItem button component="a"
+                <ListItem button component='a'
                 >
                     <ListItemIcon>
                         <HomeIcon
-                            color="primary"
+                            color='primary'
                         />
                     </ListItemIcon>
                     <ListItemText
-                        primary="Home"
+                        primary='Home'
                         primaryTypographyProps={{
                             color: 'primary'
                         }}
@@ -205,19 +208,19 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 </ListItem>
             </Link>
             <Link
-                href="/product"
-                as="/product"
+                href='/product'
+                as='/product'
                 passHref
             >
-                <ListItem button component="a"
+                <ListItem button component='a'
                 >
                     <ListItemIcon>
                         <SearchIcon
-                            color="primary"
+                            color='primary'
                         />
                     </ListItemIcon>
                     <ListItemText
-                        primary="Search"
+                        primary='Search'
                         primaryTypographyProps={{
                             color: 'primary'
                         }}
@@ -225,61 +228,61 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 </ListItem>
             </Link>
             <Link
-                href="/wish-list"
-                as="/wish-list"
+                href='/wish-list'
+                as='/wish-list'
                 passHref
             >
-                <ListItem button component="a"
+                <ListItem button component='a'
                 >
                     <ListItemIcon>
                         <FavoriteIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Wishlist" />
+                    <ListItemText primary='Wishlist' />
                 </ListItem>
             </Link>
             {
                 isLoggedIn &&
                 <Link
-                    href="/order"
-                    as="/order"
+                    href='/order'
+                    as='/order'
                     passHref
                 >
-                    <ListItem button component="a"
+                    <ListItem button component='a'
                     >
                         <ListItemIcon>
                             <AssignmentTurnedInIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Order" />
+                        <ListItemText primary='Order' />
                     </ListItem>
                 </Link>
             }
             {
                 isAdmin && isLoggedIn &&
                 <Link
-                    href="/admin"
-                    as="/admin"
+                    href='/admin'
+                    as='/admin'
                     passHref
                 >
-                    <ListItem button component="a"
+                    <ListItem button component='a'
                     >
                         <ListItemIcon>
                             <SupervisorAccountIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Admin" />
+                        <ListItemText primary='Admin' />
                     </ListItem>
                 </Link>
             }
             <Link
-                href="/department"
-                as="/department"
+                href='/department'
+                as='/department'
                 passHref
             >
-                <ListItem button component="a"
+                <ListItem button component='a'
                 >
                     <ListItemIcon>
                         <AppsIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Department" />
+                    <ListItemText primary='Department' />
                 </ListItem>
             </Link>
             {
@@ -290,7 +293,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                     <ListItemIcon>
                         <ExitToAppIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Logout" />
+                    <ListItemText primary='Logout' />
                 </ListItem>
             }
         </List>

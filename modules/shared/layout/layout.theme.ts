@@ -1,5 +1,5 @@
-import { createMuiTheme, Theme } from "@material-ui/core/styles";
-import withStyles from "@material-ui/styles/withStyles";
+import { createMuiTheme, Theme } from '@material-ui/core/styles';
+import withStyles from '@material-ui/styles/withStyles';
 
 /**
  * The minimum screen width required to render desktop layout. Below this limit, the mobile layout is rendered.
@@ -7,10 +7,10 @@ import withStyles from "@material-ui/styles/withStyles";
 export const transitionWidth = 'md';
 
 export const themeColor = {
-    primary: "#F62F5E",
-    secondaryGrey: "#e0e0e0",
+    primary: '#F62F5E',
+    secondaryGrey: '#e0e0e0',
     lightGrey: '#EFEFEF',
-    secondary: "#1976d2",
+    secondary: '#1976d2',
     white: 'white',
     black: 'black'
 };
@@ -50,7 +50,7 @@ const theme: Theme = createMuiTheme({
 export const GlobalCss = withStyles({
     // @global is handled by jss-plugin-global.
     '@global': {
-        // You should target [class*="MuiButton-root"] instead if you nest themes.
+        // You should target [class*='MuiButton-root'] instead if you nest themes.
         a: {
             textDecoration: 'none',
         },

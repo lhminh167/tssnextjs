@@ -1,5 +1,5 @@
 export function toUrl(string: string) {
-    return string.trim().replace(/\s+/g, '-').toLowerCase();
+    return string.trim().replace(/[^A-Z0-9]+/ig, "-").toLowerCase();
 }
 
 export function isEmptyString(input: string) {
@@ -15,7 +15,7 @@ const currencyFormatter = new Intl.NumberFormat(locale, {
 })
 
 export function formatCurrency(input: number): string {
-    return locale.slice(-2) + ' ' + currencyFormatter.format(input); // "US $1,000.00"
+    return locale.slice(-2) + ' ' + currencyFormatter.format(input); // 'US $1,000.00'
 }
 
 export function formatDatetime(input: string): string {

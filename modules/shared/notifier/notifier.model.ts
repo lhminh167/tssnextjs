@@ -1,5 +1,5 @@
-import { Color } from "@material-ui/lab";
-import { IResponse, Response } from "../crud/crud.model";
+import { Color } from '@material-ui/lab';
+import { IResponse, Response } from '../crud/crud.model';
 
 export interface INotifierState {
   isOpen: boolean;

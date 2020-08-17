@@ -1,4 +1,4 @@
-import { Button, Grid, InputLabel, makeStyles, Typography } from "@material-ui/core";
+import { Button, Grid, InputLabel, makeStyles, Typography } from '@material-ui/core';
 
 
 const useStyles = makeStyles(theme => ({
@@ -36,8 +36,8 @@ export default function UploadComponent({
     return (
         <Grid
             container
-            direction="row"
-            alignItems="center"
+            direction='row'
+            alignItems='center'
             spacing={2}
             className={classes.container}
         >
@@ -46,7 +46,7 @@ export default function UploadComponent({
                 className={classes.input}
                 id={name}
                 name={name}
-                type="file"
+                type='file'
                 onChange={change}
             />
             <Grid item
@@ -55,16 +55,16 @@ export default function UploadComponent({
 
             >
                 <Button
-                    variant="outlined"
-                    component="span"
-                    size="large"
+                    variant='outlined'
+                    component='span'
+                    size='large'
                 >
                     {buttonText ?? 'Chose File'}
                 </Button>
             </Grid>
             <Grid item>
                 <Typography>
-                    {data ?.name}
+                    {data?.name}
                 </Typography>
             </Grid>
         </Grid>

@@ -1,7 +1,7 @@
 import { Breadcrumbs, createStyles, Grid, Theme, Typography, Paper, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Link from "next/link";
+import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 import { bold, p, mb } from '../../shared/layout/layout.style';
 import { Customer, defaultCustomer } from '../customer.model';
@@ -31,33 +31,33 @@ export default function CustomerDetailComponent({
     return (
         <Fragment>
             <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
+                separator={<NavigateNextIcon fontSize='small' />}
                 className={classes.mb}
             >
                 <Link
-                    href="/"
+                    href='/'
                     passHref
                 >
                     <Typography
-                        component="a"
-                        color="inherit"
+                        component='a'
+                        color='inherit'
                     >
                         Home
                     </Typography>
                 </Link>
                 <Link
-                    href="/order"
+                    href='/order'
                     passHref
                 >
                     <Typography
-                        component="a"
-                        color="inherit"
+                        component='a'
+                        color='inherit'
                     >
                         Customer
                     </Typography>
                 </Link>
                 <Typography
-                    color="textPrimary"
+                    color='textPrimary'
                 >
                     Customer Details
                 </Typography>
@@ -268,8 +268,8 @@ export default function CustomerDetailComponent({
                         <Button
                             component='a'
                             fullWidth
-                            variant="contained"
-                            color="primary"
+                            variant='contained'
+                            color='primary'
                         >
                             Edit
                         </Button>

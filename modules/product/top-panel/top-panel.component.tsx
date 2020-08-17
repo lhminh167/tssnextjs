@@ -1,8 +1,8 @@
-import { createStyles, GridList, GridListTile, makeStyles, Theme, useMediaQuery } from "@material-ui/core";
-import { PaginatedList } from "../../shared/crud/crud.model";
-import { IProduct } from "../../shared/models/product.model";
-import ProductCarouselComponent from "../../shared/product-carousel/product-carousel.component";
-import TopPanelProductCard from "./top-panel-card.component";
+import { createStyles, GridList, GridListTile, makeStyles, Theme, useMediaQuery } from '@material-ui/core';
+import { PaginatedList } from '../../shared/crud/crud.model';
+import { IProduct } from '../../shared/models/product.model';
+import ProductCarouselComponent from '../../shared/product-carousel/product-carousel.component';
+import TopPanelProductCard from './top-panel-card.component';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
@@ -12,13 +12,14 @@ interface Props {
 
 export default function TopPanelComponent({ data }: Props) {
   const classes = useStyles({});
-  const isMediumScreen = useMediaQuery("(min-width:426px)");
+  const isMediumScreen = useMediaQuery('(min-width:426px)');
   const pageSize = isMediumScreen ? 4 : 2;
 
   return (
     <GridList
       cols={pageSize}
       cellHeight={'auto'}
+      data-cy='top-panel'
     >
       {
         data.items

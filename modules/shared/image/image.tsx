@@ -1,8 +1,8 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import React, { Fragment } from "react";
-import LazyLoad from "react-lazyload";
-import { w100 } from "../layout/layout.style";
-import { getImageUrl } from "../helpers/http.helper";
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import React, { Fragment } from 'react';
+import LazyLoad from 'react-lazyload';
+import { w100 } from '../layout/layout.style';
+import { getImageUrl } from '../helpers/http.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

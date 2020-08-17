@@ -44,14 +44,14 @@ const MobileNavbarComponent = () => {
         <Fragment>
             <AppBar
                 className={classes.sectionMobile}
-                color="default"
+                color='default'
             >
                 <Toolbar
                 >
                     <IconButton
                         onClick={() => { router.back() }}
-                        color="primary"
-                        edge="start"
+                        color='primary'
+                        edge='start'
                     >
                         <ArrowBackIcon
                         />
@@ -76,8 +76,8 @@ const MobileNavbarComponent = () => {
 
                     <IconButton
                         onClick={toggleSidebar(true)}
-                        color="primary"
-                        edge="end"
+                        color='primary'
+                        edge='end'
                     >
                         <MenuIcon
                         />

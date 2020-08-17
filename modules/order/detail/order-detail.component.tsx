@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Link from "next/link";
+import Link from 'next/link';
 import React, { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { formatCurrency, formatDatetime } from '../../shared/helpers/string.helper';
 import { bold, mb, p, textDanger, textSuccess, textWarning } from '../../shared/layout/layout.style';
@@ -48,33 +48,33 @@ export default function OrderDetailComponent({
     return (
         <Fragment>
             <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
+                separator={<NavigateNextIcon fontSize='small' />}
                 className={classes.mb}
             >
                 <Link
-                    href="/"
+                    href='/'
                     passHref
                 >
                     <Typography
-                        component="a"
-                        color="inherit"
+                        component='a'
+                        color='inherit'
                     >
                         Home
                     </Typography>
                 </Link>
                 <Link
-                    href="/order"
+                    href='/order'
                     passHref
                 >
                     <Typography
-                        component="a"
-                        color="inherit"
+                        component='a'
+                        color='inherit'
                     >
                         Order
                     </Typography>
                 </Link>
                 <Typography
-                    color="textPrimary"
+                    color='textPrimary'
                 >
                     {orderId}
                 </Typography>
@@ -230,7 +230,7 @@ export default function OrderDetailComponent({
                             <TableBody>
                                 {state.orderDetail.map(row => (
                                     <TableRow key={row.itemId}>
-                                        <TableCell component="th" scope="row">
+                                        <TableCell component='th' scope='row'>
                                             {row.itemId}
                                         </TableCell>
                                         <TableCell>{row.productName}</TableCell>
@@ -445,7 +445,7 @@ export default function OrderDetailComponent({
                                     })
                                     .map(row => (
                                         <TableRow key={row.auditId}>
-                                            <TableCell component="th" scope="row">
+                                            <TableCell component='th' scope='row'>
                                                 {row.auditId}
                                             </TableCell>
                                             <TableCell>{row.message}</TableCell>

@@ -1,7 +1,24 @@
-import { PaginatedList, defaultPaginationList } from "../crud/crud.model";
-import { IProduct } from "./product.model";
+import { PaginatedList, defaultPaginationList } from '../crud/crud.model';
+import { IProduct } from './product.model';
+import { toUrl } from '../helpers/string.helper';
 
-export const categoryUrl = 'category';
+
+const apiCategoryBaseUrl = 'category';
+
+export const apiCategoryUrl = {
+    category: apiCategoryBaseUrl,
+};
+
+export const categoryBaseUrl = '/category';
+
+export const categoryUrl = {
+    category: categoryBaseUrl,
+    homepage: categoryBaseUrl + '/' + 'Homepage',
+    detail: (category: ICategory) => ({
+        href: `${categoryBaseUrl}/[categoryName]/[categoryId]`,
+        as: `${categoryBaseUrl}/${toUrl(category.name)}/${category.categoryId}`,
+    }),
+};
 
 export interface ICategory {
     categoryId: number;

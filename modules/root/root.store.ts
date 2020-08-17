@@ -1,13 +1,9 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
-import { createStore } from 'redux'
 import createSagaMiddleware, { Task } from 'redux-saga'
 import { rootReducer } from './root.reducer'
 import rootSaga from './root.saga'
 import { rootInitialState } from './root.state'
-
-export type TssStore = ReturnType<typeof createStore> & {
-    sagaTask?: Task
-}
+import { TssStore, IRootState } from './root.model'
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -27,3 +23,5 @@ export const makeStore = () => {
 }
 
 export const store = makeStore();
+
+export const state = store.getState() as IRootState;
