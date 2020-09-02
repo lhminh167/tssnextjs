@@ -1,18 +1,16 @@
 import {
   defaultProductFilterCategory,
   IProductFilterCategory
-} from "../../product/filter/product-filter.model";
+} from '../../product/filter/product-filter.model';
 import {
   defaultPaginationList,
   defaultPaginationRequest,
   PaginatedList,
   PaginationRequest
-} from "../crud/crud.model";
-import { IAttributeValue } from "./attribute-value.model";
-import { IReviewGetResponse } from "./review.model";
-import { SelectOption } from "./shared.model";
-
-export const productUrl = "product";
+} from '../crud/crud.model';
+import { IAttributeValue } from './attribute-value.model';
+import { IReviewGetResponse } from './review.model';
+import { SelectOption } from './shared.model';
 
 export interface IProduct {
   productId: number;
@@ -32,13 +30,13 @@ export interface IProduct {
 
 export const defaultProduct: IProduct = {
   productId: 0,
-  name: "",
-  description: "",
+  name: '',
+  description: '',
   price: 0,
   discountedPrice: 0,
-  image: "",
-  image2: "",
-  thumbnail: "",
+  image: '',
+  image2: '',
+  thumbnail: '',
   display: 0,
   attributes: [],
   category: defaultProductFilterCategory,
@@ -67,11 +65,11 @@ export enum ProductDisplayEnum {
 
 export const productDisplayOptions: SelectOption[] = [
   {
-    label: "Homepage First Panel",
+    label: 'Homepage First Panel',
     value: ProductDisplayEnum.HomepageFirstPanel
   },
   {
-    label: "Other",
+    label: 'Other',
     value: ProductDisplayEnum.Other
   },
 ];

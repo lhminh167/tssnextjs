@@ -3,22 +3,39 @@ import {
   PaginatedList,
   PaginationRequest,
   defaultPaginationRequest
-} from "../../shared/crud/crud.model";
-import { IAttributeValue } from "../../shared/models/attribute-value.model";
-import { ICategory } from "../../shared/models/category.model";
-import { IProduct } from "../../shared/models/product.model";
-import { SelectOption } from "../../shared/models/shared.model";
+} from '../../shared/crud/crud.model';
+import { IAttributeValue } from '../../shared/models/attribute-value.model';
+import { ICategory } from '../../shared/models/category.model';
+import { IProduct } from '../../shared/models/product.model';
+import { SelectOption } from '../../shared/models/shared.model';
+import { toUrl } from '../../shared/helpers/string.helper';
 
-const productFilterBaseUrl = "Product";
+const apiProductBaseUrl = 'Product';
 
-export const productFilterUrl = {
-  filter: productFilterBaseUrl + "/" + "Filter",
-  choice: productFilterBaseUrl + "/" + "Choice",
+export const apiProductUrl = {
+  filter: apiProductBaseUrl + '/' + 'Filter',
+  choice: apiProductBaseUrl + '/' + 'Choice',
   recommendation: (productId: number) =>
-    `${productFilterBaseUrl}/${productId}/Recommendation`,
-  product: productFilterBaseUrl,
-  homepage: productFilterBaseUrl + "/" + "Homepage",
+    `${apiProductBaseUrl}/${productId}/Recommendation`,
+  product: apiProductBaseUrl,
+  homepage: apiProductBaseUrl + '/' + 'Homepage',
 };
+
+const productBaseUrl = 'product';
+
+export const productUrl = {
+  filter: productBaseUrl + '/' + 'Filter',
+  choice: productBaseUrl + '/' + 'Choice',
+  recommendation: (productId: number) =>
+    `${productBaseUrl}/${productId}/Recommendation`,
+  product: productBaseUrl,
+  homepage: productBaseUrl + '/' + 'Homepage',
+  detail: (product: IProduct) => ({
+    href: `${productBaseUrl}/[productName]/[productId]`,
+    as: `${productBaseUrl}/${toUrl(product.name)}/${product.productId}`,
+  }),
+};
+
 
 export enum ProductFilterFilterEnum {
   Size = 'Size',
@@ -59,7 +76,7 @@ export interface IProductFilterCategory {
 
 export const defaultProductFilterCategory = {
   categoryId: 0,
-  name: ""
+  name: ''
 };
 
 export interface IProductSearchRequest extends PaginationRequest {
@@ -73,7 +90,7 @@ export interface IProductSearchRequest extends PaginationRequest {
 }
 
 export const defaultProductSearchRequest: IProductSearchRequest = {
-  keyword: "",
+  keyword: '',
   color: null,
   size: null,
   category: [],
@@ -88,26 +105,26 @@ export const defaultProductSearchRequest: IProductSearchRequest = {
 };
 
 export enum SortByEnum {
-  None = "None",
-  Name = "Name",
-  Price = "Price",
-  BestSelling = "BestSelling",
-  TopRated = "TopRated",
-  MostDiscounted = "MostDiscounted",
-  Newest = "Newest"
+  None = 'None',
+  Name = 'Name',
+  Price = 'Price',
+  BestSelling = 'BestSelling',
+  TopRated = 'TopRated',
+  MostDiscounted = 'MostDiscounted',
+  Newest = 'Newest'
 }
 
 export const defaultSortByOptions: SelectOption[] = [
-  { label: "None", value: SortByEnum.None },
-  { label: "Name", value: SortByEnum.Name },
-  { label: "Price", value: SortByEnum.Price },
-  { label: "Best Selling", value: SortByEnum.BestSelling },
-  { label: "Top Rated", value: SortByEnum.TopRated },
-  { label: "Most Discounted", value: SortByEnum.MostDiscounted },
-  { label: "Newest Arrivals", value: SortByEnum.Newest }
+  { label: 'None', value: SortByEnum.None },
+  { label: 'Name', value: SortByEnum.Name },
+  { label: 'Price', value: SortByEnum.Price },
+  { label: 'Best Selling', value: SortByEnum.BestSelling },
+  { label: 'Top Rated', value: SortByEnum.TopRated },
+  { label: 'Most Discounted', value: SortByEnum.MostDiscounted },
+  { label: 'Newest Arrivals', value: SortByEnum.Newest }
 ];
 
 export const defaultIsDescendingOptions: SelectOption[] = [
-  { label: "Descending", value: true },
-  { label: "Ascending", value: false }
+  { label: 'Descending', value: true },
+  { label: 'Ascending', value: false }
 ];

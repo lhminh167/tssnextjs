@@ -4,18 +4,18 @@ import {
   IconButton,
   makeStyles,
   Theme
-} from "@material-ui/core";
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
-import { Fragment, useEffect, useState } from "react";
-import { PaginatedList } from "../crud/crud.model";
-import { IProduct } from "../models/product.model";
-import ProductHorizontalGallery from "../product-horizontal-gallery/product-horizontal-gallery.component";
-import ErrorBoundary from "../error-boundary/error-boundary.component";
+} from '@material-ui/core';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { Fragment, useEffect, useState } from 'react';
+import { PaginatedList } from '../crud/crud.model';
+import { IProduct } from '../models/product.model';
+import ProductHorizontalGallery from '../product-horizontal-gallery/product-horizontal-gallery.component';
+import ErrorBoundary from '../error-boundary/error-boundary.component';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     dots: {
-      position: "absolute",
+      position: 'absolute',
       bottom: 0,
       listStyle: 'none'
     }
@@ -83,8 +83,8 @@ export default function ProductCarouselComponent({
         container
         item
         xs={12}
-        direction="row"
-        justify="center"
+        direction='row'
+        justify='center'
         className={classes.dots}
         component='ul'
       >
@@ -93,7 +93,7 @@ export default function ProductCarouselComponent({
             component='li'
           >
             <IconButton
-              size="small"
+              size='small'
               onClick={() =>
                 change({
                   pageIndex: index,
@@ -102,8 +102,8 @@ export default function ProductCarouselComponent({
               }
             >
               <FiberManualRecordIcon
-                fontSize="inherit"
-                color={state.pageIndex === index ? "primary" : "inherit"}
+                fontSize='inherit'
+                color={state.pageIndex === index ? 'primary' : 'inherit'}
               />
             </IconButton>
           </Grid>

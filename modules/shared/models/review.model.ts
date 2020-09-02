@@ -1,6 +1,6 @@
-import { Customer } from "../../customer/customer.model";
-import { Validator } from "fluentvalidation-ts";
-import { PaginationRequest, PaginatedList, defaultPaginationList } from "../crud/crud.model";
+import { Customer } from '../../customer/customer.model';
+import { Validator } from 'fluentvalidation-ts';
+import { PaginationRequest, PaginatedList, defaultPaginationList } from '../crud/crud.model';
 
 export const reviewBaseUrl = 'review';
 

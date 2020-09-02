@@ -1,22 +1,23 @@
-import { Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@material-ui/core";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { ProductFilterFilterEnum } from "../../product/filter/product-filter.model";
-import ActionButtonsComponent from "../../shared/action-buttons/action-buttons.component";
-import { defaultRowsPerPageOptions } from "../../shared/crud/crud.model";
-import { decodeAttributes } from "../../shared/helpers/product.helper";
-import { formatCurrency } from "../../shared/helpers/string.helper";
-import Image from "../../shared/image/image";
-import { p, bold } from "../../shared/layout/layout.style";
-import PaginationComponent from "../../shared/pagination/pagination.component";
-import ShoppingCartQuantityPicker from "../quantity-picker/shopping-cart-quantity-picker.component";
-import { defaultShopingCartGetRequest, defaultShoppingCart, IShopingCart, IShopingCartItem, ShopingCartGetRequest } from "../shopping-cart.model";
-import { getShoppingCart, removeShoppingCartItem, saveShoppingCartItemForLater } from "../shopping-cart.service";
-import { shoppingCartItemCountSlice } from "../shopping-cart.slice";
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { ProductFilterFilterEnum } from '../../product/filter/product-filter.model';
+import ActionButtonsComponent from '../../shared/action-buttons/action-buttons.component';
+import { defaultRowsPerPageOptions } from '../../shared/crud/crud.model';
+import { decodeAttributes } from '../../shared/helpers/product.helper';
+import { formatCurrency } from '../../shared/helpers/string.helper';
+import Image from '../../shared/image/image';
+import { p, bold } from '../../shared/layout/layout.style';
+import PaginationComponent from '../../shared/pagination/pagination.component';
+import ShoppingCartQuantityPicker from '../quantity-picker/shopping-cart-quantity-picker.component';
+import { defaultShopingCartGetRequest, defaultShoppingCart, IShopingCart, IShopingCartItem, ShopingCartGetRequest } from '../shopping-cart.model';
+import { getShoppingCart, removeShoppingCartItem, saveShoppingCartItemForLater } from '../shopping-cart.service';
+import { shoppingCartItemCountSlice } from '../shopping-cart.slice';
+import { goTo } from '../../shared/helpers/auth.helper';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -81,11 +82,11 @@ export default function ShoppingCartComponent({
     }
 
     function back() {
-        router.push('/');
+        goTo('/');
     }
 
     function checkout() {
-        router.push('/order/new');
+        goTo('/order/new');
     }
 
     return (
@@ -95,8 +96,8 @@ export default function ShoppingCartComponent({
 
             >
                 <Typography
-                    variant="h6"
-                    component="h2"
+                    variant='h6'
+                    component='h2'
                 >
                     {state.totalQuantity + ' Items In Your Cart'}
                 </Typography>
@@ -110,17 +111,17 @@ export default function ShoppingCartComponent({
                                     Item
                             </TableCell>
                                 <TableCell
-                                    align="center"
+                                    align='center'
                                 >
                                     Size
                                 </TableCell>
                                 <TableCell
-                                    align="center"
+                                    align='center'
                                 >
                                     Quantity
                                 </TableCell>
                                 <TableCell
-                                    align="center"
+                                    align='center'
                                 >
                                     Price
                                 </TableCell>
@@ -132,12 +133,13 @@ export default function ShoppingCartComponent({
                                     const attributes = decodeAttributes(row.attributes);
                                     const color = attributes.find(e => e.name === ProductFilterFilterEnum.Color)?.value;
                                     const size = attributes.find(e => e.name === ProductFilterFilterEnum.Size)?.value;
+                                    const price = formatCurrency(row.product.discountedPrice > 0 ? row.product.discountedPrice : row.product.price);
 
                                     return (
                                         <TableRow key={row.itemId}>
                                             <TableCell
-                                                component="th"
-                                                scope="row"
+                                                component='th'
+                                                scope='row'
                                             >
                                                 <Image
                                                     imageName={row.product.image}
@@ -147,15 +149,15 @@ export default function ShoppingCartComponent({
                                                 />
                                             </TableCell>
                                             <TableCell
-                                                component="th"
-                                                scope="row"
+                                                component='th'
+                                                scope='row'
                                             >
                                                 <Grid
                                                     item
                                                     xs={12}
                                                 >
                                                     <Typography
-                                                        variant="body1"
+                                                        variant='body1'
                                                         className={classes.bold}
                                                     >
                                                         {color} {row.product.name}
@@ -165,45 +167,45 @@ export default function ShoppingCartComponent({
                                                     item
                                                     xs={12}
                                                     container
-                                                    direction="row"
+                                                    direction='row'
                                                 >
                                                     <Button
-                                                        color="primary"
-                                                        size="small"
+                                                        color='primary'
+                                                        size='small'
                                                         onClick={() => saveItemForLater(row)}
                                                         startIcon={<BookmarkIcon
-                                                            fontSize="small"
+                                                            fontSize='small'
                                                         />}
 
                                                     >
                                                         Save for later
                                                 </Button>
                                                     <Button
-                                                        color="primary"
-                                                        size="small"
+                                                        color='primary'
+                                                        size='small'
                                                         onClick={() => removeItem(row)}
                                                         startIcon={<ClearRoundedIcon
-                                                            fontSize="small"
+                                                            fontSize='small'
                                                         />}
                                                     >
                                                         Remove
                                                     </Button>
                                                 </Grid>
                                             </TableCell>
-                                            <TableCell align="center">{size}</TableCell>
-                                            <TableCell align="center">
+                                            <TableCell align='center'>{size}</TableCell>
+                                            <TableCell align='center'>
                                                 <ShoppingCartQuantityPicker
                                                     data={row}
                                                 />
                                             </TableCell>
                                             <TableCell
-                                                align="center"
+                                                align='center'
                                             >
                                                 <Typography
                                                     variant='subtitle1'
                                                     className={classes.bold}
                                                 >
-                                                    {formatCurrency(row.product.discountedPrice > 0 ? row.product.discountedPrice : row.product.price)}
+                                                    {price}
                                                 </Typography>
                                             </TableCell>
                                         </TableRow>
@@ -215,7 +217,7 @@ export default function ShoppingCartComponent({
                 </TableContainer>
                 <TablePagination
                     rowsPerPageOptions={defaultRowsPerPageOptions}
-                    component="div"
+                    component='div'
                     count={state.count}
                     rowsPerPage={state.pageSize}
                     page={state.pageIndex}
@@ -230,6 +232,8 @@ export default function ShoppingCartComponent({
                 back={back}
                 next={checkout}
                 nextButtonDisabled={state.count === 0}
+                nextDataTestId='checkout'
+                backDataTestId='back-to-home-page'
             />
         </Paper>
     )

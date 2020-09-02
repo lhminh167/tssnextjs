@@ -73,7 +73,7 @@ export default function ResetPasswordComponent({
         >
             <Grid item xs={12}
                 container
-                justify="center"
+                justify='center'
                 className={classes.mt}
             >
                 <Avatar>
@@ -82,19 +82,19 @@ export default function ResetPasswordComponent({
             </Grid>
             <Grid item xs={12}
                 container
-                justify="center"
+                justify='center'
                 className={classes.mb}
             >
-                <Typography component="h1" variant="h5">
+                <Typography component='h1' variant='h5'>
                     Reset Password
                 </Typography>
             </Grid>
             <Grid item xs={12}
                 container
-                justify="center"
+                justify='center'
                 className={classes.mb}
             >
-                <Typography component="h1" variant="h5">
+                <Typography component='h1' variant='h5'>
                     The password reset link that you provided is invalid or has expired.
                 </Typography>
             </Grid>
@@ -111,7 +111,7 @@ export default function ResetPasswordComponent({
         >
             <Grid item xs={12}
                 container
-                justify="center"
+                justify='center'
                 className={classes.mt}
             >
                 <Avatar>
@@ -120,22 +120,22 @@ export default function ResetPasswordComponent({
             </Grid>
             <Grid item xs={12}
                 container
-                justify="center"
+                justify='center'
                 className={classes.mb}
             >
-                <Typography component="h1" variant="h5">
+                <Typography component='h1' variant='h5'>
                     Reset Password
                 </Typography>
             </Grid>
             <Grid item xs={12}>
                 <TextField
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    name="newPassword"
-                    label="New Password"
-                    type="password"
-                    autoComplete="new-password"
+                    name='newPassword'
+                    label='New Password'
+                    type='password'
+                    autoComplete='new-password'
                     value={state.newPassword}
                     onChange={change}
                     error={errors.newPassword && submitted}
@@ -144,13 +144,13 @@ export default function ResetPasswordComponent({
             </Grid>
             <Grid item xs={12}>
                 <TextField
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    name="confirmNewPassword"
-                    label="Confirm New Password"
-                    type="password"
-                    autoComplete="new-password"
+                    name='confirmNewPassword'
+                    label='Confirm New Password'
+                    type='password'
+                    autoComplete='new-password'
                     value={state.confirmNewPassword}
                     onChange={change}
                     error={errors.confirmNewPassword && submitted}
@@ -160,8 +160,8 @@ export default function ResetPasswordComponent({
             <Grid item xs={12}>
                 <Button
                     fullWidth
-                    variant="contained"
-                    color="primary"
+                    variant='contained'
+                    color='primary'
                     onClick={submit}
                 >
                     Submit

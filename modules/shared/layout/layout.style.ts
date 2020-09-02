@@ -1,5 +1,5 @@
-import { CreateCSSProperties } from "@material-ui/core/styles/withStyles"
-import theme, { themeColor } from "./layout.theme"
+import { CreateCSSProperties } from '@material-ui/core/styles/withStyles'
+import theme, { themeColor } from './layout.theme'
 
 export const w100: CreateCSSProperties<{}> = {
     width: '100%'

@@ -1,14 +1,14 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { currentUserSlice } from "../customer/customer.slice";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { currentUserSlice } from '../customer/customer.slice';
 import {
     ShoppingCartUrl,
     IShopingCartItem,
     IShopingCartAddItemResponse,
     IShopingCartAddItemPayload
-} from "./shopping-cart.model";
-import { crudInitialState } from "../shared/crud/crud.state";
-import { IState } from "../shared/crud/crud.model";
-import { succeeded, failed, idle, pending } from "../shared/crud/crud.reducer";
+} from './shopping-cart.model';
+import { crudInitialState } from '../shared/crud/crud.state';
+import { IState } from '../shared/crud/crud.model';
+import { succeeded, failed, idle, pending } from '../shared/crud/crud.reducer';
 
 
 const shoppingCartItemCountInitialState = crudInitialState(0) as IState<number>;

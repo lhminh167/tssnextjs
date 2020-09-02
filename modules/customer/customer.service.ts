@@ -1,42 +1,42 @@
 import { get, post, put, remove } from '../shared/crud/crud.service';
-import { Customer, CustomerUpdatePasswordRequest, CustomerUpdateRequest, customerUrl, ILoginRequest, CustomerForgotPasswordRequest, CustomerPasswordResetRequest, CustomerPasswordResetTokenValidationRequest } from './customer.model';
+import { Customer, CustomerUpdatePasswordRequest, CustomerUpdateRequest, apiCustomerUrl, ILoginRequest, CustomerForgotPasswordRequest, CustomerPasswordResetRequest, CustomerPasswordResetTokenValidationRequest } from './customer.model';
 
 export async function getCustomers() {
-    return await get(customerUrl.baseUrl, 0);
+    return await get(apiCustomerUrl.baseUrl, 0);
 }
 
 export async function getCustomer(customerId: number) {
-    return await get(customerUrl.baseUrl, customerId);
+    return await get(apiCustomerUrl.baseUrl, customerId);
 }
 
 export async function createCustomer(input: Customer) {
-    return await post(customerUrl.baseUrl, input);
+    return await post(apiCustomerUrl.baseUrl, input);
 }
 
 export async function login(input: ILoginRequest) {
-    return await post(customerUrl.login, input);
+    return await post(apiCustomerUrl.login, input);
 }
 
 export async function updateCustomer(input: CustomerUpdateRequest) {
-    return await put(customerUrl.baseUrl, input.customerId, input);
+    return await put(apiCustomerUrl.baseUrl, input.customerId, input);
 }
 
 export async function removeCustomer(input: Customer) {
-    return await remove(customerUrl.baseUrl, 0, input.customerId);
+    return await remove(apiCustomerUrl.baseUrl, 0, input.customerId);
 }
 
 export async function updatePassword(input: CustomerUpdatePasswordRequest) {
-    return await put(customerUrl.updatePassword(input.customerId), 0, input);
+    return await put(apiCustomerUrl.updatePassword(input.customerId), 0, input);
 }
 
 export async function forgotPassword(input: CustomerForgotPasswordRequest) {
-    return await put(customerUrl.forgotPassword, 0, input);
+    return await put(apiCustomerUrl.forgotPassword, 0, input);
 }
 
 export async function validateResetPasswordToken(input: CustomerPasswordResetTokenValidationRequest) {
-    return await put(customerUrl.resetPassword(input.customerId, input.resetPasswordToken), 0, input);
+    return await put(apiCustomerUrl.resetPassword(input.customerId, input.resetPasswordToken), 0, input);
 }
 
 export async function resetPassword(input: CustomerPasswordResetRequest) {
-    return await put(customerUrl.resetPassword(input.customerId, input.resetPasswordToken), 0, input);
+    return await put(apiCustomerUrl.resetPassword(input.customerId, input.resetPasswordToken), 0, input);
 }

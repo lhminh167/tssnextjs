@@ -1,6 +1,6 @@
 
-import { reviewBaseUrl, IReview, IReviewGetRequest } from "../../shared/models/review.model";
-import { post, put, get, remove } from "../../shared/crud/crud.service";
+import { reviewBaseUrl, IReview, IReviewGetRequest } from '../../shared/models/review.model';
+import { post, put, get, remove } from '../../shared/crud/crud.service';
 import querystring from 'query-string';
 
 export async function getReviews(input: IReviewGetRequest) {

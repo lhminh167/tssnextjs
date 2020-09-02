@@ -89,13 +89,13 @@ export interface PayloadAction<T> {
 }
 
 export enum HttpMethod {
-  DELETE = "DELETE",
-  GET = "GET",
-  HEAD = "HEAD",
-  POST = "POST",
-  OPTIONS = "OPTIONS",
-  PUT = "PUT",
-  PATCH = "PATCH"
+  DELETE = 'DELETE',
+  GET = 'GET',
+  HEAD = 'HEAD',
+  POST = 'POST',
+  OPTIONS = 'OPTIONS',
+  PUT = 'PUT',
+  PATCH = 'PATCH'
 }
 
 export interface UploadRequest {
@@ -121,9 +121,9 @@ export interface ImagesRenameRequest {
   content: ImageRenameRequest[];
 }
 
-const mediaBaseUrl = "Media";
+const mediaBaseUrl = 'Media';
 
 export const mediaUrl = {
-  imageUploadToken: mediaBaseUrl + "/" + "ImageUploadToken",
+  imageUploadToken: mediaBaseUrl + '/' + 'ImageUploadToken',
   baseUrl: mediaBaseUrl
 };

@@ -1,4 +1,4 @@
-import { Validator } from "fluentvalidation-ts";
+import { Validator } from 'fluentvalidation-ts';
 
 export interface ShippingRegion {
     shippingRegionId: number;

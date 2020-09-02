@@ -17,7 +17,7 @@ export default async function getSiteMap(req: NextApiRequest, res: NextApiRespon
         res.setHeader('Content-Encoding', 'gzip');
 
         const smStream = new SitemapStream({
-            hostname: process.env.SITE_URL,
+            hostname: process.env.NEXT_PUBLIC_SITE_URL,
         });
 
         const pipeline = smStream.pipe(createGzip());

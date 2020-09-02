@@ -56,12 +56,12 @@ export default function FooterComponent(props) {
                             >
 
                                 <Typography
-                                    variant="body2"
+                                    variant='body2'
                                     component='p'
-                                    color="textSecondary"
-                                    align="center"
+                                    color='textSecondary'
+                                    align='center'
                                 >
-                                    {`© ${new Date().getFullYear()} ${process.env.SITE_NAME.toLowerCase()} Ltd`}
+                                    {`© ${new Date().getFullYear()} ${process.env.NEXT_PUBLIC_SITE_NAME.toLowerCase()} Ltd`}
                                 </Typography>
                             </Link>
 

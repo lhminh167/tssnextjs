@@ -23,7 +23,7 @@ export interface Metadata {
     og_URL?: string;
     canonical: string;
     og_image?: string;
-    og_site_name?: string;
+    og_NEXT_PUBLIC_SITE_NAME?: string;
     twitter_card?: string;
     // twitter_description?: string;
     twitter_site?: string;

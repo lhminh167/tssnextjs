@@ -17,8 +17,8 @@ export default function AdminListComponent(props) {
     return (
         <Fragment>
             <Typography
-                component="h1"
-                variant="h6"
+                component='h1'
+                variant='h6'
                 gutterBottom
             >
                 Admin Area
@@ -27,20 +27,20 @@ export default function AdminListComponent(props) {
                 component={Paper}
             >
                 <Link
-                    href="/product/new"
-                    as="/product/new"
+                    href='/product/new'
+                    as='/product/new'
                     passHref
                 >
                     <ListItem
                         button
-                        component="a"
+                        component='a'
                     >
                         <ListItemIcon>
                             <AddCircleIcon />
                         </ListItemIcon>
 
                         <ListItemText
-                            primary="Add new product"
+                            primary='Add new product'
                         />
                     </ListItem>
                 </Link>

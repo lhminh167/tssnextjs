@@ -1,13 +1,13 @@
-import Fab from "@material-ui/core/Fab";
-import Grid from "@material-ui/core/Grid";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Tooltip from "@material-ui/core/Tooltip";
-import RefreshIcon from "@material-ui/icons/Refresh";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import QuantityPicker from "../../shared/quantity-picker/quantity-picker.component";
-import { IShopingCartItem } from "../shopping-cart.model";
-import { updateShoppingCartItem } from "../shopping-cart.service";
+import Fab from '@material-ui/core/Fab';
+import Grid from '@material-ui/core/Grid';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import QuantityPicker from '../../shared/quantity-picker/quantity-picker.component';
+import { IShopingCartItem } from '../shopping-cart.model';
+import { updateShoppingCartItem } from '../shopping-cart.service';
 
 interface IProps {
   data: IShopingCartItem;
@@ -35,17 +35,22 @@ function ShoppingCartQuantityPicker({
     <Grid
       container
       spacing={1}
-      // direction="row"
+      // direction='row'
       className={classes.row}
-      justify="center"
-      alignItems="center"
+      justify='center'
+      alignItems='center'
     >
       <Grid item>
         <QuantityPicker quantity={state} output={setState} />
       </Grid>
       <Grid item>
-        <Tooltip title="Save the quantity">
-          <Fab color="primary" onClick={updateItem} size="small">
+        <Tooltip title='Save quantity'>
+          <Fab
+            color='primary'
+            onClick={updateItem}
+            size='small'
+            data-cy='update-quantity'
+          >
             <RefreshIcon />
           </Fab>
         </Tooltip>

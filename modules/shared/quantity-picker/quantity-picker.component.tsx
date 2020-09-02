@@ -3,17 +3,17 @@ import {
   createStyles,
   Theme,
   useTheme
-} from "@material-ui/core/styles";
-import AddRoundedIcon from "@material-ui/icons/AddRounded";
-import RemoveRoundedIcon from "@material-ui/icons/RemoveRounded";
-import RefreshIcon from "@material-ui/icons/Refresh";
-import Grid from "@material-ui/core/Grid";
-import { ColorProperty, BorderRadiusProperty, FontSizeProperty } from "csstype";
-import TextField from "@material-ui/core/TextField";
-import IconButton from "@material-ui/core/IconButton";
-import { useState, useEffect, useRef, ChangeEvent } from "react";
-import Tooltip from "@material-ui/core/Tooltip";
-import Fab from "@material-ui/core/Fab";
+} from '@material-ui/core/styles';
+import AddRoundedIcon from '@material-ui/icons/AddRounded';
+import RemoveRoundedIcon from '@material-ui/icons/RemoveRounded';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import Grid from '@material-ui/core/Grid';
+import { ColorProperty, BorderRadiusProperty, FontSizeProperty } from 'csstype';
+import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import { useState, useEffect, useRef, ChangeEvent } from 'react';
+import Tooltip from '@material-ui/core/Tooltip';
+import Fab from '@material-ui/core/Fab';
 
 interface IProps {
   quantity: number;
@@ -56,32 +56,41 @@ function QuantityPicker(props: IProps) {
     <Grid
       container
       spacing={1}
-      // direction="row"
+      // direction='row'
       // item
-      alignItems="center"
+      alignItems='center'
       className={classes.row}
     >
       {/* <Grid item> */}
-      <Fab onClick={decreaseByOne} size="small">
+      <Fab
+        onClick={decreaseByOne}
+        size='small'
+        data-cy='minus-one-quantity'
+      >
         <RemoveRoundedIcon />
       </Fab>
       {/* </Grid>
       <Grid item> */}
       <TextField
         className={classes.textField}
-        margin="dense"
-        variant="outlined"
+        margin='dense'
+        variant='outlined'
         inputProps={{
           style: {
-            textAlign: "center"
+            textAlign: 'center'
           }
         }}
         value={quantity}
         onChange={updateNumberInput}
+        data-cy='adjust-quantity'
       />
       {/* </Grid>
       <Grid item> */}
-      <Fab onClick={increaseByOne} size="small">
+      <Fab
+        onClick={increaseByOne}
+        size='small'
+        data-cy='plus-one-quantity'
+      >
         <AddRoundedIcon />
       </Fab>
       {/* </Grid> */}

@@ -32,7 +32,7 @@ export default function OrderListComponent() {
     }, []);
 
     const showDetail = (orderId: number) => () => {
-        router.push("/order/" + orderId);
+        router.push('/order/' + orderId);
     };
 
     return (
@@ -52,8 +52,8 @@ export default function OrderListComponent() {
                 <TableBody>
                     {state.map((row: Order) => (
                         // <Link
-                        //     href={"/order/" + row.orderId}
-                        //     as={"/order/" + row.orderId}
+                        //     href={'/order/' + row.orderId}
+                        //     as={'/order/' + row.orderId}
                         //     passHref
                         // >
                         <TableRow
@@ -61,7 +61,7 @@ export default function OrderListComponent() {
                             hover
                             onClick={showDetail(row.orderId)}
                         >
-                            <TableCell component="th" scope="row">
+                            <TableCell component='th' scope='row'>
                                 {row.orderId}
                             </TableCell>
                             <TableCell

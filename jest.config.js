@@ -1,9 +1,9 @@
 module.exports = {
-  "roots": [
-    "<rootDir>/pages",
-    "<rootDir>/modules",
+  'roots': [
+    '<rootDir>/pages',
+    '<rootDir>/modules',
   ],
-  "transform": {
-    "^.+\\.tsx?$": "ts-jest"
+  'transform': {
+    '^.+\\.tsx?$': 'ts-jest'
   },
 }

@@ -78,8 +78,8 @@ export default function ShipOkComponent({
                 className={classes.mb}
             >
                 <Typography
-                    variant="h5"
-                    component="h2"
+                    variant='h5'
+                    component='h2'
                 >
                     Order Confirmation
                 </Typography>
@@ -96,31 +96,31 @@ export default function ShipOkComponent({
             >
                 <TextField
                     multiline
-                    name="comments"
-                    variant="outlined"
-                    margin="dense"
+                    name='comments'
+                    variant='outlined'
+                    margin='dense'
                     value={state.comments}
                     onChange={change}
                     error={!state.comments && submitted}
                     helperText={!state.comments && submitted && !isSuccessful ? 'Please specify the reasons for shipment incompleteness.' : null}
                     fullWidth
                     rows={4}
-                    placeholder="If the shipment is incomplete, please specify the reasons for that."
+                    placeholder='If the shipment is incomplete, please specify the reasons for that.'
                 />
             </Grid>
             <Grid item xs={12}
             >
                 <Button
-                    variant="contained"
-                    color="primary"
+                    variant='contained'
+                    color='primary'
                     onClick={openSuccessDialog}
                     className={classes.mr}
                 >
                     Yes, the order has been shipped
                 </Button>
                 {/* <Button
-                    variant="outlined"
-                    color="primary"
+                    variant='outlined'
+                    color='primary'
                     onClick={openFailureDialog}
                 >
                     No, the shipment is incomplete
@@ -130,11 +130,11 @@ export default function ShipOkComponent({
                 open={open}
                 close={null}
                 confirm={isSuccessful ? confirmSuccess : confirmFailure}
-                content={"Please confirm this action by clicking the Submit button"}
+                content={'Please confirm this action by clicking the Submit button'}
                 decline={closeDialog}
                 isLoading={isLoading}
-                confirmText="Submit"
-                declineText="Close"
+                confirmText='Submit'
+                declineText='Close'
             />
         </Fragment >
     );

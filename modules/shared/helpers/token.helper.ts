@@ -1,16 +1,14 @@
-import jwtDecode from "jwt-decode";
-import { Customer, defaultCustomer } from "../../customer/customer.model";
-import { defaultAttributeValue } from "../models/attribute-value.model";
-import { getCustomerIdNumberFromLoginToken } from "./auth.helper";
+import jwtDecode from 'jwt-decode';
+import { Customer, defaultCustomer } from '../../customer/customer.model';
 
 export function setLoginToken(loginToken: string) {
     if (typeof window === 'undefined') return;
-    localStorage.setItem("loginToken", loginToken)
+    localStorage.setItem('loginToken', loginToken)
 }
 
 export function getLoginToken(): string {
     if (typeof window === 'undefined') return;
-    return localStorage.getItem("loginToken") ?? null;
+    return localStorage.getItem('loginToken') ?? null;
 }
 
 export function getValidLoginToken(): string {
@@ -19,12 +17,12 @@ export function getValidLoginToken(): string {
 
 export function setTokenHeader(options: RequestInit) {
     const token = getValidLoginToken();
-    if (token) options.headers["Authorization"] = `Bearer ${token}`;
+    if (token) options.headers['Authorization'] = `Bearer ${token}`;
 }
 
 export function removeLoginToken() {
     if (typeof window === 'undefined') return;
-    return localStorage.removeItem("loginToken");
+    return localStorage.removeItem('loginToken');
 }
 
 export function decodeLoginToken(): Customer {

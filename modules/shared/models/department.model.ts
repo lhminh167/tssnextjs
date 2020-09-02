@@ -1,4 +1,4 @@
-import { ICategory } from "./category.model";
+import { ICategory } from './category.model';
 
 export const departmentUrl = 'department';
 

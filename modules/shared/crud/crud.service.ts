@@ -1,19 +1,19 @@
-import es6promise from "es6-promise";
+import es6promise from 'es6-promise';
 import {
   HttpMethod,
   UploadRequest,
   ImageGetUploadTokensRequest,
   mediaUrl,
   Response as TssResponse
-} from "../crud/crud.model";
-import { setTokenHeader } from "../helpers/token.helper";
-import { setContentType } from "../helpers/http.helper";
+} from '../crud/crud.model';
+import { setTokenHeader } from '../helpers/token.helper';
+import { setContentType } from '../helpers/http.helper';
 
 es6promise.polyfill();
 
-const baseUrl = process.env.API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 const uploadUrl = `https://api.cloudinary.com/v1_1/${
-  process.env.CLOUDINARY_CLOUD_NAME
+  process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
   }/image/upload`;
 
 export async function get(url: string, id: number = 0) {
@@ -44,7 +44,7 @@ export async function remove(url: string, id: number = 0, body: any) {
 export async function callApi(url: string, options: RequestInit = {}) {
   options.headers = {};
   setTokenHeader(options);
-  setContentType(options, "application/json");
+  setContentType(options, 'application/json');
 
   const response = await fetch(url, options);
   const json = response
@@ -74,19 +74,19 @@ export async function upload(input: UploadRequest[]) {
   const tokenResponse = await getImageUploadAuthToken({
     content: input.map(entry => ({
       name: entry.name,
-      settings: "f_auto,w_auto,c_scale,q_auto,dpr_auto"
+      settings: 'f_auto,w_auto,c_scale,q_auto,dpr_auto'
     }))
   });
 
   input.map(async (entry, index) => {
     const body = new FormData();
-    body.append("api_key", process.env.CLOUDINARY_API_KEY);
-    body.append("upload_preset", "tss");
-    body.append("file", entry.file);
-    body.append("public_id", entry.name);
-    body.append("signature", tokenResponse.content[index].uploadToken);
-    body.append("timestamp", tokenResponse.content[index].creationTime);
-    body.append("eager", "f_auto,w_auto,c_scale,q_auto,dpr_auto");
+    body.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY);
+    body.append('upload_preset', 'tss');
+    body.append('file', entry.file);
+    body.append('public_id', entry.name);
+    body.append('signature', tokenResponse.content[index].uploadToken);
+    body.append('timestamp', tokenResponse.content[index].creationTime);
+    body.append('eager', 'f_auto,w_auto,c_scale,q_auto,dpr_auto');
 
     const options = {
       method: HttpMethod.POST,
@@ -99,6 +99,12 @@ export async function upload(input: UploadRequest[]) {
 
 export function getUrl(url: string, id: number = 0): string {
   url = `${baseUrl}${url}`;
-  url += id > 0 ? `/${id}` : "";
+  url += id > 0 ? `/${id}` : '';
   return url;
+}
+
+export function getEnvVar(key: string) {
+  //@ts-ignore
+  // if (typeof window !== "undefined" && window.Cypress) return Cypress.env(key);
+  // return process.env[key]
 }

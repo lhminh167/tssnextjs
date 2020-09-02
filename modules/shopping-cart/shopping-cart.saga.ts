@@ -1,6 +1,6 @@
-import { call, put, takeLatest } from "redux-saga/effects";
-import { getShoppingCartTotalQuantity } from "./shopping-cart.service";
-import { shoppingCartItemCountSlice } from "./shopping-cart.slice";
+import { call, put, takeLatest } from 'redux-saga/effects';
+import { getShoppingCartTotalQuantity } from './shopping-cart.service';
+import { shoppingCartItemCountSlice } from './shopping-cart.slice';
 
 function* getTotalQuantityWorker() {
     const response = yield call(getShoppingCartTotalQuantity);

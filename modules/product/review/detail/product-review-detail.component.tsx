@@ -1,13 +1,13 @@
-import { Button, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../../root/root.model";
-import { toNumber } from "../../../shared/helpers/auth.helper";
-import { bold, mb2, mr, mt } from "../../../shared/layout/layout.style";
-import { IReview } from "../../../shared/models/review.model";
-import ProductReviewDeleteComponent from "../delete/product-review-delete.component";
-import ProductReviewEditComponent from "../edit/product-review-edit.component";
-import ProductReviewComponent from "./product-review.component";
+import { Button, createStyles, Grid, makeStyles, Theme } from '@material-ui/core';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../root/root.model';
+import { toNumber } from '../../../shared/helpers/auth.helper';
+import { bold, mb2, mr, mt } from '../../../shared/layout/layout.style';
+import { IReview } from '../../../shared/models/review.model';
+import ProductReviewDeleteComponent from '../delete/product-review-delete.component';
+import ProductReviewEditComponent from '../edit/product-review-edit.component';
+import ProductReviewComponent from './product-review.component';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,7 +32,7 @@ export default function ProductReviewDetailComponent({
     const classes = useStyles({});
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const isAdmin = useSelector<IRootState, boolean>(
-        state => state.currentUser.data.role === "Admin"
+        state => state.currentUser.data.role === 'Admin'
     );
     const isCreator = useSelector<IRootState, boolean>(
         state => toNumber(state.currentUser.data.customerId) === data.customerId
@@ -47,7 +47,7 @@ export default function ProductReviewDetailComponent({
         <Grid
             item
             container
-            component="li"
+            component='li'
             xs={12}
             key={data.reviewId}
             className={classes.mb2}

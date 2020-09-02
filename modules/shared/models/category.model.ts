@@ -1,5 +1,5 @@
-import { PaginatedList, defaultPaginationList } from "../crud/crud.model";
-import { IProduct } from "./product.model";
+import { PaginatedList, defaultPaginationList } from '../crud/crud.model';
+import { IProduct } from './product.model';
 
 export const categoryUrl = 'category';
 
