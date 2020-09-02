@@ -3,15 +3,26 @@ import { Customer, defaultCustomer } from '../customer/customer.model';
 import { Tax, defaultTax } from '../shared/models/tax.model';
 import { IProduct } from '../shared/models/product.model';
 
-const orderBaseUrl = 'Order';
+const apiOrderBaseUrl = 'Order';
+
+export const apiOrderUrl = {
+    baseUrl: apiOrderBaseUrl,
+    new: apiOrderBaseUrl + '/new',
+    stockOk: apiOrderBaseUrl + '/stockOk',
+    stockNotOk: apiOrderBaseUrl + '/stockNotOk',
+    shipOk: apiOrderBaseUrl + '/shipOk',
+    shipNotOk: apiOrderBaseUrl + '/shipNotOk'
+};
+
+const orderBaseUrl = '/order';
 
 export const orderUrl = {
     baseUrl: orderBaseUrl,
     new: orderBaseUrl + '/new',
-    stockOk: orderBaseUrl + '/stockOk',
-    stockNotOk: orderBaseUrl + '/stockNotOk',
-    shipOk: orderBaseUrl + '/shipOk',
-    shipNotOk: orderBaseUrl + '/shipNotOk'
+    detail: (orderId: number) => ({
+        href: `${orderBaseUrl}/[orderId]`,
+        as: `${orderBaseUrl}/${orderId}`,
+    }),
 };
 
 export interface Order {

@@ -1,30 +1,15 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import { useRouter } from 'next/router';
+import { CustomerDetailMetadataComponent } from '../../../modules/customer/detail/customer-detail-metadata.component';
 import CustomerDetailComponent from '../../../modules/customer/detail/customer-detail.component';
 import ErrorBoundary from '../../../modules/shared/error-boundary/error-boundary.component';
 import { toNumber } from '../../../modules/shared/helpers/auth.helper';
-import { Container } from '@material-ui/core';
-import { CustomerDetailMetadataComponent } from '../../../modules/customer/detail/customer-detail-metadata.component';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { getLoginToken } from '../../../modules/shared/helpers/token.helper';
+import { allowCustomerHoc } from '../../../modules/shared/allow/allow-customer.component';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
-
-interface Props {
-}
-
-export default function CustomerDetailPage({
-}: Props) {
-    const classes = useStyles({});
+function CustomerDetailPage() {
     const router = useRouter();
     const userId = toNumber(router.query.userId as string);
 
-    useEffect(() => {
-        if (!getLoginToken()) router.push("/user/login");
-    }, []);
 
     return (
         <Container>
@@ -39,3 +24,5 @@ export default function CustomerDetailPage({
         </Container>
     );
 }
+
+export default allowCustomerHoc(CustomerDetailPage);

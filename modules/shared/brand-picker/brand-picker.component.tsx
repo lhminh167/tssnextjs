@@ -2,17 +2,14 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from '@material-ui/core/FormLabel';
-import { makeStyles, Theme } from '@material-ui/core/styles';
 import { ChangeEvent } from 'react';
 import { IProductFilterCategory } from '../../product/filter/product-filter.model';
 import { themeColor } from '../layout/layout.theme';
+import { CATEGORY } from '../tag/tag.model';
 
 export const CheckBoxBlankIcon = <svg width='24px' height='24px' viewBox='0 0 24 24'>
     <path fill={themeColor.primary} d='M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z' />
 </svg>
-
-const useStyles = makeStyles((theme: Theme) => ({
-}));
 
 interface Props {
     state: string[],
@@ -20,12 +17,11 @@ interface Props {
     output: any
 }
 
-function BrandPicker({
+function BrandPickerComponent({
     state,
     data,
     output
 }: Props) {
-    const classes = useStyles({});
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const name = (event.target as HTMLInputElement).value;
@@ -45,19 +41,19 @@ function BrandPicker({
                     value={entry.name}
                     color='secondary'
                     icon={CheckBoxBlankIcon}
+                    data-cy={CATEGORY + entry.name}
                 />
             }
             label={entry.name}
-            data-cy='brand'
         />
     ));
 
     return (
         <FormGroup>
-            <FormLabel component='legend' >Brand</FormLabel>
+            <FormLabel component='legend' >Category</FormLabel>
             {checkboxes}
         </FormGroup>
     );
 }
 
-export default BrandPicker;
+export default BrandPickerComponent;

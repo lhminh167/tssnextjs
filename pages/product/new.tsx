@@ -1,16 +1,11 @@
-import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
-import { useEffect } from "react";
+import { Container } from "@material-ui/core";
 import { CreateProductMetadataComponent } from "../../modules/product/create/create-product-metadata.component";
 import CreateProductComponent from "../../modules/product/create/create-product.component";
 import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
-import { allowCustomer } from "../../modules/shared/helpers/auth.helper";
+import { allowAdminHoc } from "../../modules/shared/allow/allow-admin.component";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
-export default function CreateProductPage(props) {
-  const classes = useStyles(props);
-
-  useEffect(() => allowCustomer(), []);
+function CreateProductPage() {
 
   return (
     <Container>
@@ -23,3 +18,5 @@ export default function CreateProductPage(props) {
     </Container>
   );
 }
+
+export default allowAdminHoc(CreateProductPage);

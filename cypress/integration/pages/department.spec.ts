@@ -1,3 +1,6 @@
+import NavbarComponentTest from "../../component/shared/navbar/navbar.component.spec";
+import { DepartmentListMetadataComponentTest } from "../../component/department/list/department-list-metadata.component.spec";
+
 describe('Department and Category List page', () => {
 
   beforeEach(() => {
@@ -5,8 +8,7 @@ describe('Department and Category List page', () => {
   });
 
 
-  it('should show top panel a logo', () => {
-    cy.get('[data-cy=top-panel]').should('have.length', 1);
-  });
+  DepartmentListMetadataComponentTest();
+  NavbarComponentTest();
 
 });

@@ -1,40 +1,66 @@
 import Router from 'next/router';
-import { store } from '../../root/root.store';
-import { decodeLoginToken } from './token.helper';
-import { customerIdSelector } from '../../customer/customer.slice';
-import { IRootState } from '../../root/root.model';
+import { Role } from '../../customer/customer.model';
+import { customerIdSelector, customerRoleSelector } from '../../customer/customer.slice';
+import { getState } from '../../root/root.store';
+import { decodeLoginToken, getLoginToken } from './token.helper';
 
-export function toNumber(string: string) {
-    const parsed = parseInt(string);
+export function toNumber(input: string) {
+    const hasLetters: boolean = (/[A-Z]+/ig).test(input);
+    if (hasLetters) return 0;
+
+    const parsed = parseInt(input);
     return isNaN(parsed) ? 0 : parsed;
 }
 
 export function getCustomerIdStringFromStore(): string {
-    return customerIdSelector(store.getState() as IRootState);
+    return customerIdSelector(getState());
 }
 
 export function getCustomerIdNumberFromLoginToken(): number {
-    return toNumber(decodeLoginToken()?.customerId);
+    const customerId = decodeLoginToken()?.customerId;
+
+    return toNumber(customerId);
+}
+
+export function getCustomerRoleFromLoginToken(): Role {
+    return decodeLoginToken()?.role;
 }
 
 export function getCustomerIdNumberFromStore(): number {
     return toNumber(getCustomerIdStringFromStore());
 }
 
-export function goTo(url: string) {
-    Router.push(url ?? '/');
+export function getCustomerRoleFromStore(): string {
+    return customerRoleSelector(getState());
+}
+
+export function goTo(url: string, returnUrl?: string, asPath?: string) {
+    const destination = (url ?? '/') + (returnUrl ? '?next=' + returnUrl : '');
+    Router.push(destination, asPath);
 }
 
 export function backToPreviousPage() {
     goTo(Router.query.next as string);
 }
 
-export function allowCustomer() {
-    const customerId = getCustomerIdNumberFromStore();
-    if (customerId <= 0) goTo('/user/login');
+export function goBack() {
+    Router.back();
 }
 
-export function allowAnonymous() {
-    const customerId = getCustomerIdStringFromStore();
-    if (!customerId) goTo('/user/login');
+export function isAnonymous(): boolean {
+    const token = getLoginToken();
+    const allowed = token?.length > 0;
+    return allowed;
+}
+
+export function isCustomer(): boolean {
+    const customerId = getCustomerIdNumberFromLoginToken();
+
+    return customerId > 0;
+}
+
+export function isAdmin(): boolean {
+    const role = getCustomerRoleFromLoginToken();
+    const allowed = role === Role.Admin;
+    return allowed
 }

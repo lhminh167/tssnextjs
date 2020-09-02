@@ -39,13 +39,6 @@ declare namespace Cypress {
             user: any
         ): Chainable<JQuery<E>>;
 
-        // /**
-        //  * Return a fixed-length random string.
-        //  */
-        // randomString<E extends Node = HTMLElement>(
-        //     length: number
-        // ): Chainable<JQuery<E>>;
-
         /**
          * Fill in checkout form.
          */

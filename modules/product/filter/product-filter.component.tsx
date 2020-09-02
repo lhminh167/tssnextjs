@@ -14,16 +14,17 @@ import { useRouter } from 'next/router';
 import { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../root/root.model';
-import BrandPicker from '../../shared/brand-picker/brand-picker.component';
+import BrandPickerComponent from '../../shared/brand-picker/brand-picker.component';
 import ColorPicker from '../../shared/color-picker/color-picker.component';
 import { defaultRowsPerPageOptions } from '../../shared/crud/crud.model';
 import { defaultAttributeValue, IAttributeValue } from '../../shared/models/attribute-value.model';
 import { IProduct } from '../../shared/models/product.model';
 import PaginationComponent, { PaginationProps } from '../../shared/pagination/pagination.component';
 import ProductListComponent from '../../shared/product-list/product-list.component';
-import SizePicker from '../../shared/size-picker/size-picker.component';
+import SizePickerComponent from '../../shared/size-picker/size-picker.component';
 import { defaultIsDescendingOptions, defaultProductSearchRequest, defaultSortByOptions, IProductFilterCategory, IProductSearchRequest, ProductFilterFilterEnum } from './product-filter.model';
 import { mb2, mr, mb } from '../../shared/layout/layout.style';
+import { FILTERED_ITEM_COUNT, SUBMIT, MIN_PRICE, MAX_PRICE, SORT_BY, SORT_ORDER } from '../../shared/tag/tag.model';
 import { formatCurrency } from '../../shared/helpers/string.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -231,7 +232,7 @@ export default function ProductFilterComponent({
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <Typography>
-                        Filter {count} items
+                        Filter <span data-cy={FILTERED_ITEM_COUNT}>{count}</span> items
                     </Typography>
                 </AccordionSummary>
                 <Divider />
@@ -262,7 +263,7 @@ export default function ProductFilterComponent({
                                 xs={12}
                             // className={classes.mb}
                             >
-                                <SizePicker
+                                <SizePickerComponent
                                     data={sizes}
                                     output={setSize}
                                     state={size}
@@ -292,10 +293,14 @@ export default function ProductFilterComponent({
                                 container
                                 justify='space-between'
                             >
-                                <Grid item>
+                                <Grid item
+                                    data-cy={MIN_PRICE}
+                                >
                                     {formatCurrency(price[0])}
                                 </Grid>
-                                <Grid item>
+                                <Grid item
+                                    data-cy={MAX_PRICE}
+                                >
                                     {formatCurrency(price[1])}
                                 </Grid>
                             </Grid>
@@ -308,7 +313,7 @@ export default function ProductFilterComponent({
                                 className={classes.mb2}
 
                             >
-                                <BrandPicker
+                                <BrandPickerComponent
                                     data={categories}
                                     output={setCategory}
                                     state={category}
@@ -332,11 +337,13 @@ export default function ProductFilterComponent({
                                     value={sortBy}
                                     onChange={changeSortBy}
                                     fullWidth
+                                    data-cy={SORT_BY}
                                 >
                                     {defaultSortByOptions.map(entry => (
                                         <MenuItem
                                             key={entry.value}
                                             value={entry.value}
+                                            data-cy={SORT_BY + entry.value}
                                         >
                                             {entry.label}
                                         </MenuItem>
@@ -352,11 +359,13 @@ export default function ProductFilterComponent({
                                     value={isDescending}
                                     onChange={changeIsDescending}
                                     fullWidth
+                                    data-cy={SORT_ORDER}
                                 >
                                     {defaultIsDescendingOptions.map(entry => (
                                         <MenuItem
                                             key={entry.value}
                                             value={entry.value}
+                                            data-cy={SORT_ORDER + entry.value}
                                         >
                                             {entry.label}
                                         </MenuItem>
@@ -373,6 +382,7 @@ export default function ProductFilterComponent({
                         color='primary'
                         className={classes.button}
                         onClick={apply}
+                        data-cy={SUBMIT}
                     >
                         Apply
                     </Fab>

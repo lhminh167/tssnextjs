@@ -1,21 +1,21 @@
 import { Button, Grid, InputAdornment, makeStyles, MenuItem, TextField, Typography } from '@material-ui/core';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../root/root.model';
 import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 import { UploadRequest } from '../../shared/crud/crud.model';
 import { upload } from '../../shared/crud/crud.service';
-import { toNumber } from '../../shared/helpers/auth.helper';
+import { toNumber, goTo } from '../../shared/helpers/auth.helper';
 import { toUrl } from '../../shared/helpers/string.helper';
 import { IAttributeValue } from '../../shared/models/attribute-value.model';
-import { productDisplayOptions } from '../../shared/models/product.model';
+import { productDisplayOptions, defaultProduct } from '../../shared/models/product.model';
 import UploadComponent from '../../shared/upload/upload.component';
 import { isValidForm } from '../../shared/validator/validator';
-import { IProductFilterCategory, ProductFilterFilterEnum } from '../filter/product-filter.model';
+import { IProductFilterCategory, ProductFilterFilterEnum, productUrl } from '../filter/product-filter.model';
 import productFilterSlice from '../filter/product-filter.slice';
 import { CreateProductStateValidator, defaultCreateProductState, ICreateProductRequest, ICreateProductState } from './create-product.model';
 import { createProduct } from './create-product.service';
+import { DESCRIPTION, COLOR, SIZE, YES, NAME, PRICE, DISCOUNTED_PRICE, SUBMIT, NO, CATEGORY, THUMBNAIL, IMAGE, DISPLAY, IMAGE_2, getOptionTag, TITLE } from '../../shared/tag/tag.model';
 
 
 const useStyles = makeStyles(theme => ({
@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function CreateProductComponent() {
     const classes = useStyles({});
-    const router = useRouter();
     const [state, setState] = useState<ICreateProductState>(defaultCreateProductState);
     const [submitted, setSubmitted] = useState<boolean>(false);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -63,6 +62,9 @@ export default function CreateProductComponent() {
     }
 
     async function submit(event) {
+        setSubmitted(true);
+        if (!isValidForm(errors)) return;
+
         const images: UploadRequest[] = [
             { name: toUrl(state.name) + '-thumbnail', file: state.thumbnail },
             { name: toUrl(state.name), file: state.image },
@@ -80,17 +82,12 @@ export default function CreateProductComponent() {
             image: images[1].name,
             image2: images[2].name,
         };
-        setSubmitted(true);
 
-        if (!isValidForm(errors)) return;
-        try {
-            await upload(images);
-            const response = await createProduct(data);
+        await upload(images);
+        const response = await createProduct(data);
 
-            setProductId(response.content.productId);
-            setIsDialogOpen(true);
-        } catch (e) {
-        }
+        setProductId(response.content.productId);
+        setIsDialogOpen(true);
     }
 
     function closeDialog() {
@@ -98,14 +95,11 @@ export default function CreateProductComponent() {
     }
 
     function showProductDetail() {
-        router.push({
-            pathname: '/product/[productName]',
-            query: {
-                productId
-            }
-        },
-            `/product/${toUrl(state.name)}?productId=${productId}`
-        );
+        goTo(productUrl.detail({
+            ...defaultProduct,
+            name: state.name,
+            productId: productId
+        }).as);
     }
 
     function resetForm() {
@@ -128,7 +122,7 @@ export default function CreateProductComponent() {
                 <Typography
                     component='h1'
                     variant='h5'
-
+                    data-cy={TITLE}
                 >
                     Add New Product
                 </Typography>
@@ -147,6 +141,7 @@ export default function CreateProductComponent() {
                     InputLabelProps={{ shrink: true }}
                     error={errors.name && submitted}
                     helperText={errors.name && submitted ? errors.name : null}
+                    data-cy={NAME}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -164,6 +159,8 @@ export default function CreateProductComponent() {
                     InputLabelProps={{ shrink: true }}
                     error={errors.description && submitted}
                     helperText={errors.description && submitted ? errors.description : null}
+                    data-cy={DESCRIPTION}
+
                 />
             </Grid>
             <Grid item xs={12}>
@@ -183,6 +180,7 @@ export default function CreateProductComponent() {
                     InputProps={{
                         startAdornment: <InputAdornment position='start'>$</InputAdornment>
                     }}
+                    data-cy={PRICE}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -202,6 +200,7 @@ export default function CreateProductComponent() {
                     InputProps={{
                         startAdornment: <InputAdornment position='start'>$</InputAdornment>
                     }}
+                    data-cy={DISCOUNTED_PRICE}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -219,9 +218,13 @@ export default function CreateProductComponent() {
                     InputLabelProps={{ shrink: true }}
                     error={errors.categoryId && submitted}
                     helperText={errors.categoryId && submitted ? errors.categoryId : null}
+                    data-cy={CATEGORY}
+
                 >
                     {categories.map(entry => (
-                        <MenuItem key={entry.categoryId} value={entry.categoryId}>
+                        <MenuItem key={entry.categoryId} value={entry.categoryId}
+                            data-cy={getOptionTag(CATEGORY)}
+                        >
                             {entry.name}
                         </MenuItem>
                     ))}
@@ -245,9 +248,12 @@ export default function CreateProductComponent() {
                     InputLabelProps={{ shrink: true }}
                     error={errors.color && submitted}
                     helperText={errors.color && submitted ? errors.color : null}
+                    data-cy={COLOR}
                 >
                     {colors.map(entry => (
-                        <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}>
+                        <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}
+                            data-cy={getOptionTag(COLOR)}
+                        >
                             {entry.value}
                         </MenuItem>
                     ))}
@@ -272,9 +278,12 @@ export default function CreateProductComponent() {
                     InputLabelProps={{ shrink: true }}
                     error={errors.size && submitted}
                     helperText={errors.size && submitted ? errors.size : null}
+                    data-cy={SIZE}
                 >
                     {sizes.map(entry => (
-                        <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}>
+                        <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}
+                            data-cy={getOptionTag(SIZE)}
+                        >
                             {entry.value}
                         </MenuItem>
                     ))}
@@ -295,9 +304,12 @@ export default function CreateProductComponent() {
                     InputLabelProps={{ shrink: true }}
                     error={errors.display && submitted}
                     helperText={errors.display && submitted ? errors.display : null}
+                    data-cy={DISPLAY}
                 >
                     {productDisplayOptions.map(entry => (
-                        <MenuItem key={entry.value} value={entry.value}>
+                        <MenuItem key={entry.value} value={entry.value}
+                            data-cy={getOptionTag(DISPLAY)}
+                        >
                             {entry.label}
                         </MenuItem>
                     ))}
@@ -310,6 +322,7 @@ export default function CreateProductComponent() {
                     data={state.thumbnail}
                     name='thumbnail'
                     buttonText='Chose Thumbnail'
+                    testId={THUMBNAIL}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -319,6 +332,7 @@ export default function CreateProductComponent() {
                     data={state.image}
                     name='image'
                     buttonText='Chose Image 1'
+                    testId={IMAGE}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -328,6 +342,7 @@ export default function CreateProductComponent() {
                     data={state.image2}
                     name='image2'
                     buttonText='Chose Image 2'
+                    testId={IMAGE_2}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -336,6 +351,7 @@ export default function CreateProductComponent() {
                     variant='contained'
                     color='primary'
                     onClick={submit}
+                    data-cy={SUBMIT}
                 >
                     Submit
                 </Button>
@@ -348,6 +364,8 @@ export default function CreateProductComponent() {
                 close={closeDialog}
                 confirm={showProductDetail}
                 decline={resetForm}
+                confirmTestId={YES}
+                declineTestId={NO}
             ></ConfirmationDialog>
         </Grid>
     );

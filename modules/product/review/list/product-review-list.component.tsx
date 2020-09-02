@@ -12,6 +12,7 @@ import CreateReviewComponent from '../create/create-product-review.component';
 import ProductReviewDetailComponent from '../detail/product-review-detail.component';
 import { getReviews } from '../review.service';
 import { Rating } from '@material-ui/lab';
+import { RATING } from '../../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -102,8 +103,9 @@ export default function ProductReviewListComponent({ data }: Props) {
                 max={5}
               />
               <Typography
-              // component='h2'
-              // variant='h5'
+                // component='h2'
+                // variant='h5'
+                data-cy={RATING}
               >
                 {state.count} ratings
               </Typography>

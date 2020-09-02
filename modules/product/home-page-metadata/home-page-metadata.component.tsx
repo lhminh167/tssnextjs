@@ -1,12 +1,10 @@
-import { Product, WithContext, WebSite, ShoppingCenter } from 'schema-dts';
-import { getImageUrl } from '../../shared/helpers/http.helper';
-import { IProduct, HomepageProducts } from '../../shared/models/product.model';
-import { StructuredDataComponent } from '../../shared/structured-data/structured-data.component';
 import { Fragment } from 'react';
+import { WebSite, WithContext } from 'schema-dts';
+import ErrorBoundary from '../../shared/error-boundary/error-boundary.component';
 import { MetadataComponent } from '../../shared/metadata/metadata.component';
 import { PageType, RobotsContent } from '../../shared/metadata/metadata.model';
-import ErrorBoundary from '../../shared/error-boundary/error-boundary.component';
-import { toUrl } from '../../shared/helpers/string.helper';
+import { HomepageProducts } from '../../shared/models/product.model';
+import { StructuredDataComponent } from '../../shared/structured-data/structured-data.component';
 
 interface Props {
     data: HomepageProducts

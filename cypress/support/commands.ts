@@ -24,6 +24,11 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+import { PASSWORD, EMAIL, NAME, ADDRESS_1, ADDRESS_2, MOB_PHONE, DAY_PHONE, EVE_PHONE, COUNTRY, POSTALCODE, REGION, CITY, SHIPPING, SUBMIT } from "../../modules/shared/tag/tag.model";
+import { ILoginRequest, customerUrl } from "../../modules/customer/customer.model";
+import 'cypress-file-upload';
+import 'cypress-wait-until';
+
 Cypress.Commands.add('getLink', {
     prevSubject: true
 }, (subject) => {
@@ -57,50 +62,43 @@ Cypress.Commands.add('load', {
 });
 
 Cypress.Commands.add('typeLogin', (user) => {
-    cy.getEl('email')
+    cy.getEl(EMAIL)
         .type(user.email)
 
-    cy.getEl('password')
+    cy.getEl(PASSWORD)
         .type(user.password)
 })
 
 
 Cypress.Commands.add('typeRegister', (user) => {
-    cy.getEl('name')
+    cy.getEl(NAME)
         .type(user.password)
 
-    cy.getEl('email')
+    cy.getEl(EMAIL)
         .type(user.email)
 
-    cy.getEl('password')
+    cy.getEl(PASSWORD)
         .type(user.password)
 })
-
-
-// Cypress.Commands.add('randomString', (subject, length: number) => {
-
-//     Math.random().toString(36).substring(length);
-// })
-
 
 Cypress.Commands.add('typeCheckout', (user) => {
 
     const fields: string[] = [
-        'address1',
-        'address2',
-        'city',
-        'region',
-        'postalCode',
-        'country',
-        'mobPhone',
-        'dayPhone',
-        'evePhone',
+        ADDRESS_1,
+        ADDRESS_2,
+        CITY,
+        REGION,
+        POSTALCODE,
+        COUNTRY,
+        MOB_PHONE,
+        DAY_PHONE,
+        EVE_PHONE,
     ];
 
     cy.fillTextFields(fields, user);
 
-    cy.getEl('shippingId').click()
-    cy.getEl('shippingId' + user.shippingId).click();
+    cy.getEl(SHIPPING).click()
+    cy.getEl(SHIPPING + user.shippingId).click();
 });
 
 
@@ -142,9 +140,30 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
     'getWithinIframe',
-    (targetElement) => cy.get('iframe')
+    (targetElement) => cy.get('iframe', { timeout: 600000 })
         .first()
         .iframeLoaded()
         .its('document').should('exist')
         .getInDocument(targetElement)
 );
+
+
+export function randomString(length: number) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.toLowerCase();
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+export function getRootAdminAccount() {
+    const account: ILoginRequest = {
+        email: 'lhminh.phs@gmail.com',
+        password: 'string'
+    }
+
+    return account;
+}
+

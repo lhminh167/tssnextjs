@@ -1,15 +1,16 @@
 import { Button, createStyles, FormControl, FormHelperText, Grid, InputLabel, makeStyles, MenuItem, Paper, Select, TextField, Theme, Typography } from '@material-ui/core';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../root/root.model';
 import { toNumber } from '../../shared/helpers/auth.helper';
-import { p, mb, mb2 } from '../../shared/layout/layout.style';
+import { mb, mb2, p } from '../../shared/layout/layout.style';
 import { defaultCatalogGetRequest, defaultCatalogGetResponse, ICatalogGetResponse } from '../../shared/models/catalog.model';
 import { getCatalog } from '../../shared/services/catalog.service';
+import { ADDRESS_1, ADDRESS_2, CITY, COUNTRY, DAY_PHONE, EVE_PHONE, MOB_PHONE, NAME, POSTALCODE, REGION, ROLE, SHIPPING_REGION, SUBMIT } from '../../shared/tag/tag.model';
 import { isValidForm } from '../../shared/validator/validator';
+import { Customer, CustomerUpdateRequest, CustomerUpdateRequestValidator, defaultCustomerUpdateRequest } from '../customer.model';
 import { getCustomer, updateCustomer } from '../customer.service';
-import { Customer, CustomerUpdateRequest, defaultCustomerUpdateRequest, CustomerUpdateRequestValidator } from '../customer.model';
-import { useRouter } from 'next/router';
 import { currentUserSlice } from '../customer.slice';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -127,6 +128,8 @@ export default function CustomerEditComponent({
                     onChange={change}
                     error={errors.name && submitted}
                     helperText={errors.name && submitted ? errors.name : null}
+                    data-cy={NAME}
+
                 />
             </Grid>
             <Grid item xs={12}>
@@ -141,6 +144,7 @@ export default function CustomerEditComponent({
                     onChange={change}
                     error={errors.address1 && submitted}
                     helperText={errors.address1 && submitted ? errors.address1 : null}
+                    data-cy={ADDRESS_1}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -154,6 +158,7 @@ export default function CustomerEditComponent({
                     onChange={change}
                     error={errors.address2 && submitted}
                     helperText={errors.address2 && submitted ? errors.address2 : null}
+                    data-cy={ADDRESS_2}
                 />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -168,6 +173,8 @@ export default function CustomerEditComponent({
                     onChange={change}
                     error={errors.city && submitted}
                     helperText={errors.city && submitted ? errors.city : null}
+                    data-cy={CITY}
+
                 />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -180,6 +187,8 @@ export default function CustomerEditComponent({
                     onChange={change}
                     error={errors.region && submitted}
                     helperText={errors.region && submitted ? errors.region : null}
+                    data-cy={REGION}
+
                 />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -194,6 +203,7 @@ export default function CustomerEditComponent({
                     onChange={change}
                     error={errors.postalCode && submitted}
                     helperText={errors.postalCode && submitted ? errors.postalCode : null}
+                    data-cy={POSTALCODE}
                 />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -208,6 +218,8 @@ export default function CustomerEditComponent({
                     onChange={change}
                     error={errors.country && submitted}
                     helperText={errors.country && submitted ? errors.country : null}
+                    data-cy={COUNTRY}
+
                 />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -220,6 +232,8 @@ export default function CustomerEditComponent({
                     onChange={change}
                     error={errors.dayPhone && submitted}
                     helperText={errors.dayPhone && submitted ? errors.dayPhone : null}
+                    data-cy={DAY_PHONE}
+
                 />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -232,6 +246,8 @@ export default function CustomerEditComponent({
                     onChange={change}
                     error={errors.evePhone && submitted}
                     helperText={errors.evePhone && submitted ? errors.evePhone : null}
+                    data-cy={EVE_PHONE}
+
                 />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -244,6 +260,7 @@ export default function CustomerEditComponent({
                     onChange={change}
                     error={errors.mobPhone && submitted}
                     helperText={errors.mobPhone && submitted ? errors.mobPhone : null}
+                    data-cy={MOB_PHONE}
                 />
             </Grid>
             <Grid item
@@ -264,12 +281,14 @@ export default function CustomerEditComponent({
                         id='shippingRegionId'
                         value={state.shippingRegionId}
                         onChange={change}
+                        data-cy={SHIPPING_REGION}
                     >
                         {form.shippingRegion.map(entry => {
                             return (
                                 <MenuItem
                                     key={entry.shippingRegionId}
                                     value={entry.shippingRegionId}
+                                    data-cy={SHIPPING_REGION + entry.shippingRegionId}
                                 >
                                     {entry.shippingRegion1}
                                 </MenuItem>
@@ -306,12 +325,14 @@ export default function CustomerEditComponent({
                             id='role'
                             value={state.role}
                             onChange={change}
+                            data-cy={ROLE}
                         >
                             {form.role.map(entry => {
                                 return (
                                     <MenuItem
                                         key={entry.value}
                                         value={entry.value}
+                                        data-cy={ROLE + entry.value}
                                     >
                                         {entry.value}
                                     </MenuItem>
@@ -339,6 +360,7 @@ export default function CustomerEditComponent({
                     variant='contained'
                     color='primary'
                     onClick={submit}
+                    data-cy={SUBMIT}
                 >
                     Submit
                 </Button>

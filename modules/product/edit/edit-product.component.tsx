@@ -16,6 +16,7 @@ import { IProductFilterCategory, ProductFilterFilterEnum } from '../filter/produ
 import { defaultEditProductState, EditProductRequestValidator, IEditProductRequest, IEditProductState, defaultFile } from './edit-product.model';
 import { editProduct } from './edit-product.service';
 import productFilterSlice from '../filter/product-filter.slice';
+import { SUBMIT, IMAGE_2, THUMBNAIL, DISPLAY, SIZE, COLOR, NAME, DESCRIPTION, PRICE, DISCOUNTED_PRICE, CATEGORY, IMAGE } from '../../shared/tag/tag.model';
 
 
 const useStyles = makeStyles(theme => ({
@@ -174,6 +175,7 @@ export default function EditProductComponent({
                     InputLabelProps={{ shrink: true }}
                     error={errors.name && submitted}
                     helperText={errors.name && submitted ? errors.name : null}
+                    data-cy={NAME}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -191,6 +193,7 @@ export default function EditProductComponent({
                     InputLabelProps={{ shrink: true }}
                     error={errors.description && submitted}
                     helperText={errors.description && submitted ? errors.description : null}
+                    data-cy={DESCRIPTION}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -210,6 +213,7 @@ export default function EditProductComponent({
                     InputProps={{
                         startAdornment: <InputAdornment position='start'>$</InputAdornment>
                     }}
+                    data-cy={PRICE}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -229,6 +233,7 @@ export default function EditProductComponent({
                     InputProps={{
                         startAdornment: <InputAdornment position='start'>$</InputAdornment>
                     }}
+                    data-cy={DISCOUNTED_PRICE}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -246,6 +251,7 @@ export default function EditProductComponent({
                     InputLabelProps={{ shrink: true }}
                     error={errors.categoryId && submitted}
                     helperText={errors.categoryId && submitted ? errors.categoryId : null}
+                    data-cy={CATEGORY}
                 >
                     {categories.map(entry => (
                         <MenuItem key={entry.categoryId} value={entry.categoryId}>
@@ -272,6 +278,7 @@ export default function EditProductComponent({
                     InputLabelProps={{ shrink: true }}
                     error={errors.color && submitted}
                     helperText={errors.color && submitted ? errors.color : null}
+                    data-cy={COLOR}
                 >
                     {colors.map(entry => (
                         <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}>
@@ -299,6 +306,7 @@ export default function EditProductComponent({
                     InputLabelProps={{ shrink: true }}
                     error={errors.size && submitted}
                     helperText={errors.size && submitted ? errors.size : null}
+                    data-cy={SIZE}
                 >
                     {sizes.map(entry => (
                         <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}>
@@ -322,6 +330,7 @@ export default function EditProductComponent({
                     InputLabelProps={{ shrink: true }}
                     error={errors.display && submitted}
                     helperText={errors.display && submitted ? errors.display : null}
+                    data-cy={DISPLAY}
                 >
                     {productDisplayOptions.map(entry => (
                         <MenuItem key={entry.value} value={entry.value}>
@@ -337,6 +346,7 @@ export default function EditProductComponent({
                     data={state.thumbnail}
                     name='thumbnail'
                     buttonText='Chose Thumbnail'
+                    testId={THUMBNAIL}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -346,6 +356,7 @@ export default function EditProductComponent({
                     data={state.image}
                     name='image'
                     buttonText='Chose Image 1'
+                    testId={IMAGE}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -355,6 +366,7 @@ export default function EditProductComponent({
                     data={state.image2}
                     name='image2'
                     buttonText='Chose Image 2'
+                    testId={IMAGE_2}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -363,6 +375,7 @@ export default function EditProductComponent({
                     variant='contained'
                     color='primary'
                     onClick={submit}
+                    data-cy={SUBMIT}
                 >
                     Submit
                 </Button>

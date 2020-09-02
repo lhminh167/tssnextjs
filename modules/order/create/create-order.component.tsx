@@ -106,14 +106,14 @@ export default function CreateOrderComponent() {
 
   useEffect(() => {
     getOrderCreateForm().then(data => {
-      debugger
+      
 
       setForm(data.content);
     });
   }, []);
 
   useEffect(() => {
-    debugger
+    
 
     setState(defaultOrderCreateRequest);
   }, [currentUser]);

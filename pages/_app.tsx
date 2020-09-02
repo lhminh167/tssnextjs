@@ -1,11 +1,17 @@
 import Head from "next/head";
 import React from "react";
 import { Provider } from "react-redux";
-import { store } from "../modules/root/root.store";
 import ErrorBoundary from "../modules/shared/error-boundary/error-boundary.component";
 import Layout from "../modules/shared/layout/layout.component";
+import { useStore } from "../modules/root/root.store";
 
 export default function App(props) {
+
+    const store = useStore(props.pageProps.initialReduxState)
+
+    //@ts-ignore
+    if (typeof window !== "undefined" && window.Cypress) window.store = store;
+
     return (
         <ErrorBoundary>
             <Head>
@@ -25,5 +31,6 @@ export default function App(props) {
     );
 }
 
-//@ts-ignore
-if (typeof window !== "undefined" && window.Cypress) window.store = store;
+// export function reportWebVitals(metric) {
+//     console.log(metric)
+// }

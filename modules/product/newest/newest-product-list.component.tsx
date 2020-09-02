@@ -9,6 +9,7 @@ import ProductListComponent from '../../shared/product-list/product-list.compone
 import { NewIcon } from '../../shared/svg/svg.component';
 import { defaultProductSearchRequest, IProductSearchRequest, SortByEnum } from '../filter/product-filter.model';
 import { getProducts } from '../filter/product-filter.service';
+import { NEWEST } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -56,7 +57,9 @@ export default function NewestProductList({
     }
 
     return (
-        <article>
+        <article
+            data-cy={NEWEST}
+        >
             <GalleryHeaderComponent
                 title={
                     <Typography variant='h6' component='h2'>
@@ -71,19 +74,19 @@ export default function NewestProductList({
                         }}
                     />
                 }
-                seeMore={
-                    <Link
-                        href='/product'
-                        as='/product'
-                        passHref
-                    >
-                        <Button
-                            component='a'
-                        >
-                            See All Newest Products
-                        </Button>
-                    </Link>
-                }
+            // seeMore={
+            //     <Link
+            //         href='/product'
+            //         as='/product'
+            //         passHref
+            //     >
+            //         <Button
+            //             component='a'
+            //         >
+            //             See All Newest Products
+            //         </Button>
+            //     </Link>
+            // }
             />
             <ProductListComponent
                 data={state.items}

@@ -1,21 +1,15 @@
-import { Container } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { OrderDetailMetadataComponent } from '../../modules/order/detail/order-detail-metadata.component';
 import OrderDetailComponent from '../../modules/order/detail/order-detail.component';
 import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
-import { allowCustomer, toNumber } from '../../modules/shared/helpers/auth.helper';
+import { toNumber } from '../../modules/shared/helpers/auth.helper';
+import { allowCustomerHoc } from '../../modules/shared/allow/allow-customer.component';
 
-const useStyles = makeStyles({
-});
-
-export default function OrderDetailPage() {
-    const classes = useStyles({});
+function OrderDetailPage() {
     const router = useRouter();
     const orderId = toNumber(router.query.orderId as string);
-
-    useEffect(() => allowCustomer(), []);
 
     return (
         <Container>
@@ -30,3 +24,5 @@ export default function OrderDetailPage() {
         </Container>
     );
 }
+
+export default allowCustomerHoc(OrderDetailPage);

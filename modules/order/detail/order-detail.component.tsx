@@ -11,6 +11,7 @@ import { defaultOrder, Order } from '../order.model';
 import { getOrder } from '../order.service';
 import ShipOkComponent from './ship-ok.component';
 import StockOkComponent from './stock-ok.component';
+import { ORDER_STATUS, ORDER_SUMMARY } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -35,11 +36,12 @@ export default function OrderDetailComponent({
     const [expanded, setExpanded] = useState<string | false>(false);
 
     useEffect(() => {
-        getOrder(orderId).then(data => {
+        if (orderId > 0)
+            getOrder(orderId).then(data => {
 
-            setState(data.content);
-        })
-    }, [])
+                setState(data.content);
+            })
+    }, [orderId])
 
     const handleChange = (panel: string) => (event: ChangeEvent<{}>, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
@@ -123,6 +125,7 @@ export default function OrderDetailComponent({
                 >
                     <Typography
                         component='h2'
+                        data-cy={ORDER_SUMMARY}
                     >
                         Order Summary
                     </Typography>
@@ -139,6 +142,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 className={classes[state.orderStatus.cssClass]}
+                                data-cy={ORDER_STATUS}
                             >
                                 {state.orderStatus.message}
                             </Typography>

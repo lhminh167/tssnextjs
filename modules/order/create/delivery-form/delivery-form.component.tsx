@@ -5,6 +5,7 @@ import { OrderCreateForm, OrderCreateRequest, OrderCreateRequestValidator } from
 import { Fragment, useState } from 'react';
 import { p } from '../../../shared/layout/layout.style';
 import { isValidForm } from '../../../shared/validator/validator';
+import { SHIPPING, SHIPPING_REGION, EVE_PHONE, DAY_PHONE, MOB_PHONE, COUNTRY, REGION, CITY, NAME, POSTALCODE, ADDRESS_1, ADDRESS_2 } from '../../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -72,7 +73,7 @@ export default function OrderCreateRequestComponent({
             onChange={change}
             error={errors.name && submitted}
             helperText={errors.name && submitted ? errors.name : null}
-            data-cy='name'
+            data-cy={NAME}
 
           />
         </Grid>
@@ -88,7 +89,7 @@ export default function OrderCreateRequestComponent({
             onChange={change}
             error={errors.address1 && submitted}
             helperText={errors.address1 && submitted ? errors.address1 : null}
-            data-cy='address1'
+            data-cy={ADDRESS_1}
 
           />
         </Grid>
@@ -103,7 +104,7 @@ export default function OrderCreateRequestComponent({
             onChange={change}
             error={errors.address2 && submitted}
             helperText={errors.address2 && submitted ? errors.address2 : null}
-            data-cy='address2'
+            data-cy={ADDRESS_2}
 
           />
         </Grid>
@@ -119,7 +120,7 @@ export default function OrderCreateRequestComponent({
             onChange={change}
             error={errors.city && submitted}
             helperText={errors.city && submitted ? errors.city : null}
-            data-cy='city'
+            data-cy={CITY}
 
           />
         </Grid>
@@ -133,7 +134,7 @@ export default function OrderCreateRequestComponent({
             onChange={change}
             error={errors.region && submitted}
             helperText={errors.region && submitted ? errors.region : null}
-            data-cy='region'
+            data-cy={REGION}
 
           />
         </Grid>
@@ -149,7 +150,7 @@ export default function OrderCreateRequestComponent({
             onChange={change}
             error={errors.postalCode && submitted}
             helperText={errors.postalCode && submitted ? errors.postalCode : null}
-            data-cy='postalCode'
+            data-cy={POSTALCODE}
 
           />
         </Grid>
@@ -165,7 +166,7 @@ export default function OrderCreateRequestComponent({
             onChange={change}
             error={errors.country && submitted}
             helperText={errors.country && submitted ? errors.country : null}
-            data-cy='country'
+            data-cy={COUNTRY}
 
           />
         </Grid>
@@ -181,7 +182,7 @@ export default function OrderCreateRequestComponent({
             onChange={change}
             error={errors.mobPhone && submitted}
             helperText={errors.mobPhone && submitted ? errors.mobPhone : null}
-            data-cy='mobPhone'
+            data-cy={MOB_PHONE}
 
           />
         </Grid>
@@ -196,7 +197,7 @@ export default function OrderCreateRequestComponent({
             onChange={change}
             error={errors.dayPhone && submitted}
             helperText={errors.dayPhone && submitted ? errors.dayPhone : null}
-            data-cy='dayPhone'
+            data-cy={DAY_PHONE}
 
           />
         </Grid>
@@ -211,7 +212,7 @@ export default function OrderCreateRequestComponent({
             onChange={change}
             error={errors.evePhone && submitted}
             helperText={errors.evePhone && submitted ? errors.evePhone : null}
-            data-cy='evePhone'
+            data-cy={EVE_PHONE}
 
           />
         </Grid>
@@ -233,13 +234,13 @@ export default function OrderCreateRequestComponent({
               id='shippingId'
               value={data.shippingId}
               onChange={change}
-              data-cy='shippingId'
+              data-cy={SHIPPING}
             >
               {form.shippings.map(entry =>
                 <MenuItem
                   key={entry.shippingId}
                   value={entry.shippingId}
-                  data-cy={'shippingId' + entry.shippingId}
+                  data-cy={SHIPPING + entry.shippingId}
                 >
                   {entry.shippingType}
                 </MenuItem>
@@ -274,12 +275,13 @@ export default function OrderCreateRequestComponent({
               value={data.shippingRegionId}
               onChange={change}
               disabled
-              data-cy='shippingRegionId'
+              data-cy={SHIPPING_REGION}
             >
               {form.shippingRegions.map(entry =>
                 <MenuItem
                   key={entry.shippingRegionId}
                   value={entry.shippingRegionId}
+                  data-cy={SHIPPING_REGION + entry.shippingRegionId}
                 >
                   {entry.shippingRegion1}
                 </MenuItem>

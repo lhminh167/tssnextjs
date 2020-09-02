@@ -4,10 +4,10 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import QuantityPicker from '../../shared/quantity-picker/quantity-picker.component';
+import QuantityPickerComponent from '../../shared/quantity-picker/quantity-picker.component';
 import { IShopingCartItem } from '../shopping-cart.model';
 import { updateShoppingCartItem } from '../shopping-cart.service';
+import { UPDATE_QUANTITY } from '../../shared/tag/tag.model';
 
 interface IProps {
   data: IShopingCartItem;
@@ -20,12 +20,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }));
 
-function ShoppingCartQuantityPicker({
+function ShoppingCartQuantityPickerComponent({
   data
 }: IProps) {
   const classes = useStyles({});
   const [state, setState] = useState(data.quantity);
-  const dispatch = useDispatch();
 
   function updateItem() {
     updateShoppingCartItem({ ...data, quantity: state })
@@ -41,7 +40,7 @@ function ShoppingCartQuantityPicker({
       alignItems='center'
     >
       <Grid item>
-        <QuantityPicker quantity={state} output={setState} />
+        <QuantityPickerComponent quantity={state} output={setState} />
       </Grid>
       <Grid item>
         <Tooltip title='Save quantity'>
@@ -49,7 +48,7 @@ function ShoppingCartQuantityPicker({
             color='primary'
             onClick={updateItem}
             size='small'
-            data-cy='update-quantity'
+            data-cy={UPDATE_QUANTITY}
           >
             <RefreshIcon />
           </Fab>
@@ -59,4 +58,4 @@ function ShoppingCartQuantityPicker({
   );
 }
 
-export default ShoppingCartQuantityPicker;
+export default ShoppingCartQuantityPickerComponent;

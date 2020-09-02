@@ -100,7 +100,7 @@ export enum HttpMethod {
 
 export interface UploadRequest {
   name: string;
-  file: File;
+  file: Blob;
 }
 
 export interface ImageGetUploadTokenRequest {

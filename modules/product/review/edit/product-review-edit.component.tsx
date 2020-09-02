@@ -12,6 +12,7 @@ import { CreateReviewRequestValidator, IReview } from '../../../shared/models/re
 import { isValidForm } from '../../../shared/validator/validator';
 import { updateReview } from '../review.service';
 import { formatDatetime } from '../../../shared/helpers/string.helper';
+import { REVIEW_1, RATING, SUBMIT, CANCEL, NAME, CREATED_ON } from '../../../shared/tag/tag.model';
 
 const inputTheme = createMuiTheme({
     ...theme,
@@ -85,11 +86,13 @@ export default function ProductReviewEditComponent({
                     component='h3'
                     variant='subtitle1'
                     className={classes.bold}
+                    data-cy={NAME}
                 >
                     {data.customer.name}
                 </Typography>
                 <Typography
                     variant='subtitle2'
+                    data-cy={CREATED_ON}
                 >
                     {formatDatetime(data.createdOn)}
                 </Typography>
@@ -128,6 +131,7 @@ export default function ProductReviewEditComponent({
                                 onChange={change}
                                 error={errors.review1 && submitted}
                                 helperText={errors.review1 && submitted ? errors.review1 : null}
+                                data-cy={REVIEW_1}
                             />
                         </ThemeProvider>
                     </Grid>
@@ -156,6 +160,7 @@ export default function ProductReviewEditComponent({
                                 value={state.rating}
                                 onClick={change}
                                 max={5}
+                                data-cy={RATING}
                             />
                             {
                                 errors.rating && submitted &&
@@ -189,6 +194,7 @@ export default function ProductReviewEditComponent({
                             size='small'
                             onClick={submit}
                             className={classes.mr}
+                            data-cy={SUBMIT}
                         >
                             Submit
                         </Fab>
@@ -196,6 +202,7 @@ export default function ProductReviewEditComponent({
                             variant='extended'
                             size='small'
                             onClick={close}
+                            data-cy={CANCEL}
                         >
                             Cancel
                         </Fab>

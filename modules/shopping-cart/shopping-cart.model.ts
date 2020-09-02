@@ -4,7 +4,7 @@ import querystring from 'query-string';
 
 const shoppingCartBaseUrl = 'shoppingCart';
 
-export const ShoppingCartUrl = {
+export const apiShoppingCartUrl = {
     baseUrl: shoppingCartBaseUrl,
     saveItemForLater: shoppingCartBaseUrl + '/' + 'saveItemForLater',
     moveItemToCart: shoppingCartBaseUrl + '/' + 'MoveItemToCart',

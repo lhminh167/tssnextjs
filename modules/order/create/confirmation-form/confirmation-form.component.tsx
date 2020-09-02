@@ -10,6 +10,7 @@ import { defaultShopingCartGetRequest, IShopingCartItem } from '../../../shoppin
 import { getShoppingCart } from '../../../shopping-cart/shopping-cart.service';
 import { OrderCreateForm, OrderCreateRequest } from '../create-order.model';
 import { bold, p } from '../../../shared/layout/layout.style';
+import { ORDER_SUMMARY, GRAND_TOTAL } from '../../../shared/tag/tag.model';
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -85,7 +86,7 @@ export default function OrderConfirmationComponent({
                     <Typography
                         className={classes.bold}
                         gutterBottom
-                        data-cy='order-summary'
+                        data-cy={ORDER_SUMMARY}
                     >
                         Order summary
                 </Typography>
@@ -223,7 +224,7 @@ export default function OrderConfirmationComponent({
                     <Typography
                         variant='h5'
                         className={classes.bold}
-                        data-cy='grand-total'
+                        data-cy={GRAND_TOTAL}
                     >
                         {formatCurrency(grandTotal)}
                     </Typography>

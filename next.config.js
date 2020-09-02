@@ -50,6 +50,14 @@ const nextConfig = {
     }
   },
 
+  experimental: {
+    optimizeFonts: true,
+    optimizeImages: true
+  },
+
+
+
+
   //unuseful code
   env: {
     API_URL: process.env.API_URL,

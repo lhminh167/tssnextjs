@@ -11,6 +11,7 @@ import { defaultProductSearchRequest } from "../../../../modules/product/filter/
 import { toUrl } from "../../../../modules/shared/helpers/string.helper";
 import { getProduct } from "../../../../modules/product/detail/product-detail.service";
 import { defaultPaginationRequest } from "../../../../modules/shared/crud/crud.model";
+import { revalidateInterval } from "../../../../modules/shared/helpers/http.helper";
 
 const useStyles = makeStyles(() => createStyles({
     mb: mb,
@@ -71,6 +72,6 @@ export async function getStaticProps({ params }) {
 
     return {
         props: { data: response.content },
-        revalidate: 5
+        revalidate: revalidateInterval
     }
 };

@@ -1,15 +1,12 @@
-import { makeStyles, Container } from "@material-ui/core";
-import { ICategory } from "../../../modules/shared/models/category.model";
-import ErrorBoundary from "../../../modules/shared/error-boundary/error-boundary.component";
+import { Container } from "@material-ui/core";
+import { getCategories, getCategory } from "../../../modules/category/category.service";
+import { CategoryDetailMetadataComponent } from "../../../modules/category/detail/category-detail-metadata.component";
 import CategoryDetailComponent from "../../../modules/category/detail/category-detail.component";
 import CategoryDetailProductListComponent from "../../../modules/category/detail/product-list/category-detail-product-list.component";
-import { CategoryDetailMetadataComponent } from "../../../modules/category/detail/category-detail-metadata.component";
-import { getCategories, getCategory } from "../../../modules/category/category.service";
+import ErrorBoundary from "../../../modules/shared/error-boundary/error-boundary.component";
 import { toNumber } from "../../../modules/shared/helpers/auth.helper";
 import { toUrl } from "../../../modules/shared/helpers/string.helper";
-
-const useStyles = makeStyles({
-});
+import { ICategory } from "../../../modules/shared/models/category.model";
 
 interface Props {
     data: ICategory
@@ -18,7 +15,6 @@ interface Props {
 export default function CategoryDetailPage({
     data
 }: Props) {
-    const classes = useStyles({});
     return (
         <Container>
             <ErrorBoundary>
@@ -63,6 +59,6 @@ export async function getStaticProps({ params }) {
 
     return {
         props: { data: response.content },
-        revalidate: 5
+        revalidate: null
     }
 }

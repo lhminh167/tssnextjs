@@ -1,6 +1,6 @@
 import Head from 'next/head';
+import { CANONICAL, DESCRIPTION_META_TAG, OG_DESCRIPTION, OG_IMAGE, OG_SITE_NAME, OG_TITLE, OG_TYPE, OG_URL, ROBOTS, TITLE_META_TAG, TWITTER_CARD, TWITTER_DESCRIPTION, TWITTER_DOMAIN, TWITTER_IMAGE, TWITTER_SITE } from '../tag/tag.model';
 import { Metadata } from './metadata.model';
-import { TITLE, DESCRIPTION, OG_TYPE, OG_TITLE, OG_DESCRIPTION, OG_URL, OG_IMAGE, OG_SITE_NAME, TWITTER_CARD, TWITTER_DESCRIPTION, TWITTER_SITE, TWITTER_DOMAIN, TWITTER_IMAGE, ROBOTS, CANONICAL } from './metadata.tag';
 
 export interface Props {
     data: Metadata;
@@ -17,7 +17,7 @@ export function MetadataComponent({
         <Head>
             <title
                 key='title'
-                data-cy={TITLE}
+                data-cy={TITLE_META_TAG}
             >
                 {title}
             </title>
@@ -25,7 +25,7 @@ export function MetadataComponent({
                 name='description'
                 key='description'
                 content={data.description}
-                data-cy={DESCRIPTION}
+                data-cy={DESCRIPTION_META_TAG}
             />
 
 

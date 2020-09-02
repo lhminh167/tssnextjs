@@ -12,19 +12,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Customer } from '../../customer/customer.model';
 import { currentUserSlice } from '../../customer/customer.slice';
 import { IRootState } from '../../root/root.model';
+import { shoppingCartItemCountSelector } from '../../shopping-cart/shopping-cart.slice';
 import BrandComponent from '../brand/brand.component';
 import { toNumber } from '../helpers/auth.helper';
-import { themeColor, transitionWidth } from '../layout/layout.theme';
+import { themeColor } from '../layout/layout.theme';
 import SearchComponent from '../search/search.component';
-import { SHOPPING_CART, TOTAL_QUANTITY } from './navbar.tag';
+import { ADMIN, DEPARTMENT, LOGIN, LOGOUT, ORDERS, REGISTER, SEARCH, SHOPPING_CART, TOTAL_QUANTITY, WISHLIST } from '../tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         sectionDesktop: {
-            display: 'none',
-            [theme.breakpoints.up(transitionWidth)]: {
-                display: 'flex'
-            }
+            display: 'flex'
         },
         grow: {
             flexGrow: 1
@@ -54,6 +52,7 @@ const NotLoggedInComponent = () => {
                     component='a'
                     color='primary'
                     className={classes.seperator}
+                    data-cy={LOGIN}
                 >
                     Login
                 </Typography>
@@ -64,6 +63,7 @@ const NotLoggedInComponent = () => {
                     component='a'
                     color='primary'
                     className={classes.seperator}
+                    data-cy={REGISTER}
                 >
                     Register
                 </Typography>
@@ -96,6 +96,7 @@ const LoggedInComponent = () => {
                         component='a'
                         color='primary'
                         className={classes.seperator}
+                        data-cy={ADMIN}
                     >
                         Admin
                     </Typography>
@@ -107,18 +108,9 @@ const LoggedInComponent = () => {
                     component='a'
                     color='primary'
                     className={classes.seperator}
+                    data-cy={ORDERS}
                 >
                     Orders
-            </Typography>
-            </Link>
-            <Link href='/wish-list' as='/wish-list' passHref>
-                <Typography
-                    variant='subtitle2'
-                    component='a'
-                    color='primary'
-                    className={classes.seperator}
-                >
-                    Wishlist
             </Typography>
             </Link>
             <Typography
@@ -127,6 +119,7 @@ const LoggedInComponent = () => {
                 color='primary'
                 className={classes.seperator}
                 onClick={logout}
+                data-cy={LOGOUT}
             >
                 Logout
             </Typography>
@@ -139,9 +132,7 @@ export default function DesktopNavbarComponent() {
     const isLoggedIn = useSelector<IRootState, boolean>(
         state => toNumber(state.currentUser.data.customerId) > 0
     );
-    const itemCount = useSelector<IRootState, number>(
-        state => state.shoppingCartItemCount.data
-    );
+    const itemCount = useSelector<IRootState, number>(shoppingCartItemCountSelector);
     const currentUser = useSelector<IRootState, Customer>(
         state => state.currentUser.data
     );
@@ -157,6 +148,7 @@ export default function DesktopNavbarComponent() {
                         color='primary'
                         className={classes.seperator}
                         title={`Search for products on ${process.env.SITE_NAME}`}
+                        data-cy={SEARCH}
                     >
                         Search
                     </Typography>
@@ -168,12 +160,26 @@ export default function DesktopNavbarComponent() {
                         color='primary'
                         className={classes.seperator}
                         title='List of Departments and Categories'
+                        data-cy={DEPARTMENT}
                     >
                         Departments
                     </Typography>
                 </Link>
+                <Link href='/wish-list' as='/wish-list' passHref>
+                    <Typography
+                        variant='subtitle2'
+                        component='a'
+                        color='primary'
+                        className={classes.seperator}
+                        data-cy={WISHLIST}
+                    >
+                        Wishlist
+                    </Typography>
+                </Link>
                 {isLoggedIn ? <LoggedInComponent /> : <NotLoggedInComponent />}
-                <div className={classes.grow} />
+                <div
+                    className={classes.grow}
+                />
                 <SearchComponent className={''} fullWidth={false} />
                 <Link
                     href='/shopping-cart'

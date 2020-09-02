@@ -2,22 +2,22 @@ import { Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, Table
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ProductFilterFilterEnum } from '../../product/filter/product-filter.model';
 import ActionButtonsComponent from '../../shared/action-buttons/action-buttons.component';
 import { defaultRowsPerPageOptions } from '../../shared/crud/crud.model';
+import { goTo, isAnonymous } from '../../shared/helpers/auth.helper';
 import { decodeAttributes } from '../../shared/helpers/product.helper';
 import { formatCurrency } from '../../shared/helpers/string.helper';
-import Image from '../../shared/image/image';
-import { p, bold } from '../../shared/layout/layout.style';
+import ImageComponent from '../../shared/image/image.component';
+import { bold, p } from '../../shared/layout/layout.style';
 import PaginationComponent from '../../shared/pagination/pagination.component';
-import ShoppingCartQuantityPicker from '../quantity-picker/shopping-cart-quantity-picker.component';
+import { COLOR, DISCOUNTED_PRICE, FILTERED_ITEM_COUNT, ITEM, NAME, REMOVE, SAVE_ITEM_FOR_LATER, SIZE } from '../../shared/tag/tag.model';
+import ShoppingCartQuantityPickerComponent from '../quantity-picker/shopping-cart-quantity-picker.component';
 import { defaultShopingCartGetRequest, defaultShoppingCart, IShopingCart, IShopingCartItem, ShopingCartGetRequest } from '../shopping-cart.model';
 import { getShoppingCart, removeShoppingCartItem, saveShoppingCartItemForLater } from '../shopping-cart.service';
 import { shoppingCartItemCountSlice } from '../shopping-cart.slice';
-import { goTo } from '../../shared/helpers/auth.helper';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -33,7 +33,6 @@ export default function ShoppingCartComponent({
 
 }: IProps) {
     const classes = useStyles({});
-    const router = useRouter();
     const dispatch = useDispatch();
     const [choice, setChoice] = useState<ShopingCartGetRequest>(defaultShopingCartGetRequest);
     const [state, setState] = useState<IShopingCart>(defaultShoppingCart);
@@ -43,6 +42,7 @@ export default function ShoppingCartComponent({
     }, [])
 
     async function getData(input: ShopingCartGetRequest) {
+        if (!isAnonymous()) return;
         const response = await getShoppingCart(input);
         setState(response.content);
         setChoice(input);
@@ -99,7 +99,12 @@ export default function ShoppingCartComponent({
                     variant='h6'
                     component='h2'
                 >
-                    {state.totalQuantity + ' Items In Your Cart'}
+                    <span
+                        data-cy={FILTERED_ITEM_COUNT}
+                    >
+                        {state.totalQuantity}
+                    </span>
+                    {' Items In Your Cart'}
                 </Typography>
                 <TableContainer>
                     <Table>
@@ -136,12 +141,15 @@ export default function ShoppingCartComponent({
                                     const price = formatCurrency(row.product.discountedPrice > 0 ? row.product.discountedPrice : row.product.price);
 
                                     return (
-                                        <TableRow key={row.itemId}>
+                                        <TableRow key={row.itemId}
+                                            data-cy={ITEM}
+                                            data-id={row.itemId}
+                                        >
                                             <TableCell
                                                 component='th'
                                                 scope='row'
                                             >
-                                                <Image
+                                                <ImageComponent
                                                     imageName={row.product.image}
                                                     imageStyles={{
                                                         width: 100,
@@ -160,7 +168,17 @@ export default function ShoppingCartComponent({
                                                         variant='body1'
                                                         className={classes.bold}
                                                     >
-                                                        {color} {row.product.name}
+                                                        <span
+                                                            data-cy={COLOR}
+                                                        >
+                                                            {color}
+                                                        </span>
+                                                        {' '}
+                                                        <span
+                                                            data-cy={NAME}
+                                                        >
+                                                            {row.product.name}
+                                                        </span>
                                                     </Typography>
                                                 </Grid>
                                                 <Grid
@@ -176,7 +194,7 @@ export default function ShoppingCartComponent({
                                                         startIcon={<BookmarkIcon
                                                             fontSize='small'
                                                         />}
-
+                                                        data-cy={SAVE_ITEM_FOR_LATER}
                                                     >
                                                         Save for later
                                                 </Button>
@@ -187,14 +205,22 @@ export default function ShoppingCartComponent({
                                                         startIcon={<ClearRoundedIcon
                                                             fontSize='small'
                                                         />}
+                                                        data-cy={REMOVE}
                                                     >
                                                         Remove
                                                     </Button>
                                                 </Grid>
                                             </TableCell>
-                                            <TableCell align='center'>{size}</TableCell>
+                                            <TableCell align='center'
+                                            >
+                                                <span
+                                                    data-cy={SIZE}
+                                                >
+                                                    {size}
+                                                </span>
+                                            </TableCell>
                                             <TableCell align='center'>
-                                                <ShoppingCartQuantityPicker
+                                                <ShoppingCartQuantityPickerComponent
                                                     data={row}
                                                 />
                                             </TableCell>
@@ -204,6 +230,7 @@ export default function ShoppingCartComponent({
                                                 <Typography
                                                     variant='subtitle1'
                                                     className={classes.bold}
+                                                    data-cy={DISCOUNTED_PRICE}
                                                 >
                                                     {price}
                                                 </Typography>
@@ -232,8 +259,6 @@ export default function ShoppingCartComponent({
                 back={back}
                 next={checkout}
                 nextButtonDisabled={state.count === 0}
-                nextDataTestId='checkout'
-                backDataTestId='back-to-home-page'
             />
         </Paper>
     )

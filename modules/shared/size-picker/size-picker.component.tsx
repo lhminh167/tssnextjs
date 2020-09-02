@@ -5,8 +5,9 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { IAttributeValue } from '../models/attribute-value.model';
+import { SIZE } from '../tag/tag.model';
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -29,7 +30,7 @@ interface Props {
 }
 
 
-function SizePicker(props: Props) {
+function SizePickerComponent(props: Props) {
     const classes = useStyles(props);
     const { data, state, output } = props;
 
@@ -39,7 +40,10 @@ function SizePicker(props: Props) {
 
     function icon(text: string) {
         return (
-            <Button variant='contained' size='small'>
+            <Button
+                variant='contained'
+                size='small'
+            >
                 {text}
             </Button>
         );
@@ -61,9 +65,15 @@ function SizePicker(props: Props) {
         <FormControlLabel
             key={size.attributeValueId}
             value={size.attributeValueId.toString()}
-            control={<Radio icon={icon(size.value)} checkedIcon={checkedIcon(size.value)} />}
+            control={
+                <Radio
+                    data-cy={SIZE}
+                    data-size={size.value}
+                    icon={icon(size.value)}
+                    checkedIcon={checkedIcon(size.value)}
+                />
+            }
             label={null}
-            data-cy='size'
         />
     )) : null;
 
@@ -83,4 +93,4 @@ function SizePicker(props: Props) {
     );
 }
 
-export default SizePicker;
+export default SizePickerComponent;

@@ -11,6 +11,7 @@ import { PaginatedList } from '../crud/crud.model';
 import { IProduct } from '../models/product.model';
 import ProductHorizontalGallery from '../product-horizontal-gallery/product-horizontal-gallery.component';
 import ErrorBoundary from '../error-boundary/error-boundary.component';
+import { CAROUSEL_DOT } from '../tag/tag.model';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -100,6 +101,7 @@ export default function ProductCarouselComponent({
                   pageSize: 1
                 })
               }
+              data-cy={CAROUSEL_DOT}
             >
               <FiberManualRecordIcon
                 fontSize='inherit'

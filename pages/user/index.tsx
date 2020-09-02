@@ -1,24 +1,12 @@
 
-import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
-import CustomerIndexComponent from "../../modules/customer/index/customer-index.component";
-import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
+import { Container } from "@material-ui/core";
 import { CustomerIndexMetadataComponent } from "../../modules/customer/index/customer-index-metadata.component";
-import { useEffect } from "react";
-import { getLoginToken } from "../../modules/shared/helpers/token.helper";
-import { useRouter } from "next/router";
+import CustomerIndexComponent from "../../modules/customer/index/customer-index.component";
+import { allowCustomerHoc } from "../../modules/shared/allow/allow-customer.component";
+import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
 
-export default function CustomerIndexPage(props) {
-    const classes = useStyles(props);
-    const router = useRouter();
-
-    useEffect(() => {
-        if (!getLoginToken()) router.push("/user/login");
-    }, []);
+function CustomerIndexPage() {
 
     return (
         <Container>
@@ -33,3 +21,5 @@ export default function CustomerIndexPage(props) {
         </Container>
     );
 }
+
+export default allowCustomerHoc(CustomerIndexPage);

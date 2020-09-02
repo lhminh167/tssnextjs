@@ -11,6 +11,7 @@ import {
 import { IAttributeValue } from './attribute-value.model';
 import { IReviewGetResponse } from './review.model';
 import { SelectOption } from './shared.model';
+import { formatCurrency } from '../helpers/string.helper';
 
 export interface IProduct {
   productId: number;
@@ -80,4 +81,18 @@ export interface HomepageProducts {
   bestSelling: PaginatedList<IProduct>;
   topRated: PaginatedList<IProduct>;
   newest: PaginatedList<IProduct>;
+}
+
+export function isDiscounted(input: IProduct): boolean {
+  return input.discountedPrice > 0;
+}
+
+export function getDiscountedPrice(input: IProduct): string {
+  return formatCurrency(isDiscounted(input) ? input.discountedPrice : input.price);
+}
+
+export function getDiscountPercentage(input: IProduct): number {
+  return isDiscounted(input) ?
+    Math.round((input.price - input.discountedPrice) * 100 / input.price) :
+    0;
 }

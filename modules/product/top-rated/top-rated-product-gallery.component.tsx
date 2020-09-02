@@ -7,6 +7,7 @@ import ProductHorizontalGallery from '../../shared/product-horizontal-gallery/pr
 import { PremiumBadgeIcon } from '../../shared/svg/svg.component';
 import { defaultProductSearchRequest, IProductSearchRequest, SortByEnum } from '../filter/product-filter.model';
 import { getProducts } from '../filter/product-filter.service';
+import { TOP_RATED } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -54,19 +55,20 @@ export default function TopRatedProductGalleryComponent({
                     Top Rated Products
                 </Typography>
             }
-            seeMore={
-                <Link
-                    href='/product'
-                    as='/product'
-                    passHref
-                >
-                    <Button
-                        component='a'
-                    >
-                        See All Top Rated Products
-                    </Button>
-                </Link>
-            }
+            // seeMore={
+            //     <Link
+            //         href='/product'
+            //         as='/product'
+            //         passHref
+            //     >
+            //         <Button
+            //             component='a'
+            //         >
+            //             See All Top Rated Products
+            //         </Button>
+            //     </Link>
+            // }
+            galleryTestId={TOP_RATED}
         />
     );
 }

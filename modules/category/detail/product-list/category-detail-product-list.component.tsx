@@ -48,18 +48,6 @@ export default function CategoryDetailProductListComponent({
                     Product Recommendations
                 </Typography>
             }
-            seeMore={
-                <Link
-                    href='/product'
-                    as='/product'
-                    passHref
-                >
-                    <Button component='a'
-                    >
-                        See All Recommended Products
-                    </Button>
-                </Link>
-            }
         />
     );
 }

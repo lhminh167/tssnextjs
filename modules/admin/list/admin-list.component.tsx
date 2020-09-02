@@ -6,6 +6,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Link from 'next/link';
 import React, { Fragment } from 'react';
+import { ADMIN_AREA_TITLE, ADD_NEW_PRODUCT } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -20,6 +21,7 @@ export default function AdminListComponent(props) {
                 component='h1'
                 variant='h6'
                 gutterBottom
+                data-cy={ADMIN_AREA_TITLE}
             >
                 Admin Area
             </Typography>
@@ -34,9 +36,11 @@ export default function AdminListComponent(props) {
                     <ListItem
                         button
                         component='a'
+                        data-cy={ADD_NEW_PRODUCT}
                     >
                         <ListItemIcon>
-                            <AddCircleIcon />
+                            <AddCircleIcon
+                            />
                         </ListItemIcon>
 
                         <ListItemText

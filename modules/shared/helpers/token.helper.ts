@@ -1,5 +1,5 @@
 import jwtDecode from 'jwt-decode';
-import { Customer, defaultCustomer } from '../../customer/customer.model';
+import { Customer, defaultCustomer, Role } from '../../customer/customer.model';
 
 export function setLoginToken(loginToken: string) {
     if (typeof window === 'undefined') return;
@@ -44,7 +44,7 @@ export function decodeLoginToken(): Customer {
 interface ITokenPayload {
     nameid: string,
     unique_name: string,
-    role: string,
+    role: Role,
     nbf: Date,
     exp: Date,
     iat: Date

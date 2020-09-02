@@ -1,12 +1,10 @@
-import { Button, createStyles, Grid, makeStyles, Theme, Typography } from '@material-ui/core';
+import { createStyles, Grid, makeStyles, Theme, Typography } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
-import { IReview } from '../../../shared/models/review.model';
-import { deleteReview, updateReview } from '../review.service';
-import { useState, Fragment } from 'react';
-import ProductReviewDeleteComponent from '../delete/product-review-delete.component';
-import ProductReviewEditComponent from '../edit/product-review-edit.component';
+import { Fragment } from 'react';
 import { formatDatetime } from '../../../shared/helpers/string.helper';
 import { bold } from '../../../shared/layout/layout.style';
+import { IReview } from '../../../shared/models/review.model';
+import { CREATED_ON, NAME, RATING, REVIEW_1 } from '../../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -35,17 +33,20 @@ export default function ProductReviewComponent({
                     value={data.rating}
                     readOnly
                     max={5}
+                    data-cy={RATING}
                 />
                 <Typography
                     component='h3'
                     variant='subtitle1'
                     className={classes.bold}
+                    data-cy={NAME}
                 >
                     {data.customer.name}
                 </Typography>
                 <Typography
                     variant='subtitle2'
                     component='time'
+                    data-cy={CREATED_ON}
                 >
                     {formatDatetime(data.createdOn)}
                 </Typography>
@@ -59,6 +60,7 @@ export default function ProductReviewComponent({
                     component='p'
                     variant='body1'
                     gutterBottom
+                    data-cy={REVIEW_1}
                 >
                     {data.review1}
                 </Typography>

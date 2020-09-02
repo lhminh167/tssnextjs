@@ -10,6 +10,7 @@ import { mb, mt } from '../../shared/layout/layout.style';
 import { isValidForm } from '../../shared/validator/validator';
 import { CustomerUpdatePasswordState, CustomerUpdatePasswordStateValidator, defaultCustomerUpdatePasswordState } from '../customer.model';
 import { updatePassword } from '../customer.service';
+import { PASSWORD, NEW_PASSWORD, CONFIRM_PASSWORD, SUBMIT } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles(theme => ({
     mb: mb,
@@ -93,6 +94,7 @@ export default function ChangePasswordComponent({
                     onChange={change}
                     error={errors.currentPassword && submitted}
                     helperText={errors.currentPassword && submitted ? errors.currentPassword : null}
+                    data-cy={PASSWORD}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -108,6 +110,7 @@ export default function ChangePasswordComponent({
                     onChange={change}
                     error={errors.newPassword && submitted}
                     helperText={errors.newPassword && submitted ? errors.newPassword : null}
+                    data-cy={NEW_PASSWORD}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -123,6 +126,8 @@ export default function ChangePasswordComponent({
                     onChange={change}
                     error={errors.confirmNewPassword && submitted}
                     helperText={errors.confirmNewPassword && submitted ? errors.confirmNewPassword : null}
+                    data-cy={CONFIRM_PASSWORD}
+
                 />
             </Grid>
             <Grid item xs={12}>
@@ -131,6 +136,7 @@ export default function ChangePasswordComponent({
                     variant='contained'
                     color='primary'
                     onClick={submit}
+                    data-cy={SUBMIT}
                 >
                     Submit
                 </Button>

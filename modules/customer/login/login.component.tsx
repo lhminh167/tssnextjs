@@ -1,6 +1,5 @@
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -10,10 +9,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { mb, mb2 } from '../../shared/layout/layout.style';
+import { EMAIL, FORGOT_PASSWORD, PASSWORD, REGISTER_LINK, SUBMIT } from '../../shared/tag/tag.model';
 import { isValidForm } from '../../shared/validator/validator';
 import { ILoginRequest, LoginRequestValidator } from '../customer.model';
 import { currentUserSlice } from '../customer.slice';
-import { mb, mb2 } from '../../shared/layout/layout.style';
 
 const useStyles = makeStyles(theme => ({
     mb: mb,
@@ -95,7 +95,7 @@ export default function LoginComponent() {
                 onChange={change}
                 error={errors.email && submitted}
                 helperText={errors.email && submitted ? errors.email : null}
-                data-cy='email'
+                data-cy={EMAIL}
 
             />
             <TextField
@@ -113,7 +113,7 @@ export default function LoginComponent() {
                 error={errors.password && submitted}
                 helperText={errors.password && submitted ? errors.password : null}
                 className={classes.mb2}
-                data-cy='password'
+                data-cy={PASSWORD}
 
             />
             {/* <FormControlLabel
@@ -127,7 +127,7 @@ export default function LoginComponent() {
                 color='primary'
                 className={classes.mb}
                 onClick={submit}
-                data-cy='submit'
+                data-cy={SUBMIT}
             >
                 Sign In
                     </Button>
@@ -142,8 +142,7 @@ export default function LoginComponent() {
                             variant='body2'
                             component='a'
                             color='primary'
-                            data-cy='forgot-password'
-
+                            data-cy={FORGOT_PASSWORD}
                         >
                             Forgot password?
                                 </Typography>
@@ -164,7 +163,7 @@ export default function LoginComponent() {
                             component='a'
                             variant='body2'
                             color='primary'
-                            data-cy='register'
+                            data-cy={REGISTER_LINK}
                         >
                             Don't have an account? Sign Up
                                 </Typography>

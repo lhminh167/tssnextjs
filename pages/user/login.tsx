@@ -1,27 +1,11 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
+import Container from '@material-ui/core/Container';
+import React from 'react';
+import { LoginMetadataComponent } from '../../modules/customer/login/login-metadata.component';
 import LoginComponent from '../../modules/customer/login/login.component';
 import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
-import { Container } from '@material-ui/core';
-import { LoginMetadataComponent } from '../../modules/customer/login/login-metadata.component';
-import { useRouter } from 'next/router';
-import { getLoginToken } from '../../modules/shared/helpers/token.helper';
+import { allowNotLoggedInHoc } from '../../modules/shared/allow/allow-not-logged-in.component';
 
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
-
-export default function LoginPage(props) {
-    const classes = useStyles(props);
-
-    const router = useRouter();
-
-    useEffect(() => {
-        if (getLoginToken()) router.push((router.query.next as string) ?? '/');
-    }, []);
-
+function LoginPage() {
     return (
         <Container
             maxWidth='sm'
@@ -35,3 +19,5 @@ export default function LoginPage(props) {
         </Container>
     );
 }
+
+export default allowNotLoggedInHoc(LoginPage);

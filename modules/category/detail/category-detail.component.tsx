@@ -1,13 +1,8 @@
 import { Paper, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { ICategory } from '../../shared/models/category.model';
 import ProductDetailImageComponent from '../../product/detail/product-detail-image.component';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    })
-);
+import { ICategory } from '../../shared/models/category.model';
+import { DESCRIPTION, NAME } from '../../shared/tag/tag.model';
 
 interface IProps {
     data: ICategory,
@@ -16,7 +11,6 @@ interface IProps {
 export default function CategoryDetailComponent({
     data
 }: IProps) {
-    const classes = useStyles({});
 
     return (
         <Grid container
@@ -41,6 +35,7 @@ export default function CategoryDetailComponent({
                         component='h1'
                         variant='h5'
                         gutterBottom
+                        data-cy={NAME}
                     >
                         {data.name}
                     </Typography>
@@ -50,6 +45,7 @@ export default function CategoryDetailComponent({
                         component='p'
                         variant='subtitle2'
                         gutterBottom
+                        data-cy={DESCRIPTION}
                     >
                         {data.description}
                     </Typography>

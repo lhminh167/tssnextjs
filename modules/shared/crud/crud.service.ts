@@ -1,20 +1,19 @@
 import es6promise from 'es6-promise';
 import {
   HttpMethod,
-  UploadRequest,
+
   ImageGetUploadTokensRequest,
   mediaUrl,
-  Response as TssResponse
+  Response as TssResponse, UploadRequest
 } from '../crud/crud.model';
-import { setTokenHeader } from '../helpers/token.helper';
 import { setContentType } from '../helpers/http.helper';
-import { store } from '../../root/root.store';
+import { setTokenHeader } from '../helpers/token.helper';
 
 es6promise.polyfill();
 
 const baseUrl = getEnvVar('API_URL');
 const uploadUrl = `https://api.cloudinary.com/v1_1/${
-  process.env.CLOUDINARY_CLOUD_NAME
+  getEnvVar('CLOUDINARY_CLOUD_NAME')
   }/image/upload`;
 
 export async function get(url: string, id: number = 0) {
@@ -56,11 +55,7 @@ export async function callApi(url: string, options: RequestInit = {}) {
         new TssResponse(
           null,
           response.status,
-          response.statusText,
-          null,
-          null,
-          null,
-          null
+          response.statusText
         )
     );
 
@@ -79,9 +74,9 @@ export async function upload(input: UploadRequest[]) {
     }))
   });
 
-  input.map(async (entry, index) => {
+  const requests = input.map((entry, index) => {
     const body = new FormData();
-    body.append('api_key', process.env.CLOUDINARY_API_KEY);
+    body.append('api_key', getEnvVar('CLOUDINARY_API_KEY'));
     body.append('upload_preset', 'tss');
     body.append('file', entry.file);
     body.append('public_id', entry.name);
@@ -93,9 +88,10 @@ export async function upload(input: UploadRequest[]) {
       method: HttpMethod.POST,
       body
     };
-    const response = await fetch(uploadUrl, options);
-    return await response.json();
+    return fetch(uploadUrl, options);
   });
+
+  return Promise.all(requests);
 }
 
 export function getUrl(url: string, id: number = 0): string {

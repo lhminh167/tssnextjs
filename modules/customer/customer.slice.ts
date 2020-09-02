@@ -12,6 +12,8 @@ const initialState: CurrentUserState = crudInitialState(defaultCustomer);
 
 export const customerIdSelector = (state: IRootState) => state?.currentUser?.data?.customerId;
 
+export const customerRoleSelector = (state: IRootState) => state?.currentUser?.data?.role;
+
 export const currentUserSlice = createSlice({
     name: apiCustomerUrl.baseUrl,
     initialState,

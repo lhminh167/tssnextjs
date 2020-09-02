@@ -12,16 +12,20 @@ export const apiCustomerUrl = {
     resetPassword: (customerId: number, resetPasswordToken: string) => `${apiCustomerBaseUrl}/${customerId}/ResetPassword/${resetPasswordToken}`,
 }
 
-const customerBaseUrl = 'user';
+const customerBaseUrl = '/user';
 
 export const customerUrl = {
     baseUrl: customerBaseUrl,
     register: customerBaseUrl + '/' + 'register',
     login: customerBaseUrl + '/' + 'login',
+    list: `${customerBaseUrl}/list`,
+    detail: (customerId: number) => `${customerBaseUrl}/${customerId}`,
     updatePassword: (customerId: number) => `${customerBaseUrl}/${customerId}/Password`,
     forgotPassword: `${customerBaseUrl}/ForgotPassword`,
     resetPassword: (customerId: number, resetPasswordToken: string) => `${customerBaseUrl}/${customerId}/ResetPassword/${resetPasswordToken}`,
 }
+
+export const loginTokenKey = 'loginToken';
 
 export interface Customer {
     customerId?: string;
@@ -38,11 +42,16 @@ export interface Customer {
     dayPhone?: string;
     evePhone?: string;
     mobPhone?: string;
-    role?: string;
+    role?: Role;
+}
+
+export enum Role {
+    Admin = 'Admin',
+    Customer = 'Customer'
 }
 
 export const defaultCustomer: Customer = {
-    customerId: '0',
+    customerId: null,
     name: 'Visitor',
     email: '',
     // creditCard: '',
@@ -56,7 +65,7 @@ export const defaultCustomer: Customer = {
     dayPhone: '',
     evePhone: '',
     mobPhone: '',
-    role: '',
+    role: Role.Customer,
 };
 
 export interface ILoginRequest {
@@ -112,7 +121,7 @@ export const defaultCreateCustomerRequest = {
     email: '',
     name: '',
     password: '',
-    role: 'Customer'
+    role: Role.Customer
 }
 
 export interface CustomerUpdateRequest {
@@ -148,7 +157,7 @@ export const defaultCustomerUpdateRequest: CustomerUpdateRequest = {
     dayPhone: '',
     evePhone: '',
     mobPhone: '',
-    role: 'Customer'
+    role: Role.Customer
 }
 
 export class CustomerUpdateRequestValidator extends Validator<CustomerUpdateRequest> {

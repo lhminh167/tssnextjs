@@ -2,6 +2,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import { bgGrey, p } from '../layout/layout.style';
+import { SUBMIT, BACK } from '../tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -43,7 +44,7 @@ export default function ActionButtonsComponent({
                 <Fab
                     variant='extended'
                     onClick={back}
-                    data-cy={backDataTestId ?? 'back'}
+                    data-cy={backDataTestId ?? BACK}
                 >
                     {backButtonText}
                 </Fab>
@@ -55,7 +56,7 @@ export default function ActionButtonsComponent({
                     color='primary'
                     onClick={next}
                     disabled={nextButtonDisabled}
-                    data-cy={nextDataTestId ?? 'next'}
+                    data-cy={nextDataTestId ?? SUBMIT}
                 >
                     {nextButtonText}
                 </Fab>

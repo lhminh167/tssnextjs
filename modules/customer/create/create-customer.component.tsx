@@ -13,6 +13,7 @@ import { mb, mb2 } from '../../shared/layout/layout.style';
 import { isValidForm } from '../../shared/validator/validator';
 import { CreateCustomerRequestValidator, defaultCreateCustomerRequest, ICreateCustomerRequest } from '../customer.model';
 import { currentUserSlice } from '../customer.slice';
+import { NAME, EMAIL, PASSWORD, SUBMIT, LOGIN_LINK } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles(theme => ({
     mb: mb,
@@ -88,7 +89,7 @@ export default function CreateCustomerComponent() {
                         onChange={change}
                         error={errors.name && submitted}
                         helperText={errors.name && submitted ? errors.name : null}
-                        data-cy='name'
+                        data-cy={NAME}
 
                     />
                 </Grid>
@@ -105,7 +106,7 @@ export default function CreateCustomerComponent() {
                         onChange={change}
                         error={errors.email && submitted}
                         helperText={errors.email && submitted ? errors.email : null}
-                        data-cy='email'
+                        data-cy={EMAIL}
 
                     />
                 </Grid>
@@ -124,7 +125,7 @@ export default function CreateCustomerComponent() {
                         error={errors.password && submitted}
                         helperText={errors.password && submitted ? errors.password : null}
                         className={classes.mb2}
-                        data-cy='password'
+                        data-cy={PASSWORD}
 
                     />
                 </Grid>
@@ -141,7 +142,7 @@ export default function CreateCustomerComponent() {
                 color='primary'
                 className={classes.mb}
                 onClick={submit}
-                data-cy='submit'
+                data-cy={SUBMIT}
             >
                 Register
                     </Button>
@@ -161,7 +162,7 @@ export default function CreateCustomerComponent() {
                             component='a'
                             variant='body2'
                             color='primary'
-                            data-cy='login'
+                            data-cy={LOGIN_LINK}
                         >
                             Already have an account? Login
                                 </Typography>

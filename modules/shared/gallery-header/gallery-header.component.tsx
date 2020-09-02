@@ -54,6 +54,7 @@ export default function GalleryHeaderComponent({
                             className={
                                 classes.titleIcon + ' ' + classes.alignItemsCenter
                             }
+                            data-cy={'GalleryTitleIcon'}
                         >
                             {titleIcon}
                         </Grid>
@@ -61,6 +62,7 @@ export default function GalleryHeaderComponent({
                             className={
                                 classes.alignItemsCenter
                             }
+                            data-cy={'GalleryTitle'}
                         >
                             {title}
                         </Grid>

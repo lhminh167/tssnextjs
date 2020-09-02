@@ -1,8 +1,9 @@
 import queryString from 'querystring';
 import { get } from '../../shared/crud/crud.service';
-import { IProductSearchRequest, apiProductUrl } from './product-filter.model';
+import { IProductSearchRequest, apiProductUrl, IProductFilterFilter } from './product-filter.model';
+import { Response } from '../../shared/crud/crud.model';
 
-export async function getFilter() {
+export async function getFilter(): Promise<Response<IProductFilterFilter>> {
     return await get(apiProductUrl.filter, 0);
 }
 

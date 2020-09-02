@@ -14,15 +14,16 @@ import { formatCurrency, toUrl } from '../../shared/helpers/string.helper';
 import { mb, mb2, mr, p } from '../../shared/layout/layout.style';
 import { defaultAttributeValue } from '../../shared/models/attribute-value.model';
 import { IProduct } from '../../shared/models/product.model';
-import QuantityPicker from '../../shared/quantity-picker/quantity-picker.component';
-import SizePicker from '../../shared/size-picker/size-picker.component';
+import QuantityPickerComponent from '../../shared/quantity-picker/quantity-picker.component';
+import SizePickerComponent from '../../shared/size-picker/size-picker.component';
 import { addShoppingCartItem } from '../../shopping-cart/shopping-cart.service';
 import { shoppingCartItemCountSlice } from '../../shopping-cart/shopping-cart.slice';
-import { ProductFilterFilterEnum } from '../filter/product-filter.model';
+import { ProductFilterFilterEnum, productUrl } from '../filter/product-filter.model';
 import ProductDetailImageComponent from './product-detail-image.component';
 import { removeProduct } from './product-detail.service';
 import { setLoginToken } from '../../shared/helpers/token.helper';
-import { ADD_TO_CART, ADD_TO_WISH_LIST } from './product-detail.tag';
+import { ADD_TO_CART, ADD_TO_WISH_LIST, NAME, PRICE, DISCOUNTED_PRICE, DESCRIPTION, EDIT, REMOVE } from '../../shared/tag/tag.model';
+import { goTo } from '../../shared/helpers/auth.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -80,7 +81,7 @@ export default function ProductDetailCardComponent({
     async function deleteProduct() {
         setIsLoading(true);
         await removeProduct(data.productId);
-        router.push('/');
+        goTo('/');
         closeDialog();
     }
 
@@ -103,6 +104,7 @@ export default function ProductDetailCardComponent({
                         component='h1'
                         variant='h4'
                         gutterBottom
+                        data-cy={NAME}
                     >
                         {data.name}
                     </Typography>
@@ -118,6 +120,7 @@ export default function ProductDetailCardComponent({
                         variant='h5'
                         color='primary'
                         className={data.discountedPrice > 0 ? classes.mr : null}
+                        data-cy={DISCOUNTED_PRICE}
                     >
                         {formatCurrency(
                             data.discountedPrice > 0
@@ -131,6 +134,7 @@ export default function ProductDetailCardComponent({
                             component='s'
                             variant='subtitle1'
                             color='initial'
+                            data-cy={PRICE}
                         >
                             {formatCurrency(data.price)}
                         </Typography>
@@ -143,6 +147,7 @@ export default function ProductDetailCardComponent({
                         component='p'
                         variant='subtitle2'
                         gutterBottom
+                        data-cy={DESCRIPTION}
                     >
                         {data.description}
                     </Typography>
@@ -152,13 +157,8 @@ export default function ProductDetailCardComponent({
                     <Fragment>
                         <Grid item xs={12}>
                             <Link
-                                href={{
-                                    pathname: '/product/[productName]/edit',
-                                    query: {
-                                        productId: data.productId
-                                    }
-                                }}
-                                as={`/product/${toUrl(data.name)}/edit?productId=${data.productId}`}
+                                href={productUrl.edit(data).href}
+                                as={productUrl.edit(data).as}
                                 passHref
                             >
                                 <Button
@@ -166,6 +166,7 @@ export default function ProductDetailCardComponent({
                                     color='primary'
                                     variant='contained'
                                     className={classes.mr}
+                                    data-cy={EDIT}
                                 >
                                     Edit
                                     </Button>
@@ -174,6 +175,7 @@ export default function ProductDetailCardComponent({
                                 onClick={openDialog}
                                 color='inherit'
                                 variant='contained'
+                                data-cy={REMOVE}
                             >
                                 Delete
                                 </Button>
@@ -181,7 +183,7 @@ export default function ProductDetailCardComponent({
                     </Fragment>
                 }
                 <Grid item xs={12}>
-                    <SizePicker
+                    <SizePickerComponent
                         data={sizes}
                         state={size}
                         output={setSize}
@@ -203,7 +205,7 @@ export default function ProductDetailCardComponent({
                     >
                         Quantity
                     </Typography>
-                    <QuantityPicker
+                    <QuantityPickerComponent
                         quantity={quantity}
                         output={(quantity: number) => setQuantity(quantity)}
                     />

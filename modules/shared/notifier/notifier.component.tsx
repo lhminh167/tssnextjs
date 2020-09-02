@@ -11,6 +11,7 @@ import React, { Fragment, useState } from 'react';
 import { defaultNotifierState } from './notifier.model';
 import { Response as AppResponse } from '../crud/crud.model';
 import * as Sentry from '@sentry/browser';
+import { DESCRIPTION, ID, NOTIFIER } from '../tag/tag.model';
 
 export default function Notifier() {
   const [state, setState] = useState(defaultNotifierState);
@@ -47,11 +48,7 @@ export default function Notifier() {
           return new AppResponse(
             null,
             response.status,
-            response.statusText,
-            null,
-            null,
-            null,
-            null
+            response.statusText
           )
         });
 
@@ -73,11 +70,7 @@ export default function Notifier() {
             new AppResponse(
               null,
               error.status,
-              error.statusText,
-              null,
-              null,
-              null,
-              null
+              error.statusText
             )
         );
 
@@ -91,6 +84,7 @@ export default function Notifier() {
         <Dialog
           open={state.isOpen}
           onClose={handleClose}
+          data-cy={NOTIFIER}
         >
           <DialogTitle
           >
@@ -98,9 +92,16 @@ export default function Notifier() {
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Description: {state.data.title}
+              Description:
+              <span
+                data-cy={DESCRIPTION}
+              >
+                {state.data.title}
+              </span>
             </DialogContentText>
-            <DialogContentText>
+            <DialogContentText
+              data-cy={ID}
+            >
               Error ID: {state.data.instance}
             </DialogContentText>
             {
@@ -114,7 +115,9 @@ export default function Notifier() {
 
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color='primary' autoFocus>
+            <Button onClick={handleClose} color='primary' autoFocus
+
+            >
               Ok
           </Button>
           </DialogActions>
@@ -124,18 +127,18 @@ export default function Notifier() {
 
   return null
 
-  return (
-    <Snackbar
-      open={state.isOpen}
-      autoHideDuration={6000}
-      onClose={handleClose}
-    >
-      <Alert
-        onClose={handleClose}
-        severity={state.color}
-      >
-        {state.data.title}
-      </Alert>
-    </Snackbar>
-  );
+  // return (
+  //   <Snackbar
+  //     open={state.isOpen}
+  //     autoHideDuration={6000}
+  //     onClose={handleClose}
+  //   >
+  //     <Alert
+  //       onClose={handleClose}
+  //       severity={state.color}
+  //     >
+  //       {state.data.title}
+  //     </Alert>
+  //   </Snackbar>
+  // );
 }

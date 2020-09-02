@@ -1,8 +1,10 @@
 import { Button, createStyles, Grid, TextField, Theme, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { Fragment, useState } from 'react';
+import { CANCEL } from 'redux-saga';
 import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 import { mb, mr, p } from '../../shared/layout/layout.style';
+import { CONFIRM_STOCK, SUBMIT, COMMENT } from '../../shared/tag/tag.model';
 import { Order } from '../order.model';
 import { stockNotOk, stockOk } from '../order.service';
 
@@ -87,7 +89,9 @@ export default function StockOkComponent({
             <Grid item xs={12}
                 className={classes.mb}
             >
-                <Typography variant='subtitle1'>
+                <Typography variant='subtitle1'
+                    data-cy={CONFIRM_STOCK}
+                >
                     Please proceed this order by confirming that all of its products are in stock. Also, please specify which products are out of stock, if any. For example:
                 </Typography>
             </Grid>
@@ -121,6 +125,7 @@ export default function StockOkComponent({
                     helperText={!state.comments && submitted && !isSuccessful ? 'Please specify which products are out of stock.' : null}
                     fullWidth
                     rows={4}
+                    data-cy={COMMENT}
                 // placeholder='The following products are out of stock:&#10;- Green XL Birds T-Shirt. Required Quantity: 10. Avalable Quantity: 09.&#10;- Blue L Wreath T-Shirt. Required Quantity: 05. Avalable Quantity: 02.&#10;- etc.'
                 />
             </Grid>
@@ -131,6 +136,7 @@ export default function StockOkComponent({
                     color='primary'
                     onClick={openSuccessDialog}
                     className={classes.mr}
+                    data-cy={SUBMIT}
                 >
                     Yes, they are all in stock
                 </Button>
@@ -138,6 +144,7 @@ export default function StockOkComponent({
                     variant='outlined'
                     color='primary'
                     onClick={openFailureDialog}
+                    data-cy={CANCEL}
                 >
                     No, some of them are out of stock
                 </Button>

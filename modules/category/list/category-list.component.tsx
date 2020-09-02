@@ -1,11 +1,9 @@
-import { ICategory, categoryUrl } from '../../shared/models/category.model';
-import { Fragment } from 'react';
-import { Grid, Typography, List, ListItem, ListItemIcon, ListItemText, createStyles, makeStyles, Theme } from '@material-ui/core';
-import { toUrl } from '../../shared/helpers/string.helper';
+import { createStyles, Grid, List, ListItem, ListItemIcon, ListItemText, makeStyles, Theme, Typography } from '@material-ui/core';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Link from 'next/link';
+import { Fragment } from 'react';
+import { categoryUrl, ICategory } from '../../shared/models/category.model';
+import { CATEGORY } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -62,6 +60,7 @@ export default function CategoryListComponent({
                                     />
                                 </ListItemIcon>
                                 <ListItemText
+                                    data-cy={CATEGORY}
                                     primary={entry.name}
                                     primaryTypographyProps={{
                                         variant: 'subtitle2',

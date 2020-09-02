@@ -1,3 +1,5 @@
+import { IProduct } from "../models/product.model";
+
 export function toUrl(string: string) {
     return string.trim().replace(/[^A-Z0-9]+/ig, "-").toLowerCase();
 }

@@ -9,14 +9,16 @@ import ActionButtonsComponent from '../../shared/action-buttons/action-buttons.c
 import { defaultPaginationList, defaultRowsPerPageOptions, PaginatedList } from '../../shared/crud/crud.model';
 import { decodeAttributes } from '../../shared/helpers/product.helper';
 import { formatCurrency } from '../../shared/helpers/string.helper';
-import Image from '../../shared/image/image';
 import { p, bold } from '../../shared/layout/layout.style';
 import PaginationComponent from '../../shared/pagination/pagination.component';
-import ShoppingCartQuantityPicker from '../quantity-picker/shopping-cart-quantity-picker.component';
+import ShoppingCartQuantityPickerComponent from '../quantity-picker/shopping-cart-quantity-picker.component';
 import { defaultShopingCartGetRequest, IShopingCartItem, ShopingCartGetRequest, IShopingCart, defaultShoppingCart } from '../shopping-cart.model';
 import { getShoppingCart, moveShoppingCartItemToCart, removeShoppingCartItem } from '../shopping-cart.service';
 import { shoppingCartItemCountSlice } from '../shopping-cart.slice';
 import { useDispatch } from 'react-redux';
+import ImageComponent from '../../shared/image/image.component';
+import { isAnonymous } from '../../shared/helpers/auth.helper';
+import { FILTERED_ITEM_COUNT, MOVE_ITEM_TO_CART, REMOVE, COLOR, NAME, SIZE, DISCOUNTED_PRICE, ITEM } from '../../shared/tag/tag.model';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -45,6 +47,7 @@ export default function WishListComponent({
     }, [])
 
     async function getData(input: ShopingCartGetRequest) {
+        if (!isAnonymous()) return;
         const response = await getShoppingCart(input);
         setState(response.content);
         setChoice(input);
@@ -98,7 +101,12 @@ export default function WishListComponent({
                     variant='h6'
                     component='h2'
                 >
-                    {state.totalQuantity + ' Items In Your Wish List'}
+                    <span
+                        data-cy={FILTERED_ITEM_COUNT}
+                    >
+                        {state.totalQuantity}
+                    </span>
+                    {' Items In Your Wish List'}
                 </Typography>
                 <TableContainer>
                     <Table>
@@ -134,12 +142,15 @@ export default function WishListComponent({
                                     const size = attributes.find(e => e.name === ProductFilterFilterEnum.Size)?.value;
 
                                     return (
-                                        <TableRow key={row.itemId}>
+                                        <TableRow key={row.itemId}
+                                            data-cy={ITEM}
+                                            data-id={row.itemId}
+                                        >
                                             <TableCell
                                                 component='th'
                                                 scope='row'
                                             >
-                                                <Image
+                                                <ImageComponent
                                                     imageName={row.product.image}
                                                     imageStyles={{
                                                         width: 100,
@@ -158,7 +169,16 @@ export default function WishListComponent({
                                                         variant='body1'
                                                         className={classes.bold}
                                                     >
-                                                        {color} {row.product.name}
+                                                        <span
+                                                            data-cy={COLOR}
+                                                        >
+                                                            {color}
+                                                        </span>
+                                                        <span
+                                                            data-cy={NAME}
+                                                        >
+                                                            {row.product.name}
+                                                        </span>
                                                     </Typography>
                                                 </Grid>
                                                 <Grid
@@ -174,6 +194,7 @@ export default function WishListComponent({
                                                         startIcon={<BookmarkIcon
                                                             fontSize='small'
                                                         />}
+                                                        data-cy={MOVE_ITEM_TO_CART}
                                                     >
                                                         Move to Cart
                                                     </Button>
@@ -184,14 +205,19 @@ export default function WishListComponent({
                                                         startIcon={<ClearRoundedIcon
                                                             fontSize='small'
                                                         />}
+                                                        data-cy={REMOVE}
                                                     >
                                                         Remove
                                                     </Button>
                                                 </Grid>
                                             </TableCell>
-                                            <TableCell align='center'>{size}</TableCell>
+                                            <TableCell align='center'
+                                                data-cy={SIZE}
+                                            >
+                                                {size}
+                                            </TableCell>
                                             <TableCell align='center'>
-                                                <ShoppingCartQuantityPicker
+                                                <ShoppingCartQuantityPickerComponent
                                                     data={row}
                                                 />
                                             </TableCell>
@@ -201,6 +227,7 @@ export default function WishListComponent({
                                                 <Typography
                                                     variant='subtitle1'
                                                     className={classes.bold}
+                                                    data-cy={DISCOUNTED_PRICE}
                                                 >
                                                     {formatCurrency(row.product.discountedPrice > 0 ? row.product.discountedPrice : row.product.price)}
                                                 </Typography>

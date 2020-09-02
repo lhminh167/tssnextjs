@@ -20,49 +20,6 @@ export function CustomerEditMetadataComponent({
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         'name': process.env.SITE_NAME,
-        'image': [
-            // getImageUrl(data.thumbnail),
-            // getImageUrl(data.image),
-            // getImageUrl(data.image2)
-        ],
-        // 'description': data.description,
-        // 'sku': '0446310786',
-        // 'mpn': '925872',
-        // 'brand': {
-        //     '@type': 'Store',
-        //     'name': process.env.SITE_NAME
-        // },
-        // 'review': {
-        //   '@type': 'Review',
-        //   'reviewRating': {
-        //     '@type': 'Rating',
-        //     'ratingValue': '4',
-        //     'bestRating': '5'
-        //   },
-        //   'author': {
-        //     '@type': 'Person',
-        //     'name': 'Fred Benson'
-        //   }
-        // },
-        // 'aggregateRating': data.review.count ? {
-        //     '@type': 'AggregateRating',
-        //     'ratingValue': data.review.averageRating,
-        //     'reviewCount': data.review.count,
-        //     ratingCount: data.review.count
-        // } : null,
-        // offers: {
-        //     '@type': 'Offer',
-        //     url,
-        //     'priceCurrency': 'USD',
-        //     'price': data.discountedPrice > 0 ? data.discountedPrice : data.price,
-        //     'priceValidUntil': now.setFullYear(now.getFullYear() + 1).toString(),
-        //     'itemCondition': 'http://schema.org/NewCondition',
-        //     'availability': 'http://schema.org/InStock',
-        //     'seller': {
-        //         '@type': 'Organization',
-        //         'name': process.env.SITE_NAME
-        //     }
-        // }
     }
 
     return (

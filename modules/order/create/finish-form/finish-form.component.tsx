@@ -7,6 +7,7 @@ import { RocketIcon } from '../../../shared/svg/svg.component';
 import { Order } from '../../order.model';
 import { makeStyles, createStyles } from '@material-ui/core';
 import { mb2, mb } from '../../../shared/layout/layout.style';
+import { ID, BACK } from '../../../shared/tag/tag.model';
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -55,7 +56,7 @@ export default function FinishFormComponent({ back, data }: Props) {
         className={classes.mb2}
       >
         <Typography variant='subtitle1'>
-          Your order number is <span data-cy='order-id'>{data.orderId}</span>.
+          Your order number is <span data-cy={ID}>{data.orderId}</span>.
         </Typography>
         <Typography variant='subtitle1'>
           We have emailed your order confirmation,
@@ -70,7 +71,7 @@ export default function FinishFormComponent({ back, data }: Props) {
       >
         <Link href='/' as='/' passHref>
           <Fab component='a' variant='extended' color='primary'
-            data-cy='home-page'
+            data-cy={BACK}
           >
             Back to Shop
           </Fab>

@@ -2,26 +2,26 @@ import {
   createMuiTheme,
   Fab,
   Grid,
-  useMediaQuery,
-  ThemeProvider,
-  Typography,
+
+
+
   GridList,
-  GridListTile
+  GridListTile, ThemeProvider, useMediaQuery
 } from '@material-ui/core';
 import {
   createStyles,
   makeStyles,
-  Theme,
-  useTheme
+  Theme
 } from '@material-ui/core/styles';
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
-import React, { useEffect, ElementType } from 'react';
+import React, { ElementType, useEffect } from 'react';
 import { PaginatedList } from '../crud/crud.model';
+import GalleryHeaderComponent from '../gallery-header/gallery-header.component';
 import theme from '../layout/layout.theme';
 import { IProduct } from '../models/product.model';
-import ProductCard from '../product-card/product-card.component';
-import GalleryHeaderComponent from '../gallery-header/gallery-header.component';
+import ProductCardComponent from '../product-card/product-card.component';
+import { NEXT, PREVIOUS, GALLERY } from '../tag/tag.model';
 
 export const horizontalGalleryTheme = createMuiTheme({
   ...theme,
@@ -79,6 +79,7 @@ interface Props {
   CardElement?: ElementType<{ data: IProduct }>;
   fixedPageSize?: number;
   customTitle?: any;
+  galleryTestId?: string;
 }
 
 export default function ProductHorizontalGallery({
@@ -89,7 +90,8 @@ export default function ProductHorizontalGallery({
   seeMore,
   CardElement,
   fixedPageSize,
-  customTitle
+  customTitle,
+  galleryTestId
 }: Props) {
   const classes = usehorizontalGalleryStyles({});
   const matches = useMediaQuery('(min-width:600px)');
@@ -122,6 +124,7 @@ export default function ProductHorizontalGallery({
     <ThemeProvider theme={horizontalGalleryTheme}>
       <Grid container
         component='article'
+        data-cy={galleryTestId ?? GALLERY}
       >
         <GalleryHeaderComponent
           title={title}
@@ -135,6 +138,7 @@ export default function ProductHorizontalGallery({
             onClick={toPreviousPage}
             disabled={data.pageIndex === 0}
             size='medium'
+            data-cy={PREVIOUS}
           >
             <ArrowBackIosRoundedIcon />
           </Fab>
@@ -156,7 +160,7 @@ export default function ProductHorizontalGallery({
                 {CardElement ? (
                   <CardElement data={entry} />
                 ) : (
-                    <ProductCard data={entry} />
+                    <ProductCardComponent data={entry} />
                   )}
               </GridListTile>
             ))}
@@ -166,6 +170,7 @@ export default function ProductHorizontalGallery({
             disabled={data.pageIndex >= Math.ceil(data.count / pageSize) - 1}
             onClick={toNextPage}
             size='medium'
+            data-cy={NEXT}
           >
             <ArrowForwardIosRoundedIcon />
           </Fab>

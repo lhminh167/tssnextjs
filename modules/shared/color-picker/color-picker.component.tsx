@@ -7,6 +7,7 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Color } from "csstype";
 import { ChangeEvent } from "react";
 import { IAttributeValue } from "../models/attribute-value.model";
+import { COLOR } from "../tag/tag.model";
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -53,7 +54,8 @@ function ColorPicker(props: Props) {
             className={classes.iconBorder}
         >
             <div
-                className={classes.icon} style={{ background: color }}
+                className={classes.icon}
+                style={{ background: color }}
             ></div>
         </div>);
         return icon;
@@ -78,8 +80,9 @@ function ColorPicker(props: Props) {
             key={color.attributeValueId}
             value={color.attributeValueId.toString()}
             control={<Radio icon={icon(color.value)} checkedIcon={checkedIcon(color.value)} />}
+            data-cy={COLOR}
+            data-color={color.value}
             label={null}
-            data-cy='color'
         />
     )) : null;
 

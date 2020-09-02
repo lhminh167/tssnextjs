@@ -2,5 +2,8 @@
   "baseUrl": "http://localhost:5009",
   "projectId": "ner8qg",
   "experimentalFetchPolyfill": true,
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "defaultCommandTimeout": 600000,
+  "experimentalComponentTesting": true,
+  "componentFolder": "cypress/unit"
 }

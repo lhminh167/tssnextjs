@@ -2,23 +2,17 @@ import { ListItemIcon, Paper, Typography } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import Link from 'next/link';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../root/root.model';
 import { toNumber } from '../../shared/helpers/auth.helper';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
+import { DETAIL, EDIT, NEW_PASSWORD } from '../../shared/tag/tag.model';
 
 export default function CustomerIndexComponent(props) {
-    const classes = useStyles(props);
     const userId = useSelector<IRootState, number>(
         state => toNumber(state.currentUser.data.customerId)
     );
@@ -52,6 +46,7 @@ export default function CustomerIndexComponent(props) {
 
                         <ListItemText
                             primary='View Account'
+                            data-cy={DETAIL}
                         />
                     </ListItem>
                 </Link>
@@ -73,6 +68,7 @@ export default function CustomerIndexComponent(props) {
 
                         <ListItemText
                             primary='Edit Account'
+                            data-cy={EDIT}
                         />
                     </ListItem>
                 </Link>
@@ -93,6 +89,7 @@ export default function CustomerIndexComponent(props) {
 
                         <ListItemText
                             primary='Change Password'
+                            data-cy={NEW_PASSWORD}
                         />
                     </ListItem>
                 </Link>

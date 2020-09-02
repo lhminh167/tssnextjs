@@ -10,6 +10,7 @@ import { mb, mt } from '../../shared/layout/layout.style';
 import { isValidForm } from '../../shared/validator/validator';
 import { CustomerForgotPasswordRequest, CustomerForgotPasswordRequestValidator, defaultCustomerForgotPasswordRequest } from '../customer.model';
 import { forgotPassword } from '../customer.service';
+import { EMAIL, SUBMIT } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles(theme => ({
     mb: mb,
@@ -101,6 +102,7 @@ export default function ForgotPasswordComponent({
                     onChange={change}
                     error={errors.email && submitted}
                     helperText={errors.email && submitted ? errors.email : null}
+                    data-cy={EMAIL}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -109,6 +111,7 @@ export default function ForgotPasswordComponent({
                     variant='contained'
                     color='primary'
                     onClick={submit}
+                    data-cy={SUBMIT}
                 >
                     Submit
                 </Button>

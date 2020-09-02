@@ -14,3 +14,5 @@ export function getImageUrl(
         '/image/upload/f_auto,w_auto,c_scale,q_auto,dpr_auto/tss/' +
         (imageName ? imageName.replace(/\.[^/.]+$/, '') : 'placeholder');
 }
+
+export const revalidateInterval: number = 60;

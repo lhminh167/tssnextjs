@@ -13,6 +13,7 @@ import { CreateReviewRequestValidator, IReview } from '../../../shared/models/re
 import { isValidForm } from '../../../shared/validator/validator';
 import { createReview } from '../review.service';
 import { bold, mb, mb2 } from '../../../shared/layout/layout.style';
+import { RATING, SUBMIT, LOGIN_LINK, REGISTER_LINK } from '../../../shared/tag/tag.model';
 
 const inputTheme = createMuiTheme({
     ...theme,
@@ -114,6 +115,7 @@ export default function CreateReviewComponent({
                                         color='primary'
                                         variant='subtitle2'
                                         component='a'
+                                        data-cy={LOGIN_LINK}
                                     >
                                         login
                                 </Typography>
@@ -126,6 +128,7 @@ export default function CreateReviewComponent({
                                         color='primary'
                                         variant='subtitle2'
                                         component='a'
+                                        data-cy={REGISTER_LINK}
                                     >
                                         register
                                     </Typography>
@@ -204,6 +207,7 @@ export default function CreateReviewComponent({
                                             name='create-rating'
                                             value={state.rating}
                                             onClick={change}
+                                            data-cy={RATING}
                                         />
                                         {
                                             errors.rating && submitted &&
@@ -234,6 +238,7 @@ export default function CreateReviewComponent({
                                         variant='extended'
                                         color='primary'
                                         onClick={submit}
+                                        data-cy={SUBMIT}
                                     >
                                         Submit
                                     </Fab>

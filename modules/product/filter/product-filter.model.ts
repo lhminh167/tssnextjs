@@ -34,6 +34,11 @@ export const productUrl = {
     href: `${productBaseUrl}/[productName]/[productId]`,
     as: `${productBaseUrl}/${toUrl(product.name)}/${product.productId}`,
   }),
+  edit: (product: IProduct) => ({
+    href: `${productBaseUrl}/[productName]/[productId]/edit`,
+    as: `${productBaseUrl}/${toUrl(product.name)}/${product.productId}/edit`,
+  }),
+  new: productBaseUrl + '/new'
 };
 
 
@@ -91,8 +96,8 @@ export interface IProductSearchRequest extends PaginationRequest {
 
 export const defaultProductSearchRequest: IProductSearchRequest = {
   keyword: '',
-  color: null,
-  size: null,
+  color: '',
+  size: '',
   category: [],
   minPrice: 0,
   maxPrice: 0,
@@ -100,7 +105,7 @@ export const defaultProductSearchRequest: IProductSearchRequest = {
   isDescending: true,
   pageIndex: 0,
   pageSize: 8,
-  sortBy: null,
+  sortBy: '',
   display: 0
 };
 
