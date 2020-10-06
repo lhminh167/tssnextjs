@@ -18,6 +18,8 @@ export interface OrderCreateRequest {
   mobPhone?: string;
   comments?: string;
   paymentMethodId?: string;
+  paymentId?: string;
+  paymentSecret?: string;
   shippingId?: number;
   shippingRegionId?: number;
 }

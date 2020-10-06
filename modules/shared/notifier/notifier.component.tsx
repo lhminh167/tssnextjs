@@ -92,7 +92,7 @@ export default function Notifier() {
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Description:
+              Description:{' '}
               <span
                 data-cy={DESCRIPTION}
               >

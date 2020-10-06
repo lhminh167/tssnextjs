@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react';
 import { ConfirmationDialog } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { IReview } from '../../../shared/models/review.model';
 import { deleteReview } from '../review.service';
-import { REMOVE } from '../../../shared/tag/tag.model';
+import { tag, REMOVE, REVIEW } from '../../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -44,7 +44,7 @@ export default function ProductReviewDeleteComponent({
             <Button
                 variant='outlined'
                 onClick={open}
-                data-cy={REMOVE}
+                data-cy={tag(REMOVE, data.reviewId, REVIEW)}
             >
                 Delete
             </Button>

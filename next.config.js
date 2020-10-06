@@ -67,6 +67,7 @@ const nextConfig = {
     SITE_URL: process.env.SITE_URL,
     SITE_NAME: process.env.SITE_NAME,
     ENV: process.env.NODE_ENV,
+    IS_LOCAL: process.env.IS_LOCAL,
   },
 
   webpack(config) {

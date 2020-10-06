@@ -100,14 +100,14 @@ export function ConfirmationDialog({
                 <Button autoFocus
                     onClick={decline}
                     color='primary'
-                    data-cy={declineTestId ?? YES}
+                    data-cy={declineTestId ?? NO}
                 >
                     {
                         declineText ?? 'Cancel'
                     }
                 </Button>
                 <Button onClick={confirm} color='primary'
-                    data-cy={confirmTestId ?? NO}
+                    data-cy={confirmTestId ?? YES}
                 >
                     {
                         confirmText ?? 'Ok'

@@ -12,8 +12,6 @@ export const apiCategoryUrl = {
 export const categoryBaseUrl = '/category';
 
 export const categoryUrl = {
-    category: categoryBaseUrl,
-    homepage: categoryBaseUrl + '/' + 'Homepage',
     detail: (category: ICategory) => ({
         href: `${categoryBaseUrl}/[categoryName]/[categoryId]`,
         as: `${categoryBaseUrl}/${toUrl(category.name)}/${category.categoryId}`,

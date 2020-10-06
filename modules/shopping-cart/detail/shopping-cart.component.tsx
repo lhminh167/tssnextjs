@@ -8,12 +8,13 @@ import { ProductFilterFilterEnum } from '../../product/filter/product-filter.mod
 import ActionButtonsComponent from '../../shared/action-buttons/action-buttons.component';
 import { defaultRowsPerPageOptions } from '../../shared/crud/crud.model';
 import { goTo, isAnonymous } from '../../shared/helpers/auth.helper';
-import { decodeAttributes } from '../../shared/helpers/product.helper';
+import { decodeAttributes, getCartItemColor, getCartItemSize } from '../../shared/helpers/product.helper';
 import { formatCurrency } from '../../shared/helpers/string.helper';
 import ImageComponent from '../../shared/image/image.component';
 import { bold, p } from '../../shared/layout/layout.style';
+import { getDiscountedPrice } from '../../shared/models/product.model';
 import PaginationComponent from '../../shared/pagination/pagination.component';
-import { COLOR, DISCOUNTED_PRICE, FILTERED_ITEM_COUNT, ITEM, NAME, REMOVE, SAVE_ITEM_FOR_LATER, SIZE } from '../../shared/tag/tag.model';
+import { COLOR, DISCOUNTED_PRICE, COUNT, ITEM, NAME, REMOVE, SAVE_ITEM_FOR_LATER, SIZE, tag, SHOPPING_CART } from '../../shared/tag/tag.model';
 import ShoppingCartQuantityPickerComponent from '../quantity-picker/shopping-cart-quantity-picker.component';
 import { defaultShopingCartGetRequest, defaultShoppingCart, IShopingCart, IShopingCartItem, ShopingCartGetRequest } from '../shopping-cart.model';
 import { getShoppingCart, removeShoppingCartItem, saveShoppingCartItemForLater } from '../shopping-cart.service';
@@ -100,7 +101,7 @@ export default function ShoppingCartComponent({
                     component='h2'
                 >
                     <span
-                        data-cy={FILTERED_ITEM_COUNT}
+                        data-cy={COUNT}
                     >
                         {state.totalQuantity}
                     </span>
@@ -136,13 +137,13 @@ export default function ShoppingCartComponent({
                             {
                                 state?.items?.map(row => {
                                     const attributes = decodeAttributes(row.attributes);
-                                    const color = attributes.find(e => e.name === ProductFilterFilterEnum.Color)?.value;
-                                    const size = attributes.find(e => e.name === ProductFilterFilterEnum.Size)?.value;
-                                    const price = formatCurrency(row.product.discountedPrice > 0 ? row.product.discountedPrice : row.product.price);
+                                    const color = getCartItemColor(attributes);
+                                    const size = getCartItemSize(attributes);
+                                    const price = getDiscountedPrice(row.product);
 
                                     return (
                                         <TableRow key={row.itemId}
-                                            data-cy={ITEM}
+                                            data-cy={tag(ITEM, row.itemId, SHOPPING_CART)}
                                             data-id={row.itemId}
                                         >
                                             <TableCell

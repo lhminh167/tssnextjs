@@ -12,6 +12,15 @@ declare namespace Cypress {
         ): Chainable<JQuery<E>>;
 
         /**
+         * Query to test if HTML element(s) with attribute data-cy=identifier does not exist in DOM.
+         * @param identifier identifier
+         */
+        shouldNotExist<E extends Node = HTMLElement>(
+            identifier: string,
+            options?: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow>
+        ): Chainable<JQuery<E>>;
+
+        /**
          * Wait until the destination page has loaded.
          * @param pathname pathname of destination page
          */
@@ -26,30 +35,31 @@ declare namespace Cypress {
         ): Chainable<JQuery<E>>;
 
         /**
-         * Fill in register form.
+         * Execute function of which parameter is the subject of previous command.
          */
-        typeRegister<E extends Node = HTMLElement>(
-            user: any
+        chain<E extends Node = HTMLElement>(
+            func: any
         ): Chainable<JQuery<E>>;
 
         /**
-         * Fill in login form.
+         * Check the status, title, content, errors of API responses by comparing the response object and condition object.
          */
-        typeLogin<E extends Node = HTMLElement>(
-            user: any
-        ): Chainable<JQuery<E>>;
-
-        /**
-         * Fill in checkout form.
-         */
-        typeCheckout<E extends Node = HTMLElement>(
-            user: any
+        testApi<E extends Node = HTMLElement>(
+            condition: any
         ): Chainable<JQuery<E>>;
 
         /**
          * Fill in form.
          */
         fillTextFields<E extends Node = HTMLElement>(
+            fiels: string[],
+            value: object
+        ): Chainable<JQuery<E>>;
+
+        /**
+         * Test text fields.
+         */
+        testTextFields<E extends Node = HTMLElement>(
             fiels: string[],
             value: object
         ): Chainable<JQuery<E>>;
@@ -75,9 +85,13 @@ declare namespace Cypress {
         ): Chainable<JQuery<E>>;
 
         /**
-        * Test page's meta data tags.
-        */
-        itShouldLoadMetaTags<E extends Node = HTMLElement>(
+         * visit page and wait for hydration done.
+         * @param url url
+         */
+        open<E extends Node = HTMLElement>(
+            url: string,
+            options?: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow>
         ): Chainable<JQuery<E>>;
+
     }
 }

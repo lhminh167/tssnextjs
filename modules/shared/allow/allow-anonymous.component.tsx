@@ -1,9 +1,9 @@
-import { isAnonymous, goBack } from "../helpers/auth.helper";
+import { goTo, isAnonymous } from "../helpers/auth.helper";
 import { allowHoc } from "./allow.component";
 
 function allowAnonymous() {
     const allowed = isAnonymous();
-    if (!allowed) goBack();
+    if (!allowed) goTo('/');
     return allowed;
 }
 

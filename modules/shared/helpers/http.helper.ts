@@ -1,3 +1,4 @@
+import { IResponse } from "../crud/crud.model";
 
 export function setContentType(options: RequestInit, contentType: string) {
     if (contentType) options.headers['Content-Type'] = contentType;
@@ -15,4 +16,8 @@ export function getImageUrl(
         (imageName ? imageName.replace(/\.[^/.]+$/, '') : 'placeholder');
 }
 
-export const revalidateInterval: number = 60;
+export const revalidateInterval: number = 1;
+
+export function isOk(responseStatus: number) {
+    return responseStatus < 300;
+}

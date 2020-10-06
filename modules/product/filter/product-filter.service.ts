@@ -8,7 +8,7 @@ export async function getFilter(): Promise<Response<IProductFilterFilter>> {
 }
 
 export async function getProducts(input: IProductSearchRequest) {
-    return await get(apiProductUrl.product + '?' + queryString.stringify(input as any));
+    return await get(apiProductUrl.search(input));
 }
 
 export async function getHomepageProducts() {

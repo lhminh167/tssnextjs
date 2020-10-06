@@ -9,7 +9,7 @@ function allowCheckout(): boolean {
     let allowed = isCustomer();
 
 
-    if (!allowed) goTo(customerUrl.login, Router.pathname);
+    if (!allowed) goTo(customerUrl.login(), Router.pathname);
 
     const count = shoppingCartItemCountSelector(getState());
     allowed = count > 0;

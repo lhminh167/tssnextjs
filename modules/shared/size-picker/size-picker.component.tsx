@@ -68,7 +68,7 @@ function SizePickerComponent(props: Props) {
             control={
                 <Radio
                     data-cy={SIZE}
-                    data-size={size.value}
+                    data-id={size.value}
                     icon={icon(size.value)}
                     checkedIcon={checkedIcon(size.value)}
                 />

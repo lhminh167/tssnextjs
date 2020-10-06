@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import ActionButtonsComponent from '../../../shared/action-buttons/action-buttons.component';
 import { p, w100 } from '../../../shared/layout/layout.style';
 import { shoppingCartItemCountSlice } from '../../../shopping-cart/shopping-cart.slice';
-import { createOrder } from '../../order.service';
+import { createOrder, createPayment } from '../../order.service';
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -51,16 +51,24 @@ export default function CreditCardComponent({
         });
         if (!paymentMethod) return;
 
-        const orderResponse = await createOrder({
+        const paymentResponse = await createPayment({
             ...data,
             paymentMethodId: paymentMethod.id
         });
-        if (orderResponse.status >= 300) return;
+        if (paymentResponse.status >= 300) return;
 
-        if (orderResponse.content.paymentStatus === 'requires_action') {
-            const { error, paymentIntent } = await stripe.confirmCardPayment(orderResponse.content.paymentSecret);
+        if (paymentResponse.content.paymentStatus === 'requires_action') {
+            const { error, paymentIntent } = await stripe.confirmCardPayment(paymentResponse.content.paymentSecret);
             if (!paymentIntent) return;
         }
+
+        const orderResponse = await createOrder({
+            ...data,
+            paymentMethodId: paymentMethod.id,
+            paymentId: paymentResponse.content.paymentId,
+            paymentSecret: paymentResponse.content.paymentSecret
+        });
+        if (orderResponse.status >= 300) return;
 
         dispatch(shoppingCartItemCountSlice.actions.change(0));
         next(orderResponse.content.order);

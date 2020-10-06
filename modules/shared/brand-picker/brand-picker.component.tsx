@@ -41,7 +41,8 @@ function BrandPickerComponent({
                     value={entry.name}
                     color='secondary'
                     icon={CheckBoxBlankIcon}
-                    data-cy={CATEGORY + entry.name}
+                    data-cy={CATEGORY}
+                    data-id={entry.name}
                 />
             }
             label={entry.name}

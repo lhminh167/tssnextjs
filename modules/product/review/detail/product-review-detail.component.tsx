@@ -8,7 +8,7 @@ import { IReview } from '../../../shared/models/review.model';
 import ProductReviewDeleteComponent from '../delete/product-review-delete.component';
 import ProductReviewEditComponent from '../edit/product-review-edit.component';
 import ProductReviewComponent from './product-review.component';
-import { EDIT } from '../../../shared/tag/tag.model';
+import { EDIT, tag, ITEM, REVIEW } from '../../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -52,6 +52,7 @@ export default function ProductReviewDetailComponent({
             xs={12}
             key={data.reviewId}
             className={classes.mb2}
+            data-id={data.reviewId}
         >
             {
                 !isEditMode &&
@@ -82,7 +83,7 @@ export default function ProductReviewDetailComponent({
                             variant='outlined'
                             onClick={() => { setIsEditMode(true) }}
                             className={classes.mr}
-                            data-cy={EDIT}
+                            data-cy={tag(EDIT, data.reviewId, REVIEW)}
                         >
                             Edit
                         </Button>

@@ -1,17 +1,21 @@
-import { Shipping, defaultShipping } from '../shared/models/shipping.model';
-import { Customer, defaultCustomer } from '../customer/customer.model';
-import { Tax, defaultTax } from '../shared/models/tax.model';
-import { IProduct } from '../shared/models/product.model';
+import { Customer, defaultCustomer } from "../customer/customer.model";
+import { Shipping, defaultShipping } from "../shared/models/shipping.model";
+import { Tax, defaultTax } from "../shared/models/tax.model";
+import { IProduct } from "../shared/models/product.model";
+import { PaginationRequest } from "../shared/crud/crud.model";
+import queryString from 'query-string';
 
 const apiOrderBaseUrl = 'Order';
 
 export const apiOrderUrl = {
     baseUrl: apiOrderBaseUrl,
     new: apiOrderBaseUrl + '/new',
+    payment: apiOrderBaseUrl + '/payment',
     stockOk: apiOrderBaseUrl + '/stockOk',
     stockNotOk: apiOrderBaseUrl + '/stockNotOk',
     shipOk: apiOrderBaseUrl + '/shipOk',
-    shipNotOk: apiOrderBaseUrl + '/shipNotOk'
+    shipNotOk: apiOrderBaseUrl + '/shipNotOk',
+    search: (query: PaginationRequest) => `${apiOrderBaseUrl}?${queryString.stringify(query)}`,
 };
 
 const orderBaseUrl = '/order';

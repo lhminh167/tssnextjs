@@ -10,7 +10,8 @@ import { mb, mt } from '../../shared/layout/layout.style';
 import { isValidForm } from '../../shared/validator/validator';
 import { CustomerUpdatePasswordState, CustomerUpdatePasswordStateValidator, defaultCustomerUpdatePasswordState } from '../customer.model';
 import { updatePassword } from '../customer.service';
-import { PASSWORD, NEW_PASSWORD, CONFIRM_PASSWORD, SUBMIT } from '../../shared/tag/tag.model';
+import { PASSWORD, NEW_PASSWORD, CONFIRM_NEW_PASSWORD, SUBMIT } from '../../shared/tag/tag.model';
+import { goTo } from '../../shared/helpers/auth.helper';
 
 const useStyles = makeStyles(theme => ({
     mb: mb,
@@ -49,9 +50,11 @@ export default function ChangePasswordComponent({
 
         const response = await updatePassword({
             customerId: userId,
-            currentPassword: state.currentPassword,
+            password: state.password,
             newPassword: state.newPassword
         })
+
+        if (response.status === 200) goTo('/')
 
     }
 
@@ -86,14 +89,14 @@ export default function ChangePasswordComponent({
                     variant='outlined'
                     required
                     fullWidth
-                    name='currentPassword'
+                    name={PASSWORD}
                     label='Current Password'
                     type='password'
                     autoComplete='current-password'
-                    value={state.currentPassword}
+                    value={state.password}
                     onChange={change}
-                    error={errors.currentPassword && submitted}
-                    helperText={errors.currentPassword && submitted ? errors.currentPassword : null}
+                    error={errors.password && submitted}
+                    helperText={errors.password && submitted ? errors.password : null}
                     data-cy={PASSWORD}
                 />
             </Grid>
@@ -102,7 +105,7 @@ export default function ChangePasswordComponent({
                     variant='outlined'
                     required
                     fullWidth
-                    name='newPassword'
+                    name={NEW_PASSWORD}
                     label='New Password'
                     type='password'
                     autoComplete='new-password'
@@ -118,7 +121,7 @@ export default function ChangePasswordComponent({
                     variant='outlined'
                     required
                     fullWidth
-                    name='confirmNewPassword'
+                    name={CONFIRM_NEW_PASSWORD}
                     label='Confirm New Password'
                     type='password'
                     autoComplete='new-password'
@@ -126,7 +129,7 @@ export default function ChangePasswordComponent({
                     onChange={change}
                     error={errors.confirmNewPassword && submitted}
                     helperText={errors.confirmNewPassword && submitted ? errors.confirmNewPassword : null}
-                    data-cy={CONFIRM_PASSWORD}
+                    data-cy={CONFIRM_NEW_PASSWORD}
 
                 />
             </Grid>

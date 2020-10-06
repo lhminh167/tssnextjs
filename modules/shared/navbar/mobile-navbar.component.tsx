@@ -10,7 +10,7 @@ import BrandComponent from '../brand/brand.component';
 import SearchComponent from '../search/search.component';
 import SideBarComponent from '../sidebar/sidebar.component';
 import { useRouter } from 'next/router';
-import LazyHydrate from "react-lazy-hydration";
+// import LazyHydrate from "react-lazy-hydration";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -89,9 +89,9 @@ const MobileNavbarComponent = () => {
                     </Toolbar>
                 }
             </AppBar>
-            <LazyHydrate whenVisible>
-                <SideBarComponent open={isSidebarOpen} onClose={toggleSidebar(false)} />
-            </LazyHydrate>
+            {/* <LazyHydrate whenVisible> */}
+            <SideBarComponent open={isSidebarOpen} onClose={toggleSidebar(false)} />
+            {/* </LazyHydrate> */}
         </Fragment>
     );
 }

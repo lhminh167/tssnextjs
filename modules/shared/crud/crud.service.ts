@@ -12,8 +12,7 @@ import { setTokenHeader } from '../helpers/token.helper';
 es6promise.polyfill();
 
 const baseUrl = getEnvVar('API_URL');
-const uploadUrl = `https://api.cloudinary.com/v1_1/${
-  getEnvVar('CLOUDINARY_CLOUD_NAME')
+const uploadUrl = `https://api.cloudinary.com/v1_1/${getEnvVar('CLOUDINARY_CLOUD_NAME')
   }/image/upload`;
 
 export async function get(url: string, id: number = 0) {
@@ -114,6 +113,7 @@ export function getEnvVar(key: string) {
     SITE_URL: process.env.SITE_URL,
     SITE_NAME: process.env.SITE_NAME,
     ENV: process.env.NODE_ENV,
+    IS_LOCAL: process.env.IS_LOCAL,
   }
 
   return config[key]

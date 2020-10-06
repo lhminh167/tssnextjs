@@ -81,7 +81,7 @@ function ColorPicker(props: Props) {
             value={color.attributeValueId.toString()}
             control={<Radio icon={icon(color.value)} checkedIcon={checkedIcon(color.value)} />}
             data-cy={COLOR}
-            data-color={color.value}
+            data-id={color.value}
             label={null}
         />
     )) : null;

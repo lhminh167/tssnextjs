@@ -1,6 +1,8 @@
 import { ICategory } from './category.model';
 
-export const departmentUrl = 'department';
+export const apiDepartmentUrl = 'department';
+
+export const departmentUrl = '/department';
 
 export interface IDepartment {
     departmentId: number;

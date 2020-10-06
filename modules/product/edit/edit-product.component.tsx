@@ -1,29 +1,21 @@
 import { Button, Grid, InputAdornment, makeStyles, MenuItem, TextField, Typography } from '@material-ui/core';
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../root/root.model';
 import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 import { UploadRequest } from '../../shared/crud/crud.model';
 import { upload } from '../../shared/crud/crud.service';
-import { toNumber } from '../../shared/helpers/auth.helper';
+import { goTo, toNumber } from '../../shared/helpers/auth.helper';
 import { toUrl } from '../../shared/helpers/string.helper';
 import { IAttributeValue } from '../../shared/models/attribute-value.model';
-import { IProduct, productDisplayOptions } from '../../shared/models/product.model';
+import { defaultProduct, IProduct, productDisplayOptions } from '../../shared/models/product.model';
+import { CATEGORY, COLOR, DESCRIPTION, DISCOUNTED_PRICE, DISPLAY, IMAGE, IMAGE_2, ITEM, NAME, PRICE, SIZE, SUBMIT, tag, THUMBNAIL } from '../../shared/tag/tag.model';
 import UploadComponent from '../../shared/upload/upload.component';
 import { isValidForm } from '../../shared/validator/validator';
-import { IProductFilterCategory, ProductFilterFilterEnum } from '../filter/product-filter.model';
-import { defaultEditProductState, EditProductRequestValidator, IEditProductRequest, IEditProductState, defaultFile } from './edit-product.model';
-import { editProduct } from './edit-product.service';
+import { IProductFilterCategory, ProductFilterFilterEnum, productUrl } from '../filter/product-filter.model';
 import productFilterSlice from '../filter/product-filter.slice';
-import { SUBMIT, IMAGE_2, THUMBNAIL, DISPLAY, SIZE, COLOR, NAME, DESCRIPTION, PRICE, DISCOUNTED_PRICE, CATEGORY, IMAGE } from '../../shared/tag/tag.model';
-
-
-const useStyles = makeStyles(theme => ({
-    input: {
-        display: 'none'
-    }
-}));
+import { defaultEditProductState, defaultFile, EditProductRequestValidator, IEditProductRequest, IEditProductState } from './edit-product.model';
+import { editProduct } from './edit-product.service';
 
 interface Props {
     data: IProduct;
@@ -32,8 +24,6 @@ interface Props {
 export default function EditProductComponent({
     data
 }: Props) {
-    const classes = useStyles({});
-    const router = useRouter();
     const [state, setState] = useState<IEditProductState>({
         ...defaultEditProductState,
         productId: data.productId,
@@ -103,12 +93,10 @@ export default function EditProductComponent({
         errors = new EditProductRequestValidator().validate(dataToSubmit);
 
         if (!isValidForm(errors)) return;
-        try {
-            await updateImages(dataToSubmit);
-            const response = await editProduct(dataToSubmit);
-            setIsDialogOpen(true);
-        } catch (e) {
-        }
+        await updateImages(dataToSubmit);
+        const response = await editProduct(dataToSubmit);
+        setIsDialogOpen(true);
+
     }
 
     async function updateImages(input: IEditProductRequest) {
@@ -126,14 +114,7 @@ export default function EditProductComponent({
     }
 
     function showProductDetail() {
-        router.push({
-            pathname: '/product/[productName]',
-            query: {
-                productId: state.productId
-            }
-        },
-            `/product/${toUrl(state.name)}?productId=${state.productId}`
-        );
+        goTo(productUrl.detail({ ...defaultProduct, name: state.name, productId: state.productId }).as);
     }
 
     function resetForm() {
@@ -254,7 +235,9 @@ export default function EditProductComponent({
                     data-cy={CATEGORY}
                 >
                     {categories.map(entry => (
-                        <MenuItem key={entry.categoryId} value={entry.categoryId}>
+                        <MenuItem key={entry.categoryId} value={entry.categoryId}
+                            data-cy={tag(ITEM, '', CATEGORY)}
+                        >
                             {entry.name}
                         </MenuItem>
                     ))}
@@ -281,7 +264,9 @@ export default function EditProductComponent({
                     data-cy={COLOR}
                 >
                     {colors.map(entry => (
-                        <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}>
+                        <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}
+                            data-cy={tag(ITEM, '', COLOR)}
+                        >
                             {entry.value}
                         </MenuItem>
                     ))}
@@ -309,7 +294,9 @@ export default function EditProductComponent({
                     data-cy={SIZE}
                 >
                     {sizes.map(entry => (
-                        <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}>
+                        <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}
+                            data-cy={tag(ITEM, '', SIZE)}
+                        >
                             {entry.value}
                         </MenuItem>
                     ))}
@@ -333,7 +320,9 @@ export default function EditProductComponent({
                     data-cy={DISPLAY}
                 >
                     {productDisplayOptions.map(entry => (
-                        <MenuItem key={entry.value} value={entry.value}>
+                        <MenuItem key={entry.value} value={entry.value}
+                            data-cy={tag(ITEM, '', DISPLAY)}
+                        >
                             {entry.label}
                         </MenuItem>
                     ))}

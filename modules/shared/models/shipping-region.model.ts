@@ -18,5 +18,5 @@ export class ShippingRegionValidator extends Validator<ShippingRegion> {
 
 export const defaultShippingRegion = {
     shippingRegionId: 1,
-    shippingRegion1: ''
+    shippingRegion1: 'Please Select'
 }

@@ -17,7 +17,7 @@ import BrandComponent from '../brand/brand.component';
 import { toNumber } from '../helpers/auth.helper';
 import { themeColor } from '../layout/layout.theme';
 import SearchComponent from '../search/search.component';
-import { ADMIN, DEPARTMENT, LOGIN, LOGOUT, ORDERS, REGISTER, SEARCH, SHOPPING_CART, TOTAL_QUANTITY, WISHLIST } from '../tag/tag.model';
+import { ADMIN, DEPARTMENT, LOGIN, LOGOUT, ORDER, REGISTER, SEARCH, SHOPPING_CART, TOTAL_QUANTITY, WISHLIST, USER, tag, ROLE, EMAIL, NAME } from '../tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -108,7 +108,7 @@ const LoggedInComponent = () => {
                     component='a'
                     color='primary'
                     className={classes.seperator}
-                    data-cy={ORDERS}
+                    data-cy={ORDER}
                 >
                     Orders
             </Typography>
@@ -216,6 +216,7 @@ export default function DesktopNavbarComponent() {
                             component='a'
                             title='Customer Area'
                             className={classes.seperator}
+                            data-cy={USER}
                         >
                             <Tooltip
                                 classes={{ tooltip: classes.tooltip }}
@@ -236,6 +237,7 @@ export default function DesktopNavbarComponent() {
                                                 />
                                                 <ListItemSecondaryAction>
                                                     <Typography
+                                                        data-cy={tag(NAME, '', USER)}
                                                     >
                                                         {currentUser.name}
                                                     </Typography>
@@ -247,6 +249,7 @@ export default function DesktopNavbarComponent() {
                                                 />
                                                 <ListItemSecondaryAction>
                                                     <Typography
+                                                        data-cy={tag(EMAIL, '', USER)}
                                                     >
                                                         {currentUser.email}
                                                     </Typography>
@@ -259,6 +262,7 @@ export default function DesktopNavbarComponent() {
                                                 />
                                                 <ListItemSecondaryAction>
                                                     <Typography
+                                                        data-cy={tag(ROLE, '', USER)}
                                                     >
                                                         {currentUser.role}
                                                     </Typography>

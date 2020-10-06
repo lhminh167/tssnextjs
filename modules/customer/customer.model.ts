@@ -5,8 +5,9 @@ const apiCustomerBaseUrl = 'Customer';
 
 export const apiCustomerUrl = {
     baseUrl: apiCustomerBaseUrl,
-    register: apiCustomerBaseUrl + '/' + 'register',
+    register: apiCustomerBaseUrl,
     login: apiCustomerBaseUrl + '/' + 'login',
+    detail: (customerId: number) => `${apiCustomerBaseUrl}/${customerId}`,
     updatePassword: (customerId: number) => `${apiCustomerBaseUrl}/${customerId}/Password`,
     forgotPassword: `${apiCustomerBaseUrl}/ForgotPassword`,
     resetPassword: (customerId: number, resetPasswordToken: string) => `${apiCustomerBaseUrl}/${customerId}/ResetPassword/${resetPasswordToken}`,
@@ -16,13 +17,20 @@ const customerBaseUrl = '/user';
 
 export const customerUrl = {
     baseUrl: customerBaseUrl,
-    register: customerBaseUrl + '/' + 'register',
-    login: customerBaseUrl + '/' + 'login',
+    register: (returnUrl?: string) => `${customerBaseUrl}/register${returnUrl ? '?next=' + returnUrl : ''}`,
+    login: (returnUrl?: string) => `${customerBaseUrl}/login${returnUrl ? '?next=' + returnUrl : ''}`,
     list: `${customerBaseUrl}/list`,
-    detail: (customerId: number) => `${customerBaseUrl}/${customerId}`,
-    updatePassword: (customerId: number) => `${customerBaseUrl}/${customerId}/Password`,
-    forgotPassword: `${customerBaseUrl}/ForgotPassword`,
-    resetPassword: (customerId: number, resetPasswordToken: string) => `${customerBaseUrl}/${customerId}/ResetPassword/${resetPasswordToken}`,
+    detail: (customerId: number) => ({
+        href: `${customerBaseUrl}/[customerId]`,
+        as: `${customerBaseUrl}/${customerId}`
+    }),
+    edit: (customerId: number) => ({
+        href: `${customerBaseUrl}/[customerId]/edit`,
+        as: `${customerBaseUrl}/${customerId}/edit`
+    }),
+    updatePassword: (customerId: number) => `${customerBaseUrl}/${customerId}/change-password`,
+    forgotPassword: `${customerBaseUrl}/forgot-password`,
+    resetPassword: (customerId: number, resetPasswordToken: string) => `${customerBaseUrl}/${customerId}/reset-password/${resetPasswordToken}`,
 }
 
 export const loginTokenKey = 'loginToken';
@@ -31,7 +39,8 @@ export interface Customer {
     customerId?: string;
     name?: string;
     email?: string;
-    // creditCard?: string;
+    password?: string;
+    creditCard?: string;
     address1?: string;
     address2?: string;
     city?: string;
@@ -39,6 +48,7 @@ export interface Customer {
     postalCode?: string;
     country?: string;
     shippingRegion?: ShippingRegion;
+    shippingRegionId: number;
     dayPhone?: string;
     evePhone?: string;
     mobPhone?: string;
@@ -54,7 +64,8 @@ export const defaultCustomer: Customer = {
     customerId: null,
     name: 'Visitor',
     email: '',
-    // creditCard: '',
+    password: '',
+    creditCard: '',
     address1: '',
     address2: '',
     city: '',
@@ -62,6 +73,7 @@ export const defaultCustomer: Customer = {
     postalCode: '',
     country: '',
     shippingRegion: defaultShippingRegion,
+    shippingRegionId: 1,
     dayPhone: '',
     evePhone: '',
     mobPhone: '',
@@ -186,13 +198,13 @@ export class CustomerUpdateRequestValidator extends Validator<CustomerUpdateRequ
 }
 
 export interface CustomerUpdatePasswordState {
-    currentPassword: string;
+    password: string;
     newPassword: string;
     confirmNewPassword: string;
 }
 
 export const defaultCustomerUpdatePasswordState: CustomerUpdatePasswordState = {
-    currentPassword: '',
+    password: '',
     newPassword: '',
     confirmNewPassword: '',
 }
@@ -201,7 +213,7 @@ export class CustomerUpdatePasswordStateValidator extends Validator<CustomerUpda
     constructor() {
         super();
 
-        this.ruleFor('currentPassword').notNull().notEmpty();
+        this.ruleFor('password').notNull().notEmpty();
         this.ruleFor('newPassword').notNull().notEmpty();
         this.ruleFor('confirmNewPassword').notNull().notEmpty().must((value, model) => value === model.newPassword)
             .withMessage('New Password and Confirm New Password fields do not match.');
@@ -210,7 +222,7 @@ export class CustomerUpdatePasswordStateValidator extends Validator<CustomerUpda
 
 export interface CustomerUpdatePasswordRequest {
     customerId: number;
-    currentPassword: string;
+    password: string;
     newPassword: string;
 }
 

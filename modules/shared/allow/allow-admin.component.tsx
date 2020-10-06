@@ -1,9 +1,9 @@
-import { goBack, isAdmin } from "../helpers/auth.helper";
+import { goTo, isAdmin } from "../helpers/auth.helper";
 import { allowHoc } from "./allow.component";
 
 function allowAdmin(): boolean {
     const allowed = isAdmin();
-    if (!allowed) goBack();
+    if (!allowed) goTo('/');
     return allowed;
 }
 

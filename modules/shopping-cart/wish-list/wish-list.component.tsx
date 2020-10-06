@@ -4,21 +4,20 @@ import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { ProductFilterFilterEnum } from '../../product/filter/product-filter.model';
+import { useDispatch } from 'react-redux';
 import ActionButtonsComponent from '../../shared/action-buttons/action-buttons.component';
-import { defaultPaginationList, defaultRowsPerPageOptions, PaginatedList } from '../../shared/crud/crud.model';
-import { decodeAttributes } from '../../shared/helpers/product.helper';
+import { defaultRowsPerPageOptions } from '../../shared/crud/crud.model';
+import { isAnonymous } from '../../shared/helpers/auth.helper';
+import { decodeAttributes, getCartItemColor, getCartItemSize } from '../../shared/helpers/product.helper';
 import { formatCurrency } from '../../shared/helpers/string.helper';
-import { p, bold } from '../../shared/layout/layout.style';
+import ImageComponent from '../../shared/image/image.component';
+import { bold, p } from '../../shared/layout/layout.style';
 import PaginationComponent from '../../shared/pagination/pagination.component';
+import { COLOR, COUNT, DISCOUNTED_PRICE, tag, ITEM, MOVE_ITEM_TO_CART, NAME, REMOVE, SHOPPING_CART, SIZE } from '../../shared/tag/tag.model';
 import ShoppingCartQuantityPickerComponent from '../quantity-picker/shopping-cart-quantity-picker.component';
-import { defaultShopingCartGetRequest, IShopingCartItem, ShopingCartGetRequest, IShopingCart, defaultShoppingCart } from '../shopping-cart.model';
+import { defaultShopingCartGetRequest, defaultShoppingCart, IShopingCart, IShopingCartItem, ShopingCartGetRequest } from '../shopping-cart.model';
 import { getShoppingCart, moveShoppingCartItemToCart, removeShoppingCartItem } from '../shopping-cart.service';
 import { shoppingCartItemCountSlice } from '../shopping-cart.slice';
-import { useDispatch } from 'react-redux';
-import ImageComponent from '../../shared/image/image.component';
-import { isAnonymous } from '../../shared/helpers/auth.helper';
-import { FILTERED_ITEM_COUNT, MOVE_ITEM_TO_CART, REMOVE, COLOR, NAME, SIZE, DISCOUNTED_PRICE, ITEM } from '../../shared/tag/tag.model';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -102,7 +101,7 @@ export default function WishListComponent({
                     component='h2'
                 >
                     <span
-                        data-cy={FILTERED_ITEM_COUNT}
+                        data-cy={COUNT}
                     >
                         {state.totalQuantity}
                     </span>
@@ -138,12 +137,12 @@ export default function WishListComponent({
                             {
                                 state?.items?.map(row => {
                                     const attributes = decodeAttributes(row.attributes);
-                                    const color = attributes.find(e => e.name === ProductFilterFilterEnum.Color)?.value;
-                                    const size = attributes.find(e => e.name === ProductFilterFilterEnum.Size)?.value;
+                                    const color = getCartItemColor(attributes);
+                                    const size = getCartItemSize(attributes);
 
                                     return (
                                         <TableRow key={row.itemId}
-                                            data-cy={ITEM}
+                                            data-cy={tag(ITEM, row.itemId, SHOPPING_CART)}
                                             data-id={row.itemId}
                                         >
                                             <TableCell
@@ -174,6 +173,7 @@ export default function WishListComponent({
                                                         >
                                                             {color}
                                                         </span>
+                                                        {' '}
                                                         <span
                                                             data-cy={NAME}
                                                         >

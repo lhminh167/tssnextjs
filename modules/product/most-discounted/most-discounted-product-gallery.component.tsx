@@ -5,6 +5,7 @@ import { IProduct } from '../../shared/models/product.model';
 import ProductCardComponent from '../../shared/product-card/product-card.component';
 import ProductHorizontalGallery from '../../shared/product-horizontal-gallery/product-horizontal-gallery.component';
 import { DiscountIcon } from '../../shared/svg/svg.component';
+import { MOST_DISCOUNTED } from '../../shared/tag/tag.model';
 import {
   defaultProductSearchRequest,
   IProductSearchRequest,
@@ -37,6 +38,7 @@ export default function MostDiscountedProductGalleryComponent({ data }: Props) {
 
   return (
     <ProductHorizontalGallery
+      galleryTestId={MOST_DISCOUNTED}
       data={state}
       output={change}
       title={

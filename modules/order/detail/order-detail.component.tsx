@@ -11,7 +11,10 @@ import { defaultOrder, Order } from '../order.model';
 import { getOrder } from '../order.service';
 import ShipOkComponent from './ship-ok.component';
 import StockOkComponent from './stock-ok.component';
-import { ORDER_STATUS, ORDER_SUMMARY } from '../../shared/tag/tag.model';
+import { COMMENT, ORDER, STATUS, ORDER_SUMMARY, tag } from '../../shared/tag/tag.model';
+import { getCustomerRoleFromLoginToken, goTo } from '../../shared/helpers/auth.helper';
+import { Role } from '../../customer/customer.model';
+import { isOk } from '../../shared/helpers/http.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -34,11 +37,15 @@ export default function OrderDetailComponent({
     const classes = useStyles({});
     const [state, setState] = React.useState<Order>(defaultOrder);
     const [expanded, setExpanded] = useState<string | false>(false);
+    const isAdmin: boolean = getCustomerRoleFromLoginToken() === Role.Admin;
 
     useEffect(() => {
         if (orderId > 0)
             getOrder(orderId).then(data => {
-
+                if (!isOk(data.status)) {
+                    goTo('/');
+                    return;
+                }
                 setState(data.content);
             })
     }, [orderId])
@@ -89,6 +96,8 @@ export default function OrderDetailComponent({
                 Order Details
             </Typography>
             {
+                isAdmin
+                &&
                 state.orderStatus.message === 'Awaiting stock confirmation'
                 &&
                 <Grid
@@ -103,6 +112,8 @@ export default function OrderDetailComponent({
                 </Grid>
             }
             {
+                isAdmin
+                &&
                 state.orderStatus.message === 'Awaiting shipment confirmation'
                 &&
                 <Grid
@@ -142,7 +153,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 className={classes[state.orderStatus.cssClass]}
-                                data-cy={ORDER_STATUS}
+                                data-cy={tag(ORDER, '', STATUS)}
                             >
                                 {state.orderStatus.message}
                             </Typography>
@@ -197,6 +208,7 @@ export default function OrderDetailComponent({
                                 Comments
                         </Typography>
                             <Typography
+                                data-cy={tag(ORDER_SUMMARY, '', COMMENT)}
                             >
                                 {state.comments ?? 'No Comments'}
                             </Typography>

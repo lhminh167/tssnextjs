@@ -47,6 +47,7 @@ export default function ProductCard({
         >
           <CardActionArea
             data-cy={PRODUCT_CARD}
+            data-id={data.productId}
           >
             <CardMedia>
               {

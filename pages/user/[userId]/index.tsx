@@ -5,6 +5,7 @@ import CustomerDetailComponent from '../../../modules/customer/detail/customer-d
 import ErrorBoundary from '../../../modules/shared/error-boundary/error-boundary.component';
 import { toNumber } from '../../../modules/shared/helpers/auth.helper';
 import { allowCustomerHoc } from '../../../modules/shared/allow/allow-customer.component';
+import { allowAccountOwnwerHoc } from '../../../modules/shared/allow/allow-account-owner.component copy';
 
 function CustomerDetailPage() {
     const router = useRouter();
@@ -25,4 +26,4 @@ function CustomerDetailPage() {
     );
 }
 
-export default allowCustomerHoc(CustomerDetailPage);
+export default allowCustomerHoc(allowAccountOwnwerHoc(CustomerDetailPage));

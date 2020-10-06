@@ -7,6 +7,7 @@ import ErrorBoundary from '../../../modules/shared/error-boundary/error-boundary
 import { toNumber } from '../../../modules/shared/helpers/auth.helper';
 import { mb, mt } from '../../../modules/shared/layout/layout.style';
 import { allowCustomerHoc } from '../../../modules/shared/allow/allow-customer.component';
+import { allowAccountOwnwerHoc } from '../../../modules/shared/allow/allow-account-owner.component copy';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -40,4 +41,4 @@ function CustomerEditPage({
     );
 }
 
-export default allowCustomerHoc(CustomerEditPage);
+export default allowCustomerHoc(allowAccountOwnwerHoc(CustomerEditPage));

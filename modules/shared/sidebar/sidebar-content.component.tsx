@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { currentUserSlice } from '../../customer/customer.slice';
 import { IRootState } from '../../root/root.model';
 import { toNumber } from '../helpers/auth.helper';
-import { SHOPPING_CART, TOTAL_QUANTITY, REGISTER, LOGIN, DEPARTMENT, ORDERS, ADMIN, LOGOUT, WISHLIST, HOMEPAGE, USER, SEARCH } from '../tag/tag.model';
+import { SHOPPING_CART, TOTAL_QUANTITY, REGISTER, LOGIN, DEPARTMENT, ORDER, ADMIN, LOGOUT, WISHLIST, HOMEPAGE, USER, SEARCH } from '../tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -260,7 +260,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                             <AssignmentTurnedInIcon />
                         </ListItemIcon>
                         <ListItemText primary='Orders'
-                            data-cy={ORDERS}
+                            data-cy={ORDER}
                         />
                     </ListItem>
                 </Link>

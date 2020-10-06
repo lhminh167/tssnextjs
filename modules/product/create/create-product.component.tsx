@@ -15,7 +15,7 @@ import { IProductFilterCategory, ProductFilterFilterEnum, productUrl } from '../
 import productFilterSlice from '../filter/product-filter.slice';
 import { CreateProductStateValidator, defaultCreateProductState, ICreateProductRequest, ICreateProductState } from './create-product.model';
 import { createProduct } from './create-product.service';
-import { DESCRIPTION, COLOR, SIZE, YES, NAME, PRICE, DISCOUNTED_PRICE, SUBMIT, NO, CATEGORY, THUMBNAIL, IMAGE, DISPLAY, IMAGE_2, getOptionTag, TITLE } from '../../shared/tag/tag.model';
+import { DESCRIPTION, COLOR, SIZE, YES, NAME, PRICE, DISCOUNTED_PRICE, SUBMIT, NO, CATEGORY, THUMBNAIL, IMAGE, DISPLAY, IMAGE_2, tag, TITLE, ITEM } from '../../shared/tag/tag.model';
 
 
 const useStyles = makeStyles(theme => ({
@@ -223,7 +223,7 @@ export default function CreateProductComponent() {
                 >
                     {categories.map(entry => (
                         <MenuItem key={entry.categoryId} value={entry.categoryId}
-                            data-cy={getOptionTag(CATEGORY)}
+                            data-cy={tag(ITEM, '', CATEGORY)}
                         >
                             {entry.name}
                         </MenuItem>
@@ -252,7 +252,7 @@ export default function CreateProductComponent() {
                 >
                     {colors.map(entry => (
                         <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}
-                            data-cy={getOptionTag(COLOR)}
+                            data-cy={tag(ITEM, '', COLOR)}
                         >
                             {entry.value}
                         </MenuItem>
@@ -282,7 +282,7 @@ export default function CreateProductComponent() {
                 >
                     {sizes.map(entry => (
                         <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}
-                            data-cy={getOptionTag(SIZE)}
+                            data-cy={tag(ITEM, '', SIZE)}
                         >
                             {entry.value}
                         </MenuItem>
@@ -308,7 +308,7 @@ export default function CreateProductComponent() {
                 >
                     {productDisplayOptions.map(entry => (
                         <MenuItem key={entry.value} value={entry.value}
-                            data-cy={getOptionTag(DISPLAY)}
+                            data-cy={tag(ITEM, '', DISPLAY)}
                         >
                             {entry.label}
                         </MenuItem>

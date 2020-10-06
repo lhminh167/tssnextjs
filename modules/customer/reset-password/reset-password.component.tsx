@@ -11,7 +11,7 @@ import { isValidForm } from '../../shared/validator/validator';
 import { CustomerPasswordResetState, CustomerPasswordResetStateValidator, defaultCustomerPasswordResetState } from '../customer.model';
 import { resetPassword, validateResetPasswordToken } from '../customer.service';
 import { useRouter } from 'next/router';
-import { CONFIRM_PASSWORD, NEW_PASSWORD, SUBMIT } from '../../shared/tag/tag.model';
+import { CONFIRM_NEW_PASSWORD, NEW_PASSWORD, SUBMIT } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles(theme => ({
     mb: mb,
@@ -159,7 +159,7 @@ export default function ResetPasswordComponent({
                     onChange={change}
                     error={errors.confirmNewPassword && submitted}
                     helperText={errors.confirmNewPassword && submitted ? errors.confirmNewPassword : null}
-                    data-cy={CONFIRM_PASSWORD}
+                    data-cy={CONFIRM_NEW_PASSWORD}
                 />
             </Grid>
             <Grid item xs={12}>

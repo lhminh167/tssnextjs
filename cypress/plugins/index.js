@@ -12,16 +12,18 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
+import { saveCustomerLoginToken, saveAdminLoginToken, saveProduct } from './helpers';
+require('dotenv').config();
+
 /**
  * @type {Cypress.PluginConfig}
  */
-module.exports = (on, config) => {
+export default async (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-
-  require('dotenv').config();
   config.env = process.env;
-
-  return config
-
+  await saveCustomerLoginToken(config);
+  await saveAdminLoginToken(config);
+  await saveProduct(config);
+  return config;
 }

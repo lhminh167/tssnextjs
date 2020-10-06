@@ -9,6 +9,7 @@ import { ICategory } from '../../shared/models/category.model';
 import { IProduct } from '../../shared/models/product.model';
 import { SelectOption } from '../../shared/models/shared.model';
 import { toUrl } from '../../shared/helpers/string.helper';
+import queryString from 'query-string';
 
 const apiProductBaseUrl = 'Product';
 
@@ -19,6 +20,7 @@ export const apiProductUrl = {
     `${apiProductBaseUrl}/${productId}/Recommendation`,
   product: apiProductBaseUrl,
   homepage: apiProductBaseUrl + '/' + 'Homepage',
+  search: (query: IProductSearchRequest) => `${apiProductBaseUrl}?${queryString.stringify(query)}`,
 };
 
 const productBaseUrl = '/product';
@@ -38,7 +40,8 @@ export const productUrl = {
     href: `${productBaseUrl}/[productName]/[productId]/edit`,
     as: `${productBaseUrl}/${toUrl(product.name)}/${product.productId}/edit`,
   }),
-  new: productBaseUrl + '/new'
+  new: productBaseUrl + '/new',
+  search: (query: IProductSearchRequest) => `${productBaseUrl}?${queryString.stringify(query)}`,
 };
 
 

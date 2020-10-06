@@ -24,7 +24,7 @@ export default function CustomerListComponent() {
     const showDetail = (id: string) => () => {
         const customerId: number = toNumber(id);
         const url = customerUrl.detail(customerId);
-        goTo(url);
+        goTo(url.href, null, url.as);
     };
 
     return (

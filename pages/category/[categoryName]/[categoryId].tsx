@@ -1,20 +1,29 @@
 import { Container } from "@material-ui/core";
+import { useRouter } from "next/router";
 import { getCategories, getCategory } from "../../../modules/category/category.service";
 import { CategoryDetailMetadataComponent } from "../../../modules/category/detail/category-detail-metadata.component";
 import CategoryDetailComponent from "../../../modules/category/detail/category-detail.component";
 import CategoryDetailProductListComponent from "../../../modules/category/detail/product-list/category-detail-product-list.component";
+import { IResponse } from "../../../modules/shared/crud/crud.model";
 import ErrorBoundary from "../../../modules/shared/error-boundary/error-boundary.component";
 import { toNumber } from "../../../modules/shared/helpers/auth.helper";
-import { toUrl } from "../../../modules/shared/helpers/string.helper";
+import { isOk } from "../../../modules/shared/helpers/http.helper";
+import { removeTrailingDot, toUrl } from "../../../modules/shared/helpers/string.helper";
 import { ICategory } from "../../../modules/shared/models/category.model";
+import Error from 'next/error';
 
-interface Props {
-    data: ICategory
+interface Props extends IResponse<ICategory> {
 }
 
 export default function CategoryDetailPage({
-    data
+    content: data,
+    status,
+    title
 }: Props) {
+    const router = useRouter();
+    if (router.isFallback) return <h1>Loading...</h1>
+    if (!isOk(status)) return <Error statusCode={status} title={removeTrailingDot(title)} />;
+
     return (
         <Container>
             <ErrorBoundary>
@@ -58,7 +67,7 @@ export async function getStaticProps({ params }) {
     const response: any = await getCategory(toNumber(params.categoryId));
 
     return {
-        props: { data: response.content },
+        props: { ...response },
         revalidate: null
     }
 }

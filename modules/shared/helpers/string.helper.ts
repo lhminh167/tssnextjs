@@ -1,7 +1,7 @@
-import { IProduct } from "../models/product.model";
 
-export function toUrl(string: string) {
-    return string.trim().replace(/[^A-Z0-9]+/ig, "-").toLowerCase();
+
+export function toUrl(input: string) {
+    return input.trim().replace(/[^A-Z0-9]+/ig, "-").toLowerCase();
 }
 
 export function isEmptyString(input: string) {
@@ -31,3 +31,7 @@ export function formatPercent(number: number, total: number): string {
 export const phoneNumberRegex = RegExp('^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
 
 export const postalCodeRegex = RegExp('10[0-9]{2}');
+
+export function removeTrailingDot(input: string) {
+    return input.replace(/\.$/, "");
+}

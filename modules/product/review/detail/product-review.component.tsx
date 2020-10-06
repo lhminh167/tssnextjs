@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { formatDatetime } from '../../../shared/helpers/string.helper';
 import { bold } from '../../../shared/layout/layout.style';
 import { IReview } from '../../../shared/models/review.model';
-import { CREATED_ON, NAME, RATING, REVIEW_1 } from '../../../shared/tag/tag.model';
+import { CREATED_ON, tag, NAME, RATING, REVIEW, REVIEW_1 } from '../../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -33,20 +33,20 @@ export default function ProductReviewComponent({
                     value={data.rating}
                     readOnly
                     max={5}
-                    data-cy={RATING}
+                    data-cy={tag(RATING, data.reviewId, REVIEW)}
                 />
                 <Typography
                     component='h3'
                     variant='subtitle1'
                     className={classes.bold}
-                    data-cy={NAME}
+                    data-cy={tag(NAME, data.reviewId, REVIEW)}
                 >
                     {data.customer.name}
                 </Typography>
                 <Typography
                     variant='subtitle2'
                     component='time'
-                    data-cy={CREATED_ON}
+                    data-cy={tag(CREATED_ON, data.reviewId, REVIEW)}
                 >
                     {formatDatetime(data.createdOn)}
                 </Typography>
@@ -60,7 +60,7 @@ export default function ProductReviewComponent({
                     component='p'
                     variant='body1'
                     gutterBottom
-                    data-cy={REVIEW_1}
+                    data-cy={tag(REVIEW_1, data.reviewId, REVIEW)}
                 >
                     {data.review1}
                 </Typography>

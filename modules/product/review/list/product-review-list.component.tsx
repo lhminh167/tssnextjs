@@ -1,18 +1,18 @@
 import { createStyles, Divider, Grid, TablePagination, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import { Rating } from '@material-ui/lab';
 import React, { Fragment, useState } from 'react';
 import { defaultRowsPerPageOptions } from '../../../shared/crud/crud.model';
 import { bgGrey, bold, mb, mb2, mlAuto, p, pl0 } from '../../../shared/layout/layout.style';
 import { IProduct } from '../../../shared/models/product.model';
 import { defaultReviewGetRequest, IReview, IReviewGetRequest, IReviewGetResponse } from '../../../shared/models/review.model';
 import PaginationComponent from '../../../shared/pagination/pagination.component';
+import { AVERAGE_RATING, COUNT, tag, RATING } from '../../../shared/tag/tag.model';
 import { defaultProductSearchRequest } from '../../filter/product-filter.model';
 import CreateReviewComponent from '../create/create-product-review.component';
 import ProductReviewDetailComponent from '../detail/product-review-detail.component';
 import { getReviews } from '../review.service';
-import { Rating } from '@material-ui/lab';
-import { RATING } from '../../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -101,13 +101,17 @@ export default function ProductReviewListComponent({ data }: Props) {
                 value={state.averageRating}
                 readOnly
                 max={5}
+                data-cy={tag(RATING, '', AVERAGE_RATING)}
               />
               <Typography
-                // component='h2'
-                // variant='h5'
-                data-cy={RATING}
               >
-                {state.count} ratings
+                <span
+                  data-cy={tag(COUNT, '', AVERAGE_RATING)}
+                >
+                  {state.count}
+                </span>
+                {' '}
+                ratings
               </Typography>
             </Grid>
             <Grid item xs={12}

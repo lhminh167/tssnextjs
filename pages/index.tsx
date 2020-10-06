@@ -1,5 +1,5 @@
 import Container from "@material-ui/core/Container";
-import LazyHydrate from "react-lazy-hydration";
+// import LazyHydrate from "react-lazy-hydration";
 import BestSellingProductGalleryComponent from '../modules/product/best-selling/best-selling-product.component';
 import { getHomepageProducts } from '../modules/product/filter/product-filter.service';
 import { HomePageMetadataComponent } from '../modules/product/home-page-metadata/home-page-metadata.component';
@@ -25,24 +25,24 @@ export default function ProductSearchPage({
         <TopPanelComponent data={data.topPanel} />
       </ErrorBoundary>
       <ErrorBoundary>
-        <LazyHydrate whenVisible>
-          <MostDiscountedProductGalleryComponent data={data.mostDiscounted} />
-        </LazyHydrate>
+        {/* <LazyHydrate whenVisible> */}
+        <MostDiscountedProductGalleryComponent data={data.mostDiscounted} />
+        {/* </LazyHydrate> */}
       </ErrorBoundary>
       <ErrorBoundary>
-        <LazyHydrate whenVisible>
-          <BestSellingProductGalleryComponent data={data.bestSelling} />
-        </LazyHydrate>
+        {/* <LazyHydrate whenVisible> */}
+        <BestSellingProductGalleryComponent data={data.bestSelling} />
+        {/* </LazyHydrate> */}
       </ErrorBoundary>
       <ErrorBoundary>
-        <LazyHydrate whenVisible>
-          <TopRatedProductGalleryComponent data={data.topRated} />
-        </LazyHydrate>
+        {/* <LazyHydrate whenVisible> */}
+        <TopRatedProductGalleryComponent data={data.topRated} />
+        {/* </LazyHydrate> */}
       </ErrorBoundary>
       <ErrorBoundary>
-        <LazyHydrate whenVisible>
-          <NewestProductList data={data.newest} />
-        </LazyHydrate>
+        {/* <LazyHydrate whenVisible> */}
+        <NewestProductList data={data.newest} />
+        {/* </LazyHydrate> */}
       </ErrorBoundary>
       <ErrorBoundary>
         <HomePageMetadataComponent data={data} />

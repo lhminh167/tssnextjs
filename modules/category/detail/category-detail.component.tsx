@@ -2,7 +2,7 @@ import { Paper, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import ProductDetailImageComponent from '../../product/detail/product-detail-image.component';
 import { ICategory } from '../../shared/models/category.model';
-import { DESCRIPTION, NAME } from '../../shared/tag/tag.model';
+import { CATEGORY, DESCRIPTION, NAME } from '../../shared/tag/tag.model';
 
 interface IProps {
     data: ICategory,
@@ -16,6 +16,7 @@ export default function CategoryDetailComponent({
         <Grid container
             component={Paper}
             spacing={2}
+            data-cy={CATEGORY}
         >
             {
                 data.product.items.length &&
@@ -36,6 +37,7 @@ export default function CategoryDetailComponent({
                         variant='h5'
                         gutterBottom
                         data-cy={NAME}
+                        color='primary'
                     >
                         {data.name}
                     </Typography>

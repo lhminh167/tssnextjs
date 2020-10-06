@@ -12,7 +12,7 @@ import { CreateReviewRequestValidator, IReview } from '../../../shared/models/re
 import { isValidForm } from '../../../shared/validator/validator';
 import { updateReview } from '../review.service';
 import { formatDatetime } from '../../../shared/helpers/string.helper';
-import { REVIEW_1, RATING, SUBMIT, CANCEL, NAME, CREATED_ON } from '../../../shared/tag/tag.model';
+import { REVIEW_1, RATING, SUBMIT, CANCEL, NAME, CREATED_ON, tag, REVIEW, EDIT } from '../../../shared/tag/tag.model';
 
 const inputTheme = createMuiTheme({
     ...theme,
@@ -86,13 +86,13 @@ export default function ProductReviewEditComponent({
                     component='h3'
                     variant='subtitle1'
                     className={classes.bold}
-                    data-cy={NAME}
+                    data-cy={tag(NAME, state.reviewId, EDIT + REVIEW)}
                 >
                     {data.customer.name}
                 </Typography>
                 <Typography
                     variant='subtitle2'
-                    data-cy={CREATED_ON}
+                    data-cy={tag(CREATED_ON, state.reviewId, EDIT + REVIEW)}
                 >
                     {formatDatetime(data.createdOn)}
                 </Typography>
@@ -131,7 +131,7 @@ export default function ProductReviewEditComponent({
                                 onChange={change}
                                 error={errors.review1 && submitted}
                                 helperText={errors.review1 && submitted ? errors.review1 : null}
-                                data-cy={REVIEW_1}
+                                data-cy={tag(REVIEW_1, state.reviewId, EDIT + REVIEW)}
                             />
                         </ThemeProvider>
                     </Grid>
@@ -160,7 +160,7 @@ export default function ProductReviewEditComponent({
                                 value={state.rating}
                                 onClick={change}
                                 max={5}
-                                data-cy={RATING}
+                                data-cy={tag(RATING, state.reviewId, EDIT + REVIEW)}
                             />
                             {
                                 errors.rating && submitted &&
@@ -194,15 +194,15 @@ export default function ProductReviewEditComponent({
                             size='small'
                             onClick={submit}
                             className={classes.mr}
-                            data-cy={SUBMIT}
-                        >
+                            data-cy={tag(SUBMIT, state.reviewId, EDIT + REVIEW)}
+                            >
                             Submit
                         </Fab>
                         <Fab
                             variant='extended'
                             size='small'
                             onClick={close}
-                            data-cy={CANCEL}
+                            data-cy={tag(CANCEL, state.reviewId, EDIT + REVIEW)}
                         >
                             Cancel
                         </Fab>

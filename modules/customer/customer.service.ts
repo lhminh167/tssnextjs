@@ -1,5 +1,6 @@
+import { IResponse } from '../shared/crud/crud.model';
 import { get, post, put, remove } from '../shared/crud/crud.service';
-import { Customer, CustomerUpdatePasswordRequest, CustomerUpdateRequest, apiCustomerUrl, ILoginRequest, CustomerForgotPasswordRequest, CustomerPasswordResetRequest, CustomerPasswordResetTokenValidationRequest } from './customer.model';
+import { Customer, CustomerUpdatePasswordRequest, CustomerUpdateRequest, apiCustomerUrl, ILoginRequest, CustomerForgotPasswordRequest, CustomerPasswordResetRequest, CustomerPasswordResetTokenValidationRequest, ILoginResponse } from './customer.model';
 
 export async function getCustomers() {
     return await get(apiCustomerUrl.baseUrl, 0);
@@ -9,7 +10,7 @@ export async function getCustomer(customerId: number) {
     return await get(apiCustomerUrl.baseUrl, customerId);
 }
 
-export async function createCustomer(input: Customer) {
+export async function createCustomer(input: Customer): Promise<IResponse<ILoginResponse>> {
     return await post(apiCustomerUrl.baseUrl, input);
 }
 

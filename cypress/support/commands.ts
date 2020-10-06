@@ -24,16 +24,17 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-import { PASSWORD, EMAIL, NAME, ADDRESS_1, ADDRESS_2, MOB_PHONE, DAY_PHONE, EVE_PHONE, COUNTRY, POSTALCODE, REGION, CITY, SHIPPING, SUBMIT } from "../../modules/shared/tag/tag.model";
-import { ILoginRequest, customerUrl } from "../../modules/customer/customer.model";
 import 'cypress-file-upload';
+import 'cypress-pipe';
 import 'cypress-wait-until';
+import { Response } from '../../modules/shared/crud/crud.model';
+import 'cypress-iframe';
 
 Cypress.Commands.add('getLink', {
     prevSubject: true
 }, (subject) => {
 
-    cy.get(subject).invoke('attr', 'href');
+    cy.get(subject).invoke('attr', 'href').should('exist');
 
 })
 
@@ -48,10 +49,26 @@ Cypress.Commands.add(
 
         return subject ?
             subject.find(`[data-cy='${identifier}']`, options) :
-            cy.get(`[data-cy='${identifier}']`, options);
+            cy.get(`[data-cy='${identifier}']`, options).should('exist');
 
     }
 );
+
+Cypress.Commands.add(
+    'shouldNotExist',
+    { prevSubject: 'optional' },
+    (
+        subject: Cypress.Chainable,
+        identifier: string,
+    ) => {
+
+        return subject ?
+            subject.find(`[data-cy='${identifier}']`, { timeout: 0 }).should('not.exist') :
+            cy.get(`[data-cy=${identifier}]`, { timeout: 0 }).should('not.exist');;
+
+    }
+);
+
 
 Cypress.Commands.add('load', {
     prevSubject: 'optional'
@@ -61,53 +78,42 @@ Cypress.Commands.add('load', {
 
 });
 
-Cypress.Commands.add('typeLogin', (user) => {
-    cy.getEl(EMAIL)
-        .type(user.email)
+Cypress.Commands.add('testApi', {
+    prevSubject: 'optional'
+}, (subject: any, condition: Response<any>) => {
 
-    cy.getEl(PASSWORD)
-        .type(user.password)
-})
-
-
-Cypress.Commands.add('typeRegister', (user) => {
-    cy.getEl(NAME)
-        .type(user.password)
-
-    cy.getEl(EMAIL)
-        .type(user.email)
-
-    cy.getEl(PASSWORD)
-        .type(user.password)
-})
-
-Cypress.Commands.add('typeCheckout', (user) => {
-
-    const fields: string[] = [
-        ADDRESS_1,
-        ADDRESS_2,
-        CITY,
-        REGION,
-        POSTALCODE,
-        COUNTRY,
-        MOB_PHONE,
-        DAY_PHONE,
-        EVE_PHONE,
-    ];
-
-    cy.fillTextFields(fields, user);
-
-    cy.getEl(SHIPPING).click()
-    cy.getEl(SHIPPING + user.shippingId).click();
+    expect(subject.status, 'response status').to.eq(condition.status);
+    expect(subject.title, 'response title').to.eq(condition.title);
+    if (condition.errors) expect(subject.errors, 'response errors').to.be.deep.eq(condition.errors);
+    if (condition.content) expect(subject.content, 'response content').not.be.undefined;
+    return subject;
 });
 
+Cypress.Commands.add('chain', {
+    prevSubject: 'optional'
+}, (subject: any, func: Function) => {
+
+    cy
+        .log(func.name)
+        .pipe(() => func(subject));
+});
 
 Cypress.Commands.add('fillTextFields', (fields: string[], value: object) => {
     if (!fields || !value) return;
 
     fields.forEach(field =>
-        cy.getEl(field).type(value[field])
+        cy
+            .getEl(field).find(`[name=${field}]`).clear()
+            .type(value[field]).should('have.value', value[field])
     );
+})
+
+Cypress.Commands.add('testTextFields', (fields: string[], value: object) => {
+    if (!fields || !value) return;
+
+    fields.forEach(field => {
+        if (value[field]) cy.getEl(field).should('have.text', value[field]);
+    });
 })
 
 Cypress.Commands.add(
@@ -140,30 +146,36 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
     'getWithinIframe',
-    (targetElement) => cy.get('iframe', { timeout: 600000 })
-        .first()
-        .iframeLoaded()
+    (targetElement) => cy.get('iframe', { timeout: 600000 }).should('exist')
+        .first().should('exist')
+        .iframeLoaded().should('exist')
         .its('document').should('exist')
-        .getInDocument(targetElement)
+        .getInDocument(targetElement).should('exist')
 );
 
+let appHasStarted: boolean = false;
 
-export function randomString(length: number) {
-    var result = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.toLowerCase();
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+function spyOnAddEventListener(win) {
+    // win = window object in our application
+    const addListener = win.EventTarget.prototype.addEventListener
+    win.EventTarget.prototype.addEventListener = function (name) {
+        if (name === 'change') {
+            // web app added an event listener to the input box -
+            // that means the web application has started
+            appHasStarted = true
+            // restore the original event listener
+            win.EventTarget.prototype.addEventListener = addListener
+        }
+        return addListener.apply(this, arguments)
     }
-    return result;
 }
 
-export function getRootAdminAccount() {
-    const account: ILoginRequest = {
-        email: 'lhminh.phs@gmail.com',
-        password: 'string'
+Cypress.Commands.add(
+    'open',
+    (
+        url: string,
+        options?: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow>
+    ) => {
+        cy.visit(url, { ...options, onBeforeLoad: spyOnAddEventListener })
     }
-
-    return account;
-}
-
+)

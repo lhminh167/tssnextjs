@@ -8,7 +8,7 @@ import { ChangeEvent, Fragment, useState } from 'react';
 import CategoryListComponent from '../../category/list/category-list.component';
 import { mb } from '../../shared/layout/layout.style';
 import { IDepartment } from '../../shared/models/department.model';
-import { NAME, DESCRIPTION } from '../../shared/tag/tag.model';
+import { NAME, DESCRIPTION, tag, DEPARTMENT } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -84,7 +84,7 @@ function DepartmentOverviewComponent({
                                 <Typography
                                     variant='h6'
                                     component='h2'
-                                    data-cy={NAME}
+                                    data-cy={tag(NAME, entry.departmentId, DEPARTMENT)}
                                 >
                                     {entry.name}
                                 </Typography>
@@ -97,10 +97,10 @@ function DepartmentOverviewComponent({
                                     >
                                         <Typography
                                             variant='subtitle2'
-                                            data-cy={DESCRIPTION}
+                                            data-cy={tag(DESCRIPTION, entry.departmentId, DEPARTMENT)}
                                         >
-                                            {entry.description}.
-                                    </Typography>
+                                            {entry.description}
+                                        </Typography>
                                     </Grid>
                                     <CategoryListComponent
                                         data={entry.category}

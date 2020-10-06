@@ -39,6 +39,7 @@ export default function CustomerIndexComponent(props) {
                     <ListItem
                         button
                         component='a'
+                        data-cy={DETAIL}
                     >
                         <ListItemIcon>
                             <VisibilityIcon />
@@ -46,7 +47,6 @@ export default function CustomerIndexComponent(props) {
 
                         <ListItemText
                             primary='View Account'
-                            data-cy={DETAIL}
                         />
                     </ListItem>
                 </Link>
@@ -61,6 +61,7 @@ export default function CustomerIndexComponent(props) {
                     <ListItem
                         button
                         component='a'
+                        data-cy={EDIT}
                     >
                         <ListItemIcon>
                             <EditIcon />
@@ -68,7 +69,6 @@ export default function CustomerIndexComponent(props) {
 
                         <ListItemText
                             primary='Edit Account'
-                            data-cy={EDIT}
                         />
                     </ListItem>
                 </Link>
@@ -82,6 +82,7 @@ export default function CustomerIndexComponent(props) {
                     <ListItem
                         button
                         component='a'
+                        data-cy={NEW_PASSWORD}
                     >
                         <ListItemIcon>
                             <LockOutlinedIcon />
@@ -89,7 +90,6 @@ export default function CustomerIndexComponent(props) {
 
                         <ListItemText
                             primary='Change Password'
-                            data-cy={NEW_PASSWORD}
                         />
                     </ListItem>
                 </Link>

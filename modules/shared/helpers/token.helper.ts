@@ -30,6 +30,7 @@ export function decodeLoginToken(): Customer {
         const tokenPayload: ITokenPayload = jwtDecode<ITokenPayload>(getLoginToken());
         if (new Date(tokenPayload.exp) < new Date())
             return {
+                ...defaultCustomer,
                 customerId: tokenPayload.nameid,
                 name: tokenPayload.unique_name,
                 role: tokenPayload.role

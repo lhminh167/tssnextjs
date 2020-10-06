@@ -94,7 +94,7 @@ export default function ShipOkComponent({
                     Please confirm the order has been shipped.
                 </Typography>
             </Grid>
-            <Grid item xs={12}
+            {/* <Grid item xs={12}
                 className={classes.mb}
             >
                 <TextField
@@ -111,7 +111,7 @@ export default function ShipOkComponent({
                     placeholder='If the shipment is incomplete, please specify the reasons for that.'
                     data-cy={COMMENT}
                 />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}
             >
                 <Button

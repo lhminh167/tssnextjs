@@ -1,10 +1,9 @@
 import { Button, createStyles, Grid, TextField, Theme, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { Fragment, useState } from 'react';
-import { CANCEL } from 'redux-saga';
 import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 import { mb, mr, p } from '../../shared/layout/layout.style';
-import { CONFIRM_STOCK, SUBMIT, COMMENT } from '../../shared/tag/tag.model';
+import { CONFIRM_STOCK, SUBMIT, COMMENT, CANCEL } from '../../shared/tag/tag.model';
 import { Order } from '../order.model';
 import { stockNotOk, stockOk } from '../order.service';
 

@@ -22,10 +22,11 @@ import { IProduct } from '../../shared/models/product.model';
 import PaginationComponent, { PaginationProps } from '../../shared/pagination/pagination.component';
 import ProductListComponent from '../../shared/product-list/product-list.component';
 import SizePickerComponent from '../../shared/size-picker/size-picker.component';
-import { defaultIsDescendingOptions, defaultProductSearchRequest, defaultSortByOptions, IProductFilterCategory, IProductSearchRequest, ProductFilterFilterEnum } from './product-filter.model';
+import { defaultIsDescendingOptions, defaultProductSearchRequest, defaultSortByOptions, IProductFilterCategory, IProductSearchRequest, ProductFilterFilterEnum, productUrl } from './product-filter.model';
 import { mb2, mr, mb } from '../../shared/layout/layout.style';
-import { FILTERED_ITEM_COUNT, SUBMIT, MIN_PRICE, MAX_PRICE, SORT_BY, SORT_ORDER } from '../../shared/tag/tag.model';
+import { COUNT, SUBMIT, MIN_PRICE, MAX_PRICE, SORT_BY, SORT_ORDER, tag, FILTER, PRICE } from '../../shared/tag/tag.model';
 import { formatCurrency } from '../../shared/helpers/string.helper';
+import { goTo } from '../../shared/helpers/auth.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -57,16 +58,6 @@ export default function ProductFilterComponent({
 
 }: IProps) {
     const classes = useStyles({});
-    const router = useRouter();
-    const [color, setColor] = useState(defaultAttributeValue);
-    const [size, setSize] = useState(defaultAttributeValue);
-    const [category, setCategory] = useState<string[]>([]);
-    const [price, setPrice] = useState<number[]>([
-        defaultProductSearchRequest.minPrice,
-        defaultProductSearchRequest.maxPrice
-    ]);
-    const [sortBy, setSortBy] = useState<string>(defaultSortByOptions[0].value);
-    const [isDescending, setIsDescending] = useState<boolean>(defaultIsDescendingOptions[0].value);
     const choice = useSelector<IRootState, IProductSearchRequest>(
         state => state.productFilter.choice
     );
@@ -91,21 +82,27 @@ export default function ProductFilterComponent({
     const count = useSelector<IRootState, number>(
         state => state.productFilter.product?.data?.count
     );
-
+    const [color, setColor] = useState(defaultAttributeValue);
+    const [size, setSize] = useState(defaultAttributeValue);
+    const [category, setCategory] = useState<string[]>([]);
+    const [price, setPrice] = useState<number[]>([
+        defaultProductSearchRequest.minPrice,
+        defaultProductSearchRequest.maxPrice
+    ]);
+    const [sortBy, setSortBy] = useState<string>(defaultSortByOptions[0].value);
+    const [isDescending, setIsDescending] = useState<boolean>(defaultIsDescendingOptions[0].value);
+    
     const apply = () => {
-        router.push({
-            pathname: router.pathname,
-            query: {
-                ...choice,
-                color: color.value,
-                size: size.value,
-                category,
-                minPrice: price[0],
-                maxPrice: price[1],
-                sortBy: sortBy === 'None' ? null : sortBy,
-                isDescending
-            }
-        });
+        goTo(productUrl.search({
+            ...choice,
+            color: color.value,
+            size: size.value,
+            category,
+            minPrice: price[0],
+            maxPrice: price[1],
+            sortBy: sortBy === 'None' ? '' : sortBy,
+            isDescending
+        }));
     };
 
     const clear = () => {
@@ -113,40 +110,33 @@ export default function ProductFilterComponent({
         setSize(defaultAttributeValue);
         setCategory(defaultProductSearchRequest.category);
         setPrice([
-            defaultProductSearchRequest.minPrice,
-            defaultProductSearchRequest.maxPrice
+            minPrice,
+            maxPrice
         ]);
 
-        router.push({
-            pathname: router.pathname,
-            query: { ...defaultProductSearchRequest }
-        });
+        goTo(productUrl.search({
+            ...defaultProductSearchRequest
+        }));
     };
 
     function changePageIndex(
         event,
         newPageIndex: number
     ) {
-        router.push({
-            pathname: router.pathname,
-            query: {
-                ...choice,
-                pageIndex: newPageIndex,
-            }
-        });
+        goTo(productUrl.search({
+            ...choice,
+            pageIndex: newPageIndex,
+        }));
     }
 
     function changePageSize(
         event
     ) {
-        router.push({
-            pathname: router.pathname,
-            query: {
-                ...choice,
-                pageSize: parseInt(event.target.value, 10),
-                pageIndex: defaultProductSearchRequest.pageIndex,
-            }
-        });
+        goTo(productUrl.search({
+            ...choice,
+            pageSize: parseInt(event.target.value, 10),
+            pageIndex: defaultProductSearchRequest.pageIndex,
+        }));
     }
 
     function changePrice(
@@ -191,34 +181,22 @@ export default function ProductFilterComponent({
                 page={page}
                 rowsPerPage={rowsPerPage}
                 onChangePage={onChangePage}
-                firstPageUrl={{
-                    pathname: router.pathname,
-                    query: {
-                        ...choice,
-                        pageIndex: defaultProductSearchRequest.pageIndex,
-                    }
-                }}
-                previousPageUrl={{
-                    pathname: router.pathname,
-                    query: {
-                        ...choice,
-                        pageIndex: choice.pageIndex - 1,
-                    }
-                }}
-                nextPageUrl={{
-                    pathname: router.pathname,
-                    query: {
-                        ...choice,
-                        pageIndex: choice.pageIndex + 1,
-                    }
-                }}
-                lastPageUrl={{
-                    pathname: router.pathname,
-                    query: {
-                        ...choice,
-                        pageIndex: Math.max(0, Math.ceil(count / choice.pageSize) - 1),
-                    }
-                }}
+                firstPageUrl={productUrl.search({
+                    ...choice,
+                    pageIndex: defaultProductSearchRequest.pageIndex,
+                })}
+                previousPageUrl={productUrl.search({
+                    ...choice,
+                    pageIndex: choice.pageIndex - 1,
+                })}
+                nextPageUrl={productUrl.search({
+                    ...choice,
+                    pageIndex: choice.pageIndex + 1,
+                })}
+                lastPageUrl={productUrl.search({
+                    ...choice,
+                    pageIndex: Math.max(0, Math.ceil(count / choice.pageSize) - 1),
+                })}
             />
         )
     }
@@ -232,7 +210,7 @@ export default function ProductFilterComponent({
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <Typography>
-                        Filter <span data-cy={FILTERED_ITEM_COUNT}>{count}</span> items
+                        Filter <span data-cy={COUNT}>{count}</span> items
                     </Typography>
                 </AccordionSummary>
                 <Divider />
@@ -288,6 +266,7 @@ export default function ProductFilterComponent({
                                 // marks={marks}
                                 step={0.01}
                                 aria-labelledby='continuous-slider'
+                                data-cy={tag(PRICE, '', FILTER)}
                             />
                             <Grid
                                 container

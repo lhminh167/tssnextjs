@@ -18,7 +18,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "types": [
-      "cypress"
+      "cypress",
+      "node"
     ]
   },
   "include": [

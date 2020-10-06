@@ -1,23 +1,25 @@
-import { Container, createStyles, makeStyles } from "@material-ui/core";
-import { useRouter } from "next/router";
+import { Container } from "@material-ui/core";
 import { getProduct } from "../../../../modules/product/detail/product-detail.service";
+import { EditProductMetadataComponent } from "../../../../modules/product/edit/edit-product-metadata.component";
 import EditProductComponent from "../../../../modules/product/edit/edit-product.component";
-import { defaultProductSearchRequest } from "../../../../modules/product/filter/product-filter.model";
-import { getProducts } from "../../../../modules/product/filter/product-filter.service";
-import { defaultPaginationRequest } from "../../../../modules/shared/crud/crud.model";
-import ErrorBoundary from "../../../../modules/shared/error-boundary/error-boundary.component";
-import { toUrl } from "../../../../modules/shared/helpers/string.helper";
-import { IProduct } from "../../../../modules/shared/models/product.model";
 import { allowAdminHoc } from "../../../../modules/shared/allow/allow-admin.component";
-import { revalidateInterval } from "../../../../modules/shared/helpers/http.helper";
+import ErrorBoundary from "../../../../modules/shared/error-boundary/error-boundary.component";
+import { toNumber } from "../../../../modules/shared/helpers/auth.helper";
+import { isOk } from "../../../../modules/shared/helpers/http.helper";
+import { removeTrailingDot } from "../../../../modules/shared/helpers/string.helper";
+import { IProduct } from "../../../../modules/shared/models/product.model";
+import Error from 'next/error';
+import { IResponse } from "../../../../modules/shared/crud/crud.model";
 
-interface Props {
-    data?: IProduct;
+interface Props extends IResponse<IProduct> {
 }
 
 function ProductEditPage({
-    data
+    content: data,
+    status,
+    title
 }: Props) {
+    if (!isOk(status)) return <Error statusCode={status} title={removeTrailingDot(title)} />;
 
     return (
         <Container>
@@ -26,32 +28,18 @@ function ProductEditPage({
                     data={data}
                 />
             </ErrorBoundary>
+            <ErrorBoundary>
+                <EditProductMetadataComponent
+                    data={data}
+                />
+            </ErrorBoundary>
         </Container>
     );
 }
 
-export default allowAdminHoc(ProductEditPage);
-
-export async function getStaticPaths() {
-
-    const res = await getProducts({ ...defaultProductSearchRequest, ...defaultPaginationRequest })
-    const items: IProduct[] = res.content.items;
-
-    const paths = items.map((item) => ({
-        params: {
-            productName: toUrl(item.name),
-            productId: item.productId.toString()
-        },
-    }))
-
-    return { paths, fallback: false }
+export async function getServerSideProps(ctx) {
+    const response = await getProduct(toNumber(ctx.query.productId));
+    return { props: { ...response } }
 }
 
-export async function getStaticProps({ params }) {
-    const response: any = await getProduct(params.productId);
-
-    return {
-        props: { data: response.content },
-        revalidate: revalidateInterval
-    }
-};
+export default allowAdminHoc(ProductEditPage);
