@@ -1,7 +1,7 @@
-import { OrderCreateRequest } from "../create-order.model";
+import { OrderCreateRequest } from '../create-order.model';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import CreditCardComponent from "./credit-card.component";
+import CreditCardComponent from './credit-card.component';
 
 const stripePromise = loadStripe(process.env.STRIPE_API_KEY);
 

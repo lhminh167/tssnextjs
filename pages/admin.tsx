@@ -1,15 +1,10 @@
-import { createStyles, makeStyles, Theme, Container } from "@material-ui/core";
-import AdminListComponent from "../modules/admin/list/admin-list.component";
-import ErrorBoundary from "../modules/shared/error-boundary/error-boundary.component";
-import { AdminListMetadataComponent } from "../modules/admin/list/admin-list-metadata.component";
+import { Container } from '@material-ui/core';
+import { AdminListMetadataComponent } from '../modules/admin/list/admin-list-metadata.component';
+import AdminListComponent from '../modules/admin/list/admin-list.component';
+import ErrorBoundary from '../modules/shared/error-boundary/error-boundary.component';
+import { allowAdminHoc } from '../modules/shared/allow/allow-admin.component';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
-
-export default function AdminListPage(props) {
-    const classes = useStyles({});
+function AdminListPage() {
     return (
         <Container>
             <ErrorBoundary>
@@ -24,12 +19,4 @@ export default function AdminListPage(props) {
     );
 }
 
-// AdminListPage.getInitialProps = async function ({
-//     ctx: {
-//         isServer,
-//         store,
-//         query
-//     },
-//     ctx
-// }) {
-// }
+export default allowAdminHoc(AdminListPage);

@@ -1,4 +1,4 @@
-import { Validator } from "fluentvalidation-ts";
+import { Validator } from 'fluentvalidation-ts';
 
 export class Shipping {
     shippingId: number;

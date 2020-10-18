@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { Fragment, useState } from 'react';
 import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 import { mb, mr, p } from '../../shared/layout/layout.style';
+import { CONFIRM_STOCK, SUBMIT, COMMENT, CANCEL } from '../../shared/tag/tag.model';
 import { Order } from '../order.model';
 import { stockNotOk, stockOk } from '../order.service';
 
@@ -78,8 +79,8 @@ export default function StockOkComponent({
                 className={classes.mb}
             >
                 <Typography
-                    variant="h5"
-                    component="h2"
+                    variant='h5'
+                    component='h2'
                 >
                     Order Confirmation
                 </Typography>
@@ -87,7 +88,9 @@ export default function StockOkComponent({
             <Grid item xs={12}
                 className={classes.mb}
             >
-                <Typography variant='subtitle1'>
+                <Typography variant='subtitle1'
+                    data-cy={CONFIRM_STOCK}
+                >
                     Please proceed this order by confirming that all of its products are in stock. Also, please specify which products are out of stock, if any. For example:
                 </Typography>
             </Grid>
@@ -112,32 +115,35 @@ export default function StockOkComponent({
             >
                 <TextField
                     multiline
-                    name="comments"
-                    variant="outlined"
-                    margin="dense"
+                    name='comments'
+                    variant='outlined'
+                    margin='dense'
                     value={state.comments}
                     onChange={change}
                     error={!state.comments && submitted}
                     helperText={!state.comments && submitted && !isSuccessful ? 'Please specify which products are out of stock.' : null}
                     fullWidth
                     rows={4}
-                // placeholder="The following products are out of stock:&#10;- Green XL Birds T-Shirt. Required Quantity: 10. Avalable Quantity: 09.&#10;- Blue L Wreath T-Shirt. Required Quantity: 05. Avalable Quantity: 02.&#10;- etc."
+                    data-cy={COMMENT}
+                // placeholder='The following products are out of stock:&#10;- Green XL Birds T-Shirt. Required Quantity: 10. Avalable Quantity: 09.&#10;- Blue L Wreath T-Shirt. Required Quantity: 05. Avalable Quantity: 02.&#10;- etc.'
                 />
             </Grid>
             <Grid item xs={12}
             >
                 <Button
-                    variant="contained"
-                    color="primary"
+                    variant='contained'
+                    color='primary'
                     onClick={openSuccessDialog}
                     className={classes.mr}
+                    data-cy={SUBMIT}
                 >
                     Yes, they are all in stock
                 </Button>
                 <Button
-                    variant="outlined"
-                    color="primary"
+                    variant='outlined'
+                    color='primary'
                     onClick={openFailureDialog}
+                    data-cy={CANCEL}
                 >
                     No, some of them are out of stock
                 </Button>
@@ -146,11 +152,11 @@ export default function StockOkComponent({
                 open={open}
                 close={null}
                 confirm={isSuccessful ? confirmSuccess : confirmFailure}
-                content={"Please confirm this action by clicking the Submit button"}
+                content={'Please confirm this action by clicking the Submit button'}
                 decline={closeDialog}
                 isLoading={isLoading}
-                confirmText="Submit"
-                declineText="Close"
+                confirmText='Submit'
+                declineText='Close'
             />
         </Fragment >
     );

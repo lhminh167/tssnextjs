@@ -6,6 +6,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Link from 'next/link';
 import React from 'react';
+import { NEXT, PREVIOUS, FIRST, LAST } from '../tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -66,8 +67,9 @@ export default function PaginationComponent({
                 >
                     <IconButton
                         disabled={page === 0}
-                        aria-label="first page"
-                        component="a"
+                        aria-label='first page'
+                        component='a'
+                        data-cy={FIRST}
                     >
                         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
                     </IconButton>
@@ -77,8 +79,9 @@ export default function PaginationComponent({
                 !firstPageUrl &&
                 <IconButton
                     disabled={page === 0}
-                    aria-label="first page"
+                    aria-label='first page'
                     onClick={toFirstPage}
+                    data-cy={FIRST}
                 >
                     {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
                 </IconButton>
@@ -91,8 +94,9 @@ export default function PaginationComponent({
                 >
                     <IconButton
                         disabled={page === 0}
-                        aria-label="previous page"
-                        component="a"
+                        aria-label='previous page'
+                        component='a'
+                        data-cy={PREVIOUS}
                     >
                         {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
                     </IconButton>
@@ -102,8 +106,9 @@ export default function PaginationComponent({
                 !previousPageUrl &&
                 <IconButton
                     disabled={page === 0}
-                    aria-label="previous page"
+                    aria-label='previous page'
                     onClick={toPreviousPage}
+                    data-cy={PREVIOUS}
                 >
                     {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
                 </IconButton>
@@ -116,8 +121,9 @@ export default function PaginationComponent({
                 >
                     <IconButton
                         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                        aria-label="next page"
-                        component="a"
+                        aria-label='next page'
+                        component='a'
+                        data-cy={NEXT}
                     >
                         {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
                     </IconButton>
@@ -127,8 +133,9 @@ export default function PaginationComponent({
                 !nextPageUrl &&
                 <IconButton
                     disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                    aria-label="next page"
+                    aria-label='next page'
                     onClick={toNextPage}
+                    data-cy={NEXT}
                 >
                     {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
                 </IconButton>
@@ -141,8 +148,9 @@ export default function PaginationComponent({
                 >
                     <IconButton
                         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                        aria-label="last page"
-                        component="a"
+                        aria-label='last page'
+                        component='a'
+                        data-cy={LAST}
                     >
                         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
                     </IconButton>
@@ -152,8 +160,9 @@ export default function PaginationComponent({
                 !lastPageUrl &&
                 <IconButton
                     disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                    aria-label="last page"
+                    aria-label='last page'
                     onClick={toLastPage}
+                    data-cy={LAST}
                 >
                     {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
                 </IconButton>

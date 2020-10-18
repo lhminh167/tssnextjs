@@ -1,7 +1,36 @@
 {
-  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "types": [
+      "cypress",
+      "node"
+    ]
+  },
   "include": [
-    "../node_modules/cypress",
-    "*/*.ts"
-  ]
+    "**/*.ts",
+    "**/*.tsx",
+    "../modules/**/*.ts",
+    "../modules/**/*.tsx",
+  ],
+  "paths": {
+    "cypress-react-unit-test": [
+      "../lib"
+    ],
+  }
 }

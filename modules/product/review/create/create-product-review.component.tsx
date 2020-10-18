@@ -1,25 +1,19 @@
-import { createMuiTheme, createStyles, Fab, FormControl, FormHelperText, Grid, Paper, TextField, Theme, ThemeProvider } from '@material-ui/core';
+import { createStyles, Fab, FormControl, FormHelperText, Grid, TextField, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Rating from '@material-ui/lab/Rating';
+import { ValidationErrors } from 'fluentvalidation-ts/dist/ValidationErrors';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../root/root.model';
 import { toNumber } from '../../../shared/helpers/auth.helper';
-import theme from '../../../shared/layout/layout.theme';
+import { bold, mb, mb2 } from '../../../shared/layout/layout.style';
 import { IProduct } from '../../../shared/models/product.model';
-import { CreateReviewRequestValidator, IReview } from '../../../shared/models/review.model';
+import { CreateReviewRequestValidator, defaultReview, IReview } from '../../../shared/models/review.model';
+import { ADD, DESCRIPTION, tag, LOGIN_LINK, RATING, REGISTER_LINK, REVIEW, REVIEW_1, SUBMIT, TITLE, UNAUTHORIZED } from '../../../shared/tag/tag.model';
 import { isValidForm } from '../../../shared/validator/validator';
 import { createReview } from '../review.service';
-import { bold, mb, mb2 } from '../../../shared/layout/layout.style';
-
-const inputTheme = createMuiTheme({
-    ...theme,
-    overrides: {
-    },
-});
-
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,44 +36,33 @@ export default function CreateReviewComponent({
     const customerId: number = useSelector(
         (state: IRootState) => toNumber(state.currentUser.data.customerId)
     );
-    const defaultReview: IReview = {
-        customerId: customerId,
-        productId: data.productId,
-        review1: '',
-        rating: 0,
-    };
-    const [state, setState] = useState<IReview>(defaultReview);
+    const [state, setState] = useState<IReview>({ ...defaultReview, productId: data.productId });
     const [submitted, setSubmitted] = useState<boolean>(false);
-    const errors = new CreateReviewRequestValidator().validate(state);
+    let errors: ValidationErrors<IReview> = new CreateReviewRequestValidator().validate(state);
 
-    // useEffect(() => {
-    //     setState({
-    //         ...state,
-    //         customerId
-    //     })
-    // }, [customerId]);
+    useEffect(() => {
+        setState({ ...state, customerId });
+    }, [customerId]);
 
     function change(event) {
         const target = event.target;
         const name = target.name;
-        const value = name === 'create-rating' ? Number(target.value) : target.value;
+        const value = name === 'add-rating' ? Number(target.value) : target.value;
 
         setState({
             ...state,
-            [name === 'create-rating' ? 'rating' : name]: value,
+            [name === 'add-rating' ? 'rating' : name]: value,
         });
     }
 
     async function submit(): Promise<void> {
-        try {
-            setSubmitted(true);
-            if (!isValidForm(errors)) return;
-            const response = await createReview(state);
-            setState(defaultReview);
-            setSubmitted(false);
-            output(response.content);
-        } catch (e) {
-        }
+
+        setSubmitted(true);
+        if (!isValidForm(errors)) return;
+        const response = await createReview(state);
+        setState(defaultReview);
+        setSubmitted(false);
+        output(response.content);
     }
 
     return (
@@ -90,8 +73,8 @@ export default function CreateReviewComponent({
                 className={classes.mb2}
             >
                 <Typography
-                    component="h2"
-                    variant="h5"
+                    component='h2'
+                    variant='h5'
                     className={classes.bold}
                 >
                     Add a review
@@ -102,30 +85,33 @@ export default function CreateReviewComponent({
                     (
                         <Grid item xs={12}>
                             <Typography
-                                component="span"
-                                variant="subtitle2"
+                                component='span'
+                                variant='subtitle2'
+                                data-cy={UNAUTHORIZED}
                             >
                                 Please <Link
-                                    href="/user/login"
-                                    as="/user/login"
+                                    href='/user/login'
+                                    as='/user/login'
                                     passHref
                                 >
                                     <Typography
-                                        color="primary"
-                                        variant="subtitle2"
-                                        component="a"
+                                        color='primary'
+                                        variant='subtitle2'
+                                        component='a'
+                                        data-cy={LOGIN_LINK}
                                     >
                                         login
                                 </Typography>
                                 </Link> or <Link
-                                    href="/user/register"
-                                    as="/user/register"
+                                    href='/user/register'
+                                    as='/user/register'
                                     passHref
                                 >
                                     <Typography
-                                        color="primary"
-                                        variant="subtitle2"
-                                        component="a"
+                                        color='primary'
+                                        variant='subtitle2'
+                                        component='a'
+                                        data-cy={REGISTER_LINK}
                                     >
                                         register
                                     </Typography>
@@ -139,7 +125,7 @@ export default function CreateReviewComponent({
                             item
                             container
                             xs={12}
-                            component="form"
+                            component='form'
                             noValidate
                         >
                             <Grid
@@ -160,21 +146,20 @@ export default function CreateReviewComponent({
                                     item
                                     sm={8}
                                 >
-                                    <ThemeProvider theme={inputTheme}>
-                                        <TextField
-                                            placeholder='Your review must be at least 50 characters.'
-                                            multiline
-                                            fullWidth
-                                            rows={4}
-                                            name="review1"
-                                            variant="outlined"
-                                            margin="dense"
-                                            value={state.review1}
-                                            onChange={change}
-                                            error={errors.review1 && submitted}
-                                            helperText={errors.review1 && submitted ? errors.review1 : null}
-                                        />
-                                    </ThemeProvider>
+                                    <TextField
+                                        placeholder='Your review must be at least 50 characters.'
+                                        multiline
+                                        fullWidth
+                                        rows={4}
+                                        name='review1'
+                                        variant='outlined'
+                                        margin='dense'
+                                        value={state.review1}
+                                        onChange={change}
+                                        error={errors.review1 && submitted}
+                                        helperText={errors.review1 && submitted ? errors.review1 : null}
+                                        data-cy={tag(REVIEW_1, '', ADD + REVIEW)}
+                                    />
                                 </Grid>
                             </Grid>
                             <Grid
@@ -201,9 +186,10 @@ export default function CreateReviewComponent({
                                         error
                                     >
                                         <Rating
-                                            name="create-rating"
+                                            name='add-rating'
                                             value={state.rating}
                                             onClick={change}
+                                            data-cy={tag(RATING, '', ADD + REVIEW)}
                                         />
                                         {
                                             errors.rating && submitted &&
@@ -231,9 +217,10 @@ export default function CreateReviewComponent({
                                     sm={8}
                                 >
                                     <Fab
-                                        variant="extended"
-                                        color="primary"
+                                        variant='extended'
+                                        color='primary'
                                         onClick={submit}
+                                        data-cy={tag(SUBMIT, '', ADD + REVIEW)}
                                     >
                                         Submit
                                     </Fab>

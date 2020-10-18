@@ -1,22 +1,23 @@
-import { Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@material-ui/core";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { ProductFilterFilterEnum } from "../../product/filter/product-filter.model";
-import ActionButtonsComponent from "../../shared/action-buttons/action-buttons.component";
-import { defaultPaginationList, defaultRowsPerPageOptions, PaginatedList } from "../../shared/crud/crud.model";
-import { decodeAttributes } from "../../shared/helpers/product.helper";
-import { formatCurrency } from "../../shared/helpers/string.helper";
-import Image from "../../shared/image/image";
-import { p, bold } from "../../shared/layout/layout.style";
-import PaginationComponent from "../../shared/pagination/pagination.component";
-import ShoppingCartQuantityPicker from "../quantity-picker/shopping-cart-quantity-picker.component";
-import { defaultShopingCartGetRequest, IShopingCartItem, ShopingCartGetRequest, IShopingCart, defaultShoppingCart } from "../shopping-cart.model";
-import { getShoppingCart, moveShoppingCartItemToCart, removeShoppingCartItem } from "../shopping-cart.service";
-import { shoppingCartItemCountSlice } from "../shopping-cart.slice";
-import { useDispatch } from "react-redux";
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import ActionButtonsComponent from '../../shared/action-buttons/action-buttons.component';
+import { defaultRowsPerPageOptions } from '../../shared/crud/crud.model';
+import { isAnonymous } from '../../shared/helpers/auth.helper';
+import { decodeAttributes, getCartItemColor, getCartItemSize } from '../../shared/helpers/product.helper';
+import { formatCurrency } from '../../shared/helpers/string.helper';
+import ImageComponent from '../../shared/image/image.component';
+import { bold, p } from '../../shared/layout/layout.style';
+import PaginationComponent from '../../shared/pagination/pagination.component';
+import { COLOR, COUNT, DISCOUNTED_PRICE, tag, ITEM, MOVE_ITEM_TO_CART, NAME, REMOVE, SHOPPING_CART, SIZE } from '../../shared/tag/tag.model';
+import ShoppingCartQuantityPickerComponent from '../quantity-picker/shopping-cart-quantity-picker.component';
+import { defaultShopingCartGetRequest, defaultShoppingCart, IShopingCart, IShopingCartItem, ShopingCartGetRequest } from '../shopping-cart.model';
+import { getShoppingCart, moveShoppingCartItemToCart, removeShoppingCartItem } from '../shopping-cart.service';
+import { shoppingCartItemCountSlice } from '../shopping-cart.slice';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -45,6 +46,7 @@ export default function WishListComponent({
     }, [])
 
     async function getData(input: ShopingCartGetRequest) {
+        if (!isAnonymous()) return;
         const response = await getShoppingCart(input);
         setState(response.content);
         setChoice(input);
@@ -95,10 +97,15 @@ export default function WishListComponent({
                 className={classes.p}
             >
                 <Typography
-                    variant="h6"
-                    component="h2"
+                    variant='h6'
+                    component='h2'
                 >
-                    {state.totalQuantity + ' Items In Your Wish List'}
+                    <span
+                        data-cy={COUNT}
+                    >
+                        {state.totalQuantity}
+                    </span>
+                    {' Items In Your Wish List'}
                 </Typography>
                 <TableContainer>
                     <Table>
@@ -110,17 +117,17 @@ export default function WishListComponent({
                                     Item
                             </TableCell>
                                 <TableCell
-                                    align="center"
+                                    align='center'
                                 >
                                     Size
                                 </TableCell>
                                 <TableCell
-                                    align="center"
+                                    align='center'
                                 >
                                     Quantity
                                 </TableCell>
                                 <TableCell
-                                    align="center"
+                                    align='center'
                                 >
                                     Price
                                 </TableCell>
@@ -130,16 +137,19 @@ export default function WishListComponent({
                             {
                                 state?.items?.map(row => {
                                     const attributes = decodeAttributes(row.attributes);
-                                    const color = attributes.find(e => e.name === ProductFilterFilterEnum.Color)?.value;
-                                    const size = attributes.find(e => e.name === ProductFilterFilterEnum.Size)?.value;
+                                    const color = getCartItemColor(attributes);
+                                    const size = getCartItemSize(attributes);
 
                                     return (
-                                        <TableRow key={row.itemId}>
+                                        <TableRow key={row.itemId}
+                                            data-cy={tag(ITEM, row.itemId, SHOPPING_CART)}
+                                            data-id={row.itemId}
+                                        >
                                             <TableCell
-                                                component="th"
-                                                scope="row"
+                                                component='th'
+                                                scope='row'
                                             >
-                                                <Image
+                                                <ImageComponent
                                                     imageName={row.product.image}
                                                     imageStyles={{
                                                         width: 100,
@@ -147,60 +157,77 @@ export default function WishListComponent({
                                                 />
                                             </TableCell>
                                             <TableCell
-                                                component="th"
-                                                scope="row"
+                                                component='th'
+                                                scope='row'
                                             >
                                                 <Grid
                                                     item
                                                     xs={12}
                                                 >
                                                     <Typography
-                                                        variant="body1"
+                                                        variant='body1'
                                                         className={classes.bold}
                                                     >
-                                                        {color} {row.product.name}
+                                                        <span
+                                                            data-cy={COLOR}
+                                                        >
+                                                            {color}
+                                                        </span>
+                                                        {' '}
+                                                        <span
+                                                            data-cy={NAME}
+                                                        >
+                                                            {row.product.name}
+                                                        </span>
                                                     </Typography>
                                                 </Grid>
                                                 <Grid
                                                     item
                                                     xs={12}
                                                     container
-                                                    direction="row"
+                                                    direction='row'
                                                 >
                                                     <Button
-                                                        color="primary"
-                                                        size="small"
+                                                        color='primary'
+                                                        size='small'
                                                         onClick={() => moveItemToCart(row)}
                                                         startIcon={<BookmarkIcon
-                                                            fontSize="small"
+                                                            fontSize='small'
                                                         />}
+                                                        data-cy={MOVE_ITEM_TO_CART}
                                                     >
                                                         Move to Cart
                                                     </Button>
                                                     <Button
-                                                        color="primary"
-                                                        size="small"
+                                                        color='primary'
+                                                        size='small'
                                                         onClick={() => removeItem(row)}
                                                         startIcon={<ClearRoundedIcon
-                                                            fontSize="small"
+                                                            fontSize='small'
                                                         />}
+                                                        data-cy={REMOVE}
                                                     >
                                                         Remove
                                                     </Button>
                                                 </Grid>
                                             </TableCell>
-                                            <TableCell align="center">{size}</TableCell>
-                                            <TableCell align="center">
-                                                <ShoppingCartQuantityPicker
+                                            <TableCell align='center'
+                                                data-cy={SIZE}
+                                            >
+                                                {size}
+                                            </TableCell>
+                                            <TableCell align='center'>
+                                                <ShoppingCartQuantityPickerComponent
                                                     data={row}
                                                 />
                                             </TableCell>
                                             <TableCell
-                                                align="center"
+                                                align='center'
                                             >
                                                 <Typography
                                                     variant='subtitle1'
                                                     className={classes.bold}
+                                                    data-cy={DISCOUNTED_PRICE}
                                                 >
                                                     {formatCurrency(row.product.discountedPrice > 0 ? row.product.discountedPrice : row.product.price)}
                                                 </Typography>
@@ -214,7 +241,7 @@ export default function WishListComponent({
                 </TableContainer>
                 <TablePagination
                     rowsPerPageOptions={defaultRowsPerPageOptions}
-                    component="div"
+                    component='div'
                     count={state.count}
                     rowsPerPage={state.pageSize}
                     page={state.pageIndex}

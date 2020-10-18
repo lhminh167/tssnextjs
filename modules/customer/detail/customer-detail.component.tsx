@@ -1,11 +1,12 @@
 import { Breadcrumbs, createStyles, Grid, Theme, Typography, Paper, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Link from "next/link";
+import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 import { bold, p, mb } from '../../shared/layout/layout.style';
-import { Customer, defaultCustomer } from '../customer.model';
+import { Customer, defaultCustomer, customerUrl } from '../customer.model';
 import { getCustomer } from '../customer.service';
+import { SHIPPING_REGION, NAME, EMAIL, MOB_PHONE, EVE_PHONE, DAY_PHONE, ADDRESS_1, ADDRESS_2, CITY, REGION, COUNTRY, ROLE, EDIT, POSTALCODE } from '../../shared/tag/tag.model';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,41 +24,42 @@ export default function CustomerDetailComponent({
     const [state, setState] = useState<Customer>(defaultCustomer);
 
     useEffect(() => {
-        getCustomer(userId).then(data => {
-            setState(data.content);
-        })
-    }, [])
+        if (userId > 0)
+            getCustomer(userId).then(data => {
+                setState(data.content);
+            })
+    }, [userId])
 
     return (
         <Fragment>
             <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
+                separator={<NavigateNextIcon fontSize='small' />}
                 className={classes.mb}
             >
                 <Link
-                    href="/"
+                    href='/'
                     passHref
                 >
                     <Typography
-                        component="a"
-                        color="inherit"
+                        component='a'
+                        color='inherit'
                     >
                         Home
                     </Typography>
                 </Link>
                 <Link
-                    href="/order"
+                    href={customerUrl.baseUrl}
                     passHref
                 >
                     <Typography
-                        component="a"
-                        color="inherit"
+                        component='a'
+                        color='inherit'
                     >
                         Customer
                     </Typography>
                 </Link>
                 <Typography
-                    color="textPrimary"
+                    color='textPrimary'
                 >
                     Customer Details
                 </Typography>
@@ -89,7 +91,9 @@ export default function CustomerDetailComponent({
                     >
                         Full Name
                     </Typography>
-                    <Typography >
+                    <Typography
+                        data-cy={NAME}
+                    >
                         {state.name}
                     </Typography>
                 </Grid>
@@ -99,11 +103,12 @@ export default function CustomerDetailComponent({
                 >
                     <Typography
                         className={classes.bold}
-
                     >
                         Email Address
-                            </Typography>
-                    <Typography >
+                    </Typography>
+                    <Typography
+                        data-cy={EMAIL}
+                    >
                         {state.email}
                     </Typography>
                 </Grid>
@@ -116,7 +121,9 @@ export default function CustomerDetailComponent({
                     >
                         Mobile Phone Number
                             </Typography>
-                    <Typography >
+                    <Typography
+                        data-cy={MOB_PHONE}
+                    >
                         {state.mobPhone}
                     </Typography>
                 </Grid>
@@ -130,7 +137,9 @@ export default function CustomerDetailComponent({
                     >
                         Evening Phone Number
                             </Typography>
-                    <Typography >
+                    <Typography
+                        data-cy={EVE_PHONE}
+                    >
                         {state.evePhone}
                     </Typography>
                 </Grid>
@@ -144,7 +153,10 @@ export default function CustomerDetailComponent({
                     >
                         Day Phone Number
                             </Typography>
-                    <Typography >
+                    <Typography
+                        data-cy={DAY_PHONE}
+
+                    >
                         {state.dayPhone}
                     </Typography>
                 </Grid>
@@ -158,7 +170,9 @@ export default function CustomerDetailComponent({
                     >
                         Address Line 1
                             </Typography>
-                    <Typography >
+                    <Typography
+                        data-cy={ADDRESS_1}
+                    >
                         {state.address1}
                     </Typography>
                 </Grid>
@@ -169,7 +183,10 @@ export default function CustomerDetailComponent({
                     >
                         Address Line 2
                             </Typography>
-                    <Typography >
+                    <Typography
+                        data-cy={ADDRESS_2}
+
+                    >
                         {state.address2}
                     </Typography>
                 </Grid>
@@ -183,7 +200,9 @@ export default function CustomerDetailComponent({
                     >
                         City
                             </Typography>
-                    <Typography >
+                    <Typography
+                        data-cy={CITY}
+                    >
                         {state.city}
                     </Typography>
                 </Grid>
@@ -197,7 +216,9 @@ export default function CustomerDetailComponent({
                     >
                         Region
                             </Typography>
-                    <Typography >
+                    <Typography
+                        data-cy={REGION}
+                    >
                         {state.region}
                     </Typography>
                 </Grid>
@@ -211,7 +232,10 @@ export default function CustomerDetailComponent({
                     >
                         Country
                             </Typography>
-                    <Typography >
+                    <Typography
+                        data-cy={COUNTRY}
+
+                    >
                         {state.country}
                     </Typography>
                 </Grid>
@@ -225,7 +249,9 @@ export default function CustomerDetailComponent({
                     >
                         Postal Code
                             </Typography>
-                    <Typography >
+                    <Typography
+                        data-cy={POSTALCODE}
+                    >
                         {state.postalCode}
                     </Typography>
                 </Grid>
@@ -237,8 +263,10 @@ export default function CustomerDetailComponent({
 
                     >
                         Shipping Region
-                            </Typography>
-                    <Typography >
+                    </Typography>
+                    <Typography
+                        data-cy={SHIPPING_REGION}
+                    >
                         {state.shippingRegion.shippingRegion1}
                     </Typography>
                 </Grid>
@@ -250,7 +278,9 @@ export default function CustomerDetailComponent({
                     >
                         Role
                     </Typography>
-                    <Typography >
+                    <Typography
+                        data-cy={ROLE}
+                    >
                         {state.role}
                     </Typography>
                 </Grid>
@@ -268,8 +298,10 @@ export default function CustomerDetailComponent({
                         <Button
                             component='a'
                             fullWidth
-                            variant="contained"
-                            color="primary"
+                            variant='contained'
+                            color='primary'
+                            data-cy={EDIT}
+
                         >
                             Edit
                         </Button>

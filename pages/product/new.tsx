@@ -1,14 +1,12 @@
-import { createStyles, makeStyles, Theme, Container } from "@material-ui/core";
-import CreateProductComponent from "../../modules/product/create/create-product.component";
-import { redirect } from "../../modules/shared/helpers/auth.helper";
-import { getLoginToken } from "../../modules/shared/helpers/token.helper";
-import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
+import { Container } from "@material-ui/core";
 import { CreateProductMetadataComponent } from "../../modules/product/create/create-product-metadata.component";
+import CreateProductComponent from "../../modules/product/create/create-product.component";
+import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
+import { allowAdminHoc } from "../../modules/shared/allow/allow-admin.component";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
-export default function CreateProductPage(props) {
-  const classes = useStyles(props);
+function CreateProductPage() {
+
   return (
     <Container>
       <ErrorBoundary>
@@ -21,9 +19,4 @@ export default function CreateProductPage(props) {
   );
 }
 
-CreateProductPage.getInitialProps = async function ({
-  ctx: { isServer, store, query },
-  ctx
-}) {
-  if (!isServer && !getLoginToken()) redirect(ctx, "/user/login");
-};
+export default allowAdminHoc(CreateProductPage);

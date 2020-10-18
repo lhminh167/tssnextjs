@@ -1,22 +1,24 @@
-import { Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@material-ui/core";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { ProductFilterFilterEnum } from "../../product/filter/product-filter.model";
-import ActionButtonsComponent from "../../shared/action-buttons/action-buttons.component";
-import { defaultRowsPerPageOptions } from "../../shared/crud/crud.model";
-import { decodeAttributes } from "../../shared/helpers/product.helper";
-import { formatCurrency } from "../../shared/helpers/string.helper";
-import Image from "../../shared/image/image";
-import { p, bold } from "../../shared/layout/layout.style";
-import PaginationComponent from "../../shared/pagination/pagination.component";
-import ShoppingCartQuantityPicker from "../quantity-picker/shopping-cart-quantity-picker.component";
-import { defaultShopingCartGetRequest, defaultShoppingCart, IShopingCart, IShopingCartItem, ShopingCartGetRequest } from "../shopping-cart.model";
-import { getShoppingCart, removeShoppingCartItem, saveShoppingCartItemForLater } from "../shopping-cart.service";
-import { shoppingCartItemCountSlice } from "../shopping-cart.slice";
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { ProductFilterFilterEnum } from '../../product/filter/product-filter.model';
+import ActionButtonsComponent from '../../shared/action-buttons/action-buttons.component';
+import { defaultRowsPerPageOptions } from '../../shared/crud/crud.model';
+import { goTo, isAnonymous } from '../../shared/helpers/auth.helper';
+import { decodeAttributes, getCartItemColor, getCartItemSize } from '../../shared/helpers/product.helper';
+import { formatCurrency } from '../../shared/helpers/string.helper';
+import ImageComponent from '../../shared/image/image.component';
+import { bold, p } from '../../shared/layout/layout.style';
+import { getDiscountedPrice } from '../../shared/models/product.model';
+import PaginationComponent from '../../shared/pagination/pagination.component';
+import { COLOR, DISCOUNTED_PRICE, COUNT, ITEM, NAME, REMOVE, SAVE_ITEM_FOR_LATER, SIZE, tag, SHOPPING_CART } from '../../shared/tag/tag.model';
+import ShoppingCartQuantityPickerComponent from '../quantity-picker/shopping-cart-quantity-picker.component';
+import { defaultShopingCartGetRequest, defaultShoppingCart, IShopingCart, IShopingCartItem, ShopingCartGetRequest } from '../shopping-cart.model';
+import { getShoppingCart, removeShoppingCartItem, saveShoppingCartItemForLater } from '../shopping-cart.service';
+import { shoppingCartItemCountSlice } from '../shopping-cart.slice';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,7 +34,6 @@ export default function ShoppingCartComponent({
 
 }: IProps) {
     const classes = useStyles({});
-    const router = useRouter();
     const dispatch = useDispatch();
     const [choice, setChoice] = useState<ShopingCartGetRequest>(defaultShopingCartGetRequest);
     const [state, setState] = useState<IShopingCart>(defaultShoppingCart);
@@ -42,6 +43,7 @@ export default function ShoppingCartComponent({
     }, [])
 
     async function getData(input: ShopingCartGetRequest) {
+        if (!isAnonymous()) return;
         const response = await getShoppingCart(input);
         setState(response.content);
         setChoice(input);
@@ -81,11 +83,11 @@ export default function ShoppingCartComponent({
     }
 
     function back() {
-        router.push('/');
+        goTo('/');
     }
 
     function checkout() {
-        router.push('/order/new');
+        goTo('/order/new');
     }
 
     return (
@@ -95,10 +97,15 @@ export default function ShoppingCartComponent({
 
             >
                 <Typography
-                    variant="h6"
-                    component="h2"
+                    variant='h6'
+                    component='h2'
                 >
-                    {state.totalQuantity + ' Items In Your Cart'}
+                    <span
+                        data-cy={COUNT}
+                    >
+                        {state.totalQuantity}
+                    </span>
+                    {' Items In Your Cart'}
                 </Typography>
                 <TableContainer>
                     <Table>
@@ -110,17 +117,17 @@ export default function ShoppingCartComponent({
                                     Item
                             </TableCell>
                                 <TableCell
-                                    align="center"
+                                    align='center'
                                 >
                                     Size
                                 </TableCell>
                                 <TableCell
-                                    align="center"
+                                    align='center'
                                 >
                                     Quantity
                                 </TableCell>
                                 <TableCell
-                                    align="center"
+                                    align='center'
                                 >
                                     Price
                                 </TableCell>
@@ -130,16 +137,20 @@ export default function ShoppingCartComponent({
                             {
                                 state?.items?.map(row => {
                                     const attributes = decodeAttributes(row.attributes);
-                                    const color = attributes.find(e => e.name === ProductFilterFilterEnum.Color)?.value;
-                                    const size = attributes.find(e => e.name === ProductFilterFilterEnum.Size)?.value;
+                                    const color = getCartItemColor(attributes);
+                                    const size = getCartItemSize(attributes);
+                                    const price = getDiscountedPrice(row.product);
 
                                     return (
-                                        <TableRow key={row.itemId}>
+                                        <TableRow key={row.itemId}
+                                            data-cy={tag(ITEM, row.itemId, SHOPPING_CART)}
+                                            data-id={row.itemId}
+                                        >
                                             <TableCell
-                                                component="th"
-                                                scope="row"
+                                                component='th'
+                                                scope='row'
                                             >
-                                                <Image
+                                                <ImageComponent
                                                     imageName={row.product.image}
                                                     imageStyles={{
                                                         width: 100,
@@ -147,63 +158,82 @@ export default function ShoppingCartComponent({
                                                 />
                                             </TableCell>
                                             <TableCell
-                                                component="th"
-                                                scope="row"
+                                                component='th'
+                                                scope='row'
                                             >
                                                 <Grid
                                                     item
                                                     xs={12}
                                                 >
                                                     <Typography
-                                                        variant="body1"
+                                                        variant='body1'
                                                         className={classes.bold}
                                                     >
-                                                        {color} {row.product.name}
+                                                        <span
+                                                            data-cy={COLOR}
+                                                        >
+                                                            {color}
+                                                        </span>
+                                                        {' '}
+                                                        <span
+                                                            data-cy={NAME}
+                                                        >
+                                                            {row.product.name}
+                                                        </span>
                                                     </Typography>
                                                 </Grid>
                                                 <Grid
                                                     item
                                                     xs={12}
                                                     container
-                                                    direction="row"
+                                                    direction='row'
                                                 >
                                                     <Button
-                                                        color="primary"
-                                                        size="small"
+                                                        color='primary'
+                                                        size='small'
                                                         onClick={() => saveItemForLater(row)}
                                                         startIcon={<BookmarkIcon
-                                                            fontSize="small"
+                                                            fontSize='small'
                                                         />}
-
+                                                        data-cy={SAVE_ITEM_FOR_LATER}
                                                     >
                                                         Save for later
                                                 </Button>
                                                     <Button
-                                                        color="primary"
-                                                        size="small"
+                                                        color='primary'
+                                                        size='small'
                                                         onClick={() => removeItem(row)}
                                                         startIcon={<ClearRoundedIcon
-                                                            fontSize="small"
+                                                            fontSize='small'
                                                         />}
+                                                        data-cy={REMOVE}
                                                     >
                                                         Remove
                                                     </Button>
                                                 </Grid>
                                             </TableCell>
-                                            <TableCell align="center">{size}</TableCell>
-                                            <TableCell align="center">
-                                                <ShoppingCartQuantityPicker
+                                            <TableCell align='center'
+                                            >
+                                                <span
+                                                    data-cy={SIZE}
+                                                >
+                                                    {size}
+                                                </span>
+                                            </TableCell>
+                                            <TableCell align='center'>
+                                                <ShoppingCartQuantityPickerComponent
                                                     data={row}
                                                 />
                                             </TableCell>
                                             <TableCell
-                                                align="center"
+                                                align='center'
                                             >
                                                 <Typography
                                                     variant='subtitle1'
                                                     className={classes.bold}
+                                                    data-cy={DISCOUNTED_PRICE}
                                                 >
-                                                    {formatCurrency(row.product.discountedPrice > 0 ? row.product.discountedPrice : row.product.price)}
+                                                    {price}
                                                 </Typography>
                                             </TableCell>
                                         </TableRow>
@@ -215,7 +245,7 @@ export default function ShoppingCartComponent({
                 </TableContainer>
                 <TablePagination
                     rowsPerPageOptions={defaultRowsPerPageOptions}
-                    component="div"
+                    component='div'
                     count={state.count}
                     rowsPerPage={state.pageSize}
                     page={state.pageIndex}

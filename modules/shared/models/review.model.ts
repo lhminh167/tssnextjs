@@ -1,19 +1,43 @@
-import { Customer } from "../../customer/customer.model";
-import { Validator } from "fluentvalidation-ts";
-import { PaginationRequest, PaginatedList, defaultPaginationList } from "../crud/crud.model";
+import { Customer, defaultCustomer } from '../../customer/customer.model';
+import { Validator } from 'fluentvalidation-ts';
+import { PaginationRequest, PaginatedList, defaultPaginationList } from '../crud/crud.model';
+import querystring from 'query-string';
+
+export const apiReviewBaseUrl = 'review';
+
+export const apiReviewUrl = {
+    baseUrl: `${apiReviewBaseUrl}`,
+    list: (input: IReviewGetRequest) => `${apiReviewBaseUrl}?${querystring.stringify(input)}`,
+    detail: (reviewId: number) => `${apiReviewBaseUrl}/${reviewId}`,
+}
 
 export const reviewBaseUrl = 'review';
 
-export interface IReview {
-    reviewId?: number;
-    customerId?: number;
-    productId?: number;
-    review1?: string;
-    rating?: number;
-    createdOn?: string;
-    customer?: Customer;
+export const reviewUrl = {
+    baseUrl: `${reviewBaseUrl}`,
+    list: (input: IReviewGetRequest) => `${reviewBaseUrl}?${querystring.stringify(input)}`,
+    detail: (reviewId: number) => `${reviewBaseUrl}/${reviewId}`,
 }
 
+export interface IReview {
+    reviewId: number;
+    customerId: number;
+    productId: number;
+    review1: string;
+    rating: number;
+    createdOn: string;
+    customer: Customer;
+}
+
+export const defaultReview: IReview = {
+    reviewId: 0,
+    customerId: 0,
+    productId: 0,
+    review1: '',
+    rating: 0,
+    createdOn: new Date().toString(),
+    customer: defaultCustomer
+};
 
 export class CreateReviewRequestValidator extends Validator<IReview> {
     constructor() {

@@ -1,22 +1,18 @@
-import { createStyles, makeStyles, Theme, Typography, Button } from "@material-ui/core";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { IProduct } from "../../shared/models/product.model";
-import { getShoppingCartRecommendation } from "../shopping-cart.service";
-import ProductHorizontalGallery from "../../shared/product-horizontal-gallery/product-horizontal-gallery.component";
-import { PaginatedList, defaultPaginationList, PaginationRequest, defaultPaginationRequest } from "../../shared/crud/crud.model";
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
+import { Button, Typography } from '@material-ui/core';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { defaultPaginationList, defaultPaginationRequest, PaginatedList, PaginationRequest } from '../../shared/crud/crud.model';
+import { isAnonymous } from '../../shared/helpers/auth.helper';
+import { IProduct } from '../../shared/models/product.model';
+import ProductHorizontalGallery from '../../shared/product-horizontal-gallery/product-horizontal-gallery.component';
+import { getShoppingCartRecommendation } from '../shopping-cart.service';
+import { RECOMMENDATION } from '../../shared/tag/tag.model';
 
 interface Props {
 }
 
 export default function ShoppingCartProductRecommendationGalleryComponent({
 }: Props) {
-    const classes = useStyles({});
     const [state, setState] = useState<PaginatedList<IProduct>>({
         ...defaultPaginationList,
         pageSize: 4,
@@ -29,11 +25,16 @@ export default function ShoppingCartProductRecommendationGalleryComponent({
     });
 
     useEffect(() => {
-        getShoppingCartRecommendation(choice).then((response) => {
-            setState(response.content);
-        });
+        getData(choice);
     }, []);
 
+
+    async function getData(input: PaginationRequest) {
+        if (!isAnonymous()) return;
+        const response = await getShoppingCartRecommendation(input);
+        setState(response.content);
+        setChoice(input);
+    }
 
     async function change({ pageIndex, pageSize }) {
 
@@ -41,10 +42,9 @@ export default function ShoppingCartProductRecommendationGalleryComponent({
             ...choice,
             pageIndex,
             pageSize
-        }
-        const response = await getShoppingCartRecommendation(newChoice);
-        setState(response.content);
-        setChoice(newChoice);
+        };
+
+        await getData(newChoice);
     }
 
     if (!state.count) return null;
@@ -54,22 +54,23 @@ export default function ShoppingCartProductRecommendationGalleryComponent({
             data={state}
             output={change}
             title={
-                <Typography variant="h6" component="h2">
+                <Typography variant='h6' component='h2'>
                     Product Recommendations
                 </Typography>
             }
-            seeMore={
-                <Link
-                    href="/product"
-                    as="/product"
-                    passHref
-                >
-                    <Button component="a"
-                    >
-                        See All Recommended Products
-                    </Button>
-                </Link>
-            }
+            // seeMore={
+            //     <Link
+            //         href='/product'
+            //         as='/product'
+            //         passHref
+            //     >
+            //         <Button component='a'
+            //         >
+            //             See All Recommended Products
+            //         </Button>
+            //     </Link>
+            // }
+            galleryTestId={RECOMMENDATION}
 
         />
     );

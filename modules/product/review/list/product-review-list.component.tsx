@@ -1,17 +1,18 @@
-import { createStyles, Divider, Grid, TablePagination, Theme } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import React, { Fragment, useState } from "react";
-import { defaultRowsPerPageOptions } from "../../../shared/crud/crud.model";
-import { bgGrey, bold, mb, mb2, mlAuto, p, pl0 } from "../../../shared/layout/layout.style";
-import { IProduct } from "../../../shared/models/product.model";
-import { defaultReviewGetRequest, IReview, IReviewGetRequest, IReviewGetResponse } from "../../../shared/models/review.model";
-import PaginationComponent from "../../../shared/pagination/pagination.component";
-import { defaultProductSearchRequest } from "../../filter/product-filter.model";
-import CreateReviewComponent from "../create/create-product-review.component";
-import ProductReviewDetailComponent from "../detail/product-review-detail.component";
-import { getReviews } from "../review.service";
-import { Rating } from "@material-ui/lab";
+import { createStyles, Divider, Grid, TablePagination, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import { Rating } from '@material-ui/lab';
+import React, { Fragment, useState } from 'react';
+import { defaultRowsPerPageOptions } from '../../../shared/crud/crud.model';
+import { bgGrey, bold, mb, mb2, mlAuto, p, pl0 } from '../../../shared/layout/layout.style';
+import { IProduct } from '../../../shared/models/product.model';
+import { defaultReviewGetRequest, IReview, IReviewGetRequest, IReviewGetResponse } from '../../../shared/models/review.model';
+import PaginationComponent from '../../../shared/pagination/pagination.component';
+import { AVERAGE_RATING, COUNT, tag, RATING } from '../../../shared/tag/tag.model';
+import { defaultProductSearchRequest } from '../../filter/product-filter.model';
+import CreateReviewComponent from '../create/create-product-review.component';
+import ProductReviewDetailComponent from '../detail/product-review-detail.component';
+import { getReviews } from '../review.service';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -90,8 +91,8 @@ export default function ProductReviewListComponent({ data }: Props) {
               className={classes.mb2}
             >
               <Typography
-                component="h3"
-                variant="h5"
+                component='h3'
+                variant='h5'
                 className={classes.bold}
               >
                 Average Rating
@@ -100,12 +101,17 @@ export default function ProductReviewListComponent({ data }: Props) {
                 value={state.averageRating}
                 readOnly
                 max={5}
+                data-cy={tag(RATING, '', AVERAGE_RATING)}
               />
               <Typography
-              // component="h2"
-              // variant="h5"
               >
-                {state.count} ratings
+                <span
+                  data-cy={tag(COUNT, '', AVERAGE_RATING)}
+                >
+                  {state.count}
+                </span>
+                {' '}
+                ratings
               </Typography>
             </Grid>
             <Grid item xs={12}
@@ -121,8 +127,8 @@ export default function ProductReviewListComponent({ data }: Props) {
               className={classes.mb2}
             >
               <Typography
-                component="h2"
-                variant="h5"
+                component='h2'
+                variant='h5'
                 className={classes.bold}
               >
                 Product reviews
@@ -131,7 +137,7 @@ export default function ProductReviewListComponent({ data }: Props) {
             <Grid
               item
               container
-              component="ul"
+              component='ul'
               xs={12}
               className={classes.pl0}
             >
@@ -146,7 +152,7 @@ export default function ProductReviewListComponent({ data }: Props) {
             </Grid>
             <TablePagination
               rowsPerPageOptions={defaultRowsPerPageOptions}
-              component="div"
+              component='div'
               count={state.count}
               rowsPerPage={choice.pageSize}
               page={choice.pageIndex}

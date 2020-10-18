@@ -8,8 +8,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React, { useState } from 'react';
 import { mb, mt } from '../../shared/layout/layout.style';
 import { isValidForm } from '../../shared/validator/validator';
-import { CustomerUpdatePasswordState, CustomerUpdatePasswordStateValidator, defaultCustomerUpdatePasswordState } from '../customer.model';
+import { CustomerUpdatePasswordState, CustomerUpdatePasswordStateValidator, customerUrl, defaultCustomerUpdatePasswordState } from '../customer.model';
 import { updatePassword } from '../customer.service';
+import { PASSWORD, NEW_PASSWORD, CONFIRM_NEW_PASSWORD, SUBMIT } from '../../shared/tag/tag.model';
+import { goTo } from '../../shared/helpers/auth.helper';
+import SuccessComponent, { SuccessComponentProps, defaultSuccessComponentProps } from '../../shared/success/success.component';
+import { isOk } from '../../shared/helpers/http.helper';
 
 const useStyles = makeStyles(theme => ({
     mb: mb,
@@ -26,6 +30,7 @@ export default function ChangePasswordComponent({
     const classes = useStyles({});
     const [state, setState] = useState<CustomerUpdatePasswordState>(defaultCustomerUpdatePasswordState);
     const [submitted, setSubmitted] = useState<boolean>(false);
+    const [finished, setFinished] = useState<SuccessComponentProps>(defaultSuccessComponentProps);
     const errors = new CustomerUpdatePasswordStateValidator().validate(state);
 
     function change(event) {
@@ -41,18 +46,21 @@ export default function ChangePasswordComponent({
 
     async function submit(event) {
         setSubmitted(true);
-
         if (!isValidForm(errors)) return;
-
-
-
         const response = await updatePassword({
             customerId: userId,
-            currentPassword: state.currentPassword,
+            password: state.password,
             newPassword: state.newPassword
         })
-
+        setFinished({ success: isOk(response.status), title: response.title })
     }
+
+    if (finished.success)
+        return <SuccessComponent
+            title={finished.title}
+            onConfirm={null}
+            confirmText={null}
+        />;
 
     return (
         <Grid
@@ -63,7 +71,7 @@ export default function ChangePasswordComponent({
         >
             <Grid item xs={12}
                 container
-                justify="center"
+                justify='center'
                 className={classes.mt}
 
             >
@@ -73,64 +81,69 @@ export default function ChangePasswordComponent({
             </Grid>
             <Grid item xs={12}
                 container
-                justify="center"
+                justify='center'
                 className={classes.mb}
             >
-                <Typography component="h1" variant="h5">
+                <Typography component='h1' variant='h5'>
                     Change Password
                 </Typography>
             </Grid>
             <Grid item xs={12}>
                 <TextField
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    name="currentPassword"
-                    label="Current Password"
-                    type="password"
-                    autoComplete="current-password"
-                    value={state.currentPassword}
+                    name={PASSWORD}
+                    label='Current Password'
+                    type='password'
+                    autoComplete='current-password'
+                    value={state.password}
                     onChange={change}
-                    error={errors.currentPassword && submitted}
-                    helperText={errors.currentPassword && submitted ? errors.currentPassword : null}
+                    error={errors.password && submitted}
+                    helperText={errors.password && submitted ? errors.password : null}
+                    data-cy={PASSWORD}
                 />
             </Grid>
             <Grid item xs={12}>
                 <TextField
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    name="newPassword"
-                    label="New Password"
-                    type="password"
-                    autoComplete="new-password"
+                    name={NEW_PASSWORD}
+                    label='New Password'
+                    type='password'
+                    autoComplete='new-password'
                     value={state.newPassword}
                     onChange={change}
                     error={errors.newPassword && submitted}
                     helperText={errors.newPassword && submitted ? errors.newPassword : null}
+                    data-cy={NEW_PASSWORD}
                 />
             </Grid>
             <Grid item xs={12}>
                 <TextField
-                    variant="outlined"
+                    variant='outlined'
                     required
                     fullWidth
-                    name="confirmNewPassword"
-                    label="Confirm New Password"
-                    type="password"
-                    autoComplete="new-password"
+                    name={CONFIRM_NEW_PASSWORD}
+                    label='Confirm New Password'
+                    type='password'
+                    autoComplete='new-password'
                     value={state.confirmNewPassword}
                     onChange={change}
                     error={errors.confirmNewPassword && submitted}
                     helperText={errors.confirmNewPassword && submitted ? errors.confirmNewPassword : null}
+                    data-cy={CONFIRM_NEW_PASSWORD}
+
                 />
             </Grid>
             <Grid item xs={12}>
                 <Button
                     fullWidth
-                    variant="contained"
-                    color="primary"
+                    variant='contained'
+                    color='primary'
                     onClick={submit}
+                    data-cy={SUBMIT}
                 >
                     Submit
                 </Button>

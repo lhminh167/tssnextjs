@@ -1,7 +1,7 @@
-import { Shipping } from "./shipping.model";
-import { ShippingRegion } from "./shipping-region.model";
-import { Tax } from "./tax.model";
-import { IAttributeValue } from "./attribute-value.model";
+import { Shipping } from './shipping.model';
+import { ShippingRegion } from './shipping-region.model';
+import { Tax } from './tax.model';
+import { IAttributeValue } from './attribute-value.model';
 import querystring from 'query-string';
 
 export interface ICatalogGetResponse {

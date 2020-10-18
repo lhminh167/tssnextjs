@@ -1,64 +1,88 @@
-import { Theme, Grid } from "@material-ui/core";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Link from "next/link";
-import React from "react";
-import { IProduct } from "../models/product.model";
-import Image from "../image/image";
-import { toUrl, formatCurrency } from "../helpers/string.helper";
+import { Button, Theme } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Link from 'next/link';
+import React from 'react';
+import { productUrl } from '../../product/filter/product-filter.model';
+import ImageComponent from '../image/image.component';
+import { getDiscountedPrice, getDiscountPercentage, IProduct } from '../models/product.model';
+import { DISCOUNTED_PRICE, NAME, PERCENTAGE, PRODUCT_CARD, PRODUCT_LINK, THUMBNAIL } from '../tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      // textAlign: "left"
-      // boxShadow:
-      //   "0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)"
-    }
+    discountTag: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      padding: '0 0.2rem'
+    },
   })
 );
 
 interface IProps {
   data: IProduct;
+  showPercentage?: boolean;
 }
 
-export default function ProductCard({ data }: IProps) {
+export default function ProductCard({
+  data,
+  showPercentage
+}: IProps) {
   const classes = useStyles();
 
   return (
     <Card
     >
       <Link
-        href={{
-          pathname: "/product/[productName]",
-          query: {
-            productId: data.productId
-          }
-        }}
-        as={`/product/${toUrl(data.name)}?productId=${data.productId}`}
+        href={productUrl.detail(data).href}
+        as={productUrl.detail(data).as}
         passHref
       >
-        <Typography component="a" color="inherit">
-          <CardActionArea className={classes.root}>
+        <Typography component='a' color='inherit'
+          data-cy={PRODUCT_LINK}
+        >
+          <CardActionArea
+            data-cy={PRODUCT_CARD}
+            data-id={data.productId}
+          >
             <CardMedia>
-              <Image
+              {
+                showPercentage &&
+                <Button
+                  variant='contained'
+                  className={classes.discountTag}
+                  component='div'
+                  color='primary'
+                >
+                  <span
+                    data-cy={PERCENTAGE}
+                  >
+                    {getDiscountPercentage(data)}
+                  </span>
+                  % off
+                </Button>
+              }
+              <ImageComponent
                 imageName={data.thumbnail}
+                data-cy={THUMBNAIL}
               />
             </CardMedia>
             <CardContent>
-              <Typography variant="subtitle1" gutterBottom noWrap
+              <Typography variant='subtitle1' gutterBottom noWrap
                 component='h3'
+                data-cy={NAME}
               >
                 {data.name}
               </Typography>
-
-              <Typography variant="subtitle2" gutterBottom
+              <Typography variant='subtitle2' gutterBottom
                 component='h4'
+                data-cy={DISCOUNTED_PRICE}
               >
-                {formatCurrency(data.price)}
+                {getDiscountedPrice(data)}
               </Typography>
             </CardContent>
           </CardActionArea>

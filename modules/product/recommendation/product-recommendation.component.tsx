@@ -1,10 +1,11 @@
-import { Button, createStyles, makeStyles, Theme, Typography } from "@material-ui/core";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { PaginatedList } from "../../shared/crud/crud.model";
-import { defaultProductRecommendationGetRequest, IProduct, IProductRecommendationGetRequest } from "../../shared/models/product.model";
-import ProductHorizontalGallery from "../../shared/product-horizontal-gallery/product-horizontal-gallery.component";
-import { getProductRecommendation } from "../detail/product-detail.service";
+import { Button, createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { PaginatedList } from '../../shared/crud/crud.model';
+import { defaultProductRecommendationGetRequest, IProduct, IProductRecommendationGetRequest } from '../../shared/models/product.model';
+import ProductHorizontalGallery from '../../shared/product-horizontal-gallery/product-horizontal-gallery.component';
+import { getProductRecommendation } from '../detail/product-detail.service';
+import { RECOMMENDATION } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,22 +51,23 @@ export default function ProductRecommendationComponent({
             data={state}
             output={change}
             title={
-                <Typography variant="h6" component="h2">
+                <Typography variant='h6' component='h2'>
                     Product Recommendations
                 </Typography>
             }
-            seeMore={
-                <Link
-                    href="/product"
-                    as="/product"
-                    passHref
-                >
-                    <Button component="a"
-                    >
-                        See All Product Recommendations
-                    </Button>
-                </Link>
-            }
+            // seeMore={
+            //     <Link
+            //         href='/product'
+            //         as='/product'
+            //         passHref
+            //     >
+            //         <Button component='a'
+            //         >
+            //             See All Product Recommendations
+            //         </Button>
+            //     </Link>
+            // }
+            galleryTestId={RECOMMENDATION}
         />
     );
 }

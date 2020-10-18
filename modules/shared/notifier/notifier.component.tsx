@@ -1,16 +1,12 @@
-import { Snackbar, Typography } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { Alert } from "@material-ui/lab";
-import fetchIntercept from 'fetch-intercept';
-import React, { Fragment, useState } from "react";
-import { defaultNotifierState } from "./notifier.model";
-import { Response as AppResponse } from "../crud/crud.model";
+import DialogContentText from '@material-ui/core/DialogContentText';
+import { Color } from '@material-ui/lab';
 import * as Sentry from '@sentry/browser';
+import fetchIntercept from 'fetch-intercept';
+import React, { Fragment, useState } from 'react';
+import { ConfirmationDialog } from '../confirmation-dialog/confirmation-dialog.component';
+import { IResponse } from '../crud/crud.model';
+import { DESCRIPTION, ID, NOTIFIER } from '../tag/tag.model';
+import { defaultNotifierState } from './notifier.model';
 
 export default function Notifier() {
   const [state, setState] = useState(defaultNotifierState);
@@ -23,119 +19,86 @@ export default function Notifier() {
   };
 
   const unregister = fetchIntercept.register({
-    request: function (url, config) {
-      return [url, config];
-    },
-
-    requestError: function (error) {
-
-      return Promise.reject(error);
-    },
-
-    response: function (response) {
-      const color = response.ok ? 'success' : 'error';
-
-      response?.clone().json().then((data: Response) => {
-        setState({
-          ...state,
-          isOpen: true,
-          color,
-          data: data
-        });
-      }).catch(
-        err => {
-          return new AppResponse(
-            null,
-            response.status,
-            response.statusText,
-            null,
-            null,
-            null,
-            null
-          )
-        });
-
+    request: (url, config) => [url, config],
+    requestError: error => Promise.reject(error),
+    response: response => {
+      handleResponse(response, response.ok ? 'success' : 'error');
       return response;
     },
-
-    responseError: function (error) {
-
-      error?.clone().json().then((data) => {
-        setState({
-          ...state,
-          isOpen: true,
-          color: 'error',
-          data
-        });
-      })
-        .catch(
-          err =>
-            new AppResponse(
-              null,
-              error.status,
-              error.statusText,
-              null,
-              null,
-              null,
-              null
-            )
-        );
-
+    responseError: error => {
+      handleResponse(error, 'error');
       return Promise.reject(error);
     }
   });
 
+  const handleResponse = (response: Response, color: Color) => {
+    response?.clone().json().then((data: Response) => {
+      setState({
+        ...state,
+        isOpen: true,
+        color,
+        data: data
+      });
+    })
+      .catch(err => ({
+        content: null,
+        status: response.status,
+        title: response.statusText
+      } as IResponse<any>));
+  };
+
+  const report = () => {
+    if (process.env.ENV === 'production')
+      Sentry.showReportDialog();
+  };
+
   if (state.color === 'error')
     return (
       <Fragment>
-        <Dialog
+        <ConfirmationDialog
+          title={'Error!'}
           open={state.isOpen}
-          onClose={handleClose}
-        >
-          <DialogTitle
-          >
-            Error!
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Description: {state.data.title}
-            </DialogContentText>
-            <DialogContentText>
-              Error ID: {state.data.instance}
-            </DialogContentText>
-            {
-              process.env.ENV === 'production' &&
-              <Button
-                onClick={() => Sentry.showReportDialog()}
+          close={null}
+          confirm={handleClose}
+          content={
+            <Fragment>
+              <DialogContentText>
+                Description:{' '}
+                <span
+                  data-cy={DESCRIPTION}
+                >
+                  {state.data.title}
+                </span>
+              </DialogContentText>
+              <DialogContentText
+                data-cy={ID}
               >
-                Report feedback
-              </Button>
-            }
-
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary" autoFocus>
-              Ok
-          </Button>
-          </DialogActions>
-        </Dialog>
+                Error ID: {state.data.instance}
+              </DialogContentText>
+            </Fragment>
+          }
+          decline={report}
+          confirmText='Close'
+          declineText='Report'
+          data-cy={NOTIFIER}
+        />
       </Fragment>
     );
 
   return null
 
-  return (
-    <Snackbar
-      open={state.isOpen}
-      autoHideDuration={6000}
-      onClose={handleClose}
-    >
-      <Alert
-        onClose={handleClose}
-        severity={state.color}
-      >
-        {state.data.title}
-      </Alert>
-    </Snackbar>
-  );
+  // return (
+  //   <Snackbar
+  //     open={state.isOpen}
+  //     autoHideDuration={6000}
+  //     onClose={handleClose}
+  //   >
+  //     <Alert
+  //       onClose={handleClose}
+  //       severity={state.color}
+  //     >
+  //       {state.data.title}
+  //     </Alert>
+  //   </Snackbar>
+  // );
 }

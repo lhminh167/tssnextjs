@@ -1,30 +1,32 @@
-import { FormControl, Grid, InputLabel, MenuItem, Select, Slider, TablePagination } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionActions from "@material-ui/core/AccordionActions";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import Fab from "@material-ui/core/Fab";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import ClearIcon from "@material-ui/icons/Clear";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { useRouter } from "next/router";
-import { Fragment, useState } from "react";
+import { FormControl, Grid, InputLabel, MenuItem, Select, Slider, TablePagination } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionActions from '@material-ui/core/AccordionActions';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import Fab from '@material-ui/core/Fab';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import ClearIcon from '@material-ui/icons/Clear';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { useRouter } from 'next/router';
+import { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from "../../root/root.model";
-import BrandPicker from "../../shared/brand-picker/brand-picker.component";
-import ColorPicker from "../../shared/color-picker/color-picker.component";
-import { defaultRowsPerPageOptions } from "../../shared/crud/crud.model";
-import { defaultAttributeValue, IAttributeValue } from "../../shared/models/attribute-value.model";
-import { IProduct } from "../../shared/models/product.model";
-import PaginationComponent, { PaginationProps } from "../../shared/pagination/pagination.component";
-import ProductListComponent from "../../shared/product-list/product-list.component";
-import SizePicker from "../../shared/size-picker/size-picker.component";
-import { defaultIsDescendingOptions, defaultProductSearchRequest, defaultSortByOptions, IProductFilterCategory, IProductSearchRequest, ProductFilterFilterEnum } from "./product-filter.model";
-import { mb2, mr, mb } from "../../shared/layout/layout.style";
-import { formatCurrency } from "../../shared/helpers/string.helper";
+import { IRootState } from '../../root/root.model';
+import BrandPickerComponent from '../../shared/brand-picker/brand-picker.component';
+import ColorPicker from '../../shared/color-picker/color-picker.component';
+import { defaultRowsPerPageOptions } from '../../shared/crud/crud.model';
+import { defaultAttributeValue, IAttributeValue } from '../../shared/models/attribute-value.model';
+import { IProduct } from '../../shared/models/product.model';
+import PaginationComponent, { PaginationProps } from '../../shared/pagination/pagination.component';
+import ProductListComponent from '../../shared/product-list/product-list.component';
+import SizePickerComponent from '../../shared/size-picker/size-picker.component';
+import { defaultIsDescendingOptions, defaultProductSearchRequest, defaultSortByOptions, IProductFilterCategory, IProductSearchRequest, ProductFilterFilterEnum, productUrl } from './product-filter.model';
+import { mb2, mr, mb } from '../../shared/layout/layout.style';
+import { COUNT, SUBMIT, MIN_PRICE, MAX_PRICE, SORT_BY, SORT_ORDER, tag, FILTER, PRICE } from '../../shared/tag/tag.model';
+import { formatCurrency } from '../../shared/helpers/string.helper';
+import { goTo } from '../../shared/helpers/auth.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -56,16 +58,6 @@ export default function ProductFilterComponent({
 
 }: IProps) {
     const classes = useStyles({});
-    const router = useRouter();
-    const [color, setColor] = useState(defaultAttributeValue);
-    const [size, setSize] = useState(defaultAttributeValue);
-    const [category, setCategory] = useState<string[]>([]);
-    const [price, setPrice] = useState<number[]>([
-        defaultProductSearchRequest.minPrice,
-        defaultProductSearchRequest.maxPrice
-    ]);
-    const [sortBy, setSortBy] = useState<string>(defaultSortByOptions[0].value);
-    const [isDescending, setIsDescending] = useState<boolean>(defaultIsDescendingOptions[0].value);
     const choice = useSelector<IRootState, IProductSearchRequest>(
         state => state.productFilter.choice
     );
@@ -90,21 +82,27 @@ export default function ProductFilterComponent({
     const count = useSelector<IRootState, number>(
         state => state.productFilter.product?.data?.count
     );
-
+    const [color, setColor] = useState(defaultAttributeValue);
+    const [size, setSize] = useState(defaultAttributeValue);
+    const [category, setCategory] = useState<string[]>([]);
+    const [price, setPrice] = useState<number[]>([
+        defaultProductSearchRequest.minPrice,
+        defaultProductSearchRequest.maxPrice
+    ]);
+    const [sortBy, setSortBy] = useState<string>(defaultSortByOptions[0].value);
+    const [isDescending, setIsDescending] = useState<boolean>(defaultIsDescendingOptions[0].value);
+    
     const apply = () => {
-        router.push({
-            pathname: router.pathname,
-            query: {
-                ...choice,
-                color: color.value,
-                size: size.value,
-                category,
-                minPrice: price[0],
-                maxPrice: price[1],
-                sortBy: sortBy === "None" ? null : sortBy,
-                isDescending
-            }
-        });
+        goTo(productUrl.search({
+            ...choice,
+            color: color.value,
+            size: size.value,
+            category,
+            minPrice: price[0],
+            maxPrice: price[1],
+            sortBy: sortBy === 'None' ? '' : sortBy,
+            isDescending
+        }));
     };
 
     const clear = () => {
@@ -112,40 +110,33 @@ export default function ProductFilterComponent({
         setSize(defaultAttributeValue);
         setCategory(defaultProductSearchRequest.category);
         setPrice([
-            defaultProductSearchRequest.minPrice,
-            defaultProductSearchRequest.maxPrice
+            minPrice,
+            maxPrice
         ]);
 
-        router.push({
-            pathname: router.pathname,
-            query: { ...defaultProductSearchRequest }
-        });
+        goTo(productUrl.search({
+            ...defaultProductSearchRequest
+        }));
     };
 
     function changePageIndex(
         event,
         newPageIndex: number
     ) {
-        router.push({
-            pathname: router.pathname,
-            query: {
-                ...choice,
-                pageIndex: newPageIndex,
-            }
-        });
+        goTo(productUrl.search({
+            ...choice,
+            pageIndex: newPageIndex,
+        }));
     }
 
     function changePageSize(
         event
     ) {
-        router.push({
-            pathname: router.pathname,
-            query: {
-                ...choice,
-                pageSize: parseInt(event.target.value, 10),
-                pageIndex: defaultProductSearchRequest.pageIndex,
-            }
-        });
+        goTo(productUrl.search({
+            ...choice,
+            pageSize: parseInt(event.target.value, 10),
+            pageIndex: defaultProductSearchRequest.pageIndex,
+        }));
     }
 
     function changePrice(
@@ -190,34 +181,22 @@ export default function ProductFilterComponent({
                 page={page}
                 rowsPerPage={rowsPerPage}
                 onChangePage={onChangePage}
-                firstPageUrl={{
-                    pathname: router.pathname,
-                    query: {
-                        ...choice,
-                        pageIndex: defaultProductSearchRequest.pageIndex,
-                    }
-                }}
-                previousPageUrl={{
-                    pathname: router.pathname,
-                    query: {
-                        ...choice,
-                        pageIndex: choice.pageIndex - 1,
-                    }
-                }}
-                nextPageUrl={{
-                    pathname: router.pathname,
-                    query: {
-                        ...choice,
-                        pageIndex: choice.pageIndex + 1,
-                    }
-                }}
-                lastPageUrl={{
-                    pathname: router.pathname,
-                    query: {
-                        ...choice,
-                        pageIndex: Math.max(0, Math.ceil(count / choice.pageSize) - 1),
-                    }
-                }}
+                firstPageUrl={productUrl.search({
+                    ...choice,
+                    pageIndex: defaultProductSearchRequest.pageIndex,
+                })}
+                previousPageUrl={productUrl.search({
+                    ...choice,
+                    pageIndex: choice.pageIndex - 1,
+                })}
+                nextPageUrl={productUrl.search({
+                    ...choice,
+                    pageIndex: choice.pageIndex + 1,
+                })}
+                lastPageUrl={productUrl.search({
+                    ...choice,
+                    pageIndex: Math.max(0, Math.ceil(count / choice.pageSize) - 1),
+                })}
             />
         )
     }
@@ -231,7 +210,7 @@ export default function ProductFilterComponent({
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <Typography>
-                        Filter {count} items
+                        Filter <span data-cy={COUNT}>{count}</span> items
                     </Typography>
                 </AccordionSummary>
                 <Divider />
@@ -262,7 +241,7 @@ export default function ProductFilterComponent({
                                 xs={12}
                             // className={classes.mb}
                             >
-                                <SizePicker
+                                <SizePickerComponent
                                     data={sizes}
                                     output={setSize}
                                     state={size}
@@ -281,21 +260,26 @@ export default function ProductFilterComponent({
                             <Slider
                                 value={price}
                                 onChange={changePrice}
-                                valueLabelDisplay="auto"
+                                valueLabelDisplay='auto'
                                 max={maxPrice}
                                 min={minPrice}
                                 // marks={marks}
                                 step={0.01}
-                                aria-labelledby="continuous-slider"
+                                aria-labelledby='continuous-slider'
+                                data-cy={tag(PRICE, '', FILTER)}
                             />
                             <Grid
                                 container
-                                justify="space-between"
+                                justify='space-between'
                             >
-                                <Grid item>
+                                <Grid item
+                                    data-cy={MIN_PRICE}
+                                >
                                     {formatCurrency(price[0])}
                                 </Grid>
-                                <Grid item>
+                                <Grid item
+                                    data-cy={MAX_PRICE}
+                                >
                                     {formatCurrency(price[1])}
                                 </Grid>
                             </Grid>
@@ -308,7 +292,7 @@ export default function ProductFilterComponent({
                                 className={classes.mb2}
 
                             >
-                                <BrandPicker
+                                <BrandPickerComponent
                                     data={categories}
                                     output={setCategory}
                                     state={category}
@@ -332,11 +316,13 @@ export default function ProductFilterComponent({
                                     value={sortBy}
                                     onChange={changeSortBy}
                                     fullWidth
+                                    data-cy={SORT_BY}
                                 >
                                     {defaultSortByOptions.map(entry => (
                                         <MenuItem
                                             key={entry.value}
                                             value={entry.value}
+                                            data-cy={SORT_BY + entry.value}
                                         >
                                             {entry.label}
                                         </MenuItem>
@@ -352,11 +338,13 @@ export default function ProductFilterComponent({
                                     value={isDescending}
                                     onChange={changeIsDescending}
                                     fullWidth
+                                    data-cy={SORT_ORDER}
                                 >
                                     {defaultIsDescendingOptions.map(entry => (
                                         <MenuItem
                                             key={entry.value}
                                             value={entry.value}
+                                            data-cy={SORT_ORDER + entry.value}
                                         >
                                             {entry.label}
                                         </MenuItem>
@@ -369,15 +357,16 @@ export default function ProductFilterComponent({
                 <Divider />
                 <AccordionActions className={classes.AccordionActions}>
                     <Fab
-                        variant="extended"
-                        color="primary"
+                        variant='extended'
+                        color='primary'
                         className={classes.button}
                         onClick={apply}
+                        data-cy={SUBMIT}
                     >
                         Apply
                     </Fab>
                     <Button
-                        color="primary"
+                        color='primary'
                         className={classes.button}
                         onClick={clear}
                     >
@@ -393,7 +382,7 @@ export default function ProductFilterComponent({
             />
             <TablePagination
                 rowsPerPageOptions={defaultRowsPerPageOptions}
-                component="div"
+                component='div'
                 count={count}
                 rowsPerPage={choice.pageSize}
                 page={choice.pageIndex}

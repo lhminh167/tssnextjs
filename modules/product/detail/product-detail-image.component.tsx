@@ -1,9 +1,9 @@
 import { ButtonBase, createStyles, Grid, GridList, GridListTile, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
-import Image from '../../shared/image/image';
 import { IProduct } from '../../shared/models/product.model';
 import { w100, h100 } from '../../shared/layout/layout.style';
+import ImageComponent from '../../shared/image/image.component';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -35,7 +35,7 @@ export default function ProductDetailImageComponent({
                 item
                 xs={12}
             >
-                <Image
+                <ImageComponent
                     imageName={state[choice]}
 
 
@@ -57,7 +57,7 @@ export default function ProductDetailImageComponent({
                                 <ButtonBase
                                     onClick={() => setChoice(index)}
                                 >
-                                    <Image
+                                    <ImageComponent
                                         imageName={entry}
                                         imageStyles={{
                                             height: '100px'

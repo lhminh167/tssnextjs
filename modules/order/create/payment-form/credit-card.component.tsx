@@ -1,11 +1,11 @@
-import { createStyles, Grid, makeStyles } from "@material-ui/core";
+import { createStyles, Grid, makeStyles } from '@material-ui/core';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import React from "react";
-import { useDispatch } from "react-redux";
-import ActionButtonsComponent from "../../../shared/action-buttons/action-buttons.component";
-import { p, w100 } from "../../../shared/layout/layout.style";
-import { shoppingCartItemCountSlice } from "../../../shopping-cart/shopping-cart.slice";
-import { createOrder } from "../../order.service";
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import ActionButtonsComponent from '../../../shared/action-buttons/action-buttons.component';
+import { p, w100 } from '../../../shared/layout/layout.style';
+import { shoppingCartItemCountSlice } from '../../../shopping-cart/shopping-cart.slice';
+import { createOrder, createPayment } from '../../order.service';
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -47,20 +47,28 @@ export default function CreditCardComponent({
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card: cardElement,
-            billing_details: { name: "cardholderName.value" }
+            billing_details: { name: 'cardholderName.value' }
         });
         if (!paymentMethod) return;
 
-        const orderResponse = await createOrder({
+        const paymentResponse = await createPayment({
             ...data,
             paymentMethodId: paymentMethod.id
         });
-        if (orderResponse.status >= 300) return;
+        if (paymentResponse.status >= 300) return;
 
-        if (orderResponse.content.paymentStatus === 'requires_action') {
-            const { error, paymentIntent } = await stripe.confirmCardPayment(orderResponse.content.paymentSecret);
+        if (paymentResponse.content.paymentStatus === 'requires_action') {
+            const { error, paymentIntent } = await stripe.confirmCardPayment(paymentResponse.content.paymentSecret);
             if (!paymentIntent) return;
         }
+
+        const orderResponse = await createOrder({
+            ...data,
+            paymentMethodId: paymentMethod.id,
+            paymentId: paymentResponse.content.paymentId,
+            paymentSecret: paymentResponse.content.paymentSecret
+        });
+        if (orderResponse.status >= 300) return;
 
         dispatch(shoppingCartItemCountSlice.actions.change(0));
         next(orderResponse.content.order);
@@ -70,7 +78,7 @@ export default function CreditCardComponent({
         <form
             className={classes.w100}
         >
-            {/* <Typography variant="h6" gutterBottom>
+            {/* <Typography variant='h6' gutterBottom>
                 Payment method
             </Typography> */}
             <CardElement

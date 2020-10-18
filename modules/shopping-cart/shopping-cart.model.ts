@@ -1,19 +1,27 @@
-import { defaultProduct, IProduct } from "../shared/models/product.model";
-import { PaginationRequest, defaultPaginationRequest, PaginatedList, defaultPaginationList } from "../shared/crud/crud.model";
+import { defaultProduct, IProduct } from '../shared/models/product.model';
+import { PaginationRequest, defaultPaginationRequest, PaginatedList, defaultPaginationList } from '../shared/crud/crud.model';
 import querystring from 'query-string';
 
-const shoppingCartBaseUrl = 'shoppingCart';
+const apiShoppingCartBaseUrl = 'shoppingCart';
 
-export const ShoppingCartUrl = {
-    baseUrl: shoppingCartBaseUrl,
-    saveItemForLater: shoppingCartBaseUrl + '/' + 'saveItemForLater',
-    moveItemToCart: shoppingCartBaseUrl + '/' + 'MoveItemToCart',
-    totalCost: shoppingCartBaseUrl + '/' + 'TotalCost',
-    totalQuantity: (buyNow: boolean) => shoppingCartBaseUrl + '/TotalQuantity?buyNow=' + buyNow,
-    shoppingCart: (input: ShopingCartGetRequest) => shoppingCartBaseUrl + '?' +
+export const apiShoppingCartUrl = {
+    baseUrl: apiShoppingCartBaseUrl,
+    saveItemForLater: apiShoppingCartBaseUrl + '/' + 'saveItemForLater',
+    moveItemToCart: apiShoppingCartBaseUrl + '/' + 'MoveItemToCart',
+    totalCost: apiShoppingCartBaseUrl + '/' + 'TotalCost',
+    totalQuantity: (buyNow: boolean) => apiShoppingCartBaseUrl + '/TotalQuantity?buyNow=' + buyNow,
+    shoppingCart: (input: ShopingCartGetRequest) => apiShoppingCartBaseUrl + '?' +
         querystring.stringify(input),
-    wishList: `${shoppingCartBaseUrl}?buyNow=false`,
-    recommendation: `${shoppingCartBaseUrl}/Recommendation`,
+    wishList: `${apiShoppingCartBaseUrl}?buyNow=false`,
+    recommendation: `${apiShoppingCartBaseUrl}/Recommendation`,
+    detail: (itemId: number) => `${apiShoppingCartBaseUrl}/${itemId}`
+}
+
+const shoppingCartBaseUrl = '/shopping-cart';
+
+export const shoppingCartUrl = {
+    baseUrl: shoppingCartBaseUrl,
+    wishList: `/wish-list`,
 }
 
 export interface IShopingCartItem {
