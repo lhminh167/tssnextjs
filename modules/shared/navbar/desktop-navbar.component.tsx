@@ -15,6 +15,7 @@ import { IRootState } from '../../root/root.model';
 import { shoppingCartItemCountSelector } from '../../shopping-cart/shopping-cart.slice';
 import BrandComponent from '../brand/brand.component';
 import { toNumber } from '../helpers/auth.helper';
+import { getUserAvatar } from '../helpers/string.helper';
 import { themeColor } from '../layout/layout.theme';
 import SearchComponent from '../search/search.component';
 import { ADMIN, DEPARTMENT, LOGIN, LOGOUT, ORDER, REGISTER, SEARCH, SHOPPING_CART, TOTAL_QUANTITY, WISHLIST, USER, tag, ROLE, EMAIL, NAME } from '../tag/tag.model';
@@ -275,7 +276,7 @@ export default function DesktopNavbarComponent() {
                                 <Avatar
                                     className={classes.avatar}
                                 >
-                                    {currentUser.name[0]}
+                                    {getUserAvatar(currentUser.name)}
                                 </Avatar>
                             </Tooltip>
                         </IconButton>

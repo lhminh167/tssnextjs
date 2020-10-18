@@ -2,9 +2,7 @@ import { EnumChangefreq } from "sitemap";
 import { getCategories } from "../../category/category.service";
 import { defaultProductSearchRequest, productUrl } from "../../product/filter/product-filter.model";
 import { getProducts } from "../../product/filter/product-filter.service";
-import { PaginatedList, Response } from "../crud/crud.model";
-import { ICategory, categoryUrl } from "../models/category.model";
-import { IProduct } from "../models/product.model";
+import { categoryUrl } from "../models/category.model";
 
 export async function getPages() {
     const result = [

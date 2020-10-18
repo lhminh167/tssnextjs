@@ -7,9 +7,9 @@ import { toNumber } from '../../shared/helpers/auth.helper';
 import { mb, mb2, p } from '../../shared/layout/layout.style';
 import { defaultCatalogGetRequest, defaultCatalogGetResponse, ICatalogGetResponse } from '../../shared/models/catalog.model';
 import { getCatalog } from '../../shared/services/catalog.service';
-import { ADDRESS_1, ADDRESS_2, CITY, COUNTRY, DAY_PHONE, EVE_PHONE, MOB_PHONE, NAME, POSTALCODE, REGION, ROLE, SHIPPING_REGION, SUBMIT } from '../../shared/tag/tag.model';
+import { ADDRESS_1, ADDRESS_2, CITY, COUNTRY, DAY_PHONE, EMAIL, EVE_PHONE, MOB_PHONE, NAME, POSTALCODE, REGION, ROLE, SHIPPING_REGION, SUBMIT } from '../../shared/tag/tag.model';
 import { isValidForm } from '../../shared/validator/validator';
-import { Customer, CustomerUpdateRequest, CustomerUpdateRequestValidator, defaultCustomerUpdateRequest } from '../customer.model';
+import { Customer, CustomerUpdateRequest, CustomerUpdateRequestValidator, defaultCustomerUpdateRequest, Role } from '../customer.model';
 import { getCustomer, updateCustomer } from '../customer.service';
 import { currentUserSlice } from '../customer.slice';
 
@@ -129,7 +129,23 @@ export default function CustomerEditComponent({
                     error={errors.name && submitted}
                     helperText={errors.name && submitted ? errors.name : null}
                     data-cy={NAME}
-
+                    autoFocus
+                />
+            </Grid>
+            <Grid item xs={12}
+            >
+                <TextField
+                    required
+                    id='email'
+                    name='email'
+                    label='Email Address'
+                    fullWidth
+                    autoComplete='email'
+                    value={state.email}
+                    onChange={change}
+                    error={errors.email && submitted}
+                    helperText={errors.email && submitted ? errors.email : null}
+                    data-cy={EMAIL}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -305,51 +321,49 @@ export default function CustomerEditComponent({
                     }
                 </FormControl>
             </Grid>
-            {
-                currentUser.role === 'Admin' &&
-                <Grid item
-                    xs={12} sm={6}
+            <Grid item
+                xs={12} sm={6}
+            >
+                <FormControl
+                    fullWidth
+                    error={errors.role && submitted}
                 >
-                    <FormControl
-                        fullWidth
-                        error={errors.role && submitted}
+                    <InputLabel
+                        id='role'
                     >
-                        <InputLabel
-                            id='role'
-                        >
-                            Role
+                        Role
                     </InputLabel>
-                        <Select
-                            name='role'
-                            labelId='role'
-                            id='role'
-                            value={state.role}
-                            onChange={change}
-                            data-cy={ROLE}
+                    <Select
+                        name='role'
+                        labelId='role'
+                        id='role'
+                        value={state.role}
+                        onChange={change}
+                        data-cy={ROLE}
+                        disabled={currentUser.role !== Role.Admin}
+                    >
+                        {form.role.map(entry => {
+                            return (
+                                <MenuItem
+                                    key={entry.value}
+                                    value={entry.value}
+                                    data-cy={ROLE + entry.value}
+                                >
+                                    {entry.value}
+                                </MenuItem>
+                            )
+                        })}
+                    </Select>
+                    {
+                        errors.role && submitted &&
+                        <FormHelperText
+                            error
                         >
-                            {form.role.map(entry => {
-                                return (
-                                    <MenuItem
-                                        key={entry.value}
-                                        value={entry.value}
-                                        data-cy={ROLE + entry.value}
-                                    >
-                                        {entry.value}
-                                    </MenuItem>
-                                )
-                            })}
-                        </Select>
-                        {
-                            errors.role && submitted &&
-                            <FormHelperText
-                                error
-                            >
-                                {errors.role}
-                            </FormHelperText>
-                        }
-                    </FormControl>
-                </Grid>
-            }
+                            {errors.role}
+                        </FormHelperText>
+                    }
+                </FormControl>
+            </Grid>
             <Grid item
                 xs={12}
                 className={classes.mb}

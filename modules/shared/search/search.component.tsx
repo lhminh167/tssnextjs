@@ -52,20 +52,25 @@ export default function SearchComponent({
         if (typingTimeout) clearTimeout(typingTimeout);
         setState(e.target.value);
         typingTimeout = setTimeout(() => {
-            dispatch(productFilterSlice.actions.changeKeyword(e.target.value));
-        }, 2000);
+            changeKeyword(e.target.value);
+        }, 1000);
     };
 
     const submit = (e) => {
         if (e.key !== 'Enter') return;
         e.preventDefault();
-        dispatch(productFilterSlice.actions.changeKeyword(state));
+        changeKeyword(state);
         goTo(productUrl.search({ ...choice, keyword: state }));
     };
 
     const clear = () => {
         setState('');
+        changeKeyword('');
     };
+
+    function changeKeyword(input: string) {
+        dispatch(productFilterSlice.actions.changeKeyword(input));
+    }
 
     return (
         <ThemeProvider theme={searchTheme}>

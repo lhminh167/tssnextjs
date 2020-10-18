@@ -15,7 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { currentUserSlice } from '../../customer/customer.slice';
 import { IRootState } from '../../root/root.model';
 import { toNumber } from '../helpers/auth.helper';
-import { SHOPPING_CART, TOTAL_QUANTITY, REGISTER, LOGIN, DEPARTMENT, ORDER, ADMIN, LOGOUT, WISHLIST, HOMEPAGE, USER, SEARCH } from '../tag/tag.model';
+import { getUserAvatar } from '../helpers/string.helper';
+import { SHOPPING_CART, TOTAL_QUANTITY, REGISTER, LOGIN, DEPARTMENT, ORDER, ADMIN, LOGOUT, WISHLIST, HOMEPAGE, USER, SEARCH, LINK, EMAIL, USERNAME, NAME, tag } from '../tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -73,7 +74,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 >
                     <ListItemAvatar>
                         <Avatar>
-                            {userName[0]}
+                            {getUserAvatar(userName)}
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText
@@ -131,11 +132,13 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 >
                     <ListItem button component='a'
                         className={classes.user}
-                        data-cy={USER}
+                        data-cy={USER + LINK}
                     >
                         <ListItemAvatar>
-                            <Avatar>
-                                {userName[0]}
+                            <Avatar
+                                data-cy={USER}
+                            >
+                                {getUserAvatar(userName)}
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText
@@ -143,6 +146,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                                 <Grid item
                                     component={MuiLink}
                                     color='inherit'
+                                    data-cy={tag(NAME, '', USER)}
                                 >
                                     {userName}
                                 </Grid>
@@ -152,6 +156,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                                 <Grid item
                                     component={MuiLink}
                                     color='inherit'
+                                    data-cy={tag(EMAIL, '', USER)}
                                 >
                                     {userEmail}
                                 </Grid>
@@ -196,7 +201,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 passHref
             >
                 <ListItem button component='a'
-                    data-cy={HOMEPAGE}
+                    data-cy={HOMEPAGE + LINK}
                 >
                     <ListItemIcon>
                         <HomeIcon
@@ -238,12 +243,12 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 passHref
             >
                 <ListItem button component='a'
+                    data-cy={WISHLIST}
                 >
                     <ListItemIcon>
                         <FavoriteIcon />
                     </ListItemIcon>
                     <ListItemText primary='Wishlist'
-                        data-cy={WISHLIST}
                     />
                 </ListItem>
             </Link>
@@ -255,12 +260,12 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                     passHref
                 >
                     <ListItem button component='a'
+                        data-cy={ORDER}
                     >
                         <ListItemIcon>
                             <AssignmentTurnedInIcon />
                         </ListItemIcon>
                         <ListItemText primary='Orders'
-                            data-cy={ORDER}
                         />
                     </ListItem>
                 </Link>
@@ -273,12 +278,12 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                     passHref
                 >
                     <ListItem button component='a'
+                        data-cy={ADMIN}
                     >
                         <ListItemIcon>
                             <SupervisorAccountIcon />
                         </ListItemIcon>
                         <ListItemText primary='Admin'
-                            data-cy={ADMIN}
                         />
                     </ListItem>
                 </Link>
@@ -289,12 +294,12 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 passHref
             >
                 <ListItem button component='a'
+                    data-cy={DEPARTMENT}
                 >
                     <ListItemIcon>
                         <AppsIcon />
                     </ListItemIcon>
-                    <ListItemText primary='Department'
-                        data-cy={DEPARTMENT}
+                    <ListItemText primary='Departments'
                     />
                 </ListItem>
             </Link>

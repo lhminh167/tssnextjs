@@ -7,7 +7,7 @@ it('Sitemap -> Sitemap should include all pages of website #working', () => {
   );
 });
 
-it.skip('Sitemap -> All pages listed in sitemap should be accessible #smoke', () => {
+it.skip('Sitemap -> All pages listed in sitemap should be accessible #smoke #working', () => {
   cy
     .pipe(cySetAdminLoginToken)
     .pipe(getSitemapUrls)

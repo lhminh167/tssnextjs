@@ -11,7 +11,8 @@ export const BACK = 'back';
 export const BEST_SELLING = 'bestSelling';
 export const CANCEL = 'cancel';
 export const CANONICAL = 'canonical';
-export const CAROUSEL_DOT = 'carouselDot';
+export const CAROUSEL = 'carousel';
+export const DOT = 'dot';
 export const CATEGORY = 'category';
 export const CITY = 'city';
 export const CLEAR = 'clear';
@@ -120,6 +121,8 @@ export const USER = 'user';
 export const USERNAME = 'username';
 export const WISHLIST = 'wishlist';
 export const YES = 'yes';
+export const MENU = 'menu';
+export const GO_BACK = 'goBack';
 
 export function tag(tag: string, id: any = '', prefix: string = '') {
     let result = `${prefix ? prefix : ''}${tag}${id ? 'Id' + id : ''}`;

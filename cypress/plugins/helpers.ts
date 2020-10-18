@@ -1,20 +1,20 @@
-import { promises } from 'fs';
 import fetch from 'isomorphic-unfetch';
-import path from 'path';
-import { apiCustomerUrl, defaultCustomer } from '../../modules/customer/customer.model';
-import { apiProductUrl } from '../../modules/product/filter/product-filter.model';
-import { HttpMethod, mediaUrl, UploadRequest } from '../../modules/shared/crud/crud.model';
-import { setContentType } from '../../modules/shared/helpers/http.helper';
-import { cySetCustomerLoginToken, mockRandomAccount, mockRandomCustomer, mockRootAdminAccount } from '../helpers/shared/helpers/auth.helper';
-import { mockRandomProduct } from '../helpers/shared/helpers/product.helper';
 import Blob from 'node-blob';
-import FormData from 'form-data';
+import path from 'path';
+import { apiCustomerUrl } from '../../modules/customer/customer.model';
+import { apiProductUrl, IProductFilterFilter } from '../../modules/product/filter/product-filter.model';
+import { HttpMethod, IResponse, mediaUrl, UploadRequest } from '../../modules/shared/crud/crud.model';
+import { setContentType } from '../../modules/shared/helpers/http.helper';
 import { toUrl } from '../../modules/shared/helpers/string.helper';
-import { setLoginToken } from '../../modules/shared/helpers/token.helper';
+import { defaultProduct, IProduct } from '../../modules/shared/models/product.model';
+import { mockRandomCustomer, mockRootAdminAccount } from '../helpers/shared/helpers/auth.helper';
+import { getRandomString } from '../helpers/shared/helpers/string.helper';
 import { TEST_IMAGE } from '../helpers/shared/image/image.component.spec';
+import percyHealthCheck from '@percy/cypress/task';
+import { promises } from 'fs';
 
 export async function saveCustomerLoginToken(config) {
-  const user = mockRandomAccount();
+  const user = mockRandomCustomer();
   const createRes = await post(user, apiCustomerUrl.register, config);
   config.env.CYPRESS_CUSTOMER_LOGIN_TOKEN = createRes.content.loginToken;
 
@@ -36,11 +36,19 @@ export async function saveAdminLoginToken(config) {
 }
 
 export async function saveProduct(config) {
-  const filter = await get(apiProductUrl.filter, config);
+  const filter: IResponse<IProductFilterFilter> = await get(apiProductUrl.filter, config);
   config.env.CYPRESS_PRODUCT_FILTER = JSON.stringify(filter.content);
   const buffer = await promises.readFile(path.join(__dirname, `../fixtures/${TEST_IMAGE}`));
   const file = new Blob([buffer]);
-  const product = mockRandomProduct();
+  const product: IProduct = {
+    ...defaultProduct,
+    name: getRandomString(5),
+    description: getRandomString(5),
+    discountedPrice: 99.5,
+    price: 100.65,
+    category: filter.content.categories[0],
+    attributes: filter.content.attributes
+  };
   const images = [
     { name: toUrl(product.name) + '-thumbnail', file },
     { name: toUrl(product.name), file },
@@ -158,4 +166,12 @@ async function put(body, url, config, isAdmin: boolean = true) {
     config,
     isAdmin
   );
+}
+
+export function percyHeathCheck(on, config) {
+  if (isProduction()) on("task", percyHealthCheck);
+}
+
+export function isProduction() {
+  return process.env.NODE_ENV === 'production';
 }

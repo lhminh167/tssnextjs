@@ -28,7 +28,7 @@ interface Props {
     imageStyles?: any;
 }
 
-export default function TopPanelProductCard({
+export default function ProductGrid({
     data,
     imageStyles
 }: Props) {

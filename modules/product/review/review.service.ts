@@ -1,12 +1,13 @@
 
 import { apiReviewUrl, IReview, IReviewGetRequest } from '../../shared/models/review.model';
 import { post, put, get, remove } from '../../shared/crud/crud.service';
+import { IResponse } from '../../shared/crud/crud.model';
 
 export async function getReviews(input: IReviewGetRequest) {
     return await get(apiReviewUrl.list(input));
 }
 
-export async function createReview(review: IReview) {
+export async function createReview(review: IReview): Promise<IResponse<IReview>> {
     return await post(apiReviewUrl.baseUrl, review);
 }
 

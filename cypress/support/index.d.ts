@@ -57,6 +57,14 @@ declare namespace Cypress {
         ): Chainable<JQuery<E>>;
 
         /**
+         * Test texts.
+         */
+        testTexts<E extends Node = HTMLElement>(
+            fiels: string[],
+            value: object
+        ): Chainable<JQuery<E>>;
+
+        /**
          * Test text fields.
          */
         testTextFields<E extends Node = HTMLElement>(
@@ -65,33 +73,11 @@ declare namespace Cypress {
         ): Chainable<JQuery<E>>;
 
         /**
-        * Wait until a specific iframe has loaded.
-        */
-        iframeLoaded<E extends Node = HTMLElement>(
-        ): Chainable<JQuery<E>>;
-
-        /**
-        * get selector-satisfying element(s) within document.
-        */
-        getInDocument<E extends Node = HTMLElement>(
-            selector: any
-        ): Chainable<JQuery<E>>;
-
-        /**
-        * Get selector-satisfying element(s) within in iframe.
-        */
-        getWithinIframe<E extends Node = HTMLElement>(
-            targetElement: any
-        ): Chainable<JQuery<E>>;
-
-        /**
-         * visit page and wait for hydration done.
-         * @param url url
+         * Take screenshots for visual regression testing.
          */
-        open<E extends Node = HTMLElement>(
-            url: string,
-            options?: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow>
+        takeScreenShot<E extends Node = HTMLElement>(
+            name?: string,
+            options?: SnapshotOptions
         ): Chainable<JQuery<E>>;
-
     }
 }

@@ -27,5 +27,10 @@
     "**/*.tsx",
     "../modules/**/*.ts",
     "../modules/**/*.tsx",
-  ]
+  ],
+  "paths": {
+    "cypress-react-unit-test": [
+      "../lib"
+    ],
+  }
 }

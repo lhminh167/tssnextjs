@@ -2,9 +2,9 @@ import { get, remove } from '../../shared/crud/crud.service';
 import { apiProductUrl } from '../filter/product-filter.model';
 import { IProductRecommendationGetRequest, IProduct } from '../../shared/models/product.model';
 import querystring from 'query-string';
-import { Response } from '../../shared/crud/crud.model';
+import { IResponse } from '../../shared/crud/crud.model';
 
-export async function getProduct(productId: number): Promise<Response<IProduct>> {
+export async function getProduct(productId: number): Promise<IResponse<IProduct>> {
     return await get(apiProductUrl.product, productId);
 }
 

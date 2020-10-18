@@ -1,13 +1,15 @@
-import { apiProductUrl, defaultProductSearchRequest, productUrl, SortByEnum } from "../../../modules/product/filter/product-filter.model";
-import { getProducts } from "../../../modules/product/filter/product-filter.service";
+import { apiProductUrl, defaultProductSearchRequest, IProductSearchRequest, productUrl, SortByEnum } from "../../../modules/product/filter/product-filter.model";
+import { getFilter, getProducts } from "../../../modules/product/filter/product-filter.service";
+import { getUrl } from "../../../modules/shared/crud/crud.service";
 import { CATEGORY, COLOR, COUNT, DESCRIPTION, DISCOUNTED_PRICE, FILTER, MAX_PRICE, MIN_PRICE, NAME, PRICE, PRODUCT_CARD, PRODUCT_LINK, SEARCH_BOX, SIZE, SUBMIT, tag } from "../../../modules/shared/tag/tag.model";
-import { cyGetExistingProduct } from "../../helpers/product/create/create-product.component.spec";
-import setupProductSortingTest, { ProductListCategoryTest, ProductListColorTest, ProductListSizeTest } from "../../helpers/product/filter/product-filter.component.spec";
+import { cyCreateProduct, cyGetExistingProduct, cyGetFilter } from "../../helpers/product/create/create-product.component.spec";
+import setupProductSortingTest, { getMaxPrice, getMinPrice, getRandomPrice, ProductListCategoryTest, ProductListColorTest, ProductListSizeTest } from "../../helpers/product/filter/product-filter.component.spec";
+import { mockRandomProduct } from "../../helpers/shared/helpers/product.helper";
 import { getRandomNumber, getRandomString, unformatCurrency } from "../../helpers/shared/helpers/string.helper";
 
 it('Product Search Page -> Search By Name -> When user types a keyword into the search box and press Enter key, then page should show products whose title containing keyword #working', () => {
   const product = cyGetExistingProduct();
-  cy.visit(productUrl.product);
+  cy.visit(productUrl.product).wait(4000);
   cy.getEl(SEARCH_BOX).type(product.name + '{enter}');
   cy.getEl(COUNT).should('have.text', 1);
   cy.getEl(PRODUCT_CARD).first().within(() => {
@@ -17,7 +19,7 @@ it('Product Search Page -> Search By Name -> When user types a keyword into the 
 
 it('Product Search Page -> Search By Description -> When user types a keyword into the search box and press Enter key, then page should show products whose description containing keyword #working', () => {
   const product = cyGetExistingProduct();
-  cy.visit(productUrl.product);
+  cy.visit(productUrl.product).wait(4000);
   cy.getEl(SEARCH_BOX).type(product.description + '{enter}');
   cy.getEl(COUNT).should('have.text', 1);
   cy.getEl(PRODUCT_LINK).first().click().getLink().load();
@@ -26,12 +28,12 @@ it('Product Search Page -> Search By Description -> When user types a keyword in
 
 it('Product Search Page -> Search From Other Page -> When user is not on Product Search Page and enters a search keyword, then user should be redirected to Product Search Page #working', () => {
   const text = getRandomString(5);
-  cy.visit('/');
+  cy.visit('/').wait(4000);
   cy.getEl(SEARCH_BOX).type(text + '{enter}');
   cy.load(productUrl.search({ ...defaultProductSearchRequest, keyword: text }));
 })
 
-it('Product Search Page -> Search By Category -> should show products which belongs to the chosen category', () => {
+it('Product Search Page -> Search By Category -> should show products which belongs to the chosen category #working', () => {
 
   cy.visit(productUrl.product);
   cy.getEl(COUNT).click();
@@ -48,34 +50,33 @@ it('Product Search Page -> Search By Category -> should show products which belo
   cy.get('@category').chain(ProductListCategoryTest);
 });
 
-it('Product Search Page -> Search By Price Range -> should show products which belongs to the chosen price range', () => {
+it('Product Search Page -> Search By Price Range -> should show products which belongs to the chosen price range #working', () => {
 
-  cy.visit(productUrl.product);
-  cy.getEl(COUNT).click();
-  cy.getEl(MIN_PRICE).invoke('text').then(minLimit => {
-    cy.getEl(MAX_PRICE).invoke('text').then(maxLimit => {
+  const minPrice = getMinPrice();
+  const maxPrice = getMaxPrice();
 
-      const minPrice = getRandomNumber(unformatCurrency(minLimit), unformatCurrency(maxLimit));
-      const maxPrice = getRandomNumber(unformatCurrency(minLimit), unformatCurrency(maxLimit));
+  const product = mockRandomProduct();
+  product.discountedPrice = getRandomNumber(minPrice, maxPrice);
+  product.price = product.discountedPrice * 1.1;
 
-      cy.getEl(tag(PRICE, '', FILTER)).within(() => {
-        cy.get('[data-index="1"] ')
-          .focus()
-          .trigger("mousedown")
-          .trigger("mousemove", { which: 1, pageX: maxPrice })
+  const request: IProductSearchRequest = {
+    ...defaultProductSearchRequest,
+    minPrice,
+    maxPrice
+  };
 
-        cy.get('[data-index="0"] ')
-          .focus()
-          .trigger("mousedown")
-          .trigger("mousemove", { which: 1, pageX: minPrice })
+  cy
+    .server().route({ url: getUrl(apiProductUrl.search(request)) }).as('route')
+    .wrap(product).pipe(cyCreateProduct)
+    .visit(productUrl.search(request))
 
-      })
-    })
-  })
-
+  cy
+    .getEl(DISCOUNTED_PRICE).each(el =>
+      cy.wrap(el).invoke('text').pipe(unformatCurrency).should('be.greaterThan', minPrice).should('be.lessThan', maxPrice)
+    )
 });
 
-it('Product Search Page -> Search By Size -> should show products which belongs to the chosen price range #working', () => {
+it('Product Search Page -> Search By Size -> When user chooses a size and searches, then result products should have that size #working', () => {
 
   cy.visit(productUrl.product);
   cy.getEl(COUNT).click();
@@ -90,7 +91,7 @@ it('Product Search Page -> Search By Size -> should show products which belongs 
 
 });
 
-it('Product Search Page -> Search By Color -> should show products which belongs to the chosen price range #working', () => {
+it('Product Search Page -> Search By Color -> When user chooses a color and searches, then result products should have that color #working', () => {
   cy.visit(productUrl.product);
   cy.getEl(COUNT).click();
   cy.getEl(COLOR).last().click().invoke('attr', 'data-id').as('color');
@@ -104,7 +105,7 @@ it('Product Search Page -> Search By Color -> should show products which belongs
 });
 
 
-it('Product Search Page -> Sort By Ascending Name -> should show products which belongs to the chosen price range #working', () => {
+it('Product Search Page -> Sort By Ascending Name -> When user sorts products by name in ascending order, then result products should be sorted by name in ascending order #working', () => {
 
   setupProductSortingTest({
     ...defaultProductSearchRequest,
@@ -121,7 +122,7 @@ it('Product Search Page -> Sort By Ascending Name -> should show products which 
 
 
 
-it('Product Search Page -> Sort By Descending Price -> should show products which belongs to the chosen price range #working', () => {
+it('Product Search Page -> Sort By Descending Price -> When user sorts products by price in descending order, then result products should be sorted by price in descending order #working', () => {
 
   setupProductSortingTest({
     ...defaultProductSearchRequest,
@@ -137,7 +138,7 @@ it('Product Search Page -> Sort By Descending Price -> should show products whic
 });
 
 
-it('Product Search Page -> Sort By Ascending Price -> should show products which belongs to the chosen price range #working', () => {
+it('Product Search Page -> Sort By Ascending Price -> When user sorts products by price in ascending order, then result products should be sorted by price in ascending order #working', () => {
   setupProductSortingTest({
     ...defaultProductSearchRequest,
     sortBy: SortByEnum.Price,

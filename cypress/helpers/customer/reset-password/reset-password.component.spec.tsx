@@ -1,172 +1,35 @@
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import React, { useState, useEffect } from 'react';
-import { mb, mt } from '../../shared/layout/layout.style';
-import { isValidForm } from '../../shared/validator/validator';
-import { CustomerPasswordResetState, CustomerPasswordResetStateValidator, defaultCustomerPasswordResetState } from '../customer.model';
-import { resetPassword, validateResetPasswordToken } from '../customer.service';
-import { useRouter } from 'next/router';
+import { apiCustomerUrl, customerUrl } from "../../../../modules/customer/customer.model";
+import { HttpMethod } from "../../../../modules/shared/crud/crud.model";
+import { getUrl } from "../../../../modules/shared/crud/crud.service";
+import { toNumber } from "../../../../modules/shared/helpers/auth.helper";
+import { removeLoginToken } from "../../../../modules/shared/helpers/token.helper";
+import { NEW_PASSWORD, CONFIRM_NEW_PASSWORD, SUBMIT, DESCRIPTION, HOMEPAGE } from "../../../../modules/shared/tag/tag.model";
+import { UserPopoverDetailTest } from "../../shared/navbar/desktop-navbar.component.spec";
+import { cyCustomer } from "../customer.model";
+import { typeLogin } from "../login/login.component.spec";
 
-const useStyles = makeStyles(theme => ({
-    mb: mb,
-    mt: mt
-}));
+export const resetPasswordFields = [NEW_PASSWORD, CONFIRM_NEW_PASSWORD];
 
-interface Props {
-}
-
-export default function ResetPasswordComponentTest({
-}: Props) {
-    const classes = useStyles({});
-    const [state, setState] = useState<CustomerPasswordResetState>(defaultCustomerPasswordResetState);
-    const [submitted, setSubmitted] = useState<boolean>(false);
-    const [isValidToken, setIsValidToken] = useState<boolean>(false);
-    const errors = new CustomerPasswordResetStateValidator().validate(state);
-    const router = useRouter();
-    const customerId: number = router.query.userId as any;
-    const resetPasswordToken: string = router.query.resetPasswordToken as any;
-
-    useEffect(() => {
-        validateResetPasswordToken({
-            customerId,
-            resetPasswordToken
-        }).then(res => {
-            if (res.status < 300)
-                setIsValidToken(true);
-        })
-    }, []);
-
-    function change(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
-        setState({
-            ...state,
-            [name]: value,
-        });
-    }
-
-    async function submit(event) {
-        setSubmitted(true);
-
-        if (!isValidForm(errors)) return;
-
-
-
-        const response = await resetPassword({
-            customerId,
-            resetPasswordToken,
-            newPassword: state.newPassword
-        })
-
-    }
-
-    if (isValidToken) return (
-        <Grid
-            container
-        >
-            <Grid item xs={12}
-                container
-                justify='center'
-                className={classes.mt}
-            >
-                <Avatar>
-                    <LockOutlinedIcon />
-                </Avatar>
-            </Grid>
-            <Grid item xs={12}
-                container
-                justify='center'
-                className={classes.mb}
-            >
-                <Typography component='h1' variant='h5'>
-                    Reset Password
-                </Typography>
-            </Grid>
-            <Grid item xs={12}
-                container
-                justify='center'
-                className={classes.mb}
-            >
-                <Typography component='h1' variant='h5'>
-                    The password reset link that you provided is invalid or has expired.
-                </Typography>
-            </Grid>
-
-        </Grid>
-    )
-
-    return (
-        <Grid
-            container
-            spacing={2}
-            component='form'
-            noValidate
-        >
-            <Grid item xs={12}
-                container
-                justify='center'
-                className={classes.mt}
-            >
-                <Avatar>
-                    <LockOutlinedIcon />
-                </Avatar>
-            </Grid>
-            <Grid item xs={12}
-                container
-                justify='center'
-                className={classes.mb}
-            >
-                <Typography component='h1' variant='h5'>
-                    Reset Password
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                    variant='outlined'
-                    required
-                    fullWidth
-                    name='newPassword'
-                    label='New Password'
-                    type='password'
-                    autoComplete='new-password'
-                    value={state.newPassword}
-                    onChange={change}
-                    error={errors.newPassword && submitted}
-                    helperText={errors.newPassword && submitted ? errors.newPassword : null}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                    variant='outlined'
-                    required
-                    fullWidth
-                    name='confirmNewPassword'
-                    label='Confirm New Password'
-                    type='password'
-                    autoComplete='new-password'
-                    value={state.confirmNewPassword}
-                    onChange={change}
-                    error={errors.confirmNewPassword && submitted}
-                    helperText={errors.confirmNewPassword && submitted ? errors.confirmNewPassword : null}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Button
-                    fullWidth
-                    variant='contained'
-                    color='primary'
-                    onClick={submit}
-                >
-                    Submit
-                </Button>
-            </Grid>
-        </Grid >
-    );
+export function resetPasswordTest(user: cyCustomer, resetPasswordToken: string) {
+    const customerId = toNumber(user.customerId);
+    cy
+        .route({ url: getUrl(apiCustomerUrl.resetPassword(customerId, resetPasswordToken)), method: HttpMethod.PUT })
+        .as('resetPasswordRoute')
+        .chain(removeLoginToken)
+        .visit(customerUrl.resetPassword(customerId, resetPasswordToken))
+    cy
+        .getEl(HOMEPAGE).takeScreenShot()
+        .fillTextFields(resetPasswordFields, user)
+    cy
+        .getEl(SUBMIT).click()
+        .wait('@resetPasswordRoute')
+    cy
+        .getEl(DESCRIPTION).should('have.text', 'Password was reset successfully. A confirmation email was sent to your email address.')
+    cy
+        .getEl(SUBMIT).click().wrap(customerUrl.login()).load()
+        .wrap({ ...user, password: user.newPassword }).pipe(typeLogin)
+    cy
+        .getEl(SUBMIT).click()
+        .wrap('/').load()
+        .wrap(user).chain(UserPopoverDetailTest)
 }

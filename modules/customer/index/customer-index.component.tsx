@@ -9,13 +9,11 @@ import Link from 'next/link';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../root/root.model';
-import { toNumber } from '../../shared/helpers/auth.helper';
+import { getCustomerIdNumberFromLoginToken, toNumber } from '../../shared/helpers/auth.helper';
 import { DETAIL, EDIT, NEW_PASSWORD } from '../../shared/tag/tag.model';
 
 export default function CustomerIndexComponent(props) {
-    const userId = useSelector<IRootState, number>(
-        state => toNumber(state.currentUser.data.customerId)
-    );
+    const userId = getCustomerIdNumberFromLoginToken();
 
     return (
         <Fragment>

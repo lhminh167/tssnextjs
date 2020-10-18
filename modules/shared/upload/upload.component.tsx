@@ -1,5 +1,5 @@
 import { Button, Grid, InputLabel, makeStyles, Typography } from '@material-ui/core';
-import { UPLOAD } from '../tag/tag.model';
+import { NAME, UPLOAD } from '../tag/tag.model';
 
 
 const useStyles = makeStyles(theme => ({
@@ -62,7 +62,9 @@ export default function UploadComponent({
                 </Button>
             </Grid>
             <Grid item>
-                <Typography>
+                <Typography
+                    data-cy={NAME}
+                >
                     {data?.name}
                 </Typography>
             </Grid>

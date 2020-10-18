@@ -1,14 +1,16 @@
+import { Dispatch } from '@reduxjs/toolkit';
 import Router from 'next/router';
 import { Role } from '../../customer/customer.model';
-import { customerIdSelector, customerRoleSelector } from '../../customer/customer.slice';
+import { currentUserSlice, customerIdSelector, customerRoleSelector } from '../../customer/customer.slice';
 import { getState } from '../../root/root.store';
-import { decodeLoginToken, getLoginToken } from './token.helper';
+import { shoppingCartItemCountSlice } from '../../shopping-cart/shopping-cart.slice';
+import { decodeLoginToken, getLoginToken, getValidLoginToken } from './token.helper';
 
 export function toNumber(input: string) {
     const hasLetters: boolean = (/[A-Z]+/ig).test(input);
     if (hasLetters) return 0;
 
-    const parsed = parseInt(input);
+    const parsed = parseFloat(input);
     return isNaN(parsed) ? 0 : parsed;
 }
 
@@ -63,4 +65,18 @@ export function isAdmin(): boolean {
     const role = getCustomerRoleFromLoginToken();
     const allowed = role === Role.Admin;
     return allowed
+}
+
+export function getCurrentUser(dispatch: Dispatch) {
+    if (!getValidLoginToken()) return;
+
+
+    dispatch(
+        shoppingCartItemCountSlice.actions.getTotalQuantityPending()
+    );
+
+    const customerId = getCustomerIdNumberFromLoginToken();
+    customerId
+        ? dispatch(currentUserSlice.actions.getCustomerPending(customerId))
+        : dispatch(currentUserSlice.actions.setCurrentUser(decodeLoginToken()));
 }

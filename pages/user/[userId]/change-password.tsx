@@ -5,7 +5,7 @@ import ChangePasswordComponent from '../../../modules/customer/change-password/c
 import ErrorBoundary from '../../../modules/shared/error-boundary/error-boundary.component';
 import { toNumber } from '../../../modules/shared/helpers/auth.helper';
 import { allowCustomerHoc } from '../../../modules/shared/allow/allow-customer.component';
-import { allowAccountOwnwerHoc } from '../../../modules/shared/allow/allow-account-owner.component copy';
+import { allowAccountOwnwerHoc } from '../../../modules/shared/allow/allow-account-owner.component';
 
 function CustomerChangePasswordPage() {
     const router = useRouter();

@@ -24,11 +24,10 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+import { IResponse } from '../../modules/shared/crud/crud.model';
 import 'cypress-file-upload';
 import 'cypress-pipe';
-import 'cypress-wait-until';
-import { Response } from '../../modules/shared/crud/crud.model';
-import 'cypress-iframe';
+import '@percy/cypress';
 
 Cypress.Commands.add('getLink', {
     prevSubject: true
@@ -69,7 +68,6 @@ Cypress.Commands.add(
     }
 );
 
-
 Cypress.Commands.add('load', {
     prevSubject: 'optional'
 }, (subject, pathname) => {
@@ -80,7 +78,7 @@ Cypress.Commands.add('load', {
 
 Cypress.Commands.add('testApi', {
     prevSubject: 'optional'
-}, (subject: any, condition: Response<any>) => {
+}, (subject: any, condition: IResponse<any>) => {
 
     expect(subject.status, 'response status').to.eq(condition.status);
     expect(subject.title, 'response title').to.eq(condition.title);
@@ -108,7 +106,7 @@ Cypress.Commands.add('fillTextFields', (fields: string[], value: object) => {
     );
 })
 
-Cypress.Commands.add('testTextFields', (fields: string[], value: object) => {
+Cypress.Commands.add('testTexts', (fields: string[], value: object) => {
     if (!fields || !value) return;
 
     fields.forEach(field => {
@@ -116,66 +114,17 @@ Cypress.Commands.add('testTextFields', (fields: string[], value: object) => {
     });
 })
 
-Cypress.Commands.add(
-    'iframeLoaded',
-    { prevSubject: 'element' },
-    //@ts-ignore
-    ($iframe) => {
-        const contentWindow = $iframe.prop('contentWindow');
-        return new Promise(resolve => {
-            if (
-                contentWindow &&
-                contentWindow.document.readyState === 'complete'
-            ) {
-                resolve(contentWindow)
-            } else {
-                $iframe.on('load', () => {
-                    resolve(contentWindow)
-                })
-            }
-        })
-    });
+Cypress.Commands.add('testTextFields', (fields: string[], value: object) => {
+    if (!fields || !value) return;
 
+    fields.forEach(field =>
+        cy
+            .getEl(field).find(`[name=${field}]`)
+            .should('exist').should('have.value', value[field])
+    );
+})
 
-Cypress.Commands.add(
-    'getInDocument',
-    { prevSubject: 'document' },
-    //@ts-ignore
-    (document, selector) => Cypress.$(selector, document)
-);
-
-Cypress.Commands.add(
-    'getWithinIframe',
-    (targetElement) => cy.get('iframe', { timeout: 600000 }).should('exist')
-        .first().should('exist')
-        .iframeLoaded().should('exist')
-        .its('document').should('exist')
-        .getInDocument(targetElement).should('exist')
-);
-
-let appHasStarted: boolean = false;
-
-function spyOnAddEventListener(win) {
-    // win = window object in our application
-    const addListener = win.EventTarget.prototype.addEventListener
-    win.EventTarget.prototype.addEventListener = function (name) {
-        if (name === 'change') {
-            // web app added an event listener to the input box -
-            // that means the web application has started
-            appHasStarted = true
-            // restore the original event listener
-            win.EventTarget.prototype.addEventListener = addListener
-        }
-        return addListener.apply(this, arguments)
-    }
-}
-
-Cypress.Commands.add(
-    'open',
-    (
-        url: string,
-        options?: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow>
-    ) => {
-        cy.visit(url, { ...options, onBeforeLoad: spyOnAddEventListener })
-    }
-)
+Cypress.Commands.add('takeScreenShot', (name?: string, options?: SnapshotOptions) => {
+    if (Cypress.env('NODE_ENV') === 'PRODUCTION')
+        cy.percySnapshot(name, options);
+})

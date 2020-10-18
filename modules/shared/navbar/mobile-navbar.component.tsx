@@ -10,6 +10,7 @@ import BrandComponent from '../brand/brand.component';
 import SearchComponent from '../search/search.component';
 import SideBarComponent from '../sidebar/sidebar.component';
 import { useRouter } from 'next/router';
+import { MENU, GO_BACK } from '../tag/tag.model';
 // import LazyHydrate from "react-lazy-hydration";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -49,6 +50,7 @@ const MobileNavbarComponent = () => {
                         onClick={() => { router.back() }}
                         color='primary'
                         edge='start'
+                        data-cy={GO_BACK}
                     >
                         <ArrowBackIcon
                         />
@@ -74,6 +76,7 @@ const MobileNavbarComponent = () => {
                         onClick={toggleSidebar(true)}
                         color='primary'
                         edge='end'
+                        data-cy={MENU}
                     >
                         <MenuIcon
                         />

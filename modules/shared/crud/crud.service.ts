@@ -1,10 +1,10 @@
 import es6promise from 'es6-promise';
 import {
   HttpMethod,
-
   ImageGetUploadTokensRequest,
+  IResponse,
   mediaUrl,
-  Response as TssResponse, UploadRequest
+  UploadRequest
 } from '../crud/crud.model';
 import { setContentType } from '../helpers/http.helper';
 import { setTokenHeader } from '../helpers/token.helper';
@@ -49,14 +49,11 @@ export async function callApi(url: string, options: RequestInit = {}) {
   const json = response
     .json()
     .then(res => res)
-    .catch(
-      err =>
-        new TssResponse(
-          null,
-          response.status,
-          response.statusText
-        )
-    );
+    .catch(err => ({
+      content: null,
+      status: response.status,
+      title: response.statusText
+    } as IResponse<any>));
 
   return await json;
 }

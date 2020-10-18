@@ -1,5 +1,6 @@
 import { Customer, defaultCustomer, ICreateCustomerRequest, ILoginRequest, Role } from "../../../../modules/customer/customer.model";
 import { getLoginToken, setLoginToken } from "../../../../modules/shared/helpers/token.helper";
+import { cyCustomer } from "../../customer/customer.model";
 import { getRandomNumbers, getRandomString } from "./string.helper";
 
 export function mockRootAdminAccount() {
@@ -24,7 +25,8 @@ export function mockRandomAccount() {
 export function mockRandomCustomer() {
     const randomText = getRandomString(5);
     const randomNums = getRandomNumbers(10);
-    const res: Customer = {
+    const newPassword = getRandomString(5);
+    const res: cyCustomer = {
         ...defaultCustomer,
         name: randomText,
         email: randomText + '@mail.com',
@@ -39,7 +41,9 @@ export function mockRandomCustomer() {
         address2: randomText,
         country: randomText,
         shippingRegionId: 2,
-        password: randomText
+        password: randomText,
+        newPassword,
+        confirmNewPassword: newPassword
     }
     return res;
 }
@@ -57,7 +61,7 @@ export function cySetCustomerLoginToken() {
 }
 
 
-export function cyGetExistingCustomer(): Customer {
+export function cyGetExistingCustomer(): cyCustomer {
     const customer = JSON.parse(Cypress.env('CYPRESS_CUSTOMER'));
     return customer;
 }

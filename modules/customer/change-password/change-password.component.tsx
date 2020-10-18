@@ -8,10 +8,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React, { useState } from 'react';
 import { mb, mt } from '../../shared/layout/layout.style';
 import { isValidForm } from '../../shared/validator/validator';
-import { CustomerUpdatePasswordState, CustomerUpdatePasswordStateValidator, defaultCustomerUpdatePasswordState } from '../customer.model';
+import { CustomerUpdatePasswordState, CustomerUpdatePasswordStateValidator, customerUrl, defaultCustomerUpdatePasswordState } from '../customer.model';
 import { updatePassword } from '../customer.service';
 import { PASSWORD, NEW_PASSWORD, CONFIRM_NEW_PASSWORD, SUBMIT } from '../../shared/tag/tag.model';
 import { goTo } from '../../shared/helpers/auth.helper';
+import SuccessComponent, { SuccessComponentProps, defaultSuccessComponentProps } from '../../shared/success/success.component';
+import { isOk } from '../../shared/helpers/http.helper';
 
 const useStyles = makeStyles(theme => ({
     mb: mb,
@@ -28,6 +30,7 @@ export default function ChangePasswordComponent({
     const classes = useStyles({});
     const [state, setState] = useState<CustomerUpdatePasswordState>(defaultCustomerUpdatePasswordState);
     const [submitted, setSubmitted] = useState<boolean>(false);
+    const [finished, setFinished] = useState<SuccessComponentProps>(defaultSuccessComponentProps);
     const errors = new CustomerUpdatePasswordStateValidator().validate(state);
 
     function change(event) {
@@ -43,20 +46,21 @@ export default function ChangePasswordComponent({
 
     async function submit(event) {
         setSubmitted(true);
-
         if (!isValidForm(errors)) return;
-
-
-
         const response = await updatePassword({
             customerId: userId,
             password: state.password,
             newPassword: state.newPassword
         })
-
-        if (response.status === 200) goTo('/')
-
+        setFinished({ success: isOk(response.status), title: response.title })
     }
+
+    if (finished.success)
+        return <SuccessComponent
+            title={finished.title}
+            onConfirm={null}
+            confirmText={null}
+        />;
 
     return (
         <Grid

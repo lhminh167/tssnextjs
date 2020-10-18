@@ -61,18 +61,17 @@ export function typeCreateProductForm(input: IProduct) {
     cy.getEl(tag(ITEM, '', DISPLAY)).first().click();
     cy.get('body').click('left');
 
-    cy.getEl(THUMBNAIL).within(() => {
-        cy.getEl(UPLOAD).attachFile(TEST_IMAGE)
-    });
+    cy.getEl(THUMBNAIL).within(cyAttachImage);
 
-    cy.getEl(IMAGE).within(() => {
-        cy.getEl(UPLOAD).attachFile(TEST_IMAGE)
-    });
+    cy.getEl(IMAGE).within(cyAttachImage);
 
-    cy.getEl(IMAGE_2).within(() => {
-        cy.getEl(UPLOAD).attachFile(TEST_IMAGE)
-    });
+    cy.getEl(IMAGE_2).within(cyAttachImage);
 
+}
+
+export function cyAttachImage() {
+    cy.getEl(UPLOAD).attachFile(TEST_IMAGE)
+    cy.getEl(NAME).should('have.text', TEST_IMAGE)
 }
 
 export function cyCreateRandomProduct() {

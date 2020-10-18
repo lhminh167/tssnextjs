@@ -1,7 +1,7 @@
 import { Validator } from 'fluentvalidation-ts';
 import { defaultShippingRegion, ShippingRegion } from '../shared/models/shipping-region.model';
 
-const apiCustomerBaseUrl = 'Customer';
+export const apiCustomerBaseUrl = 'Customer';
 
 export const apiCustomerUrl = {
     baseUrl: apiCustomerBaseUrl,
@@ -39,7 +39,6 @@ export interface Customer {
     customerId?: string;
     name?: string;
     email?: string;
-    password?: string;
     creditCard?: string;
     address1?: string;
     address2?: string;
@@ -64,7 +63,6 @@ export const defaultCustomer: Customer = {
     customerId: null,
     name: 'Visitor',
     email: '',
-    password: '',
     creditCard: '',
     address1: '',
     address2: '',

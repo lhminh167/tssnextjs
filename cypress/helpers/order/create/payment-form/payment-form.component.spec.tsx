@@ -5,38 +5,20 @@ export function typePaymentForm(input: IPaymentInfo) {
   cy.wait(5000).get(".__PrivateStripeElement > iframe").then(($element) => {
     const $body = $element.contents().find("body");
 
-    let stripe = cy.wrap($body);
-    stripe
-      .find('[name="cardnumber"]')
-      .should('exist')
-      .click()
-      .type(input.cardNumber);
-
-    stripe = cy.wrap($body);
-    stripe
-      .find('[name="exp-date"]')
-      .should('exist')
-      .click()
-      .type(input.expDate);
-
-    stripe = cy.wrap($body);
-    stripe
-      .find('[name="cvc"]')
-      .should('exist')
-
-      .click()
-      .type(input.cvc);
-
-    stripe = cy.wrap($body);
-    stripe
-      .find('[name="postal"]')
-      .should('exist')
-
-      .click()
-      .type(input.postal);
+    typePaymentField($body, 'cardnumber', input.cardNumber);
+    typePaymentField($body, 'exp-date', input.expDate);
+    typePaymentField($body, 'cvc', input.cvc);
+    typePaymentField($body, 'postal', input.postal);
   });
 
   return cy;
+}
+
+function typePaymentField($body: any, field: string, value: string) {
+  cy
+    .wrap($body).find(`[name="${field}"]`).should('exist')
+    .click().clear().should('have.value', '')
+    .type(value)
 }
 
 export function getChallengeFrame() {

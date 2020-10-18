@@ -12,8 +12,12 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-import { saveCustomerLoginToken, saveAdminLoginToken, saveProduct } from './helpers';
 require('dotenv').config();
+import {
+  saveCustomerLoginToken, saveAdminLoginToken, saveProduct,
+  percyHeathCheck
+} from './helpers';
+const preprocessor = require('cypress-react-unit-test/plugins/next')
 
 /**
  * @type {Cypress.PluginConfig}
@@ -22,8 +26,12 @@ export default async (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   config.env = process.env;
+  preprocessor(on, config)
+
+  // require('cypress-react-unit-test/plugins/react-scripts')(on, config)
   await saveCustomerLoginToken(config);
   await saveAdminLoginToken(config);
   await saveProduct(config);
+  percyHeathCheck(on, config);
   return config;
 }

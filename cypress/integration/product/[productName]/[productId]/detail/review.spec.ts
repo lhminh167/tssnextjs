@@ -1,16 +1,19 @@
+import { createCustomer } from "../../../../../../modules/customer/customer.service";
 import { createReview } from "../../../../../../modules/product/review/review.service";
 import { HttpMethod } from "../../../../../../modules/shared/crud/crud.model";
 import { getUrl } from "../../../../../../modules/shared/crud/crud.service";
+import { removeLoginToken, setLoginToken } from "../../../../../../modules/shared/helpers/token.helper";
 import { apiReviewUrl } from "../../../../../../modules/shared/models/review.model";
-import { ADD, EDIT, tag, ITEM, LOGIN_LINK, RATING, REGISTER_LINK, REMOVE, REVIEW, REVIEW_1, SUBMIT, UNAUTHORIZED, YES } from "../../../../../../modules/shared/tag/tag.model";
+import { ADD, EDIT, tag, ITEM, LOGIN_LINK, RATING, REGISTER_LINK, REMOVE, REVIEW, REVIEW_1, SUBMIT, UNAUTHORIZED, YES, DESCRIPTION } from "../../../../../../modules/shared/tag/tag.model";
 import { cyVisitExistingProduct } from "../../../../../helpers/product/create/create-product.component.spec";
-import { cyClickRating, cyCreateRandomReview, mockRandomReview } from "../../../../../helpers/product/review/create/create-product-review.component.spec";
+import { cyClickRating, cyCreateRandomReview, mockRandomReview, ReviewCreateTest } from "../../../../../helpers/product/review/create/create-product-review.component.spec";
 import ReviewDeleteTest from "../../../../../helpers/product/review/delete/product-review-delete.component.spec";
-import ProductReviewComponentTest from "../../../../../helpers/product/review/detail/product-review.component.spec";
-import { cySetAdminLoginToken, cySetCustomerLoginToken } from "../../../../../helpers/shared/helpers/auth.helper";
+import ReviewDetailTest from "../../../../../helpers/product/review/detail/product-review.component.spec";
+import ReviewEditTest from "../../../../../helpers/product/review/edit/product-review-edit.component.spec";
+import { cySetAdminLoginToken, cySetCustomerLoginToken, mockRandomCustomer } from "../../../../../helpers/shared/helpers/auth.helper";
 import { IReview } from "../../../../../helpers/shared/models/review.model";
 
-it('Product Detail Page -> Review -> When user is not logged in, Adding Review Form, Edit Review, and Delete Review buttons are hidden', () => {
+it('Product Detail Page -> Review -> When user is not logged in, then Adding Review Form, Edit Review, and Delete Review buttons are hidden #working', () => {
     cyVisitExistingProduct();
     cy.getEl(UNAUTHORIZED).should('have.text', 'Please login or register to add a review.')
     cy.getEl(LOGIN_LINK).should('have.text', 'login').click().getLink().load();
@@ -19,84 +22,44 @@ it('Product Detail Page -> Review -> When user is not logged in, Adding Review F
     cyVisitExistingProduct();
 });
 
-it('Product Detail Page -> Review -> When user is logged in as customer, user can create a new review', () => {
+it('Product Detail Page -> Review -> When user logs in as customer, then user can create a new review #working', () => {
     cy
         .server()
         .route({ url: getUrl(apiReviewUrl.baseUrl), method: HttpMethod.POST }).as('addRoute')
         .route({ url: getUrl(apiReviewUrl.baseUrl + '**') }).as('listRoute')
         .pipe(cySetCustomerLoginToken)
-        .pipe(cyVisitExistingProduct);
-
-    const randomReview = mockRandomReview();
-    cy.getEl(tag(REVIEW_1, '', ADD + REVIEW)).type(randomReview.review1);
-    cy.getEl(tag(RATING, '', ADD + REVIEW)).within(() => cyClickRating(randomReview.rating, ADD + '-' + RATING));
-    cy.getEl(tag(SUBMIT, '', ADD + REVIEW)).click();
-    cy.wait('@addRoute', { timeout: 60000 }).its('responseBody.content').then(review => {
-        cy.wait('@listRoute', { timeout: 60000 });
-        ProductReviewComponentTest(review);
-    });
-});
-
-it('Product Detail Page -> Review -> When user is logged in as customer, user can edit their own review', () => {
-    cy
-        .pipe(cyCreateRandomReview).its('content.reviewId').as('reviewId')
         .pipe(cyVisitExistingProduct)
+    cy
+        .getEl(tag(REVIEW_1, '', ADD + REVIEW)).takeScreenShot()
+        .pipe(ReviewCreateTest)
+        .wait('@addRoute').its('responseBody.content').as('review').wait('@listRoute')
+        .get('@review').chain(ReviewDetailTest)
+});
 
-        .get('@reviewId').then((reviewId: any) => {
-            cy
-                .server()
-                .route({ url: getUrl(apiReviewUrl.detail(reviewId)), method: HttpMethod.PUT }).as('editRoute')
-                .route({ url: getUrl(apiReviewUrl.baseUrl + '**') }).as('listRoute');
+it('Product Detail Page -> Review -> When user logs in as customer, then user can edit or delete their own review #working', () => {
+    cy
+        .pipe(cyCreateRandomReview)
+        .pipe(cyVisitExistingProduct)
+        .get('@reviewId').chain(ReviewEditTest)
+        .get('@reviewId').chain(ReviewDeleteTest)
+});
 
-            const randomReview = mockRandomReview();
-            cy
-                .getEl(tag(EDIT, reviewId, REVIEW)).click();
-            cy
-                .getEl(tag(REVIEW_1, reviewId, EDIT + REVIEW))
-                .type(randomReview.review1);
-            cy
-                .getEl(tag(RATING, reviewId, EDIT + REVIEW))
-                .within(() => cyClickRating(randomReview.rating, EDIT + '-' + RATING));
-            cy
-                .getEl(tag(SUBMIT, reviewId, EDIT + REVIEW))
-                .click();
+it('Product Detail Page -> Review -> When user logs in as customer, then user cannot edit or delete reviews of other customers #working', () => {
+    cy
+        .pipe(cyCreateRandomReview).chain(removeLoginToken)
+        .pipe(mockRandomCustomer).pipe(createCustomer).its('content.loginToken').chain(setLoginToken)
+        .pipe(cyVisitExistingProduct)
+        .get('@reviewId').then(reviewId => {
+            cy.shouldNotExist(tag(EDIT, reviewId, REVIEW))
+            cy.shouldNotExist(tag(REMOVE, reviewId, REVIEW))
         })
-        ;
-
-    cy.wait('@editRoute', { timeout: 60000 }).its('responseBody.content').then(review => {
-        cy.wait('@listRoute', { timeout: 60000 });
-        ProductReviewComponentTest(review);
-    });
-
 });
 
-it('Product Detail Page -> Review -> When user is logged in as customer, user can delete their own review', () => {
+it('Product Detail Page -> Review -> When user logs in as admin, then user can edit or delete any review #working', () => {
     cy
-        .pipe(cyCreateRandomReview).as('review')
-        .then(ReviewDeleteTest)
-
-});
-
-it('Product Detail Page -> Review -> When user is logged in as customer, user cannot edit other\'s review', () => {
-
-
-});
-
-it('Product Detail Page -> Review -> When user is logged in as customer, user cannot delete other\'s review', () => {
-
-
-});
-
-it('Product Detail Page -> Review -> When user is logged in as admin, user can edit any review', () => {
-
-
-});
-
-it('Product Detail Page -> Review -> When user is logged in as admin, user can delete any review', () => {
-    cy
-        .pipe(cyCreateRandomReview).as('review')
+        .pipe(cyCreateRandomReview).chain(removeLoginToken)
         .pipe(cySetAdminLoginToken)
         .pipe(cyVisitExistingProduct)
-        .get('@review')
-        .chain(ReviewDeleteTest)
+        .get('@reviewId').chain(ReviewEditTest)
+        .get('@reviewId').chain(ReviewDeleteTest)
 });

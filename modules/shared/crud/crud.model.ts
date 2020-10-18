@@ -55,34 +55,6 @@ export interface IResponse<T> {
   errors?: any[];
 }
 
-export class Response<T> implements IResponse<T> {
-  constructor(
-    content?: T,
-    status?: number,
-    title?: string,
-    type?: string,
-    detail?: string,
-    instance?: string,
-    errors?: any[]
-  ) {
-    this.content = content;
-    this.status = status;
-    this.type = type;
-    this.title = title;
-    this.detail = detail;
-    this.instance = instance;
-    this.errors = errors;
-  }
-
-  content?: T;
-  status?: number;
-  type?: string;
-  title?: string;
-  detail?: string;
-  instance?: string;
-  errors?: any[];
-}
-
 export interface PayloadAction<T> {
   type?: string;
   payload: IResponse<T>;

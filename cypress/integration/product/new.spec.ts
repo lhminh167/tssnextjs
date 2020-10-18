@@ -14,7 +14,7 @@ it('Add New Product Page -> Add New Product -> When user logged in as admin, the
     .visit(productUrl.new)
     .pipe(mockRandomProduct)
     .chain(typeCreateProductForm)
-  cy.getEl(SUBMIT).click().wait('@route', { timeout: 60000 }).its('responseBody.content').as('product');
+  cy.getEl(SUBMIT).click().wait('@route').its('responseBody.content').as('product');
   cy.getEl(YES).click();
   cy.get('@product').chain(productUrl.detail).its('as')
     .load();

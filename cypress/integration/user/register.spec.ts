@@ -1,23 +1,23 @@
-import { apiCustomerUrl, Customer, customerUrl } from "../../../modules/customer/customer.model";
+import { apiCustomerUrl, customerUrl } from "../../../modules/customer/customer.model";
 import { createCustomer } from "../../../modules/customer/customer.service";
 import { HttpMethod } from "../../../modules/shared/crud/crud.model";
-import { setLoginToken, removeLoginToken } from "../../../modules/shared/helpers/token.helper";
-import { FORGOT_PASSWORD, LOGIN_LINK, SUBMIT } from "../../../modules/shared/tag/tag.model";
+import { setLoginToken } from "../../../modules/shared/helpers/token.helper";
+import { LOGIN_LINK, SUBMIT } from "../../../modules/shared/tag/tag.model";
 import { apiShoppingCartUrl, shoppingCartUrl } from "../../../modules/shopping-cart/shopping-cart.model";
 import { addShoppingCartItem } from "../../../modules/shopping-cart/shopping-cart.service";
 import { typeRegister } from "../../helpers/customer/create/create-customer.component.spec";
-import CustomerDetailTest from "../../helpers/customer/detail/customer-detail.component.spec";
+import UserDetailTest from "../../helpers/customer/detail/customer-detail.component.spec";
 import { cyGetExistingProduct } from "../../helpers/product/create/create-product.component.spec";
 import { cySetCustomerLoginToken, mockRandomAccount, mockRandomCustomer } from "../../helpers/shared/helpers/auth.helper";
 import { ShoppingCartItemDetailTest } from "../../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { fromProductToCartItem } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-it('Register Page -> Login -> When not-logged-in user accesses Register Page, then user can register a new account #working', () => {
-    const randomCustomer = mockRandomAccount();
+it('Register Page -> Register -> When not-logged-in user accesses Register Page, then user can register a new account #working', () => {
+    const user = mockRandomAccount();
     cy
         .server().route({ url: apiCustomerUrl.register, method: HttpMethod.POST }).as('route')
         .visit(customerUrl.register())
-        .wrap(randomCustomer)
+        .wrap(user)
         .chain(typeRegister)
     cy
         .getEl(SUBMIT).click()
@@ -26,8 +26,8 @@ it('Register Page -> Login -> When not-logged-in user accesses Register Page, th
 
     cy
         .get('@user').its('customerId').chain(customerUrl.detail).its('as')
-        .pipe(cy.visit).wrap(randomCustomer)
-        .chain(CustomerDetailTest);
+        .pipe(cy.visit).wrap(user)
+        .chain(UserDetailTest);
 });
 
 it('Register Page -> Access Denied -> When logged-in user accesses Register Page, then user is redirected to Home Page #working', () => {

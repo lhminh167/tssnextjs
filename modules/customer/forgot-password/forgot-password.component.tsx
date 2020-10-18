@@ -8,9 +8,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React, { useState } from 'react';
 import { mb, mt } from '../../shared/layout/layout.style';
 import { isValidForm } from '../../shared/validator/validator';
-import { CustomerForgotPasswordRequest, CustomerForgotPasswordRequestValidator, defaultCustomerForgotPasswordRequest } from '../customer.model';
+import { CustomerForgotPasswordRequest, CustomerForgotPasswordRequestValidator, customerUrl, defaultCustomerForgotPasswordRequest } from '../customer.model';
 import { forgotPassword } from '../customer.service';
 import { EMAIL, SUBMIT } from '../../shared/tag/tag.model';
+import SuccessComponent, { defaultSuccessComponentProps, SuccessComponentProps } from '../../shared/success/success.component';
+import { isOk } from '../../shared/helpers/http.helper';
+import { goTo } from '../../shared/helpers/auth.helper';
 
 const useStyles = makeStyles(theme => ({
     mb: mb,
@@ -25,6 +28,7 @@ export default function ForgotPasswordComponent({
     const classes = useStyles({});
     const [state, setState] = useState<CustomerForgotPasswordRequest>(defaultCustomerForgotPasswordRequest);
     const [submitted, setSubmitted] = useState<boolean>(false);
+    const [finished, setFinished] = useState<SuccessComponentProps>(defaultSuccessComponentProps);
     const errors = new CustomerForgotPasswordRequestValidator().validate(state);
 
     function change(event) {
@@ -40,14 +44,17 @@ export default function ForgotPasswordComponent({
 
     async function submit(event) {
         setSubmitted(true);
-
         if (!isValidForm(errors)) return;
-
-
-
         const response = await forgotPassword(state);
-
+        setFinished({ success: isOk(response.status), title: response.title })
     }
+
+    if (finished.success)
+        return <SuccessComponent
+            title={finished.title}
+            onConfirm={null}
+            confirmText={null}
+        />;
 
     return (
         <Grid

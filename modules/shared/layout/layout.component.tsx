@@ -8,7 +8,7 @@ import FooterComponent from "../footer/footer.component";
 import { mb } from "./layout.style";
 import { getValidLoginToken, decodeLoginToken } from "../helpers/token.helper";
 import { shoppingCartItemCountSlice } from "../../shopping-cart/shopping-cart.slice";
-import { getCustomerIdNumberFromLoginToken } from "../helpers/auth.helper";
+import { getCurrentUser, getCustomerIdNumberFromLoginToken } from "../helpers/auth.helper";
 import { currentUserSlice } from "../../customer/customer.slice";
 import { CssBaseline } from "@material-ui/core";
 import * as Sentry from '@sentry/browser';
@@ -39,28 +39,13 @@ export default function Layout(props) {
         if (process.env.ENV !== 'production')
             Sentry.init({ dsn: "https://092f990227db4c81b121d898afcd93dc@sentry.io/5189172" });
 
-        getCurrentUser();
+        getCurrentUser(dispatch);
 
         // Remove the server-side injected CSS.
         const jssStyles = document.querySelector("#jss-server-side");
         if (jssStyles) jssStyles.parentNode.removeChild(jssStyles);
 
     }, []);
-
-
-    function getCurrentUser() {
-        if (!getValidLoginToken()) return;
-
-
-        dispatch(
-            shoppingCartItemCountSlice.actions.getTotalQuantityPending()
-        );
-
-        const customerId = getCustomerIdNumberFromLoginToken();
-        customerId
-            ? dispatch(currentUserSlice.actions.getCustomerPending(customerId))
-            : dispatch(currentUserSlice.actions.setCurrentUser(decodeLoginToken()));
-    }
 
     return (
         <ThemeProvider theme={theme}>

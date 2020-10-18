@@ -1,5 +1,8 @@
 import { Container } from '@material-ui/core';
+import Router, { useRouter } from 'next/router';
 import querystring from 'query-string';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { END } from 'redux-saga';
 import { ProductFilterMetadataComponent } from '../../modules/product/filter/product-filter-metadata.component';
 import ProductFilterComponent from '../../modules/product/filter/product-filter.component';
@@ -7,9 +10,17 @@ import { defaultProductSearchRequest } from '../../modules/product/filter/produc
 import productFilterSlice from '../../modules/product/filter/product-filter.slice';
 import { initializeStore } from '../../modules/root/root.store';
 import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
+import { getCurrentUser } from '../../modules/shared/helpers/auth.helper';
 
 
 export default function ProductSearchPage(props) {
+    const dispatch = useDispatch();
+    const router = useRouter();
+
+    useEffect(() => {
+        getCurrentUser(dispatch);
+    }, [router.query])
+
     return (
         <Container>
             <ErrorBoundary>

@@ -1,4 +1,4 @@
-import { defaultPaginationRequest, PaginatedList, Response } from "../../../../modules/shared/crud/crud.model";
+import { defaultPaginationRequest, PaginatedList, IResponse } from "../../../../modules/shared/crud/crud.model";
 import { encodeAttributes } from "../../../../modules/shared/helpers/product.helper";
 import { getLoginToken, setLoginToken } from "../../../../modules/shared/helpers/token.helper";
 import { IProduct } from "../../../../modules/shared/models/product.model";
@@ -9,13 +9,13 @@ import { cySetCustomerLoginToken } from "../../shared/helpers/auth.helper";
 
 export async function cyRemoveAllCartItems(buyNow: boolean) {
 
-    const cart: Response<PaginatedList<IShopingCartItem>> = await getShoppingCart({
+    const cart: IResponse<PaginatedList<IShopingCartItem>> = await getShoppingCart({
         ...defaultPaginationRequest,
         buyNow
     });
 
     for (const item of cart.content.items) {
-        const res: Response<IShopingCartItem> = await removeShoppingCartItem(item);
+        const res: IResponse<IShopingCartItem> = await removeShoppingCartItem(item);
         expect(res.status, 'Response status code for removing shopping cart item ID ' + item.itemId).to.eq(200);
     };
 
@@ -67,7 +67,11 @@ export function cartItemShouldBeRemoved(input: IShopingCartItem) {
 }
 
 export function finishShoppingCartPage() {
-    cy.get(`[data-cy*="${ITEM}"]`).should('exist');
+    cy.pipe(cyGetAnyCartItem).should('exist');
     cy.getEl(SUBMIT).click();
     return cy;
+}
+
+export function cyGetAnyCartItem() {
+    return cy.get(`[data-cy*="${ITEM}"]`);
 }

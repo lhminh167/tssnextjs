@@ -1,6 +1,6 @@
+import { Order } from "../../../../modules/order/order.model"
 import { formatDatetime } from "../../../../modules/shared/helpers/string.helper"
 import { tag, ID, ORDER, STATUS, USER, NAME, CREATED_ON, DATETIME, SHIPPING } from "../../../../modules/shared/tag/tag.model"
-import { Order } from "../order.model"
 
 export function OrderListItemDetailTest(input: Order) {
     cy

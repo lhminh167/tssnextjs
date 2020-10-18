@@ -2,6 +2,9 @@
   "baseUrl": "http://localhost:5009",
   "projectId": "ner8qg",
   "experimentalFetchPolyfill": true,
+  "experimentalComponentTesting": true,
   "chromeWebSecurity": false,
-  "defaultCommandTimeout": 60000
+  "defaultCommandTimeout": 60000,
+  "requestTimeout": 60000,
+  "responseTimeout": 60000
 }

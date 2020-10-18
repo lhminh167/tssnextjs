@@ -16,6 +16,10 @@ export const apiOrderUrl = {
     shipOk: apiOrderBaseUrl + '/shipOk',
     shipNotOk: apiOrderBaseUrl + '/shipNotOk',
     search: (query: PaginationRequest) => `${apiOrderBaseUrl}?${queryString.stringify(query)}`,
+    detail: (orderId: number) => ({
+        href: `${apiOrderBaseUrl}/[orderId]`,
+        as: `${apiOrderBaseUrl}/${orderId}`,
+    }),
 };
 
 const orderBaseUrl = '/order';

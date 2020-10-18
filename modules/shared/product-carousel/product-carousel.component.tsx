@@ -11,7 +11,7 @@ import { PaginatedList } from '../crud/crud.model';
 import { IProduct } from '../models/product.model';
 import ProductHorizontalGallery from '../product-horizontal-gallery/product-horizontal-gallery.component';
 import ErrorBoundary from '../error-boundary/error-boundary.component';
-import { CAROUSEL_DOT } from '../tag/tag.model';
+import { DOT } from '../tag/tag.model';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,6 +22,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     }
   })
 );
+
+export const defaultAutoplay: number = 3000;
 
 interface Props {
   data: PaginatedList<IProduct>;
@@ -55,7 +57,7 @@ export default function ProductCarouselComponent({
         items: [data.items[pageIndex]],
         pageIndex
       });
-    }, 3000);
+    }, autoplay);
 
     return () => clearInterval(interval);
   }, [state.pageIndex]);
@@ -101,7 +103,7 @@ export default function ProductCarouselComponent({
                   pageSize: 1
                 })
               }
-              data-cy={CAROUSEL_DOT}
+              data-cy={DOT}
             >
               <FiberManualRecordIcon
                 fontSize='inherit'

@@ -1,5 +1,5 @@
 import { Color } from '@material-ui/lab';
-import { IResponse, Response } from '../crud/crud.model';
+import { IResponse } from '../crud/crud.model';
 
 export interface INotifierState {
   isOpen: boolean;
@@ -9,6 +9,6 @@ export interface INotifierState {
 
 export const defaultNotifierState: INotifierState = {
   isOpen: false,
-  data: new Response(),
+  data: {},
   color: 'success'
 };

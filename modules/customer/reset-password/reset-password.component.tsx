@@ -8,10 +8,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React, { useState, useEffect } from 'react';
 import { mb, mt } from '../../shared/layout/layout.style';
 import { isValidForm } from '../../shared/validator/validator';
-import { CustomerPasswordResetState, CustomerPasswordResetStateValidator, defaultCustomerPasswordResetState } from '../customer.model';
+import { CustomerPasswordResetState, CustomerPasswordResetStateValidator, customerUrl, defaultCustomerPasswordResetState } from '../customer.model';
 import { resetPassword, validateResetPasswordToken } from '../customer.service';
 import { useRouter } from 'next/router';
-import { CONFIRM_NEW_PASSWORD, NEW_PASSWORD, SUBMIT } from '../../shared/tag/tag.model';
+import { CONFIRM_NEW_PASSWORD, ERROR, NEW_PASSWORD, SUBMIT } from '../../shared/tag/tag.model';
+import { isOk } from '../../shared/helpers/http.helper';
+import SuccessComponent, { defaultSuccessComponentProps, SuccessComponentProps } from '../../shared/success/success.component';
+import { goTo } from '../../shared/helpers/auth.helper';
 
 const useStyles = makeStyles(theme => ({
     mb: mb,
@@ -31,16 +34,17 @@ export default function ResetPasswordComponent({
     const router = useRouter();
     const customerId: number = router.query.userId as any;
     const resetPasswordToken: string = router.query.resetPasswordToken as any;
+    const [finished, setFinished] = useState<SuccessComponentProps>(defaultSuccessComponentProps);
 
     useEffect(() => {
-        validateResetPasswordToken({
-            customerId,
-            resetPasswordToken
-        }).then(res => {
-            if (res.status < 300)
-                setIsValidToken(true);
-        })
-    }, []);
+        if (customerId && resetPasswordToken)
+            validateResetPasswordToken({
+                customerId,
+                resetPasswordToken
+            }).then(res => {
+                if (isOk(res.status)) setIsValidToken(true);
+            })
+    }, [customerId, resetPasswordToken]);
 
     function change(event) {
         const target = event.target;
@@ -55,57 +59,27 @@ export default function ResetPasswordComponent({
 
     async function submit(event) {
         setSubmitted(true);
-
         if (!isValidForm(errors)) return;
-
-
-
         const response = await resetPassword({
             customerId,
             resetPasswordToken,
             newPassword: state.newPassword
         })
-
+        setFinished({ success: isOk(response.status), title: response.title })
     }
 
+    function login() {
+        goTo(customerUrl.login());
+    }
+
+    if (finished.success)
+        return <SuccessComponent
+            title={finished.title}
+            onConfirm={login}
+            confirmText='Login'
+        />;
+
     if (isValidToken) return (
-        <Grid
-            container
-        >
-            <Grid item xs={12}
-                container
-                justify='center'
-                className={classes.mt}
-            >
-                <Avatar>
-                    <LockOutlinedIcon />
-                </Avatar>
-            </Grid>
-            <Grid item xs={12}
-                container
-                justify='center'
-                className={classes.mb}
-            >
-                <Typography component='h1' variant='h5'>
-                    Reset Password
-                </Typography>
-            </Grid>
-            <Grid item xs={12}
-                container
-                justify='center'
-                className={classes.mb}
-            >
-                <Typography component='h1' variant='h5'
-                    data-cy={NEW_PASSWORD}
-                >
-                    The password reset link that you provided is invalid or has expired.
-                </Typography>
-            </Grid>
-
-        </Grid>
-    )
-
-    return (
         <Grid
             container
             spacing={2}
@@ -175,4 +149,6 @@ export default function ResetPasswordComponent({
             </Grid>
         </Grid >
     );
+
+    return null;
 }

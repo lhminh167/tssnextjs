@@ -35,7 +35,7 @@ export async function forgotPassword(input: CustomerForgotPasswordRequest) {
 }
 
 export async function validateResetPasswordToken(input: CustomerPasswordResetTokenValidationRequest) {
-    return await put(apiCustomerUrl.resetPassword(input.customerId, input.resetPasswordToken), 0, input);
+    return await get(apiCustomerUrl.resetPassword(input.customerId, input.resetPasswordToken), 0);
 }
 
 export async function resetPassword(input: CustomerPasswordResetRequest) {

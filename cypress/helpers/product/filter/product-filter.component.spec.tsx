@@ -1,12 +1,10 @@
-import { size } from "cypress/types/lodash";
 import { getProduct } from "../../../../modules/product/detail/product-detail.service";
-import { IProductSearchRequest, defaultProductSearchRequest, SortByEnum, productUrl, apiProductUrl } from "../../../../modules/product/filter/product-filter.model";
-import { getUrl } from "../../../../modules/shared/crud/crud.service";
+import { defaultProductSearchRequest, IProductSearchRequest, productUrl } from "../../../../modules/product/filter/product-filter.model";
 import { toNumber } from "../../../../modules/shared/helpers/auth.helper";
-import { getCartItemColor, getColors, getSizes } from "../../../../modules/shared/helpers/product.helper";
-import { IAttributeValue } from "../../../../modules/shared/models/attribute-value.model";
-import { IProduct } from "../../../../modules/shared/models/product.model";
-import { COUNT, DISCOUNTED_PRICE, PRODUCT_CARD, SORT_BY, SORT_ORDER, SUBMIT } from "../../../../modules/shared/tag/tag.model";
+import { getColors, getSizes } from "../../../../modules/shared/helpers/product.helper";
+import { COUNT, PRODUCT_CARD, SORT_BY, SORT_ORDER, SUBMIT } from "../../../../modules/shared/tag/tag.model";
+import { getRandomNumber } from "../../shared/helpers/string.helper";
+import { cyGetFilter } from "../create/create-product.component.spec";
 
 export default function setupProductSortingTest(input: IProductSearchRequest) {
 
@@ -84,4 +82,32 @@ export function ProductCategoryTest(productId: number, category: string) {
         .pipe(getProduct)
         .its('content.category.name')
         .should('equal', category);
+}
+
+export function getMinPrice(): number {
+    return getRandomPrice(true);
+}
+
+export function getMaxPrice(): number {
+    return getRandomPrice(false);
+}
+
+export function getRandomPrice(isMinimum: boolean): number {
+    const filter = cyGetFilter();
+    const minLimit = filter.minPrice;
+    const maxLimit = filter.maxPrice;
+    const middlePrice = (minLimit + maxLimit) / 2;
+
+    return isMinimum ?
+        getRandomNumber(minLimit, middlePrice) :
+        getRandomNumber(middlePrice, maxLimit);
+}
+
+export function searchByPrice() {
+
+    productUrl.search({
+        ...defaultProductSearchRequest,
+        minPrice: getMinPrice(),
+        maxPrice: getMaxPrice(),
+    })
 }
