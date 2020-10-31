@@ -6,15 +6,16 @@ import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmatio
 import { UploadRequest } from '../../shared/crud/crud.model';
 import { upload } from '../../shared/crud/crud.service';
 import { goTo, toNumber } from '../../shared/helpers/auth.helper';
+import { isOk } from '../../shared/helpers/http.helper';
 import { toUrl } from '../../shared/helpers/string.helper';
 import { IAttributeValue } from '../../shared/models/attribute-value.model';
-import { defaultProduct, IProduct, productDisplayOptions } from '../../shared/models/product.model';
+import { defaultProduct, getImage2Name, getImageName, getThumbnailName, IProduct, productDisplayOptions } from '../../shared/models/product.model';
 import { CATEGORY, COLOR, DESCRIPTION, DISCOUNTED_PRICE, DISPLAY, IMAGE, IMAGE_2, ITEM, NAME, PRICE, SIZE, SUBMIT, tag, THUMBNAIL } from '../../shared/tag/tag.model';
 import UploadComponent from '../../shared/upload/upload.component';
 import { isValidForm } from '../../shared/validator/validator';
 import { IProductFilterCategory, ProductFilterFilterEnum, productUrl } from '../filter/product-filter.model';
 import productFilterSlice from '../filter/product-filter.slice';
-import { defaultEditProductState, defaultFile, EditProductRequestValidator, IEditProductRequest, IEditProductState } from './edit-product.model';
+import { defaultEditProductState, defaultFile, EditProductStateValidator, IEditProductRequest, IEditProductState } from './edit-product.model';
 import { editProduct } from './edit-product.service';
 
 interface Props {
@@ -35,14 +36,13 @@ export default function EditProductComponent({
         image2: { ...defaultFile, name: data.image2 },
         thumbnail: { ...defaultFile, name: data.thumbnail },
         display: data.display.toString(),
-        size: data.attributes.filter(a => a.name === 'Size').map(a => a.attributeValueId),
-        color: data.attributes.filter(a => a.name === 'Color').map(a => a.attributeValueId),
-        categoryId: data.category.categoryId
-
+        size: data.attributes.filter(a => a.name === 'Size').map(a => a.attributeValueId.toString()),
+        color: data.attributes.filter(a => a.name === 'Color').map(a => a.attributeValueId.toString()),
+        categoryId: data.category.categoryId.toString(),
     });
     const [submitted, setSubmitted] = useState<boolean>(false);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-    let errors: any = {};
+    let errors = new EditProductStateValidator().validate(state);;
 
     const colors = useSelector<IRootState, IAttributeValue[]>(
         state => state.productFilter.filter?.data?.attributes.filter(a => a.name === ProductFilterFilterEnum.Color)
@@ -75,6 +75,8 @@ export default function EditProductComponent({
     }
 
     async function submit(event) {
+        setSubmitted(true);
+        if (!isValidForm(errors)) return;
 
         const dataToSubmit: IEditProductRequest = {
             productId: state.productId,
@@ -82,21 +84,18 @@ export default function EditProductComponent({
             description: state.description,
             price: toNumber(state.price),
             discountedPrice: toNumber(state.discountedPrice),
-            categoryId: state.categoryId,
-            attributes: [...state.color, ...state.size],
+            categoryId: toNumber(state.categoryId),
+            attributes: [...state.color, ...state.size].map(x => toNumber(x)),
             display: toNumber(state.display),
-            thumbnail: toUrl(state.name) + '-thumbnail',
-            image: toUrl(state.name),
-            image2: toUrl(state.name) + '-2',
+            thumbnail: getThumbnailName(state.name),
+            image: getImageName(state.name),
+            image2: getImage2Name(state.name),
         };
-        setSubmitted(true);
-        errors = new EditProductRequestValidator().validate(dataToSubmit);
 
-        if (!isValidForm(errors)) return;
         await updateImages(dataToSubmit);
+
         const response = await editProduct(dataToSubmit);
         setIsDialogOpen(true);
-
     }
 
     async function updateImages(input: IEditProductRequest) {
@@ -264,7 +263,7 @@ export default function EditProductComponent({
                     data-cy={COLOR}
                 >
                     {colors.map(entry => (
-                        <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}
+                        <MenuItem key={entry.attributeValueId} value={entry.attributeValueId.toString()}
                             data-cy={tag(ITEM, '', COLOR)}
                         >
                             {entry.value}
@@ -294,7 +293,7 @@ export default function EditProductComponent({
                     data-cy={SIZE}
                 >
                     {sizes.map(entry => (
-                        <MenuItem key={entry.attributeValueId} value={entry.attributeValueId}
+                        <MenuItem key={entry.attributeValueId} value={entry.attributeValueId.toString()}
                             data-cy={tag(ITEM, '', SIZE)}
                         >
                             {entry.value}

@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { formatDatetime } from '../../../shared/helpers/string.helper';
 import { bold } from '../../../shared/layout/layout.style';
 import { IReview } from '../../../shared/models/review.model';
-import { CREATED_ON, tag, NAME, RATING, REVIEW, REVIEW_1 } from '../../../shared/tag/tag.model';
+import { DATETIME, tag, NAME, RATING, REVIEW, DESCRIPTION } from '../../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -46,7 +46,7 @@ export default function ProductReviewComponent({
                 <Typography
                     variant='subtitle2'
                     component='time'
-                    data-cy={tag(CREATED_ON, data.reviewId, REVIEW)}
+                    data-cy={tag(DATETIME, data.reviewId, REVIEW)}
                 >
                     {formatDatetime(data.createdOn)}
                 </Typography>
@@ -60,7 +60,7 @@ export default function ProductReviewComponent({
                     component='p'
                     variant='body1'
                     gutterBottom
-                    data-cy={tag(REVIEW_1, data.reviewId, REVIEW)}
+                    data-cy={tag(DESCRIPTION, data.reviewId, REVIEW)}
                 >
                     {data.review1}
                 </Typography>

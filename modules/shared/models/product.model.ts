@@ -11,7 +11,7 @@ import {
 import { IAttributeValue } from './attribute-value.model';
 import { IReviewGetResponse } from './review.model';
 import { SelectOption } from './shared.model';
-import { formatCurrency } from '../helpers/string.helper';
+import { formatCurrency, toUrl } from '../helpers/string.helper';
 
 export interface IProduct {
   productId: number;
@@ -95,4 +95,22 @@ export function getDiscountPercentage(input: IProduct): number {
   return isDiscounted(input) ?
     Math.round((input.price - input.discountedPrice) * 100 / input.price) :
     0;
+}
+
+export function getThumbnailName(productName: string) {
+  return toImageName(productName) + '-thumbnail';
+}
+
+export function getImageName(productName: string) {
+  return toImageName(productName);
+
+}
+
+export function getImage2Name(productName: string) {
+  return toImageName(productName) + '-2';
+
+}
+
+export function toImageName(productName: string) {
+  return toUrl(productName);
 }

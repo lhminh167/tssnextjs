@@ -3,23 +3,25 @@ import { apiProductUrl, productUrl } from "../../../../../../modules/product/fil
 import { HttpMethod } from "../../../../../../modules/shared/crud/crud.model";
 import { getUrl } from "../../../../../../modules/shared/crud/crud.service";
 import { SUBMIT, YES } from "../../../../../../modules/shared/tag/tag.model";
-import { cyCreateProduct, cyCreateRandomProduct, cyGetExistingProduct, typeCreateProductForm } from "../../../../../helpers/product/create/create-product.component.spec";
+import { createProductTextFields, cyCreateProduct, cyCreateRandomProduct, cyGetExistingProduct, typeCreateProductForm } from "../../../../../helpers/product/create/create-product.component.spec";
 import { ProductDetailTest } from "../../../../../helpers/product/detail/product-detail-card.component.spec";
 import { cySetAdminLoginToken, cySetCustomerLoginToken } from "../../../../../helpers/shared/helpers/auth.helper";
 import { mockRandomProduct } from "../../../../../helpers/shared/helpers/product.helper";
 
-it('Edit Product Page -> Edit Product Form -> Meta tags should have correct values', () => {
-});
+// it('Edit Product Page -> Edit Product Form -> Meta tags should have correct values', () => {
+// });
 
 
-it('Edit Product Page -> Edit Product Form -> When user logged in as admin, then user can edit any product #working', () => {
+it('Edit Product Page -> Edit Product Form -> When user logged in as admin, then user can edit any product #e2e-working #visual-working', () => {
    cy
       .pipe(cySetAdminLoginToken)
       .pipe(cyCreateRandomProduct).as('product')
       .chain(productUrl.edit).its('as')
       .pipe(cy.visit)
-   cy
-      .getEl(SUBMIT).takeScreenShot()
+
+      .clearTextFields(createProductTextFields)
+      .takeScreenShot('Edit Product Page')
+
       .pipe(mockRandomProduct)
       .chain(typeCreateProductForm);
    cy
@@ -32,7 +34,7 @@ it('Edit Product Page -> Edit Product Form -> When user logged in as admin, then
       .get('@editedProduct').chain(ProductDetailTest);
 });
 
-it('Edit Product Page -> Edit Product Form -> When user accesses Edit Product Page as customer, then user is redirected to Home Page #working', () => {
+it('Edit Product Page -> Edit Product Form -> When user accesses Edit Product Page as customer, then user is redirected to Home Page #e2e-working', () => {
    const product = cyGetExistingProduct();
    cy
       .pipe(cySetCustomerLoginToken)
@@ -40,7 +42,7 @@ it('Edit Product Page -> Edit Product Form -> When user accesses Edit Product Pa
 });
 
 
-it('Edit Product Page -> Edit Product Form -> When not-logged-in user accesses Edit Product Page, then user is redirected to Home Page #working', () => {
+it('Edit Product Page -> Edit Product Form -> When not-logged-in user accesses Edit Product Page, then user is redirected to Home Page #e2e-working', () => {
    const product = cyGetExistingProduct();
    cy.visit(productUrl.edit(product).as).wrap('/').load();
 });

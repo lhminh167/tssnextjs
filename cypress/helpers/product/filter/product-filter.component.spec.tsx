@@ -9,8 +9,7 @@ import { cyGetFilter } from "../create/create-product.component.spec";
 export default function setupProductSortingTest(input: IProductSearchRequest) {
 
     // cy.server().route({ url: getUrl(apiProductUrl.search(input)) }).as('route');
-    cy.visit(productUrl.product);
-    cy.getEl(COUNT).click();
+    cy.visit(productUrl.product).pipe(openProductFilter);
     cy.getEl(SORT_BY).click();
     cy.getEl(SORT_BY + input.sortBy).click();
     cy.getEl(SORT_ORDER).click();
@@ -110,4 +109,11 @@ export function searchByPrice() {
         minPrice: getMinPrice(),
         maxPrice: getMaxPrice(),
     })
+}
+
+export function openProductFilter() {
+
+    cy.scrollTo('top')
+    cy.getEl(COUNT).click({ force: true })
+    return cy;
 }

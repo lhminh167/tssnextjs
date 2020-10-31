@@ -1,4 +1,5 @@
 import DialogContentText from '@material-ui/core/DialogContentText';
+import Typography from '@material-ui/core/Typography';
 import { Color } from '@material-ui/lab';
 import * as Sentry from '@sentry/browser';
 import fetchIntercept from 'fetch-intercept';
@@ -64,16 +65,22 @@ export default function Notifier() {
             <Fragment>
               <DialogContentText>
                 Description:{' '}
-                <span
+                <Typography
+                  component='span'
                   data-cy={DESCRIPTION}
                 >
                   {state.data.title}
-                </span>
+                </Typography>
               </DialogContentText>
               <DialogContentText
-                data-cy={ID}
               >
-                Error ID: {state.data.instance}
+                Error ID:{' '}
+                <Typography
+                  component='span'
+                  data-cy={ID}
+                >
+                  {state.data.instance}
+                </Typography>
               </DialogContentText>
             </Fragment>
           }

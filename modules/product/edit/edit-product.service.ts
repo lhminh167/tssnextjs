@@ -1,9 +1,10 @@
 import { put } from '../../shared/crud/crud.service';
 import { apiProductUrl } from '../filter/product-filter.model';
 import { IEditProductRequest } from './edit-product.model';
-import { mediaUrl, ImageRenameRequest } from '../../shared/crud/crud.model';
+import { mediaUrl, ImageRenameRequest, IResponse } from '../../shared/crud/crud.model';
+import { IProduct } from '../../shared/models/product.model';
 
-export async function editProduct(input: IEditProductRequest) {
+export async function editProduct(input: IEditProductRequest): Promise<IResponse<IProduct>> {
     return await put(apiProductUrl.product, input.productId, input);
 }
 

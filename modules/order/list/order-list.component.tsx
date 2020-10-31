@@ -1,4 +1,4 @@
-import { TablePagination } from '@material-ui/core';
+import { TablePagination, Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -14,8 +14,8 @@ import { goTo } from '../../shared/helpers/auth.helper';
 import { formatDatetime } from '../../shared/helpers/string.helper';
 import { textDanger, textSuccess, textWarning } from '../../shared/layout/layout.style';
 import PaginationComponent, { PaginationProps } from '../../shared/pagination/pagination.component';
-import { CREATED_ON, DATETIME, ID, ITEM, NAME, ORDER, SHIPPING, STATUS, tag, USER, USERNAME } from '../../shared/tag/tag.model';
-import { apiOrderUrl, Order, orderUrl } from '../order.model';
+import { DATETIME, ID, ITEM, NAME, ORDER, SHIPPING, STATUS, tag, USER } from '../../shared/tag/tag.model';
+import { Order, orderUrl } from '../order.model';
 import { getOrders } from '../order.service';
 
 const useStyles = makeStyles({
@@ -105,32 +105,53 @@ export default function OrderListComponent() {
                                 key={row.orderId}
                                 hover
                                 onClick={showDetail(row.orderId)}
+                                data-cy={tag(ITEM, row.orderId, ORDER)}
                             >
                                 <TableCell component='th' scope='row'
-                                    data-cy={tag(ID, row.orderId, ORDER)}
                                 >
+                                    <Typography
+                                        component='span'
+                                        data-cy={tag(ID)}
+                                    >
                                     {row.orderId}
+                                    </Typography>
                                 </TableCell>
                                 <TableCell
-                                    className={classes[row.orderStatus.cssClass]}
-                                    data-cy={tag(STATUS, row.orderId, ORDER)}
                                 >
+                                    <Typography
+                                        component='span'
+                                        className={classes[row.orderStatus.cssClass]}
+                                        data-cy={tag(STATUS)}
+                                    >
                                     {row.orderStatus.message}
+                                    </Typography>
                                 </TableCell>
                                 <TableCell
-                                    data-cy={tag(USER + NAME, row.orderId, ORDER)}
                                 >
+                                    <Typography
+                                        component='span'
+                                        data-cy={tag(USER + NAME)}
+                                    >
                                     {row.customer.name}
+                                    </Typography>
                                 </TableCell>
                                 <TableCell
-                                    data-cy={tag(CREATED_ON, row.orderId, ORDER)}
                                 >
+                                    <Typography
+                                        component='span'
+                                        data-cy={tag(DATETIME)}
+                                    >
                                     {formatDatetime(row.createdOn)}
+                                    </Typography>
                                 </TableCell>
                                 <TableCell
-                                    data-cy={tag(SHIPPING + DATETIME, row.orderId, ORDER)}
                                 >
+                                    <Typography
+                                        component='span'
+                                        data-cy={tag(SHIPPING + DATETIME)}
+                                    >
                                     {formatDatetime(row.shippedOn)}
+                                    </Typography>
                                 </TableCell>
                             </TableRow>
                         ))}

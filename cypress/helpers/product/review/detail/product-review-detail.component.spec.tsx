@@ -1,5 +1,5 @@
 import { IReview } from "../../../../../modules/shared/models/review.model";
-import { ITEM, REVIEW_1, RATING, NAME, CREATED_ON } from "../../../../../modules/shared/tag/tag.model";
+import { ITEM, DESCRIPTION, RATING, NAME, DATETIME } from "../../../../../modules/shared/tag/tag.model";
 
 export default function ProductReviewDetailComponentTest() {
     describe('ProductReviewDetailComponentTest', () => {
@@ -17,11 +17,11 @@ export function ProductReviewDetailComponentBasicTest(input: IReview) {
         .find(`[data-id]=${input.reviewId}`)
         .within(() => {
             cy
-                .getEl(REVIEW_1)
+                .getEl(DESCRIPTION)
                 .type(input.review1).should('have.text', input.review1)
                 .getEl(RATING)
                 .contains(input.rating + ' Stars')
                 .getEl(NAME).should('have.text', input.customer.name)
-                .getEl(CREATED_ON).should('have.text', input.createdOn);
+                .getEl(DATETIME).should('have.text', input.createdOn);
         })
 }

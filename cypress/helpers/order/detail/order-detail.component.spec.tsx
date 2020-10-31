@@ -41,3 +41,23 @@ export enum OrderStatus {
     ConfirmShipping = 'Awaiting shipment confirmation',
     ConfirmStock = 'Awaiting stock confirmation'
 }
+
+export function openAllPanels() {
+    cy
+        .get('.MuiAccordion-root')
+        .invoke('attr', 'class', 'MuiPaper-root MuiAccordion-root MuiAccordion-rounded MuiPaper-elevation1 MuiPaper-rounded Mui-expanded')
+    //   .should('have.attr', 'test', 'my new value')
+    cy
+        .get('.MuiAccordionSummary-root')
+        .invoke('attr', 'class', 'MuiButtonBase-root MuiAccordionSummary-root Mui-expanded')
+    //   .should('have.attr', 'test', 'my new value')
+    cy
+        .get('.MuiCollapse-container')
+        .invoke('attr', 'class', 'MuiCollapse-container MuiCollapse-entered')
+    // .should('have.attr', 'test', 'my new value')
+    cy
+        .get('.MuiAccordionSummary-expandIcon')
+        .invoke('attr', 'class', 'MuiButtonBase-root MuiIconButton-root MuiAccordionSummary-expandIcon MuiIconButton-edgeEnd Mui-expanded')
+    // .should('have.attr', 'test', 'my new value')
+
+}

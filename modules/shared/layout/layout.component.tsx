@@ -1,7 +1,7 @@
 import { createStyles, makeStyles, Theme, ThemeProvider } from "@material-ui/core/styles";
 import { Fragment, useEffect } from "react";
 import Navbar from "../navbar/navbar.component";
-import theme, { transitionWidth, GlobalCss } from "./layout.theme";
+import theme, { transitionWidth } from "./layout.theme";
 import ErrorBoundary from "../error-boundary/error-boundary.component";
 import Notifier from "../notifier/notifier.component";
 import FooterComponent from "../footer/footer.component";
@@ -50,7 +50,6 @@ export default function Layout(props) {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <GlobalCss />
             <div
                 className={classes.root}
             >

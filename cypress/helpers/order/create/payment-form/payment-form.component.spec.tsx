@@ -2,7 +2,7 @@ import { SUBMIT, ORDER_SUMMARY, GRAND_TOTAL, ID } from "../../../../../modules/s
 import { cyFinishConfirmationForm, cyGoToConfirmationForm } from "../confirmation-form/confirmation-form.component.spec";
 
 export function typePaymentForm(input: IPaymentInfo) {
-  cy.wait(5000).get(".__PrivateStripeElement > iframe").then(($element) => {
+  cy.get(".__PrivateStripeElement > iframe").then(($element) => {
     const $body = $element.contents().find("body");
 
     typePaymentField($body, 'cardnumber', input.cardNumber);
@@ -78,14 +78,10 @@ export function cyGoToPaymentForm() {
 
 
 export function cyFinishPaymentForm() {
-  cy
-    .pipe(getSuccessPaymentInfo)
-    .pipe(typePaymentForm)
-  cy
-    .getEl(SUBMIT).click();
+  cy.pipe(getSuccessPaymentInfo).pipe(typePaymentForm)
+  cy.getEl(SUBMIT).click();
 
-  return cy
-    .getEl(ID).invoke('text')
+  return cy.getEl(ID).invoke('text')
     .then(parseFloat).should('be.gt', 0)
 
 }

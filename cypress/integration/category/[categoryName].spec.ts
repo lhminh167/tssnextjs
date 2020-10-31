@@ -6,17 +6,17 @@ import { cyVisitExistingProduct, cyGetExistingProduct } from "../../helpers/prod
 import { ProductDetailTest } from "../../helpers/product/detail/product-detail-card.component.spec";
 import ProductListTest from "../../helpers/shared/product-list/product-list.component.spec";
 
-it('Category Detail Page -> Category Details -> When page finished loading, product details should have correct values #working', () => {
+it('Category Detail Page -> Category Details -> When page finished loading, product details should have correct values #e2e-working #visual-working', () => {
   cy.wrap(1).pipe(getCategory).its('content').as('category')
     .pipe(categoryUrl.detail).its('as')
     .pipe(cy.visit);
-  cy.getEl(CATEGORY).takeScreenShot();
+  cy.getEl(GALLERY).takeScreenShot('Category Detail Page');
   cy.getEl(CATEGORY).within(() => {
     cy.get('@category').chain(CategoryDetailTest);
   })
 });
 
-it('Category Detail Page -> Product Recommendations -> When page finished loading, product recommendations should have correct values #working', () => {
+it('Category Detail Page -> Product Recommendations -> When page finished loading, product recommendations should have correct values #e2e-working', () => {
   cy
     .wrap(1).pipe(getCategory).its('content').as('category')
     .pipe(categoryUrl.detail).its('as')

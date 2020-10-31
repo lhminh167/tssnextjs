@@ -5,22 +5,23 @@ import { cyGetExistingProduct } from "../helpers/product/create/create-product.c
 import { ShoppingCartItemDetailTest } from "../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { cartItemShouldBeRemoved, cyAddToCart } from "../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-it('Wish List Page -> Back To Shop Button -> When Back To Shop Button is clicked, then user is redirected to homepage #working', () => {
+it('Wish List Page -> Back To Shop Button -> When Back To Shop Button is clicked, then user is redirected to homepage #e2e-working', () => {
   cy.visit(shoppingCartUrl.wishList);
   cy.getEl(BACK).click().wrap('/').load();
 });
 
-it('Wish List Page -> Remove Item Button -> When user clicks Remove Item button, the corresponding item should be removed from wish list #working', () => {
+it('Wish List Page -> Remove Item Button -> When user clicks Remove Item button, the corresponding item should be removed from wish list #e2e-working #visual-working', () => {
   cy
     .server().route(apiShoppingCartUrl.baseUrl + '**').as('route')
     .wrap(cyAddToCart(cyGetExistingProduct(), 1, false)).its('content.loginToken').chain(setLoginToken)
     .visit(shoppingCartUrl.wishList).wait('@route');
 
+  cy.getEl(REMOVE).takeScreenShot('Wish List Page')
   cy.getEl(REMOVE).click().wait('@route')
     .its('responseBody.content').pipe(cartItemShouldBeRemoved)
 });
 
-it('Wish List Page -> Move Item To Cart Button -> When user clicks Move Item To Cart Button button, the corresponding item should be moved to cart #working', () => {
+it('Wish List Page -> Move Item To Cart Button -> When user clicks Move Item To Cart Button button, the corresponding item should be moved to cart #e2e-working', () => {
   cy.server().route(apiShoppingCartUrl.baseUrl + '?**').as('route')
     .wrap(cyAddToCart(cyGetExistingProduct(), 1, false)).as('addResponse')
     .its('content.loginToken').chain(setLoginToken)
@@ -34,7 +35,7 @@ it('Wish List Page -> Move Item To Cart Button -> When user clicks Move Item To 
   cy.get('@item').chain(ShoppingCartItemDetailTest);
 });
 
-it('Wish List Page -> Go To Cart Button -> When Back To Shop Button is clicked, then user is redirected to Shopping Cart Page #working', () => {
+it('Wish List Page -> Go To Cart Button -> When Back To Shop Button is clicked, then user is redirected to Shopping Cart Page #e2e-working', () => {
   cy.visit(shoppingCartUrl.wishList);
   cy.getEl(SUBMIT).click().wrap(shoppingCartUrl.baseUrl).load();
 });

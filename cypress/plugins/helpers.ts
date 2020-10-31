@@ -1,5 +1,8 @@
+import percyHealthCheck from '@percy/cypress/task';
+import Blob from 'cross-blob';
+import FormData from "formdata-node";
+import { promises } from 'fs';
 import fetch from 'isomorphic-unfetch';
-import Blob from 'node-blob';
 import path from 'path';
 import { apiCustomerUrl } from '../../modules/customer/customer.model';
 import { apiProductUrl, IProductFilterFilter } from '../../modules/product/filter/product-filter.model';
@@ -10,8 +13,6 @@ import { defaultProduct, IProduct } from '../../modules/shared/models/product.mo
 import { mockRandomCustomer, mockRootAdminAccount } from '../helpers/shared/helpers/auth.helper';
 import { getRandomString } from '../helpers/shared/helpers/string.helper';
 import { TEST_IMAGE } from '../helpers/shared/image/image.component.spec';
-import percyHealthCheck from '@percy/cypress/task';
-import { promises } from 'fs';
 
 export async function saveCustomerLoginToken(config) {
   const user = mockRandomCustomer();
@@ -85,19 +86,21 @@ async function upload(input: UploadRequest[], config) {
     }))
   }, config);
   const requests = input.map((entry, index) => {
-    const body = {
-      'api_key': config.env.CLOUDINARY_API_KEY,
-      'upload_preset': 'tss',
-      'file': entry.file,
-      'public_id': entry.name,
-      'signature': tokenResponse.content[index].uploadToken,
-      'timestamp': tokenResponse.content[index].creationTime,
-      'eager': 'f_auto,w_auto,c_scale,q_auto,dpr_auto',
-    };
+    const fd = new FormData()
+
+    fd.set('api_key', config.env.CLOUDINARY_API_KEY)
+    fd.set('upload_preset', 'tss')
+    fd.set('file', entry.file)
+    fd.set('public_id', entry.name)
+    fd.set('signature', tokenResponse.content[index].uploadToken)
+    fd.set('timestamp', tokenResponse.content[index].creationTime)
+    fd.set('eager', 'f_auto,w_auto,c_scale,q_auto,dpr_auto')
+
     const options = {
       method: HttpMethod.POST,
-      body: JSON.stringify(body)
-    };
+      body: fd.stream, // Set internal stream as request body
+      headers: fd.headers // Set headers of the current FormData instance
+    }
     //@ts-ignore
     const response = fetch(uploadUrl, options)
       .then(res => {
@@ -105,7 +108,6 @@ async function upload(input: UploadRequest[], config) {
         return res.json();
       })
       .then(res => {
-        console.log(res);
         return res
       })
       .catch(e => console.log(e));
@@ -169,7 +171,8 @@ async function put(body, url, config, isAdmin: boolean = true) {
 }
 
 export function percyHeathCheck(on, config) {
-  if (isProduction()) on("task", percyHealthCheck);
+  // if (isProduction()) 
+  on("task", percyHealthCheck);
 }
 
 export function isProduction() {

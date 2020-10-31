@@ -1,4 +1,3 @@
-import { from } from "form-data";
 import { orderUrl } from "../../../modules/order/order.model";
 import { DESCRIPTION, ORDER, STATUS } from "../../../modules/shared/tag/tag.model";
 import { cyCreateOrder } from "../../helpers/order/create/create-order.component.spec";
@@ -7,12 +6,12 @@ import { CONFIRM_STOCK, SUBMIT, YES, CONFIRM_SHIPPING, NO, CANCEL, COMMENT, ORDE
 import { customerUrl } from "../../../modules/customer/customer.model";
 import { HiddenConfirmStockComponentTest } from "../../helpers/order/detail/stock-ok.component.spec";
 import { HiddenConfirmShippingComponentTest } from "../../helpers/order/detail/ship-ok.component.spec";
-import { OrderDetailStatusTest, OrderStatus } from "../../helpers/order/detail/order-detail.component.spec";
+import { openAllPanels, OrderDetailStatusTest, OrderStatus } from "../../helpers/order/detail/order-detail.component.spec";
 import { stockOk } from "../../../modules/order/order.service";
 import { setLoginToken } from "../../../modules/shared/helpers/token.helper";
 import { createCustomer } from "../../../modules/customer/customer.service";
 
-it('Order Detail Page -> Confirm Stock Not Ok -> When logged in as admin, user could cancel an order because some of its products are out of stock #working', () => {
+it('Order Detail Page -> Confirm Stock Not Ok -> When logged in as admin, user could cancel an order because some of its products are out of stock #e2e-working', () => {
 
     const comment = `The following products are out of stock:
 - Green XL Birds T-Shirt. Required Quantity: 10. Available Quantity: 09.
@@ -36,7 +35,7 @@ it('Order Detail Page -> Confirm Stock Not Ok -> When logged in as admin, user c
 
 });
 
-it('Order Detail Page -> Complete Order -> When logged in as admin, user could confirm stock & shipping of any customer\'s order #working', () => {
+it('Order Detail Page -> Complete Order -> When logged in as admin, user could confirm stock & shipping of any customer\'s order #e2e-working #visual-working', () => {
 
     cy
         .pipe(cySetCustomerLoginToken)
@@ -46,7 +45,7 @@ it('Order Detail Page -> Complete Order -> When logged in as admin, user could c
         .pipe(cy.visit)
 
     cy.wrap(OrderStatus.ConfirmStock).chain(OrderDetailStatusTest)
-    cy.getEl(CONFIRM_STOCK);
+    cy.getEl(CONFIRM_STOCK)
     cy.getEl(SUBMIT).click();
     cy.getEl(YES).click().should('not.exist')
 
@@ -56,10 +55,11 @@ it('Order Detail Page -> Complete Order -> When logged in as admin, user could c
     cy.getEl(YES).click().should('not.exist')
 
     cy.wrap(OrderStatus.Completed).chain(OrderDetailStatusTest)
+        .chain(openAllPanels).takeScreenShot('Order Detail Page');
 });
 
 
-it('Order Detail Page -> Hide Order Confirmation -> When logged in as customer, the Order Confirmation section is hidden #working', () => {
+it('Order Detail Page -> Hide Order Confirmation -> When logged in as customer, the Order Confirmation section is hidden #e2e-working', () => {
 
     cy
         .pipe(cySetCustomerLoginToken)
@@ -82,14 +82,14 @@ it('Order Detail Page -> Hide Order Confirmation -> When logged in as customer, 
 });
 
 
-it('Order Detail Page -> Access Denied -> When user is not logged in and access Order Detail Page, then user is redirected to Login Page #working', () => {
+it('Order Detail Page -> Access Denied -> When user is not logged in and access Order Detail Page, then user is redirected to Login Page #e2e-working', () => {
 
     cy.visit(orderUrl.baseUrl);
     cy.load(customerUrl.login(orderUrl.baseUrl));
 });
 
 
-it('Order Detail Page -> Access Denied -> When user logs in as customer and accesses Order Detail Page of another customer, then user is redirected to Home Page #working', () => {
+it('Order Detail Page -> Access Denied -> When user logs in as customer and accesses Order Detail Page of another customer, then user is redirected to Home Page #e2e-working', () => {
 
     cy
         .pipe(mockRandomCustomer)

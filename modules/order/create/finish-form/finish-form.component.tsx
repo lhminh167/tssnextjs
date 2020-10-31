@@ -56,7 +56,13 @@ export default function FinishFormComponent({ back, data }: Props) {
         className={classes.mb2}
       >
         <Typography variant='subtitle1'>
-          Your order number is <span data-cy={ID}>{data.orderId}</span>.
+          Your order number is{' '}
+          <Typography
+            data-cy={ID}
+            component='span'
+          >
+            {data.orderId}
+          </Typography>.
         </Typography>
         <Typography variant='subtitle1'>
           We have emailed your order confirmation,

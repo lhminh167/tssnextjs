@@ -8,7 +8,10 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     image: {
       ...w100,
-      objectFit: 'cover'
+      objectFit: 'cover',
+      '@media only percy': {
+        content: 'url("https://res.cloudinary.com/lhminh167/image/upload/f_auto,w_auto,c_scale,q_auto,dpr_auto/tss/liberian-elephant-thumbnail")'
+      }
     }
   })
 );

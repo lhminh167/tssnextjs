@@ -11,7 +11,7 @@ import { resetPasswordFields, resetPasswordTest } from "../../helpers/customer/r
 import { mockRandomCustomer } from "../../helpers/shared/helpers/auth.helper";
 import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navbar.component.spec";
 
-it('Forgot Password Page -> Forgot Password -> When user resets their forgotten password, then user can log in using new password #working', () => {
+it('Forgot Password Page -> Forgot Password -> When user resets their forgotten password, then user can log in using new password #e2e-working #visual-working', () => {
     const user = mockRandomCustomer();
     cy
         .server().route({ url: getUrl(apiCustomerUrl.forgotPassword), method: HttpMethod.PUT }).as('route')
@@ -19,7 +19,7 @@ it('Forgot Password Page -> Forgot Password -> When user resets their forgotten 
         .its('customer.customerId').then((customerId: any) => user.customerId = customerId)
         .visit(customerUrl.forgotPassword)
     cy
-        .getEl(HOMEPAGE).takeScreenShot()
+        .clearTextFields([EMAIL]).takeScreenShot('Forgot Password Page')
         .fillTextFields([EMAIL], user)
     cy
         .getEl(SUBMIT).click().wait('@route')

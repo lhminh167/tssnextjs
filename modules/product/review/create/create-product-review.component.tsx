@@ -11,7 +11,7 @@ import { toNumber } from '../../../shared/helpers/auth.helper';
 import { bold, mb, mb2 } from '../../../shared/layout/layout.style';
 import { IProduct } from '../../../shared/models/product.model';
 import { CreateReviewRequestValidator, defaultReview, IReview } from '../../../shared/models/review.model';
-import { ADD, DESCRIPTION, tag, LOGIN_LINK, RATING, REGISTER_LINK, REVIEW, REVIEW_1, SUBMIT, TITLE, UNAUTHORIZED } from '../../../shared/tag/tag.model';
+import { ADD, tag, LOGIN_LINK, RATING, REGISTER_LINK, REVIEW, DESCRIPTION, SUBMIT, TITLE, UNAUTHORIZED } from '../../../shared/tag/tag.model';
 import { isValidForm } from '../../../shared/validator/validator';
 import { createReview } from '../review.service';
 
@@ -60,7 +60,7 @@ export default function CreateReviewComponent({
         setSubmitted(true);
         if (!isValidForm(errors)) return;
         const response = await createReview(state);
-        setState(defaultReview);
+        setState({ ...defaultReview, productId: data.productId, customerId });
         setSubmitted(false);
         output(response.content);
     }
@@ -158,7 +158,7 @@ export default function CreateReviewComponent({
                                         onChange={change}
                                         error={errors.review1 && submitted}
                                         helperText={errors.review1 && submitted ? errors.review1 : null}
-                                        data-cy={tag(REVIEW_1, '', ADD + REVIEW)}
+                                        data-cy={tag(DESCRIPTION, '', ADD + REVIEW)}
                                     />
                                 </Grid>
                             </Grid>

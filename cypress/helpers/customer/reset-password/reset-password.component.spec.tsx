@@ -18,7 +18,7 @@ export function resetPasswordTest(user: cyCustomer, resetPasswordToken: string) 
         .chain(removeLoginToken)
         .visit(customerUrl.resetPassword(customerId, resetPasswordToken))
     cy
-        .getEl(HOMEPAGE).takeScreenShot()
+        .clearTextFields(resetPasswordFields).takeScreenShot('Reset Password Page')
         .fillTextFields(resetPasswordFields, user)
     cy
         .getEl(SUBMIT).click()

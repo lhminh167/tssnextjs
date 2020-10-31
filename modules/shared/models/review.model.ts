@@ -2,12 +2,13 @@ import { Customer, defaultCustomer } from '../../customer/customer.model';
 import { Validator } from 'fluentvalidation-ts';
 import { PaginationRequest, PaginatedList, defaultPaginationList } from '../crud/crud.model';
 import querystring from 'query-string';
+import { apiProductUrl } from '../../product/filter/product-filter.model';
 
 export const apiReviewBaseUrl = 'review';
 
 export const apiReviewUrl = {
     baseUrl: `${apiReviewBaseUrl}`,
-    list: (input: IReviewGetRequest) => `${apiReviewBaseUrl}?${querystring.stringify(input)}`,
+    list: (input: IReviewGetRequest) => `${apiProductUrl.product}/${input.productId}/${apiReviewBaseUrl}/?${querystring.stringify(input)}`,
     detail: (reviewId: number) => `${apiReviewBaseUrl}/${reviewId}`,
 }
 

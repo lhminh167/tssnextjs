@@ -57,6 +57,13 @@ declare namespace Cypress {
         ): Chainable<JQuery<E>>;
 
         /**
+         * Clear text fields.
+         */
+        clearTextFields<E extends Node = HTMLElement>(
+            fiels: string[]
+        ): Chainable<JQuery<E>>;
+
+        /**
          * Test texts.
          */
         testTexts<E extends Node = HTMLElement>(
@@ -73,11 +80,19 @@ declare namespace Cypress {
         ): Chainable<JQuery<E>>;
 
         /**
-         * Take screenshots for visual regression testing.
+         * Take a screenshot for visual regression testing.
          */
         takeScreenShot<E extends Node = HTMLElement>(
             name?: string,
             options?: SnapshotOptions
+        ): Chainable<JQuery<E>>;
+
+        /**
+         * Test the number of rating stars.
+         * @param rating number of rating stars
+         */
+        testRating<E extends Node = HTMLElement>(
+            rating: number
         ): Chainable<JQuery<E>>;
     }
 }

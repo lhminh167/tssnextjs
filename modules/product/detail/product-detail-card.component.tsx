@@ -13,7 +13,7 @@ import { encodeAttributes } from '../../shared/helpers/product.helper';
 import { formatCurrency, toUrl } from '../../shared/helpers/string.helper';
 import { mb, mb2, mr, p } from '../../shared/layout/layout.style';
 import { defaultAttributeValue } from '../../shared/models/attribute-value.model';
-import { IProduct } from '../../shared/models/product.model';
+import { getDiscountedPrice, IProduct } from '../../shared/models/product.model';
 import QuantityPickerComponent from '../../shared/quantity-picker/quantity-picker.component';
 import SizePickerComponent from '../../shared/size-picker/size-picker.component';
 import { addShoppingCartItem } from '../../shopping-cart/shopping-cart.service';
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
         mr: mr,
         mb: mb,
         mb2: mb2,
-        p: p
+        p: p,
     }),
 );
 
@@ -122,11 +122,7 @@ export default function ProductDetailCardComponent({
                         className={data.discountedPrice > 0 ? classes.mr : null}
                         data-cy={DISCOUNTED_PRICE}
                     >
-                        {formatCurrency(
-                            data.discountedPrice > 0
-                                ? data.discountedPrice
-                                : data.price
-                        )}
+                        {getDiscountedPrice(data)}
                     </Typography>
                     {
                         data.discountedPrice > 0 &&

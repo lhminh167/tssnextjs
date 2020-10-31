@@ -18,7 +18,7 @@ import { toNumber } from '../helpers/auth.helper';
 import { getUserAvatar } from '../helpers/string.helper';
 import { themeColor } from '../layout/layout.theme';
 import SearchComponent from '../search/search.component';
-import { ADMIN, DEPARTMENT, LOGIN, LOGOUT, ORDER, REGISTER, SEARCH, SHOPPING_CART, TOTAL_QUANTITY, WISHLIST, USER, tag, ROLE, EMAIL, NAME } from '../tag/tag.model';
+import { ADMIN, DEPARTMENT, LOGIN, LOGOUT, ORDER, REGISTER, SEARCH, SHOPPING_CART, TOTAL_QUANTITY, WISHLIST, USER, tag, ROLE, EMAIL, NAME, LINK } from '../tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -217,7 +217,7 @@ export default function DesktopNavbarComponent() {
                             component='a'
                             title='Customer Area'
                             className={classes.seperator}
-                            data-cy={USER}
+                            data-cy={USER + LINK}
                         >
                             <Tooltip
                                 classes={{ tooltip: classes.tooltip }}
@@ -275,6 +275,7 @@ export default function DesktopNavbarComponent() {
                             >
                                 <Avatar
                                     className={classes.avatar}
+                                    data-cy={USER}
                                 >
                                     {getUserAvatar(currentUser.name)}
                                 </Avatar>

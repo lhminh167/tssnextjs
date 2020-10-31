@@ -33,7 +33,7 @@ export function formatCurrency(input: number): string {
 }
 
 export function formatDatetime(input: string): string {
-    return input ? dateTimeFormatter.format(new Date(input)) : null;
+    return input ? dateTimeFormatter.format(new Date(input)) : '';
 }
 
 export function formatPercent(number: number, total: number): string {
@@ -50,4 +50,8 @@ export function removeTrailingDot(input: string) {
 
 export function getUserAvatar(input: string) {
     return input[0];
+}
+
+export function removeFileExtension(input: string) {
+    return input.substr(0, input.lastIndexOf('.')) || input;
 }

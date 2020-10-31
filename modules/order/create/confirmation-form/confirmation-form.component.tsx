@@ -1,7 +1,7 @@
 import { createStyles, Divider, Grid, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import React, { useEffect, useState, Fragment } from 'react';
 import ActionButtonsComponent from '../../../shared/action-buttons/action-buttons.component';
-import { decodeAttributes } from '../../../shared/helpers/product.helper';
+import { decodeAttributes, getCartItemColor, getCartItemSize } from '../../../shared/helpers/product.helper';
 import { formatCurrency } from '../../../shared/helpers/string.helper';
 import { defaultShippingRegion, ShippingRegion } from '../../../shared/models/shipping-region.model';
 import { defaultShipping, Shipping } from '../../../shared/models/shipping.model';
@@ -10,7 +10,8 @@ import { defaultShopingCartGetRequest, IShopingCartItem } from '../../../shoppin
 import { getShoppingCart } from '../../../shopping-cart/shopping-cart.service';
 import { OrderCreateForm, OrderCreateRequest } from '../create-order.model';
 import { bold, p } from '../../../shared/layout/layout.style';
-import { ORDER_SUMMARY, GRAND_TOTAL } from '../../../shared/tag/tag.model';
+import { ORDER_SUMMARY, GRAND_TOTAL, ADDRESS_1, ADDRESS_2, DISCOUNTED_PRICE, ITEM, NAME, SHOPPING_CART, tag, QUANTITY, COLOR, SIZE } from '../../../shared/tag/tag.model';
+import { getDiscountedPrice } from '../../../shared/models/product.model';
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -104,26 +105,52 @@ export default function OrderConfirmationComponent({
                             </TableHead>
                             <TableBody>
                                 {state.map(row => {
+                                    const attributes = decodeAttributes(row.attributes);
+                                    const color = getCartItemColor(attributes);
+                                    const size = getCartItemSize(attributes);
+                                    const price = getDiscountedPrice(row.product);
+
                                     return (
-                                        <TableRow key={row.itemId}>
-                                            <TableCell component='th' scope='row'>
-                                                {decodeAttributes(row.attributes).map(a => a.value).join(' ')} {row.product.name}
+                                        <TableRow key={row.itemId}
+                                            data-cy={tag(ITEM, row.itemId, SHOPPING_CART)}
+                                        >
+                                            <TableCell component='th' scope='row'
+                                            >
+                                                <Typography
+                                                    data-cy={COLOR}
+                                                    component='span'
+                                                >
+                                                    {color}
+                                                </Typography>
+                                                {' '}
+                                                <Typography
+                                                    data-cy={SIZE}
+                                                    component='span'
+                                                >
+                                                    {size}
+                                                </Typography>
+                                                {' '}
+                                                <Typography
+                                                    data-cy={NAME}
+                                                    component='span'
+                                                >
+                                                    {row.product.name}
+                                                </Typography>
                                             </TableCell>
-                                            <TableCell align='right'>{row.quantity}</TableCell>
+                                            <TableCell align='right'
+                                                data-cy={QUANTITY}
+                                            >
+                                                {row.quantity}
+                                            </TableCell>
                                             <TableCell
                                                 align='right'
                                             >
                                                 <Typography
                                                     color='primary'
                                                     className={classes.bold}
+                                                    data-cy={DISCOUNTED_PRICE}
                                                 >
-                                                    {
-                                                        formatCurrency(
-                                                            row.product.discountedPrice > 0
-                                                                ? row.product.discountedPrice
-                                                                : row.product.price
-                                                        )
-                                                    }
+                                                    {price}
                                                 </Typography>
 
                                             </TableCell>
@@ -148,10 +175,12 @@ export default function OrderConfirmationComponent({
                         Address
                 </Typography>
                     <Typography
+                        data-cy={ADDRESS_1}
                     >
                         {data.address1}
                     </Typography>
                     <Typography
+                        data-cy={ADDRESS_2}
                         gutterBottom
                     >
                         {data.address2}

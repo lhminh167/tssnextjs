@@ -7,11 +7,12 @@ import { ProductDetailTest } from "../../helpers/product/detail/product-detail-c
 import { cySetAdminLoginToken, cySetCustomerLoginToken } from "../../helpers/shared/helpers/auth.helper";
 import { mockRandomProduct } from "../../helpers/shared/helpers/product.helper";
 
-it('Add New Product Page -> Add New Product -> When user logged in as admin, then user could add a new product #working', () => {
+it('Add New Product Page -> Add New Product -> When user logged in as admin, then user could add a new product #e2e-working', () => {
   cy
     .server().route({ url: apiProductUrl.product, method: HttpMethod.POST }).as('route')
     .pipe(cySetAdminLoginToken)
     .visit(productUrl.new)
+  cy.getEl(SUBMIT).click().takeScreenShot('Add New Product Page')
     .pipe(mockRandomProduct)
     .chain(typeCreateProductForm)
   cy.getEl(SUBMIT).click().wait('@route').its('responseBody.content').as('product');
@@ -23,14 +24,14 @@ it('Add New Product Page -> Add New Product -> When user logged in as admin, the
     .chain(ProductDetailTest);
 });
 
-it('Add New Product Page -> Access Denied -> When user logged in as customer, then user is redirected to Home Page #working', () => {
+it('Add New Product Page -> Access Denied -> When user logged in as customer, then user is redirected to Home Page #e2e-working', () => {
   cy
     .pipe(cySetCustomerLoginToken)
     .visit(productUrl.new)
     .wrap('/').load();
 });
 
-it('Add New Product Page -> Access Denied -> When user is not logged in, then user is redirected to Home Page #working', () => {
+it('Add New Product Page -> Access Denied -> When user is not logged in, then user is redirected to Home Page #e2e-working', () => {
   cy
     .visit(productUrl.new)
     .wrap('/').load();

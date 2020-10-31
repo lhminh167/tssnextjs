@@ -27,8 +27,6 @@ export default async (on, config) => {
   // `config` is the resolved Cypress config
   config.env = process.env;
   preprocessor(on, config)
-
-  // require('cypress-react-unit-test/plugins/react-scripts')(on, config)
   await saveCustomerLoginToken(config);
   await saveAdminLoginToken(config);
   await saveProduct(config);

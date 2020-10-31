@@ -1,7 +1,7 @@
 import { createReview } from "../../../../../modules/product/review/review.service";
 import { toNumber } from "../../../../../modules/shared/helpers/auth.helper";
 import { IReview } from "../../../../../modules/shared/models/review.model";
-import { tag, REVIEW_1, ADD, REVIEW, RATING, SUBMIT } from "../../../../../modules/shared/tag/tag.model";
+import { tag, DESCRIPTION, ADD, REVIEW, RATING, SUBMIT } from "../../../../../modules/shared/tag/tag.model";
 import { cyGetExistingCustomer, cySetCustomerLoginToken } from "../../../shared/helpers/auth.helper";
 import { getRandomString } from "../../../shared/helpers/string.helper";
 import { cyGetExistingProduct } from "../../create/create-product.component.spec";
@@ -30,13 +30,13 @@ export function cyClickRating(rating: number, tag: string) {
 export function cyCreateRandomReview() {
     return cy
         .pipe(cySetCustomerLoginToken).pipe(mockRandomReview)
-        .pipe(createReview).its('content.reviewId').as('reviewId')
+        .pipe(createReview).its('content.reviewId')
 }
 
 
 export function ReviewCreateTest() {
     const randomReview = mockRandomReview();
-    cy.getEl(tag(REVIEW_1, '', ADD + REVIEW)).type(randomReview.review1);
+    cy.getEl(tag(DESCRIPTION, '', ADD + REVIEW)).type(randomReview.review1);
     cy.getEl(tag(RATING, '', ADD + REVIEW)).within(() => cyClickRating(randomReview.rating, ADD + '-' + RATING));
     cy.getEl(tag(SUBMIT, '', ADD + REVIEW)).click()
     return cy;

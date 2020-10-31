@@ -100,11 +100,13 @@ export default function WishListComponent({
                     variant='h6'
                     component='h2'
                 >
-                    <span
+                    <Typography
                         data-cy={COUNT}
+                        component='span'
+                        variant='h6'
                     >
                         {state.totalQuantity}
-                    </span>
+                    </Typography>
                     {' Items In Your Wish List'}
                 </Typography>
                 <TableContainer>
@@ -168,17 +170,19 @@ export default function WishListComponent({
                                                         variant='body1'
                                                         className={classes.bold}
                                                     >
-                                                        <span
+                                                        <Typography
                                                             data-cy={COLOR}
+                                                            component='span'
                                                         >
                                                             {color}
-                                                        </span>
+                                                        </Typography>
                                                         {' '}
-                                                        <span
+                                                        <Typography
                                                             data-cy={NAME}
+                                                            component='span'
                                                         >
                                                             {row.product.name}
-                                                        </span>
+                                                        </Typography>
                                                     </Typography>
                                                 </Grid>
                                                 <Grid

@@ -58,11 +58,11 @@ export default function ProductCard({
                   component='div'
                   color='primary'
                 >
-                  <span
+                  <Typography
                     data-cy={PERCENTAGE}
                   >
                     {getDiscountPercentage(data)}
-                  </span>
+                  </Typography>
                   % off
                 </Button>
               }
