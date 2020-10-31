@@ -7,7 +7,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
-import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import Link from 'next/link';
 import React from 'react';
@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { currentUserSlice } from '../../customer/customer.slice';
 import { IRootState } from '../../root/root.model';
 import { toNumber } from '../helpers/auth.helper';
+import { getUserAvatar } from '../helpers/string.helper';
+import { SHOPPING_CART, TOTAL_QUANTITY, REGISTER, LOGIN, DEPARTMENT, ORDER, ADMIN, LOGOUT, WISHLIST, HOMEPAGE, USER, SEARCH, LINK, EMAIL, USERNAME, NAME, tag } from '../tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -51,7 +53,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
         state => state.shoppingCartItemCount.data
     );
     const isAdmin = useSelector<IRootState, boolean>(
-        state => state.currentUser.data.role === "Admin"
+        state => state.currentUser.data.role === 'Admin'
     );
 
     function logout() {
@@ -61,7 +63,7 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
     return (
         <List
             className={classes.list}
-            component="nav"
+            component='nav'
             disablePadding
         >
             {
@@ -72,25 +74,26 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 >
                     <ListItemAvatar>
                         <Avatar>
-                            {userName[0]}
+                            {getUserAvatar(userName)}
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText
                         primary={
                             <Grid
                                 container
-                                direction="row"
-                                alignItems="center"
+                                direction='row'
+                                alignItems='center'
                                 spacing={1}
                             >
                                 <Link
-                                    href="/user/login"
-                                    as="/user/login"
+                                    href='/user/login'
+                                    as='/user/login'
                                     passHref
                                 >
                                     <Grid item
                                         component={MuiLink}
-                                        color="inherit"
+                                        color='inherit'
+                                        data-cy={LOGIN}
                                     >
                                         Login
                                 </Grid>
@@ -100,13 +103,14 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                                     |
                                     </Grid>
                                 <Link
-                                    href="/user/register"
-                                    as="/user/register"
+                                    href='/user/register'
+                                    as='/user/register'
                                     passHref
                                 >
                                     <Grid item
                                         component={MuiLink}
-                                        color="inherit"
+                                        color='inherit'
+                                        data-cy={REGISTER}
                                     >
                                         Register
                                         </Grid>
@@ -126,19 +130,23 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                     as={`/user`}
                     passHref
                 >
-                    <ListItem button component="a"
+                    <ListItem button component='a'
                         className={classes.user}
+                        data-cy={USER + LINK}
                     >
                         <ListItemAvatar>
-                            <Avatar>
-                                {userName[0]}
+                            <Avatar
+                                data-cy={USER}
+                            >
+                                {getUserAvatar(userName)}
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText
                             primary={
                                 <Grid item
                                     component={MuiLink}
-                                    color="inherit"
+                                    color='inherit'
+                                    data-cy={tag(NAME, '', USER)}
                                 >
                                     {userName}
                                 </Grid>
@@ -147,7 +155,8 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                             secondary={
                                 <Grid item
                                     component={MuiLink}
-                                    color="inherit"
+                                    color='inherit'
+                                    data-cy={tag(EMAIL, '', USER)}
                                 >
                                     {userEmail}
                                 </Grid>
@@ -158,26 +167,28 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 </Link>
             }
             <Link
-                href="/shopping-cart"
-                as="/shopping-cart"
+                href='/shopping-cart'
+                as='/shopping-cart'
                 passHref
             >
-                <ListItem button component="a"
+                <ListItem button component='a'
                     className={classes.firstListItem}
+                    data-cy={SHOPPING_CART}
                 >
                     <ListItemIcon
                     >
                         <Badge
                             badgeContent={itemCount ?? 0}
-                            color="primary"
+                            color='primary'
+                            data-cy={TOTAL_QUANTITY}
                         >
                             <ShoppingCartOutlinedIcon
-                                color="primary"
+                                color='primary'
                             />
                         </Badge>
                     </ListItemIcon>
                     <ListItemText
-                        primary="Shopping Cart"
+                        primary='Shopping Cart'
                         primaryTypographyProps={{
                             color: 'primary'
                         }}
@@ -185,19 +196,20 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 </ListItem>
             </Link>
             <Link
-                href="/"
-                as="/"
+                href='/'
+                as='/'
                 passHref
             >
-                <ListItem button component="a"
+                <ListItem button component='a'
+                    data-cy={HOMEPAGE + LINK}
                 >
                     <ListItemIcon>
                         <HomeIcon
-                            color="primary"
+                            color='primary'
                         />
                     </ListItemIcon>
                     <ListItemText
-                        primary="Home"
+                        primary='Home'
                         primaryTypographyProps={{
                             color: 'primary'
                         }}
@@ -205,19 +217,20 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 </ListItem>
             </Link>
             <Link
-                href="/product"
-                as="/product"
+                href='/product'
+                as='/product'
                 passHref
             >
-                <ListItem button component="a"
+                <ListItem button component='a'
+                    data-cy={SEARCH}
                 >
                     <ListItemIcon>
                         <SearchIcon
-                            color="primary"
+                            color='primary'
                         />
                     </ListItemIcon>
                     <ListItemText
-                        primary="Search"
+                        primary='Search'
                         primaryTypographyProps={{
                             color: 'primary'
                         }}
@@ -225,72 +238,83 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                 </ListItem>
             </Link>
             <Link
-                href="/wish-list"
-                as="/wish-list"
+                href='/wish-list'
+                as='/wish-list'
                 passHref
             >
-                <ListItem button component="a"
+                <ListItem button component='a'
+                    data-cy={WISHLIST}
                 >
                     <ListItemIcon>
                         <FavoriteIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Wishlist" />
+                    <ListItemText primary='Wishlist'
+                    />
                 </ListItem>
             </Link>
             {
                 isLoggedIn &&
                 <Link
-                    href="/order"
-                    as="/order"
+                    href='/order'
+                    as='/order'
                     passHref
                 >
-                    <ListItem button component="a"
+                    <ListItem button component='a'
+                        data-cy={ORDER}
                     >
                         <ListItemIcon>
                             <AssignmentTurnedInIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Order" />
+                        <ListItemText primary='Orders'
+                        />
                     </ListItem>
                 </Link>
             }
             {
                 isAdmin && isLoggedIn &&
                 <Link
-                    href="/admin"
-                    as="/admin"
+                    href='/admin'
+                    as='/admin'
                     passHref
                 >
-                    <ListItem button component="a"
+                    <ListItem button component='a'
+                        data-cy={ADMIN}
                     >
                         <ListItemIcon>
                             <SupervisorAccountIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Admin" />
+                        <ListItemText primary='Admin'
+                        />
                     </ListItem>
                 </Link>
             }
             <Link
-                href="/department"
-                as="/department"
+                href='/department'
+                as='/department'
                 passHref
             >
-                <ListItem button component="a"
+                <ListItem button component='a'
+                    data-cy={DEPARTMENT}
                 >
                     <ListItemIcon>
                         <AppsIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Department" />
+                    <ListItemText primary='Departments'
+                    />
                 </ListItem>
             </Link>
             {
                 isLoggedIn &&
                 <ListItem button
                     onClick={logout}
+                    data-cy={LOGOUT}
                 >
                     <ListItemIcon>
                         <ExitToAppIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Logout" />
+                    <ListItemText primary='Logout'
+
+                    />
                 </ListItem>
             }
         </List>

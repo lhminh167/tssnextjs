@@ -1,19 +1,15 @@
+import Fab from '@material-ui/core/Fab';
+import Grid from '@material-ui/core/Grid';
 import {
-  makeStyles,
-  createStyles,
-  Theme,
-  useTheme
-} from "@material-ui/core/styles";
-import AddRoundedIcon from "@material-ui/icons/AddRounded";
-import RemoveRoundedIcon from "@material-ui/icons/RemoveRounded";
-import RefreshIcon from "@material-ui/icons/Refresh";
-import Grid from "@material-ui/core/Grid";
-import { ColorProperty, BorderRadiusProperty, FontSizeProperty } from "csstype";
-import TextField from "@material-ui/core/TextField";
-import IconButton from "@material-ui/core/IconButton";
-import { useState, useEffect, useRef, ChangeEvent } from "react";
-import Tooltip from "@material-ui/core/Tooltip";
-import Fab from "@material-ui/core/Fab";
+  createStyles, makeStyles,
+
+  Theme
+} from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import AddRoundedIcon from '@material-ui/icons/AddRounded';
+import RemoveRoundedIcon from '@material-ui/icons/RemoveRounded';
+import { ChangeEvent } from 'react';
+import { ADJUST_QUANTITY, MINUS_ONE_QUANTITY, PLUS_ONE_QUANTITY } from '../tag/tag.model';
 
 interface IProps {
   quantity: number;
@@ -35,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function QuantityPicker(props: IProps) {
+function QuantityPickerComponent(props: IProps) {
   const classes = useStyles(props);
   const { quantity, output } = props;
 
@@ -56,32 +52,41 @@ function QuantityPicker(props: IProps) {
     <Grid
       container
       spacing={1}
-      // direction="row"
+      // direction='row'
       // item
-      alignItems="center"
+      alignItems='center'
       className={classes.row}
     >
       {/* <Grid item> */}
-      <Fab onClick={decreaseByOne} size="small">
+      <Fab
+        onClick={decreaseByOne}
+        size='small'
+        data-cy={MINUS_ONE_QUANTITY}
+      >
         <RemoveRoundedIcon />
       </Fab>
       {/* </Grid>
       <Grid item> */}
       <TextField
         className={classes.textField}
-        margin="dense"
-        variant="outlined"
+        margin='dense'
+        variant='outlined'
         inputProps={{
           style: {
-            textAlign: "center"
-          }
+            textAlign: 'center'
+          },
+          'data-cy': ADJUST_QUANTITY
         }}
         value={quantity}
         onChange={updateNumberInput}
       />
       {/* </Grid>
       <Grid item> */}
-      <Fab onClick={increaseByOne} size="small">
+      <Fab
+        onClick={increaseByOne}
+        size='small'
+        data-cy={PLUS_ONE_QUANTITY}
+      >
         <AddRoundedIcon />
       </Fab>
       {/* </Grid> */}
@@ -89,4 +94,4 @@ function QuantityPicker(props: IProps) {
   );
 }
 
-export default QuantityPicker;
+export default QuantityPickerComponent;

@@ -1,4 +1,4 @@
-import { PayloadAction, IState } from './crud.model';
+import { IState } from './crud.model';
 
 export function pending(state: IState<any>) {
     state.isLoading = true;

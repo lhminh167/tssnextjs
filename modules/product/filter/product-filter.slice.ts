@@ -3,7 +3,7 @@ import { PaginatedList } from '../../shared/crud/crud.model';
 import { failed, idle, pending, succeeded } from '../../shared/crud/crud.reducer';
 import { crudInitialState, paginatedInitialState } from '../../shared/crud/crud.state';
 import { IProduct } from '../../shared/models/product.model';
-import { defaultProductSearchRequest, IProductFilterFilter, IProductFilterState, IProductSearchRequest, productFilterUrl, filterInitialData } from './product-filter.model';
+import { defaultProductSearchRequest, IProductFilterFilter, IProductFilterState, IProductSearchRequest, apiProductUrl, filterInitialData } from './product-filter.model';
 
 const productFilterInitialState: IProductFilterState = {
     filter: crudInitialState(filterInitialData),
@@ -12,7 +12,7 @@ const productFilterInitialState: IProductFilterState = {
 };
 
 export default createSlice({
-    name: productFilterUrl.product,
+    name: apiProductUrl.product,
     initialState: productFilterInitialState,
     reducers: {
         getFilterPending: (state: IProductFilterState) => {
@@ -53,8 +53,8 @@ export default createSlice({
         getProductsIdle: (state: IProductFilterState) => {
             idle(state.product, productFilterInitialState.product);
         },
-        
-        
+
+
         apply: (state: IProductFilterState, action: PayloadAction<IProductSearchRequest>) => {
             state.choice = action.payload;
         },

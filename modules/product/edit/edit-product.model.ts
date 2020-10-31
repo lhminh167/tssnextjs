@@ -1,6 +1,6 @@
-import { Validator } from "fluentvalidation-ts";
-import { IReview } from "../../shared/models/review.model";
-import { IAttributeValue } from "../../shared/models/attribute-value.model";
+import { Validator } from 'fluentvalidation-ts';
+import { IReview } from '../../shared/models/review.model';
+import { IAttributeValue } from '../../shared/models/attribute-value.model';
 
 export interface IEditProductState {
     productId: number;

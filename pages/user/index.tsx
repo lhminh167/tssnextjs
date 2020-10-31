@@ -1,16 +1,13 @@
 
-import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
-import CustomerIndexComponent from "../../modules/customer/index/customer-index.component";
-import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
+import { Container } from "@material-ui/core";
 import { CustomerIndexMetadataComponent } from "../../modules/customer/index/customer-index-metadata.component";
+import CustomerIndexComponent from "../../modules/customer/index/customer-index.component";
+import { allowCustomerHoc } from "../../modules/shared/allow/allow-customer.component";
+import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
 
-export default function CustomerIndexPage(props) {
-    const classes = useStyles(props);
+function CustomerIndexPage() {
+
     return (
         <Container>
             <ErrorBoundary>
@@ -25,12 +22,4 @@ export default function CustomerIndexPage(props) {
     );
 }
 
-// CustomerIndexPage.getInitialProps = async function ({
-//     ctx: {
-//         isServer,
-//         store,
-//         query
-//     },
-//     ctx
-// }) {
-// }
+export default allowCustomerHoc(CustomerIndexPage);

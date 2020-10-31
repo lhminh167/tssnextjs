@@ -1,13 +1,14 @@
-import { Breadcrumbs, Accordion, AccordionDetails, AccordionSummary, Typography } from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { Breadcrumbs, Accordion, AccordionDetails, AccordionSummary, Typography } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Link from "next/link";
-import { ChangeEvent, Fragment, useState } from "react";
-import CategoryListComponent from "../../category/list/category-list.component";
-import { mb } from "../../shared/layout/layout.style";
-import { IDepartment } from "../../shared/models/department.model";
+import Link from 'next/link';
+import { ChangeEvent, Fragment, useState } from 'react';
+import CategoryListComponent from '../../category/list/category-list.component';
+import { mb } from '../../shared/layout/layout.style';
+import { IDepartment } from '../../shared/models/department.model';
+import { NAME, DESCRIPTION, tag, DEPARTMENT } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,20 +31,20 @@ export default function DepartmentListComponent({
                 xs={12}
                 className={classes.mb}
             >
-                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+                <Breadcrumbs separator={<NavigateNextIcon fontSize='small' />}>
                     <Link
-                        href="/"
+                        href='/'
                         as='/'
                         passHref
                     >
                         <Typography
-                            component="a"
-                            color="inherit"
+                            component='a'
+                            color='inherit'
                         >
                             Home
                         </Typography>
                     </Link>
-                    <Typography color="textPrimary">Department</Typography>
+                    <Typography color='textPrimary'>Department</Typography>
                 </Breadcrumbs>
             </Grid>
             <DepartmentOverviewComponent
@@ -81,8 +82,9 @@ function DepartmentOverviewComponent({
                                 expandIcon={<ExpandMoreIcon />}
                             >
                                 <Typography
-                                    variant="h6"
-                                    component="h2"
+                                    variant='h6'
+                                    component='h2'
+                                    data-cy={tag(NAME, entry.departmentId, DEPARTMENT)}
                                 >
                                     {entry.name}
                                 </Typography>
@@ -95,9 +97,10 @@ function DepartmentOverviewComponent({
                                     >
                                         <Typography
                                             variant='subtitle2'
+                                            data-cy={tag(DESCRIPTION, entry.departmentId, DEPARTMENT)}
                                         >
-                                            {entry.description}.
-                                    </Typography>
+                                            {entry.description}
+                                        </Typography>
                                     </Grid>
                                     <CategoryListComponent
                                         data={entry.category}

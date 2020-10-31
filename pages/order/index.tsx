@@ -1,14 +1,12 @@
-import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
-import React from "react";
-import OrderListComponent from "../../modules/order/list/order-list.component";
-import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
-import { redirect, getCustomerIdNumberFromStore } from "../../modules/shared/helpers/auth.helper";
-import { OrderListMetadataComponent } from "../../modules/order/list/order-list-metadata.component";
+import Container from '@material-ui/core/Container';
+import React from 'react';
+import { OrderListMetadataComponent } from '../../modules/order/list/order-list-metadata.component';
+import OrderListComponent from '../../modules/order/list/order-list.component';
+import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
+import { allowCustomerHoc } from '../../modules/shared/allow/allow-customer.component';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({}));
+function OrderListPage() {
 
-export default function OrderListPage() {
-  const classes = useStyles({});
   return (
     <Container>
       <ErrorBoundary>
@@ -21,14 +19,4 @@ export default function OrderListPage() {
   );
 }
 
-OrderListPage.getInitialProps = async function ({
-  ctx: { isServer, store },
-  ctx
-}) {
-  if (isServer) return;
-  const customerId = getCustomerIdNumberFromStore(store);
-  if (customerId <= 0) {
-    redirect(ctx, "/user/login");
-    return;
-  }
-};
+export default allowCustomerHoc(OrderListPage)

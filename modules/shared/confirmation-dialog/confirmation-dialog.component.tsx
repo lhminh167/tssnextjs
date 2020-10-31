@@ -1,4 +1,4 @@
-import { IconButton, Typography, Backdrop, CircularProgress, Grid } from '@material-ui/core';
+import { Backdrop, CircularProgress, Grid, IconButton, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -7,6 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { ReactNode } from 'react';
+import { NO, YES } from '../tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -26,6 +27,8 @@ export interface Props {
     confirm: any;
     decline: any;
     isLoading?: boolean;
+    confirmTestId?: string,
+    declineTestId?: string
 }
 
 export function ConfirmationDialog({
@@ -37,36 +40,38 @@ export function ConfirmationDialog({
     close,
     confirm,
     decline,
-    isLoading
+    isLoading,
+    confirmTestId,
+    declineTestId
 }: Props) {
     const classes = useStyles({});
     return (
         <Dialog
             disableBackdropClick
             disableEscapeKeyDown
-            maxWidth="xs"
+            maxWidth='xs'
             open={open}
         >
             <Backdrop
                 className={classes.backdrop}
                 open={isLoading ?? false}
             >
-                <CircularProgress color="inherit" />
+                <CircularProgress color='inherit' />
             </Backdrop>
             <DialogTitle
                 disableTypography
             >
                 <Grid
                     container
-                    direction="row"
-                    justify="space-between"
-                    alignItems="center"
+                    direction='row'
+                    justify='space-between'
+                    alignItems='center'
                 >
                     <Grid
                         item
                     >
                         <Typography
-                            variant="h6"
+                            variant='h6'
                         >
                             {
                                 title ?? 'Confirmation'
@@ -94,13 +99,16 @@ export function ConfirmationDialog({
             <DialogActions>
                 <Button autoFocus
                     onClick={decline}
-                    color="primary"
+                    color='primary'
+                    data-cy={declineTestId ?? NO}
                 >
                     {
                         declineText ?? 'Cancel'
                     }
                 </Button>
-                <Button onClick={confirm} color="primary">
+                <Button onClick={confirm} color='primary'
+                    data-cy={confirmTestId ?? YES}
+                >
                     {
                         confirmText ?? 'Ok'
                     }

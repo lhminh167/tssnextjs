@@ -1,12 +1,12 @@
-import { Button, createStyles, makeStyles, Theme, Typography } from "@material-ui/core";
-import Link from "next/link";
-import { useState } from "react";
-import { defaultProductSearchRequest, IProductSearchRequest } from "../../../product/filter/product-filter.model";
-import { getProducts } from "../../../product/filter/product-filter.service";
-import { PaginatedList } from "../../../shared/crud/crud.model";
-import { ICategory } from "../../../shared/models/category.model";
-import { IProduct } from "../../../shared/models/product.model";
-import ProductHorizontalGallery from "../../../shared/product-horizontal-gallery/product-horizontal-gallery.component";
+import { Button, createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
+import Link from 'next/link';
+import { useState } from 'react';
+import { defaultProductSearchRequest, IProductSearchRequest } from '../../../product/filter/product-filter.model';
+import { getProducts } from '../../../product/filter/product-filter.service';
+import { PaginatedList } from '../../../shared/crud/crud.model';
+import { ICategory } from '../../../shared/models/category.model';
+import { IProduct } from '../../../shared/models/product.model';
+import ProductHorizontalGallery from '../../../shared/product-horizontal-gallery/product-horizontal-gallery.component';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -44,21 +44,9 @@ export default function CategoryDetailProductListComponent({
             data={state}
             output={changePageIndex}
             title={
-                <Typography variant="h6" component="h2">
+                <Typography variant='h6' component='h2'>
                     Product Recommendations
                 </Typography>
-            }
-            seeMore={
-                <Link
-                    href="/product"
-                    as="/product"
-                    passHref
-                >
-                    <Button component="a"
-                    >
-                        See All Recommended Products
-                    </Button>
-                </Link>
             }
         />
     );

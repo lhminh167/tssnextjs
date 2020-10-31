@@ -1,16 +1,10 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import React from 'react';
-import DepartmentListComponent from '../modules/department/list/department-list.component';
 import { getDepartments } from '../modules/department/department.service';
-import { IDepartment } from '../modules/shared/models/department.model';
-import { Container } from '@material-ui/core';
-import ErrorBoundary from '../modules/shared/error-boundary/error-boundary.component';
 import { DepartmentListMetadataComponent } from '../modules/department/list/department-list-metadata.component';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
+import DepartmentListComponent from '../modules/department/list/department-list.component';
+import ErrorBoundary from '../modules/shared/error-boundary/error-boundary.component';
+import { IDepartment } from '../modules/shared/models/department.model';
 
 interface Props {
     data: IDepartment[]
@@ -19,7 +13,6 @@ interface Props {
 export default function DepartmentListPage({
     data
 }: Props) {
-    const classes = useStyles({});
     return (
         <Container>
             <ErrorBoundary>
@@ -35,9 +28,12 @@ export default function DepartmentListPage({
     );
 }
 
-DepartmentListPage.getInitialProps = async function ({ ctx }) {
-    const { query } = ctx;
+export async function getStaticProps() {
+
     const response: any = await getDepartments();
 
-    return { data: response.content };
+    return {
+        props: { data: response.content },
+        revalidate: null
+    }
 }

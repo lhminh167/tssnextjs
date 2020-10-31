@@ -1,4 +1,4 @@
-import { Validator } from "fluentvalidation-ts";
+import { Validator } from 'fluentvalidation-ts';
 
 export interface ShippingRegion {
     shippingRegionId: number;
@@ -18,5 +18,5 @@ export class ShippingRegionValidator extends Validator<ShippingRegion> {
 
 export const defaultShippingRegion = {
     shippingRegionId: 1,
-    shippingRegion1: ''
+    shippingRegion1: 'Please Select'
 }

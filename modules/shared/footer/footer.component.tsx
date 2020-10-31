@@ -7,6 +7,7 @@ import { Metadata } from '../metadata/metadata.model';
 import { Grid, useMediaQuery, Paper } from '@material-ui/core';
 import Link from 'next/link';
 import { bgWhite, p, mt, mtAuto } from '../layout/layout.style';
+import { FOOTER } from '../tag/tag.model';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +28,7 @@ export default function FooterComponent(props) {
         <Paper
             component='footer'
             className={classes.bgWhite + ' ' + classes.mtAuto}
+            data-cy={FOOTER}
         >
             <Container
                 className={classes.p}
@@ -56,10 +58,10 @@ export default function FooterComponent(props) {
                             >
 
                                 <Typography
-                                    variant="body2"
+                                    variant='body2'
                                     component='p'
-                                    color="textSecondary"
-                                    align="center"
+                                    color='textSecondary'
+                                    align='center'
                                 >
                                     {`© ${new Date().getFullYear()} ${process.env.SITE_NAME.toLowerCase()} Ltd`}
                                 </Typography>

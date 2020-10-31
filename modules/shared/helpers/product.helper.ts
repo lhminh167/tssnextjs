@@ -1,4 +1,5 @@
-import { IAttributeValue } from "../models/attribute-value.model";
+import { ProductFilterFilterEnum } from '../../product/filter/product-filter.model';
+import { IAttributeValue } from '../models/attribute-value.model';
 
 export function encodeAttributes(attributeList: IAttributeValue[]): string {
     const attributes: string = attributeList.map(a => a.name).join('/');
@@ -20,4 +21,20 @@ export function decodeAttributes(attributeList: string): IAttributeValue[] {
         });
     }
     return attributePairs;
+}
+
+export function getCartItemColor(input: IAttributeValue[]) {
+    return input.find(e => e.name === ProductFilterFilterEnum.Color)?.value;
+}
+
+export function getCartItemSize(input: IAttributeValue[]) {
+    return input.find(e => e.name === ProductFilterFilterEnum.Size)?.value;
+}
+
+export function getColors(input: IAttributeValue[]) {
+    return input.filter(e => e.name === ProductFilterFilterEnum.Color);
+}
+
+export function getSizes(input: IAttributeValue[]) {
+    return input.filter(e => e.name === ProductFilterFilterEnum.Size);
 }

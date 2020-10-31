@@ -1,17 +1,36 @@
-import { Shipping, defaultShipping } from "../shared/models/shipping.model";
 import { Customer, defaultCustomer } from "../customer/customer.model";
+import { Shipping, defaultShipping } from "../shared/models/shipping.model";
 import { Tax, defaultTax } from "../shared/models/tax.model";
 import { IProduct } from "../shared/models/product.model";
+import { PaginationRequest } from "../shared/crud/crud.model";
+import queryString from 'query-string';
 
-const orderBaseUrl = "Order";
+const apiOrderBaseUrl = 'Order';
+
+export const apiOrderUrl = {
+    baseUrl: apiOrderBaseUrl,
+    new: apiOrderBaseUrl + '/new',
+    payment: apiOrderBaseUrl + '/payment',
+    stockOk: apiOrderBaseUrl + '/stockOk',
+    stockNotOk: apiOrderBaseUrl + '/stockNotOk',
+    shipOk: apiOrderBaseUrl + '/shipOk',
+    shipNotOk: apiOrderBaseUrl + '/shipNotOk',
+    search: (query: PaginationRequest) => `${apiOrderBaseUrl}?${queryString.stringify(query)}`,
+    detail: (orderId: number) => ({
+        href: `${apiOrderBaseUrl}/[orderId]`,
+        as: `${apiOrderBaseUrl}/${orderId}`,
+    }),
+};
+
+const orderBaseUrl = '/order';
 
 export const orderUrl = {
     baseUrl: orderBaseUrl,
-    new: orderBaseUrl + "/new",
-    stockOk: orderBaseUrl + "/stockOk",
-    stockNotOk: orderBaseUrl + "/stockNotOk",
-    shipOk: orderBaseUrl + "/shipOk",
-    shipNotOk: orderBaseUrl + "/shipNotOk"
+    new: orderBaseUrl + '/new',
+    detail: (orderId: number) => ({
+        href: `${orderBaseUrl}/[orderId]`,
+        as: `${orderBaseUrl}/${orderId}`,
+    }),
 };
 
 export interface Order {

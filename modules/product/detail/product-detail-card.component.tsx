@@ -14,14 +14,16 @@ import { formatCurrency, toUrl } from '../../shared/helpers/string.helper';
 import { mb, mb2, mr, p } from '../../shared/layout/layout.style';
 import { defaultAttributeValue } from '../../shared/models/attribute-value.model';
 import { IProduct } from '../../shared/models/product.model';
-import QuantityPicker from '../../shared/quantity-picker/quantity-picker.component';
-import SizePicker from '../../shared/size-picker/size-picker.component';
+import QuantityPickerComponent from '../../shared/quantity-picker/quantity-picker.component';
+import SizePickerComponent from '../../shared/size-picker/size-picker.component';
 import { addShoppingCartItem } from '../../shopping-cart/shopping-cart.service';
 import { shoppingCartItemCountSlice } from '../../shopping-cart/shopping-cart.slice';
-import { ProductFilterFilterEnum } from '../filter/product-filter.model';
+import { ProductFilterFilterEnum, productUrl } from '../filter/product-filter.model';
 import ProductDetailImageComponent from './product-detail-image.component';
 import { removeProduct } from './product-detail.service';
 import { setLoginToken } from '../../shared/helpers/token.helper';
+import { ADD_TO_CART, ADD_TO_WISH_LIST, NAME, PRICE, DISCOUNTED_PRICE, DESCRIPTION, EDIT, REMOVE } from '../../shared/tag/tag.model';
+import { goTo } from '../../shared/helpers/auth.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,7 +52,7 @@ export default function ProductDetailCardComponent({
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const isAdmin = useSelector<IRootState, boolean>(
-        state => state.currentUser.data.role === "Admin"
+        state => state.currentUser.data.role === 'Admin'
     );
 
     async function handleAddToCart(buyNow: boolean) {
@@ -79,7 +81,7 @@ export default function ProductDetailCardComponent({
     async function deleteProduct() {
         setIsLoading(true);
         await removeProduct(data.productId);
-        router.push('/');
+        goTo('/');
         closeDialog();
     }
 
@@ -99,9 +101,10 @@ export default function ProductDetailCardComponent({
 
                 >
                     <Typography
-                        component="h1"
-                        variant="h4"
+                        component='h1'
+                        variant='h4'
                         gutterBottom
+                        data-cy={NAME}
                     >
                         {data.name}
                     </Typography>
@@ -109,14 +112,15 @@ export default function ProductDetailCardComponent({
                 <Grid item xs={12}
                     container
                     direction='row'
-                    alignItems="flex-end"
+                    alignItems='flex-end'
                     className={classes.mb}
                 >
                     <Typography
-                        component="h2"
-                        variant="h5"
-                        color="primary"
+                        component='h2'
+                        variant='h5'
+                        color='primary'
                         className={data.discountedPrice > 0 ? classes.mr : null}
+                        data-cy={DISCOUNTED_PRICE}
                     >
                         {formatCurrency(
                             data.discountedPrice > 0
@@ -127,9 +131,10 @@ export default function ProductDetailCardComponent({
                     {
                         data.discountedPrice > 0 &&
                         <Typography
-                            component="s"
-                            variant="subtitle1"
-                            color="initial"
+                            component='s'
+                            variant='subtitle1'
+                            color='initial'
+                            data-cy={PRICE}
                         >
                             {formatCurrency(data.price)}
                         </Typography>
@@ -139,9 +144,10 @@ export default function ProductDetailCardComponent({
                     className={classes.mb}
                 >
                     <Typography
-                        component="p"
-                        variant="subtitle2"
+                        component='p'
+                        variant='subtitle2'
                         gutterBottom
+                        data-cy={DESCRIPTION}
                     >
                         {data.description}
                     </Typography>
@@ -151,28 +157,25 @@ export default function ProductDetailCardComponent({
                     <Fragment>
                         <Grid item xs={12}>
                             <Link
-                                href={{
-                                    pathname: '/product/[productName]/edit',
-                                    query: {
-                                        productId: data.productId
-                                    }
-                                }}
-                                as={`/product/${toUrl(data.name)}/edit?productId=${data.productId}`}
+                                href={productUrl.edit(data).href}
+                                as={productUrl.edit(data).as}
                                 passHref
                             >
                                 <Button
-                                    component="a"
-                                    color="primary"
-                                    variant="contained"
+                                    component='a'
+                                    color='primary'
+                                    variant='contained'
                                     className={classes.mr}
+                                    data-cy={EDIT}
                                 >
                                     Edit
                                     </Button>
                             </Link>
                             <Button
                                 onClick={openDialog}
-                                color="inherit"
-                                variant="contained"
+                                color='inherit'
+                                variant='contained'
+                                data-cy={REMOVE}
                             >
                                 Delete
                                 </Button>
@@ -180,7 +183,7 @@ export default function ProductDetailCardComponent({
                     </Fragment>
                 }
                 <Grid item xs={12}>
-                    <SizePicker
+                    <SizePickerComponent
                         data={sizes}
                         state={size}
                         output={setSize}
@@ -202,20 +205,21 @@ export default function ProductDetailCardComponent({
                     >
                         Quantity
                     </Typography>
-                    <QuantityPicker
+                    <QuantityPickerComponent
                         quantity={quantity}
                         output={(quantity: number) => setQuantity(quantity)}
                     />
                 </Grid>
                 <Grid item container
                     xs={12}
-                    alignItems="center"
+                    alignItems='center'
                 >
                     <Fab
-                        variant="extended"
-                        color="primary"
+                        variant='extended'
+                        color='primary'
                         onClick={() => { handleAddToCart(true) }}
                         className={classes.mr + ' ' + classes.mb}
+                        data-cy={ADD_TO_CART}
                     >
                         Add To Cart
                     </Fab>
@@ -224,9 +228,10 @@ export default function ProductDetailCardComponent({
                         onClick={() => { handleAddToCart(false) }}
                         startIcon={
                             <FavoriteBorderIcon
-                                color="primary"
+                                color='primary'
                             />
                         }
+                        data-cy={ADD_TO_WISH_LIST}
                     >
                         Add to Wish List
                     </Button>

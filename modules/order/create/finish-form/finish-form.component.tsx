@@ -1,12 +1,13 @@
-import Fab from "@material-ui/core/Fab";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Link from "next/link";
-import React from "react";
-import { RocketIcon } from "../../../shared/svg/svg.component";
-import { Order } from "../../order.model";
-import { makeStyles, createStyles } from "@material-ui/core";
-import { mb2, mb } from "../../../shared/layout/layout.style";
+import Fab from '@material-ui/core/Fab';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Link from 'next/link';
+import React from 'react';
+import { RocketIcon } from '../../../shared/svg/svg.component';
+import { Order } from '../../order.model';
+import { makeStyles, createStyles } from '@material-ui/core';
+import { mb2, mb } from '../../../shared/layout/layout.style';
+import { ID, BACK } from '../../../shared/tag/tag.model';
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -26,16 +27,16 @@ export default function FinishFormComponent({ back, data }: Props) {
   return (
     <Grid
       container
-      alignItems="center"
-      direction="column"
+      alignItems='center'
+      direction='column'
     >
       <Grid
         item
       >
         <RocketIcon
-          color="primary"
+          color='primary'
           style={{
-            fontSize: "16rem"
+            fontSize: '16rem'
           }}
         />
       </Grid>
@@ -43,24 +44,24 @@ export default function FinishFormComponent({ back, data }: Props) {
         item
         className={classes.mb}
       >
-        <Typography variant="h2" component="h2">
+        <Typography variant='h2' component='h2'>
           Success!
         </Typography>
       </Grid>
       <Grid
         item
         container
-        alignItems="center"
-        direction="column"
+        alignItems='center'
+        direction='column'
         className={classes.mb2}
       >
-        <Typography variant="subtitle1">
-          Your order number is {data.orderId}.
+        <Typography variant='subtitle1'>
+          Your order number is <span data-cy={ID}>{data.orderId}</span>.
         </Typography>
-        <Typography variant="subtitle1">
+        <Typography variant='subtitle1'>
           We have emailed your order confirmation,
         </Typography>
-        <Typography variant="subtitle1">
+        <Typography variant='subtitle1'>
           and will send you an update when your order has shipped.
         </Typography>
       </Grid>
@@ -68,8 +69,9 @@ export default function FinishFormComponent({ back, data }: Props) {
         item
         className={classes.mb2}
       >
-        <Link href="/" as="/" passHref>
-          <Fab component="a" variant="extended" color="primary"
+        <Link href='/' as='/' passHref>
+          <Fab component='a' variant='extended' color='primary'
+            data-cy={BACK}
           >
             Back to Shop
           </Fab>

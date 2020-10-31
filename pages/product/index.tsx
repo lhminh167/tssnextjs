@@ -1,18 +1,26 @@
-import { createStyles, makeStyles, Theme, Container } from "@material-ui/core";
+import { Container } from '@material-ui/core';
+import Router, { useRouter } from 'next/router';
 import querystring from 'query-string';
-import ProductFilterComponent from "../../modules/product/filter/product-filter.component";
-import { defaultProductSearchRequest } from "../../modules/product/filter/product-filter.model";
-import productFilterSlice from "../../modules/product/filter/product-filter.slice";
-import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
-import { ProductFilterMetadataComponent } from "../../modules/product/filter/product-filter-metadata.component";
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { END } from 'redux-saga';
+import { ProductFilterMetadataComponent } from '../../modules/product/filter/product-filter-metadata.component';
+import ProductFilterComponent from '../../modules/product/filter/product-filter.component';
+import { defaultProductSearchRequest } from '../../modules/product/filter/product-filter.model';
+import productFilterSlice from '../../modules/product/filter/product-filter.slice';
+import { initializeStore } from '../../modules/root/root.store';
+import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
+import { getCurrentUser } from '../../modules/shared/helpers/auth.helper';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
 
 export default function ProductSearchPage(props) {
-    const classes = useStyles(props);
+    const dispatch = useDispatch();
+    const router = useRouter();
+
+    useEffect(() => {
+        getCurrentUser(dispatch);
+    }, [router.query])
+
     return (
         <Container>
             <ErrorBoundary>
@@ -27,18 +35,9 @@ export default function ProductSearchPage(props) {
     );
 }
 
-ProductSearchPage.getInitialProps = async function ({
-    ctx: {
-        isServer,
-        store,
-        query,
-        req
-    },
-    ctx
-}) {
-
+export async function getServerSideProps(context) {
     const parsedQuery = querystring.parse(
-        querystring.stringify(query),
+        querystring.stringify(context.query),
         {
             parseNumbers: true,
             parseBooleans: true,
@@ -46,14 +45,25 @@ ProductSearchPage.getInitialProps = async function ({
         }
     );
 
-    if (
-        isServer
-        || !store.getState().productFilter.filter.data.attributes.length
-    )
-        store.dispatch(productFilterSlice.actions.getFilterPending());
+    const reduxStore = initializeStore();
+    const { dispatch } = reduxStore;
 
-    store.dispatch(productFilterSlice.actions.getProductsPending({
+    dispatch(productFilterSlice.actions.getFilterPending());
+
+    dispatch(productFilterSlice.actions.getProductsPending({
         ...defaultProductSearchRequest,
         ...parsedQuery as any,
     }));
+
+    dispatch(END);
+
+    await reduxStore.sagaTask.toPromise();
+
+    const initialReduxState = reduxStore.getState();
+
+    return {
+        props: {
+            initialReduxState
+        },
+    }
 }

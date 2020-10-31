@@ -1,12 +1,10 @@
-import { Button, createStyles, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
-import { Rating } from "@material-ui/lab";
-import { IReview } from "../../../shared/models/review.model";
-import { deleteReview, updateReview } from "../review.service";
-import { useState, Fragment } from "react";
-import ProductReviewDeleteComponent from "../delete/product-review-delete.component";
-import ProductReviewEditComponent from "../edit/product-review-edit.component";
-import { formatDatetime } from "../../../shared/helpers/string.helper";
-import { bold } from "../../../shared/layout/layout.style";
+import { createStyles, Grid, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Rating } from '@material-ui/lab';
+import { Fragment } from 'react';
+import { formatDatetime } from '../../../shared/helpers/string.helper';
+import { bold } from '../../../shared/layout/layout.style';
+import { IReview } from '../../../shared/models/review.model';
+import { CREATED_ON, tag, NAME, RATING, REVIEW, REVIEW_1 } from '../../../shared/tag/tag.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -35,17 +33,20 @@ export default function ProductReviewComponent({
                     value={data.rating}
                     readOnly
                     max={5}
+                    data-cy={tag(RATING, data.reviewId, REVIEW)}
                 />
                 <Typography
-                    component="h3"
-                    variant="subtitle1"
+                    component='h3'
+                    variant='subtitle1'
                     className={classes.bold}
+                    data-cy={tag(NAME, data.reviewId, REVIEW)}
                 >
                     {data.customer.name}
                 </Typography>
                 <Typography
-                    variant="subtitle2"
+                    variant='subtitle2'
                     component='time'
+                    data-cy={tag(CREATED_ON, data.reviewId, REVIEW)}
                 >
                     {formatDatetime(data.createdOn)}
                 </Typography>
@@ -56,9 +57,10 @@ export default function ProductReviewComponent({
                 sm={8}
             >
                 <Typography
-                    component="p"
-                    variant="body1"
+                    component='p'
+                    variant='body1'
                     gutterBottom
+                    data-cy={tag(REVIEW_1, data.reviewId, REVIEW)}
                 >
                     {data.review1}
                 </Typography>

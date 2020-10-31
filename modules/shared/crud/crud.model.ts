@@ -55,52 +55,24 @@ export interface IResponse<T> {
   errors?: any[];
 }
 
-export class Response<T> implements IResponse<T> {
-  constructor(
-    content?: T,
-    status?: number,
-    title?: string,
-    type?: string,
-    detail?: string,
-    instance?: string,
-    errors?: any[]
-  ) {
-    this.content = content;
-    this.status = status;
-    this.type = type;
-    this.title = title;
-    this.detail = detail;
-    this.instance = instance;
-    this.errors = errors;
-  }
-
-  content?: T;
-  status?: number;
-  type?: string;
-  title?: string;
-  detail?: string;
-  instance?: string;
-  errors?: any[];
-}
-
 export interface PayloadAction<T> {
   type?: string;
   payload: IResponse<T>;
 }
 
 export enum HttpMethod {
-  DELETE = "DELETE",
-  GET = "GET",
-  HEAD = "HEAD",
-  POST = "POST",
-  OPTIONS = "OPTIONS",
-  PUT = "PUT",
-  PATCH = "PATCH"
+  DELETE = 'DELETE',
+  GET = 'GET',
+  HEAD = 'HEAD',
+  POST = 'POST',
+  OPTIONS = 'OPTIONS',
+  PUT = 'PUT',
+  PATCH = 'PATCH'
 }
 
 export interface UploadRequest {
   name: string;
-  file: File;
+  file: Blob;
 }
 
 export interface ImageGetUploadTokenRequest {
@@ -121,9 +93,9 @@ export interface ImagesRenameRequest {
   content: ImageRenameRequest[];
 }
 
-const mediaBaseUrl = "Media";
+const mediaBaseUrl = 'Media';
 
 export const mediaUrl = {
-  imageUploadToken: mediaBaseUrl + "/" + "ImageUploadToken",
+  imageUploadToken: mediaBaseUrl + '/' + 'ImageUploadToken',
   baseUrl: mediaBaseUrl
 };

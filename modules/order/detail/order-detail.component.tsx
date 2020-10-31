@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Link from "next/link";
+import Link from 'next/link';
 import React, { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { formatCurrency, formatDatetime } from '../../shared/helpers/string.helper';
 import { bold, mb, p, textDanger, textSuccess, textWarning } from '../../shared/layout/layout.style';
@@ -11,6 +11,10 @@ import { defaultOrder, Order } from '../order.model';
 import { getOrder } from '../order.service';
 import ShipOkComponent from './ship-ok.component';
 import StockOkComponent from './stock-ok.component';
+import { COMMENT, ORDER, STATUS, ORDER_SUMMARY, tag } from '../../shared/tag/tag.model';
+import { getCustomerRoleFromLoginToken, goTo } from '../../shared/helpers/auth.helper';
+import { Role } from '../../customer/customer.model';
+import { isOk } from '../../shared/helpers/http.helper';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -33,13 +37,18 @@ export default function OrderDetailComponent({
     const classes = useStyles({});
     const [state, setState] = React.useState<Order>(defaultOrder);
     const [expanded, setExpanded] = useState<string | false>(false);
+    const isAdmin: boolean = getCustomerRoleFromLoginToken() === Role.Admin;
 
     useEffect(() => {
-        getOrder(orderId).then(data => {
-
-            setState(data.content);
-        })
-    }, [])
+        if (orderId > 0)
+            getOrder(orderId).then(data => {
+                if (!isOk(data.status)) {
+                    goTo('/');
+                    return;
+                }
+                setState(data.content);
+            })
+    }, [orderId])
 
     const handleChange = (panel: string) => (event: ChangeEvent<{}>, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
@@ -48,33 +57,33 @@ export default function OrderDetailComponent({
     return (
         <Fragment>
             <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
+                separator={<NavigateNextIcon fontSize='small' />}
                 className={classes.mb}
             >
                 <Link
-                    href="/"
+                    href='/'
                     passHref
                 >
                     <Typography
-                        component="a"
-                        color="inherit"
+                        component='a'
+                        color='inherit'
                     >
                         Home
                     </Typography>
                 </Link>
                 <Link
-                    href="/order"
+                    href='/order'
                     passHref
                 >
                     <Typography
-                        component="a"
-                        color="inherit"
+                        component='a'
+                        color='inherit'
                     >
                         Order
                     </Typography>
                 </Link>
                 <Typography
-                    color="textPrimary"
+                    color='textPrimary'
                 >
                     {orderId}
                 </Typography>
@@ -87,6 +96,8 @@ export default function OrderDetailComponent({
                 Order Details
             </Typography>
             {
+                isAdmin
+                &&
                 state.orderStatus.message === 'Awaiting stock confirmation'
                 &&
                 <Grid
@@ -101,6 +112,8 @@ export default function OrderDetailComponent({
                 </Grid>
             }
             {
+                isAdmin
+                &&
                 state.orderStatus.message === 'Awaiting shipment confirmation'
                 &&
                 <Grid
@@ -123,6 +136,7 @@ export default function OrderDetailComponent({
                 >
                     <Typography
                         component='h2'
+                        data-cy={ORDER_SUMMARY}
                     >
                         Order Summary
                     </Typography>
@@ -139,6 +153,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 className={classes[state.orderStatus.cssClass]}
+                                data-cy={tag(ORDER, '', STATUS)}
                             >
                                 {state.orderStatus.message}
                             </Typography>
@@ -193,6 +208,7 @@ export default function OrderDetailComponent({
                                 Comments
                         </Typography>
                             <Typography
+                                data-cy={tag(ORDER_SUMMARY, '', COMMENT)}
                             >
                                 {state.comments ?? 'No Comments'}
                             </Typography>
@@ -230,7 +246,7 @@ export default function OrderDetailComponent({
                             <TableBody>
                                 {state.orderDetail.map(row => (
                                     <TableRow key={row.itemId}>
-                                        <TableCell component="th" scope="row">
+                                        <TableCell component='th' scope='row'>
                                             {row.itemId}
                                         </TableCell>
                                         <TableCell>{row.productName}</TableCell>
@@ -445,7 +461,7 @@ export default function OrderDetailComponent({
                                     })
                                     .map(row => (
                                         <TableRow key={row.auditId}>
-                                            <TableCell component="th" scope="row">
+                                            <TableCell component='th' scope='row'>
                                                 {row.auditId}
                                             </TableCell>
                                             <TableCell>{row.message}</TableCell>

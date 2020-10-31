@@ -1,0 +1,143 @@
+import { customerUrl } from "../../../modules/customer/customer.model";
+import { createCustomer, login } from "../../../modules/customer/customer.service";
+import { getValidLoginToken, removeLoginToken, setLoginToken } from "../../../modules/shared/helpers/token.helper";
+import { FORGOT_PASSWORD, REGISTER_LINK, SUBMIT } from "../../../modules/shared/tag/tag.model";
+import { apiShoppingCartUrl, shoppingCartUrl } from "../../../modules/shopping-cart/shopping-cart.model";
+import { addShoppingCartItem } from "../../../modules/shopping-cart/shopping-cart.service";
+import { typeLogin } from "../../helpers/customer/login/login.component.spec";
+import { cyGetExistingProduct } from "../../helpers/product/create/create-product.component.spec";
+import { cyGetCustomerLoginToken, cyGetExistingCustomer, cySetCustomerLoginToken, mockRandomCustomer } from "../../helpers/shared/helpers/auth.helper";
+import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navbar.component.spec";
+import { ShoppingCartItemDetailTest } from "../../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
+import { fromProductToCartItem } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
+
+it('Login Page -> Login -> When not-logged-in user accesses Login Page, then user can log in #working', () => {
+    const user = cyGetExistingCustomer();
+    cy
+        .visit(customerUrl.login())
+        .wrap(user).pipe(typeLogin)
+    cy
+        .getEl(SUBMIT).click()
+        .wrap('/').load()
+        .wrap(user).chain(UserPopoverDetailTest)
+});
+
+it('Login Page -> Access Denied -> When logged-in user accesses Login Page, then user is redirected to Home Page #working', () => {
+    cy
+        .pipe(cySetCustomerLoginToken)
+        .visit(customerUrl.login())
+        .wrap('/').load();
+});
+
+it('Login Page -> Register Link -> When user clicks Register Link, then user is redirected to Register Page #working', () => {
+    cy.visit(customerUrl.login())
+    cy.getEl(REGISTER_LINK).click().getLink().load();
+});
+
+
+it('Login Page -> Forgot Password Link -> When user clicks Forgot Password Link, then user is redirected to Forgot Password Page #working', () => {
+    cy.visit(customerUrl.login())
+    cy.getEl(FORGOT_PASSWORD).click().getLink().load();
+});
+
+
+it('Login Page -> Anonymous Shopping Cart -> Given anonymous user has some items in shopping cart, when user logs in, then anonymous cart items are added to the account user used to log in #working', () => {
+    const item = fromProductToCartItem(cyGetExistingProduct(), 2, true);
+    cy
+        .pipe(mockRandomCustomer).as('customer')
+        .pipe(createCustomer).its('content')
+
+        .wrap(item).pipe(addShoppingCartItem)
+        .its('content.loginToken').chain(setLoginToken)
+
+        .get('@customer').chain(login)
+        .its('content.loginToken').chain(setLoginToken)
+
+        .server().route(apiShoppingCartUrl.baseUrl + '?**').as('route')
+        .visit(shoppingCartUrl.baseUrl)
+
+        .wait('@route').its('responseBody.content.items')
+        .pipe(res => ({
+            ...item,
+            itemId: res[0].itemId,
+        }))
+        .chain(ShoppingCartItemDetailTest);
+});
+
+
+it('Login Page -> Anonymous Shopping Cart -> Given an anonymous user has a cart item and a customer has the same cart item, when user logs in as that customer, then anonymous cart item is removed and its quantity is added up to the customer/s same item #working', () => {
+    const item = fromProductToCartItem(cyGetExistingProduct(), 2, true);
+    cy
+        .pipe(mockRandomCustomer).as('customer')
+        .pipe(createCustomer)
+        .its('content.loginToken').chain(setLoginToken)
+        .wrap(item).pipe(addShoppingCartItem).chain(removeLoginToken)
+
+        .wrap(item).pipe(addShoppingCartItem)
+        .its('content.loginToken').chain(setLoginToken)
+
+        .get('@customer').chain(login)
+        .its('content.loginToken').chain(setLoginToken)
+
+        .server().route(apiShoppingCartUrl.baseUrl + '?**').as('route')
+        .visit(shoppingCartUrl.baseUrl)
+
+        .wait('@route').its('responseBody.content.items')
+        .pipe(res => ({
+            ...item,
+            itemId: res[0].itemId,
+            quantity: 4,
+        }))
+        .chain(ShoppingCartItemDetailTest);
+});
+
+
+it('Login Page -> Anonymous Wish List -> Given anonymous user has some items in wish list, when user logs in, then anonymous wish list items are added to the account user used to log in #working', () => {
+    const item = fromProductToCartItem(cyGetExistingProduct(), 2, false);
+    cy
+        .pipe(mockRandomCustomer).as('customer')
+        .pipe(createCustomer).its('content')
+
+        .wrap(item).pipe(addShoppingCartItem)
+        .its('content.loginToken').chain(setLoginToken)
+
+        .get('@customer').chain(login)
+        .its('content.loginToken').chain(setLoginToken)
+
+        .server().route(apiShoppingCartUrl.baseUrl + '?**').as('route')
+        .visit(shoppingCartUrl.wishList)
+
+        .wait('@route').its('responseBody.content.items')
+        .pipe(res => ({
+            ...item,
+            itemId: res[0].itemId,
+        }))
+        .chain(ShoppingCartItemDetailTest);
+});
+
+
+it('Login Page -> Anonymous wish List -> Given an anonymous user has a wish list item and a customer has the same wish list item, when user logs in as that customer, then anonymous wish list item is removed and its quantity is added up to the customer/s same item #working', () => {
+    const item = fromProductToCartItem(cyGetExistingProduct(), 2, false);
+    cy
+        .pipe(mockRandomCustomer).as('customer')
+        .pipe(createCustomer)
+        .its('content.loginToken').chain(setLoginToken)
+        .wrap(item).pipe(addShoppingCartItem).chain(removeLoginToken)
+
+        .wrap(item).pipe(addShoppingCartItem)
+        .its('content.loginToken').chain(setLoginToken)
+
+        .get('@customer').chain(login)
+        .its('content.loginToken').chain(setLoginToken)
+
+        .server().route(apiShoppingCartUrl.baseUrl + '?**').as('route')
+        .visit(shoppingCartUrl.wishList)
+
+        .wait('@route').its('responseBody.content.items')
+        .pipe(res => ({
+            ...item,
+            itemId: res[0].itemId,
+            quantity: 4,
+        }))
+        .chain(ShoppingCartItemDetailTest);
+});

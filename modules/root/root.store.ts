@@ -1,32 +1,60 @@
-import { applyMiddleware, createStore } from 'redux'
-import createSagaMiddleware, { Task } from 'redux-saga'
-import { composeWithDevTools } from 'redux-devtools-extension';
-
-import { rootInitialState } from './root.state'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { useMemo } from 'react'
+import createSagaMiddleware from 'redux-saga'
+import { TssStore, IRootState } from './root.model'
 import { rootReducer } from './root.reducer'
 import rootSaga from './root.saga'
+import { rootInitialState } from './root.state'
 
-const bindMiddleware = middleware => {
-    if (process.env.ENV !== 'production') {
-        // const { composeWithDevTools } = require('redux-devtools-extension')
-        return composeWithDevTools(applyMiddleware(...middleware))
-    }
-    return applyMiddleware(...middleware)
+const dev = process.env.NODE_ENV !== 'production';
+
+let store;
+
+export const initStore = (preloadedState): TssStore => {
+  const sagaMiddleware = createSagaMiddleware();
+
+  const store: TssStore = configureStore({
+    reducer: rootReducer,
+    middleware: [...getDefaultMiddleware(), sagaMiddleware],
+    preloadedState,
+    devTools: dev
+  })
+
+  store.sagaTask = sagaMiddleware.run(rootSaga);
+
+  return store;
 }
 
-export type TssStore = ReturnType<typeof createStore> & {
-    sagaTask?: Task
+export const initializeStore = (preloadedState = rootInitialState) => {
+  let _store = store ?? initStore(preloadedState);
+  // After navigating to a page with an initial Redux state, merge that state
+  // with the current state in the store, and create a new store
+  if (preloadedState && store) {
+    _store = initStore({
+      ...getStore().getState(),
+      ...preloadedState,
+    })
+    // Reset the current store
+    store = undefined;
+  }
+
+  // For SSG and SSR always create a new store
+  if (typeof window === 'undefined') return _store;
+  // Create the store once in the client
+  if (!store) store = _store;
+
+  return _store;
 }
 
-export default function configureStore(initialState = rootInitialState) {
-    const sagaMiddleware = createSagaMiddleware();
-    const store: TssStore = createStore(
-        rootReducer,
-        initialState,
-        bindMiddleware([sagaMiddleware])
-    )
+export function useStore(initialState) {
+  const store = useMemo(() => initializeStore(initialState), [initialState]);
+  return store;
+}
 
-    store.sagaTask = sagaMiddleware.run(rootSaga)
+export function getStore() {
+  return store;
+}
 
-    return store
+export function getState(): IRootState {
+  return getStore().getState();
 }

@@ -12,6 +12,7 @@ import { CreateReviewRequestValidator, IReview } from '../../../shared/models/re
 import { isValidForm } from '../../../shared/validator/validator';
 import { updateReview } from '../review.service';
 import { formatDatetime } from '../../../shared/helpers/string.helper';
+import { REVIEW_1, RATING, SUBMIT, CANCEL, NAME, CREATED_ON, tag, REVIEW, EDIT } from '../../../shared/tag/tag.model';
 
 const inputTheme = createMuiTheme({
     ...theme,
@@ -82,20 +83,22 @@ export default function ProductReviewEditComponent({
         <Grid container spacing={3}>
             <Grid item xs={12}>
                 <Typography
-                    component="h3"
-                    variant="subtitle1"
+                    component='h3'
+                    variant='subtitle1'
                     className={classes.bold}
+                    data-cy={tag(NAME, state.reviewId, EDIT + REVIEW)}
                 >
                     {data.customer.name}
                 </Typography>
                 <Typography
-                    variant="subtitle2"
+                    variant='subtitle2'
+                    data-cy={tag(CREATED_ON, state.reviewId, EDIT + REVIEW)}
                 >
                     {formatDatetime(data.createdOn)}
                 </Typography>
             </Grid>
             <Grid item container xs={12}
-                component="form"
+                component='form'
                 noValidate
             >
                 <Grid
@@ -121,13 +124,14 @@ export default function ProductReviewEditComponent({
                                 multiline
                                 fullWidth
                                 rows={4}
-                                name="review1"
-                                variant="outlined"
-                                margin="dense"
+                                name='review1'
+                                variant='outlined'
+                                margin='dense'
                                 value={state.review1}
                                 onChange={change}
                                 error={errors.review1 && submitted}
                                 helperText={errors.review1 && submitted ? errors.review1 : null}
+                                data-cy={tag(REVIEW_1, state.reviewId, EDIT + REVIEW)}
                             />
                         </ThemeProvider>
                     </Grid>
@@ -152,15 +156,16 @@ export default function ProductReviewEditComponent({
                         <FormControl
                         >
                             <Rating
-                                name="edit-rating"
+                                name='edit-rating'
                                 value={state.rating}
                                 onClick={change}
                                 max={5}
+                                data-cy={tag(RATING, state.reviewId, EDIT + REVIEW)}
                             />
                             {
                                 errors.rating && submitted &&
                                 < FormHelperText
-                                    id="rating"
+                                    id='rating'
                                 >
                                     {errors.rating}
                                 </FormHelperText>
@@ -184,18 +189,20 @@ export default function ProductReviewEditComponent({
                         sm={8}
                     >
                         <Fab
-                            variant="extended"
-                            color="primary"
-                            size="small"
+                            variant='extended'
+                            color='primary'
+                            size='small'
                             onClick={submit}
                             className={classes.mr}
-                        >
+                            data-cy={tag(SUBMIT, state.reviewId, EDIT + REVIEW)}
+                            >
                             Submit
                         </Fab>
                         <Fab
-                            variant="extended"
-                            size="small"
+                            variant='extended'
+                            size='small'
                             onClick={close}
+                            data-cy={tag(CANCEL, state.reviewId, EDIT + REVIEW)}
                         >
                             Cancel
                         </Fab>

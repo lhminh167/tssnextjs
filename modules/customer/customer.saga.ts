@@ -1,44 +1,42 @@
-import { call, put, takeLatest } from "redux-saga/effects";
-import { removeLoginToken, setLoginToken } from "../shared/helpers/token.helper";
-import { shoppingCartItemCountSlice } from "../shopping-cart/shopping-cart.slice";
-import { getCustomer, login, createCustomer } from "./customer.service";
-import { currentUserSlice } from "./customer.slice";
-import Router from "next/router";
+import { call, put, takeLatest } from 'redux-saga/effects';
+import { removeLoginToken, setLoginToken } from '../shared/helpers/token.helper';
+import { shoppingCartItemCountSlice } from '../shopping-cart/shopping-cart.slice';
+import { getCustomer, login, createCustomer } from './customer.service';
+import { currentUserSlice } from './customer.slice';
+import Router from 'next/router';
+import { goTo, backToPreviousPage } from '../shared/helpers/auth.helper';
 
 function* loginWorker(action) {
   const response = yield call(login, action.payload);
 
-  if (response.status < 300) {
-    yield put(currentUserSlice.actions.loginSucceeded(response.content.customer));
-    setLoginToken(response.content.loginToken);
-    yield put(shoppingCartItemCountSlice.actions.getTotalQuantityPending());
-    let returnUrl = "/";
-    const next = Router.query?.next as string;
-    if (next?.length > 0 && next !== undefined) returnUrl = next;
-    Router.push(returnUrl);
-  } else {
+  if (response.status >= 300) {
     yield put(currentUserSlice.actions.loginFailed(response.title));
+    return;
   }
+
+  yield put(currentUserSlice.actions.loginSucceeded(response.content.customer));
+  setLoginToken(response.content.loginToken);
+  yield put(shoppingCartItemCountSlice.actions.getTotalQuantityPending());
+  backToPreviousPage();
 }
 
 function logoutWorker(action) {
   removeLoginToken();
-  Router.push(action.payload ?? '/');
+  goTo(action.payload);
 }
 
 function* createCustomerWorker(action) {
-  const response = yield call(createCustomer, action.payload)
-  if (response.status < 300) {
-    yield put(currentUserSlice.actions.createCustomerSucceeded(response.content.customer));
-    setLoginToken(response.content.loginToken);
-    yield put(shoppingCartItemCountSlice.actions.getTotalQuantityPending());
-    let returnUrl = "/";
-    const next = Router.query?.next as string;
-    if (next?.length > 0 && next !== undefined) returnUrl = next;
-    Router.push(returnUrl);
-  } else {
+  const response = yield call(createCustomer, action.payload);
+
+  if (response.status >= 300) {
     yield put(currentUserSlice.actions.createCustomerFailed(response.title));
+    return;
   }
+
+  yield put(currentUserSlice.actions.createCustomerSucceeded(response.content.customer));
+  setLoginToken(response.content.loginToken);
+  yield put(shoppingCartItemCountSlice.actions.getTotalQuantityPending());
+  backToPreviousPage();
 }
 
 function* getCustomerWorker(action) {

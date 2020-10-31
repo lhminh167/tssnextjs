@@ -1,14 +1,11 @@
-import { Button, Grid, InputLabel, makeStyles, Typography } from "@material-ui/core";
+import { Button, Grid, InputLabel, makeStyles, Typography } from '@material-ui/core';
+import { NAME, UPLOAD } from '../tag/tag.model';
 
 
 const useStyles = makeStyles(theme => ({
     input: {
         display: 'none'
     },
-    container: {
-        // border: '1px solid',
-        // borderRadius: theme.shape.borderRadius
-    }
 }));
 
 interface Props {
@@ -17,6 +14,7 @@ interface Props {
     buttonText: string;
     accept: string;
     name: string;
+    testId?: string;
 }
 
 export default function UploadComponent({
@@ -24,8 +22,8 @@ export default function UploadComponent({
     output,
     buttonText,
     accept,
-    name
-
+    name,
+    testId
 }: Props) {
     const classes = useStyles({});
 
@@ -36,18 +34,19 @@ export default function UploadComponent({
     return (
         <Grid
             container
-            direction="row"
-            alignItems="center"
+            direction='row'
+            alignItems='center'
             spacing={2}
-            className={classes.container}
+            data-cy={testId}
         >
             <input
                 accept={accept}
                 className={classes.input}
                 id={name}
                 name={name}
-                type="file"
+                type='file'
                 onChange={change}
+                data-cy={UPLOAD}
             />
             <Grid item
                 component={InputLabel}
@@ -55,16 +54,18 @@ export default function UploadComponent({
 
             >
                 <Button
-                    variant="outlined"
-                    component="span"
-                    size="large"
+                    variant='outlined'
+                    component='span'
+                    size='large'
                 >
                     {buttonText ?? 'Chose File'}
                 </Button>
             </Grid>
             <Grid item>
-                <Typography>
-                    {data ?.name}
+                <Typography
+                    data-cy={NAME}
+                >
+                    {data?.name}
                 </Typography>
             </Grid>
         </Grid>

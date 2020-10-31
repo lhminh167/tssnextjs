@@ -1,4 +1,4 @@
-import { Shipping } from "./shipping.model";
+import { Shipping } from './shipping.model';
 
 export interface Tax {
     taxId: number;

@@ -1,22 +1,45 @@
 import { Validator } from 'fluentvalidation-ts';
 import { defaultShippingRegion, ShippingRegion } from '../shared/models/shipping-region.model';
 
-const customerBaseUrl = 'Customer';
+export const apiCustomerBaseUrl = 'Customer';
+
+export const apiCustomerUrl = {
+    baseUrl: apiCustomerBaseUrl,
+    register: apiCustomerBaseUrl,
+    login: apiCustomerBaseUrl + '/' + 'login',
+    detail: (customerId: number) => `${apiCustomerBaseUrl}/${customerId}`,
+    updatePassword: (customerId: number) => `${apiCustomerBaseUrl}/${customerId}/Password`,
+    forgotPassword: `${apiCustomerBaseUrl}/ForgotPassword`,
+    resetPassword: (customerId: number, resetPasswordToken: string) => `${apiCustomerBaseUrl}/${customerId}/ResetPassword/${resetPasswordToken}`,
+}
+
+const customerBaseUrl = '/user';
 
 export const customerUrl = {
     baseUrl: customerBaseUrl,
-    register: customerBaseUrl + '/' + 'register',
-    login: customerBaseUrl + '/' + 'login',
-    updatePassword: (customerId: number) => `${customerBaseUrl}/${customerId}/Password`,
-    forgotPassword: `${customerBaseUrl}/ForgotPassword`,
-    resetPassword: (customerId: number, resetPasswordToken: string) => `${customerBaseUrl}/${customerId}/ResetPassword/${resetPasswordToken}`,
+    register: (returnUrl?: string) => `${customerBaseUrl}/register${returnUrl ? '?next=' + returnUrl : ''}`,
+    login: (returnUrl?: string) => `${customerBaseUrl}/login${returnUrl ? '?next=' + returnUrl : ''}`,
+    list: `${customerBaseUrl}/list`,
+    detail: (customerId: number) => ({
+        href: `${customerBaseUrl}/[customerId]`,
+        as: `${customerBaseUrl}/${customerId}`
+    }),
+    edit: (customerId: number) => ({
+        href: `${customerBaseUrl}/[customerId]/edit`,
+        as: `${customerBaseUrl}/${customerId}/edit`
+    }),
+    updatePassword: (customerId: number) => `${customerBaseUrl}/${customerId}/change-password`,
+    forgotPassword: `${customerBaseUrl}/forgot-password`,
+    resetPassword: (customerId: number, resetPasswordToken: string) => `${customerBaseUrl}/${customerId}/reset-password/${resetPasswordToken}`,
 }
+
+export const loginTokenKey = 'loginToken';
 
 export interface Customer {
     customerId?: string;
     name?: string;
     email?: string;
-    // creditCard?: string;
+    creditCard?: string;
     address1?: string;
     address2?: string;
     city?: string;
@@ -24,28 +47,35 @@ export interface Customer {
     postalCode?: string;
     country?: string;
     shippingRegion?: ShippingRegion;
+    shippingRegionId: number;
     dayPhone?: string;
     evePhone?: string;
     mobPhone?: string;
-    role?: string;
+    role?: Role;
+}
+
+export enum Role {
+    Admin = 'Admin',
+    Customer = 'Customer'
 }
 
 export const defaultCustomer: Customer = {
-    customerId: "0",
-    name: "Visitor",
-    email: "",
-    // creditCard: "",
-    address1: "",
-    address2: "",
-    city: "",
-    region: "",
-    postalCode: "",
-    country: "",
+    customerId: null,
+    name: 'Visitor',
+    email: '',
+    creditCard: '',
+    address1: '',
+    address2: '',
+    city: '',
+    region: '',
+    postalCode: '',
+    country: '',
     shippingRegion: defaultShippingRegion,
-    dayPhone: "",
-    evePhone: "",
-    mobPhone: "",
-    role: '',
+    shippingRegionId: 1,
+    dayPhone: '',
+    evePhone: '',
+    mobPhone: '',
+    role: Role.Customer,
 };
 
 export interface ILoginRequest {
@@ -98,10 +128,10 @@ export class CreateCustomerRequestValidator extends Validator<ICreateCustomerReq
 }
 
 export const defaultCreateCustomerRequest = {
-    email: "",
-    name: "",
-    password: "",
-    role: "Customer"
+    email: '',
+    name: '',
+    password: '',
+    role: Role.Customer
 }
 
 export interface CustomerUpdateRequest {
@@ -124,20 +154,20 @@ export interface CustomerUpdateRequest {
 
 export const defaultCustomerUpdateRequest: CustomerUpdateRequest = {
     customerId: 0,
-    name: "Visitor",
-    email: "",
-    // creditCard: "",
-    address1: "",
-    address2: "",
-    city: "",
-    region: "",
-    postalCode: "",
-    country: "",
+    name: 'Visitor',
+    email: '',
+    // creditCard: '',
+    address1: '',
+    address2: '',
+    city: '',
+    region: '',
+    postalCode: '',
+    country: '',
     shippingRegionId: 0,
-    dayPhone: "",
-    evePhone: "",
-    mobPhone: "",
-    role: "Customer"
+    dayPhone: '',
+    evePhone: '',
+    mobPhone: '',
+    role: Role.Customer
 }
 
 export class CustomerUpdateRequestValidator extends Validator<CustomerUpdateRequest> {
@@ -166,22 +196,22 @@ export class CustomerUpdateRequestValidator extends Validator<CustomerUpdateRequ
 }
 
 export interface CustomerUpdatePasswordState {
-    currentPassword: string;
+    password: string;
     newPassword: string;
     confirmNewPassword: string;
 }
 
 export const defaultCustomerUpdatePasswordState: CustomerUpdatePasswordState = {
-    currentPassword: "",
-    newPassword: "",
-    confirmNewPassword: "",
+    password: '',
+    newPassword: '',
+    confirmNewPassword: '',
 }
 
 export class CustomerUpdatePasswordStateValidator extends Validator<CustomerUpdatePasswordState> {
     constructor() {
         super();
 
-        this.ruleFor('currentPassword').notNull().notEmpty();
+        this.ruleFor('password').notNull().notEmpty();
         this.ruleFor('newPassword').notNull().notEmpty();
         this.ruleFor('confirmNewPassword').notNull().notEmpty().must((value, model) => value === model.newPassword)
             .withMessage('New Password and Confirm New Password fields do not match.');
@@ -190,7 +220,7 @@ export class CustomerUpdatePasswordStateValidator extends Validator<CustomerUpda
 
 export interface CustomerUpdatePasswordRequest {
     customerId: number;
-    currentPassword: string;
+    password: string;
     newPassword: string;
 }
 

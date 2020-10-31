@@ -7,18 +7,16 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import MenuIcon from '@material-ui/icons/Menu';
 import React, { Fragment, useState } from 'react';
 import BrandComponent from '../brand/brand.component';
-import { transitionWidth } from '../layout/layout.theme';
 import SearchComponent from '../search/search.component';
 import SideBarComponent from '../sidebar/sidebar.component';
 import { useRouter } from 'next/router';
+import { MENU, GO_BACK } from '../tag/tag.model';
+// import LazyHydrate from "react-lazy-hydration";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         sectionMobile: {
             display: 'flex',
-            [theme.breakpoints.up(transitionWidth)]: {
-                display: 'none',
-            },
         },
         grow: {
             flexGrow: 1,
@@ -44,14 +42,15 @@ const MobileNavbarComponent = () => {
         <Fragment>
             <AppBar
                 className={classes.sectionMobile}
-                color="default"
+                color='default'
             >
                 <Toolbar
                 >
                     <IconButton
                         onClick={() => { router.back() }}
-                        color="primary"
-                        edge="start"
+                        color='primary'
+                        edge='start'
+                        data-cy={GO_BACK}
                     >
                         <ArrowBackIcon
                         />
@@ -73,11 +72,11 @@ const MobileNavbarComponent = () => {
                     }
 
                     <div className={classes.grow} />
-
                     <IconButton
                         onClick={toggleSidebar(true)}
-                        color="primary"
-                        edge="end"
+                        color='primary'
+                        edge='end'
+                        data-cy={MENU}
                     >
                         <MenuIcon
                         />
@@ -93,7 +92,9 @@ const MobileNavbarComponent = () => {
                     </Toolbar>
                 }
             </AppBar>
+            {/* <LazyHydrate whenVisible> */}
             <SideBarComponent open={isSidebarOpen} onClose={toggleSidebar(false)} />
+            {/* </LazyHydrate> */}
         </Fragment>
     );
 }

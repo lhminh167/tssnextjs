@@ -1,23 +1,16 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import { useRouter } from 'next/router';
+import { ChangePasswordMetadataComponent } from '../../../modules/customer/change-password/change-password-metadata.component';
+import ChangePasswordComponent from '../../../modules/customer/change-password/change-password.component';
 import ErrorBoundary from '../../../modules/shared/error-boundary/error-boundary.component';
 import { toNumber } from '../../../modules/shared/helpers/auth.helper';
-import { Container } from '@material-ui/core';
-import ChangePasswordComponent from '../../../modules/customer/change-password/change-password.component';
-import { ChangePasswordMetadataComponent } from '../../../modules/customer/change-password/change-password-metadata.component';
+import { allowCustomerHoc } from '../../../modules/shared/allow/allow-customer.component';
+import { allowAccountOwnwerHoc } from '../../../modules/shared/allow/allow-account-owner.component';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
+function CustomerChangePasswordPage() {
+    const router = useRouter();
+    const userId = toNumber(router.query.userId as string);
 
-interface Props {
-    userId: number;
-}
-
-export default function CustomerChangePasswordPage({
-    userId
-}: Props) {
-    const classes = useStyles({});
     return (
         <Container>
             <ErrorBoundary>
@@ -33,16 +26,4 @@ export default function CustomerChangePasswordPage({
     );
 }
 
-CustomerChangePasswordPage.getInitialProps = async function ({
-    ctx: {
-        isServer,
-        store,
-        query
-    },
-    ctx
-}) {
-    const userId = toNumber(query.userId);
-    return {
-        userId
-    };
-}
+export default allowCustomerHoc(allowAccountOwnwerHoc(CustomerChangePasswordPage));

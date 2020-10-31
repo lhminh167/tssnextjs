@@ -1,19 +1,11 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import React from 'react';
+import { LoginMetadataComponent } from '../../modules/customer/login/login-metadata.component';
 import LoginComponent from '../../modules/customer/login/login.component';
 import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
-import { Container } from '@material-ui/core';
-import { LoginMetadataComponent } from '../../modules/customer/login/login-metadata.component';
+import { allowNotLoggedInHoc } from '../../modules/shared/allow/allow-not-logged-in.component';
 
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
-
-export default function LoginPage(props) {
-    const classes = useStyles(props);
-
+function LoginPage() {
     return (
         <Container
             maxWidth='sm'
@@ -28,18 +20,4 @@ export default function LoginPage(props) {
     );
 }
 
-LoginPage.getInitialProps = async function ({
-    ctx: {
-        isServer,
-        store
-    },
-    ctx
-}) {
-    // if (
-    //     !isServer &&
-    //     getCustomerIdNumberFromStore(store) > 0
-    // ) {
-    //     redirect(ctx, ctx.req.originalUrl);
-    //     return
-    // }
-}
+export default allowNotLoggedInHoc(LoginPage);

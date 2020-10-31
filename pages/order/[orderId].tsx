@@ -1,17 +1,13 @@
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import OrderDetailComponent from '../../modules/order/detail/order-detail.component';
-import { getCustomerIdNumberFromStore, redirect, toNumber } from '../../modules/shared/helpers/auth.helper';
-import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
-import { Container } from '@material-ui/core';
-import { OrderDetailMetadataComponent } from '../../modules/order/detail/order-detail-metadata.component';
+import Container from '@material-ui/core/Container';
 import { useRouter } from 'next/router';
+import React from 'react';
+import { OrderDetailMetadataComponent } from '../../modules/order/detail/order-detail-metadata.component';
+import OrderDetailComponent from '../../modules/order/detail/order-detail.component';
+import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';
+import { toNumber } from '../../modules/shared/helpers/auth.helper';
+import { allowCustomerHoc } from '../../modules/shared/allow/allow-customer.component';
 
-const useStyles = makeStyles({
-});
-
-export default function OrderDetailPage() {
-    const classes = useStyles({});
+function OrderDetailPage() {
     const router = useRouter();
     const orderId = toNumber(router.query.orderId as string);
 
@@ -29,16 +25,4 @@ export default function OrderDetailPage() {
     );
 }
 
-OrderDetailPage.getInitialProps = async function ({
-    ctx: {
-        isServer,
-        store
-    },
-    ctx
-}) {
-    const customerId = getCustomerIdNumberFromStore(store);
-    if (!isServer && customerId <= 0) {
-        redirect(ctx, '/user/login');
-        return;
-    }
-}
+export default allowCustomerHoc(OrderDetailPage);
