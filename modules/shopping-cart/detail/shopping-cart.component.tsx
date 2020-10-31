@@ -100,11 +100,13 @@ export default function ShoppingCartComponent({
                     variant='h6'
                     component='h2'
                 >
-                    <span
+                    <Typography
                         data-cy={COUNT}
+                        component='span'
+                        variant='h6'
                     >
                         {state.totalQuantity}
-                    </span>
+                    </Typography>
                     {' Items In Your Cart'}
                 </Typography>
                 <TableContainer>
@@ -168,18 +170,19 @@ export default function ShoppingCartComponent({
                                                     <Typography
                                                         variant='body1'
                                                         className={classes.bold}
+                                                        component='span'
+                                                        data-cy={COLOR}
                                                     >
-                                                        <span
-                                                            data-cy={COLOR}
-                                                        >
-                                                            {color}
-                                                        </span>
-                                                        {' '}
-                                                        <span
-                                                            data-cy={NAME}
-                                                        >
-                                                            {row.product.name}
-                                                        </span>
+                                                        {color}
+                                                    </Typography>
+                                                    {' '}
+                                                    <Typography
+                                                        variant='body1'
+                                                        className={classes.bold}
+                                                        component='span'
+                                                        data-cy={NAME}
+                                                    >
+                                                        {row.product.name}
                                                     </Typography>
                                                 </Grid>
                                                 <Grid
@@ -214,11 +217,11 @@ export default function ShoppingCartComponent({
                                             </TableCell>
                                             <TableCell align='center'
                                             >
-                                                <span
+                                                <Typography
                                                     data-cy={SIZE}
                                                 >
                                                     {size}
-                                                </span>
+                                                </Typography>
                                             </TableCell>
                                             <TableCell align='center'>
                                                 <ShoppingCartQuantityPickerComponent

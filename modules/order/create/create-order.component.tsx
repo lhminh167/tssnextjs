@@ -28,6 +28,7 @@ import PaymentFormComponent from './payment-form/payment-form.component';
 import { Order, defaultOrder } from '../order.model';
 import { currentUserSlice } from '../../customer/customer.slice';
 import { p, pl0, pr0 } from '../../shared/layout/layout.style';
+import { isMobile } from '../../shared/layout/layout.theme';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   pl0: pl0,
@@ -85,6 +86,7 @@ function ActiveStepComponent({
 }
 
 export default function CreateOrderComponent() {
+  const matches = isMobile();
   const classes = useStyles({});
   const currentUser = useSelector(
     (state: IRootState) => state.currentUser.data
@@ -149,11 +151,14 @@ export default function CreateOrderComponent() {
         item
         xs={12}
       >
-        <Stepper activeStep={activeStep}
+        <Stepper
+          activeStep={activeStep}
           className={classes.pl0 + ' ' + classes.pr0}
+          orientation={matches ? 'horizontal' : 'vertical'}
         >
           {steps.map((label, index) => (
-            <Step key={label}
+            <Step
+              key={label}
               className={
                 (index === 0 ? classes.pl0 + ' ' : '') +
                 (index === steps.length - 1 ? classes.pr0 : '')

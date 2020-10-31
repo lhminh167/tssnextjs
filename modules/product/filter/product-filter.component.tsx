@@ -91,7 +91,7 @@ export default function ProductFilterComponent({
     ]);
     const [sortBy, setSortBy] = useState<string>(defaultSortByOptions[0].value);
     const [isDescending, setIsDescending] = useState<boolean>(defaultIsDescendingOptions[0].value);
-    
+
     const apply = () => {
         goTo(productUrl.search({
             ...choice,
@@ -210,7 +210,7 @@ export default function ProductFilterComponent({
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <Typography>
-                        Filter <span data-cy={COUNT}>{count}</span> items
+                        Filter <Typography component='span' data-cy={COUNT}>{count}</Typography> items
                     </Typography>
                 </AccordionSummary>
                 <Divider />

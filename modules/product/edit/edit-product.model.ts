@@ -1,6 +1,9 @@
 import { Validator } from 'fluentvalidation-ts';
 import { IReview } from '../../shared/models/review.model';
 import { IAttributeValue } from '../../shared/models/attribute-value.model';
+import { toNumber } from '../../shared/helpers/auth.helper';
+import { getImage2Name, getImageName, getThumbnailName } from '../../shared/models/product.model';
+import { removeFileExtension } from '../../shared/helpers/string.helper';
 
 export interface IEditProductState {
     productId: number;
@@ -12,9 +15,9 @@ export interface IEditProductState {
     image2: File;
     thumbnail: File;
     display: string;
-    size: number[];
-    color: number[];
-    categoryId: number;
+    size: string[];
+    color: string[];
+    categoryId: string;
 }
 
 export const defaultEditProductState: IEditProductState = {
@@ -26,48 +29,60 @@ export const defaultEditProductState: IEditProductState = {
     image: null,
     image2: null,
     thumbnail: null,
-    display: '1',
+    display: '0',
     size: [],
     color: [],
-    categoryId: 0,
+    categoryId: ''
 }
 
-export class EditProductRequestValidator extends Validator<IEditProductRequest> {
+export class EditProductStateValidator extends Validator<IEditProductState> {
     constructor() {
         super();
 
-        this.ruleFor('productId')
-            .greaterThan(0);
+        this.ruleFor('name').notNull().notEmpty();
 
-        this.ruleFor('name')
-            .notEmpty();
+        this.ruleFor('description').notNull().notEmpty();
 
-        this.ruleFor('description')
-            .notEmpty();
-
-        this.ruleFor('price')
-            .greaterThan(0);
+        this.ruleFor('price').must(value => toNumber(value) > 0);
 
         this.ruleFor('discountedPrice')
-            .greaterThanOrEqualTo(0)
-            .must((discountedPrice, model) =>
-                discountedPrice < model.price
+            .must(
+                (discountedPrice, model) =>
+                    toNumber(discountedPrice) < toNumber(model.price)
             );
 
         this.ruleFor('image')
-            .notEmpty();
+            .notNull()
+            .must((value, model) =>
+                getImageName(model.name) === removeFileExtension(value.name)
+                || value.size > 0
+            );
 
         this.ruleFor('image2')
-            .notEmpty();
+            .notNull()
+            .must((value, model) =>
+                getImage2Name(model.name) === removeFileExtension(value.name)
+                || value.size > 0
+            );
 
         this.ruleFor('thumbnail')
-            .notEmpty();
+            .notNull()
+            .must((value, model) =>
+                getThumbnailName(model.name) === removeFileExtension(value.name)
+                || value.size > 0
+            );
 
-        this.ruleFor('display')
-            .greaterThanOrEqualTo(0);
+        this.ruleFor('display').must(value => toNumber(value) > 0);
 
-        this.ruleFor('categoryId')
-            .greaterThan(0);
+        this.ruleFor('size').must(value => value.length > 0);
+
+        this.ruleForEach('size').must(value => toNumber(value) > 0);
+
+        this.ruleFor('color').must(value => value.length > 0);
+
+        this.ruleForEach('color').must(value => toNumber(value) > 0);
+
+        this.ruleFor('categoryId').must((value, model) => toNumber(value) > 0);
     }
 }
 

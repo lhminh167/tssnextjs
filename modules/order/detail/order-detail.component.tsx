@@ -11,7 +11,7 @@ import { defaultOrder, Order } from '../order.model';
 import { getOrder } from '../order.service';
 import ShipOkComponent from './ship-ok.component';
 import StockOkComponent from './stock-ok.component';
-import { COMMENT, ORDER, STATUS, ORDER_SUMMARY, tag } from '../../shared/tag/tag.model';
+import { COMMENT, ORDER, STATUS, ORDER_SUMMARY, tag, ADDRESS_1, ADDRESS_2, CITY, COUNTRY, NAME, POSTALCODE, REGION, EMAIL, ID, ITEM, DISCOUNTED_PRICE, QUANTITY, AUDIT, DATETIME, DESCRIPTION, GRAND_TOTAL, SHIPPING, TAX, EVE_PHONE, DAY_PHONE, MOB_PHONE } from '../../shared/tag/tag.model';
 import { getCustomerRoleFromLoginToken, goTo } from '../../shared/helpers/auth.helper';
 import { Role } from '../../customer/customer.model';
 import { isOk } from '../../shared/helpers/http.helper';
@@ -84,6 +84,7 @@ export default function OrderDetailComponent({
                 </Link>
                 <Typography
                     color='textPrimary'
+                    data-cy={tag(ID, '', ORDER)}
                 >
                     {orderId}
                 </Typography>
@@ -165,6 +166,7 @@ export default function OrderDetailComponent({
                                 Total Amount
                         </Typography>
                             <Typography
+                                data-cy={GRAND_TOTAL}
                             >
                                 {formatCurrency(state.totalAmount)}
                             </Typography>
@@ -174,8 +176,9 @@ export default function OrderDetailComponent({
                                 className={classes.bold}
                             >
                                 Tax
-                        </Typography>
+                            </Typography>
                             <Typography
+                                data-cy={TAX}
                             >
                                 {state.tax.taxType}
                             </Typography>
@@ -187,6 +190,7 @@ export default function OrderDetailComponent({
                                 Created On
                             </Typography>
                             <Typography
+                                data-cy={DATETIME}
                             >
                                 {formatDatetime(state.createdOn)}
                             </Typography>
@@ -197,7 +201,9 @@ export default function OrderDetailComponent({
                             >
                                 Shipping
                             </Typography>
-                            <Typography >
+                            <Typography
+                                data-cy={SHIPPING}
+                            >
                                 {state.shipping.shippingType}
                             </Typography>
                         </Grid>
@@ -245,14 +251,49 @@ export default function OrderDetailComponent({
                             </TableHead>
                             <TableBody>
                                 {state.orderDetail.map(row => (
-                                    <TableRow key={row.itemId}>
+                                    <TableRow
+                                        key={row.itemId}
+                                        data-cy={tag(ITEM, row.itemId, ORDER)}
+                                    >
                                         <TableCell component='th' scope='row'>
-                                            {row.itemId}
+                                            <Typography
+                                                component='span'
+                                                data-cy={ID}
+                                            >
+                                                {row.itemId}
+                                            </Typography>
                                         </TableCell>
-                                        <TableCell>{row.productName}</TableCell>
-                                        <TableCell>{row.attributes}</TableCell>
-                                        <TableCell>{row.quantity}</TableCell>
-                                        <TableCell>{row.unitCost}</TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                component='span'
+                                                data-cy={NAME}
+                                            >
+                                                {row.productName}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                component='span'
+                                            >
+                                                {row.attributes}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                component='span'
+                                                data-cy={QUANTITY}
+                                            >
+                                                {row.quantity}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                component='span'
+                                                data-cy={DISCOUNTED_PRICE}
+                                            >
+                                                {row.unitCost}
+                                            </Typography>
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -284,6 +325,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 gutterBottom
+                                data-cy={NAME}
                             >
                                 {state.customer.name}
                             </Typography>
@@ -297,6 +339,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 gutterBottom
+                                data-cy={EMAIL}
                             >
                                 {state.customer.email}
                             </Typography>
@@ -310,6 +353,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 gutterBottom
+                                data-cy={MOB_PHONE}
                             >
                                 {state.customer.mobPhone}
                             </Typography>
@@ -322,6 +366,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 gutterBottom
+                                data-cy={EVE_PHONE}
                             >
                                 {state.customer.evePhone}
                             </Typography>
@@ -335,6 +380,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 gutterBottom
+                                data-cy={DAY_PHONE}
                             >
                                 {state.customer.dayPhone}
                             </Typography>
@@ -348,6 +394,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 gutterBottom
+                                data-cy={ADDRESS_1}
                             >
                                 {state.customer.address1}
                             </Typography>
@@ -361,6 +408,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 gutterBottom
+                                data-cy={ADDRESS_2}
                             >
                                 {state.customer.address2}
                             </Typography>
@@ -374,6 +422,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 gutterBottom
+                                data-cy={CITY}
                             >
                                 {state.customer.city}
                             </Typography>
@@ -387,6 +436,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 gutterBottom
+                                data-cy={REGION}
                             >
                                 {state.customer.region}
                             </Typography>
@@ -400,6 +450,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 gutterBottom
+                                data-cy={COUNTRY}
                             >
                                 {state.customer.country}
                             </Typography>
@@ -413,6 +464,7 @@ export default function OrderDetailComponent({
                             </Typography>
                             <Typography
                                 gutterBottom
+                                data-cy={POSTALCODE}
                             >
                                 {state.customer.postalCode}
                             </Typography>
@@ -460,17 +512,43 @@ export default function OrderDetailComponent({
                                         return b.code - a.code;
                                     })
                                     .map(row => (
-                                        <TableRow key={row.auditId}>
+                                        <TableRow
+                                            key={row.auditId}
+                                            data-cy={tag(ITEM, row.auditId, AUDIT)}
+
+                                        >
                                             <TableCell component='th' scope='row'>
-                                                {row.auditId}
+                                                <Typography
+                                                    component='span'
+                                                    data-cy={ID}
+                                                >
+                                                    {row.auditId}
+                                                </Typography>
                                             </TableCell>
-                                            <TableCell>{row.message}</TableCell>
-                                            <TableCell>{row.code}</TableCell>
-                                            <TableCell>{
-                                                row.createdOn ?
-                                                    new Date(row.createdOn).toString() :
-                                                    null
-                                            }</TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    component='span'
+                                                // data-cy={DESCRIPTION}
+                                                >
+                                                    {row.message}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    component='span'
+                                                // data-cy={STATUS}
+                                                >
+                                                    {row.code}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    component='span'
+                                                    data-cy={DATETIME}
+                                                >
+                                                    {formatDatetime(row.createdOn)}
+                                                </Typography>
+                                            </TableCell>
                                         </TableRow>
                                     ))
                                 }
@@ -479,6 +557,6 @@ export default function OrderDetailComponent({
                     </TableContainer>
                 </AccordionDetails>
             </Accordion>
-        </Fragment>
+        </Fragment >
     );
 }

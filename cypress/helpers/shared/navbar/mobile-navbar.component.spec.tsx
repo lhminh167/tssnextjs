@@ -1,12 +1,3 @@
-import { NavbarComponentLinkTest } from "./desktop-navbar.component.spec";
-
-
-export default function MobileNavbarComponentTest() {
-    describe('MobileNavbarComponentTest', () => {
-
-        NavbarComponentLinkTest();
-
-
-
-    });
+export function closeMobileNavbar() {
+    cy.get('.MuiBackdrop-root').click({ force: true })
 }

@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import AddRoundedIcon from '@material-ui/icons/AddRounded';
 import RemoveRoundedIcon from '@material-ui/icons/RemoveRounded';
 import { ChangeEvent } from 'react';
-import { ADJUST_QUANTITY, MINUS_ONE_QUANTITY, PLUS_ONE_QUANTITY } from '../tag/tag.model';
+import { QUANTITY, MINUS_ONE_QUANTITY, PLUS_ONE_QUANTITY } from '../tag/tag.model';
 
 interface IProps {
   quantity: number;
@@ -75,7 +75,7 @@ function QuantityPickerComponent(props: IProps) {
           style: {
             textAlign: 'center'
           },
-          'data-cy': ADJUST_QUANTITY
+          'data-cy': QUANTITY
         }}
         value={quantity}
         onChange={updateNumberInput}

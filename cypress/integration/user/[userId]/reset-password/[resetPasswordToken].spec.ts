@@ -10,7 +10,7 @@ import { resetPasswordFields, resetPasswordTest } from "../../../../helpers/cust
 import { mockRandomCustomer } from "../../../../helpers/shared/helpers/auth.helper";
 import { getRandomString } from "../../../../helpers/shared/helpers/string.helper";
 
-it('Reset Password page -> Invalid Reset Password Token -> When user access this page using an expired or invalid reset password token, then an error message is shown to user #working', () => {
+it('Reset Password Page -> Invalid Reset Password Token -> When user access this page using an expired or invalid reset password token, then an error message is shown to user #e2e-working #visual-working', () => {
     const user = mockRandomCustomer();
     cy
         .wrap(user).pipe(createCustomer).its('content').as('response')
@@ -28,5 +28,6 @@ it('Reset Password page -> Invalid Reset Password Token -> When user access this
                 .visit(customerUrl.resetPassword(customerId, token))
             cy
                 .getEl(DESCRIPTION).should('have.text', 'This password reset link is invalid or has expired.')
+                .takeScreenShot('Invalid Reset Password Token Page & Notifier')
         })
 });

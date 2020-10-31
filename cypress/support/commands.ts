@@ -28,6 +28,10 @@ import { IResponse } from '../../modules/shared/crud/crud.model';
 import 'cypress-file-upload';
 import 'cypress-pipe';
 import '@percy/cypress';
+import { cySnapshotDefaultConfig } from '../helpers/shared/layout/layout.theme';
+import { SUBMIT } from '../../modules/shared/tag/tag.model';
+import { random } from 'cypress/types/lodash';
+import { getRandomString } from '../helpers/shared/helpers/string.helper';
 
 Cypress.Commands.add('getLink', {
     prevSubject: true
@@ -106,6 +110,16 @@ Cypress.Commands.add('fillTextFields', (fields: string[], value: object) => {
     );
 })
 
+Cypress.Commands.add('clearTextFields', (fields: string[]) => {
+    if (!fields) return;
+
+    fields.forEach(field =>
+        cy.getEl(field).find(`[name=${field}]`).clear()
+    );
+
+    cy.getEl(SUBMIT).click();
+})
+
 Cypress.Commands.add('testTexts', (fields: string[], value: object) => {
     if (!fields || !value) return;
 
@@ -124,7 +138,19 @@ Cypress.Commands.add('testTextFields', (fields: string[], value: object) => {
     );
 })
 
-Cypress.Commands.add('takeScreenShot', (name?: string, options?: SnapshotOptions) => {
-    if (Cypress.env('NODE_ENV') === 'PRODUCTION')
-        cy.percySnapshot(name, options);
+Cypress.Commands.add('takeScreenShot', {
+    prevSubject: true
+}, (subject, name?: string, options: SnapshotOptions = cySnapshotDefaultConfig) => {
+    // if (Cypress.env('NODE_ENV') !== 'PRODUCTION') return;
+
+    if (!name) name = cy.state('runnable').fullTitle();
+    if (!options) options = { ...cySnapshotDefaultConfig, ...options };
+
+    cy.percySnapshot(name, options);
+})
+
+Cypress.Commands.add('testRating', {
+    prevSubject: true
+}, (subject, rating: number) => {
+    cy.get(subject).invoke('attr', 'aria-label').should('equal', `${rating} Star${rating > 2 ? 's' : ''}`);
 })

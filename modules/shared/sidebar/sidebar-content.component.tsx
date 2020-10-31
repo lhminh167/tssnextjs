@@ -73,7 +73,9 @@ export default function SideBarContentComponent(props: ITreeViewProps) {
                     className={classes.user}
                 >
                     <ListItemAvatar>
-                        <Avatar>
+                        <Avatar
+                            data-cy={USER}
+                        >
                             {getUserAvatar(userName)}
                         </Avatar>
                     </ListItemAvatar>

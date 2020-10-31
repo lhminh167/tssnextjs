@@ -1,17 +1,15 @@
-import { GridList, GridListTile, useTheme } from '@material-ui/core';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { GridList, GridListTile } from '@material-ui/core';
 import React from 'react';
+import { isMobile } from '../layout/layout.theme';
 import { IProduct } from '../models/product.model';
 import ProductCardComponent from '../product-card/product-card.component';
-import { transitionWidth } from '../layout/layout.theme';
 
 interface IProps {
   data: IProduct[];
 }
 
 export default function ProductListComponent({ data }: IProps) {
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('sm'));
+  const matches = isMobile();
 
   return (
     <GridList

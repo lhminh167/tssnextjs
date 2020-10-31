@@ -105,11 +105,12 @@ export default function ProductReviewListComponent({ data }: Props) {
               />
               <Typography
               >
-                <span
+                <Typography
                   data-cy={tag(COUNT, '', AVERAGE_RATING)}
+                  component='span'
                 >
                   {state.count}
-                </span>
+                </Typography>
                 {' '}
                 ratings
               </Typography>

@@ -12,7 +12,7 @@ import { CreateReviewRequestValidator, IReview } from '../../../shared/models/re
 import { isValidForm } from '../../../shared/validator/validator';
 import { updateReview } from '../review.service';
 import { formatDatetime } from '../../../shared/helpers/string.helper';
-import { REVIEW_1, RATING, SUBMIT, CANCEL, NAME, CREATED_ON, tag, REVIEW, EDIT } from '../../../shared/tag/tag.model';
+import { DESCRIPTION, RATING, SUBMIT, CANCEL, NAME, DATETIME, tag, REVIEW, EDIT } from '../../../shared/tag/tag.model';
 
 const inputTheme = createMuiTheme({
     ...theme,
@@ -92,7 +92,7 @@ export default function ProductReviewEditComponent({
                 </Typography>
                 <Typography
                     variant='subtitle2'
-                    data-cy={tag(CREATED_ON, state.reviewId, EDIT + REVIEW)}
+                    data-cy={tag(DATETIME, state.reviewId, EDIT + REVIEW)}
                 >
                     {formatDatetime(data.createdOn)}
                 </Typography>
@@ -131,7 +131,7 @@ export default function ProductReviewEditComponent({
                                 onChange={change}
                                 error={errors.review1 && submitted}
                                 helperText={errors.review1 && submitted ? errors.review1 : null}
-                                data-cy={tag(REVIEW_1, state.reviewId, EDIT + REVIEW)}
+                                data-cy={tag(DESCRIPTION, state.reviewId, EDIT + REVIEW)}
                             />
                         </ThemeProvider>
                     </Grid>
@@ -195,7 +195,7 @@ export default function ProductReviewEditComponent({
                             onClick={submit}
                             className={classes.mr}
                             data-cy={tag(SUBMIT, state.reviewId, EDIT + REVIEW)}
-                            >
+                        >
                             Submit
                         </Fab>
                         <Fab

@@ -10,7 +10,7 @@ import { cyEditQuantity } from "../../../../../helpers/shared/quantity-picker/qu
 import { ShoppingCartItemDetailTest } from "../../../../../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { fromProductToCartItem } from "../../../../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-it('Product Detail Page -> Add To Cart Button -> When Add To Cart Button is clicked, then product is added to cart #working', () => {
+it('Product Detail Page -> Add To Cart Button -> When Add To Cart Button is clicked, then product is added to cart #e2e-working', () => {
     const product = cyGetExistingProduct();
     let item = fromProductToCartItem(product, 3, true);
     const size = getCartItemSize(decodeAttributes(item.attributes));
@@ -35,7 +35,7 @@ it('Product Detail Page -> Add To Cart Button -> When Add To Cart Button is clic
 
 });
 
-it('Product Detail Page -> Add To Cart Button -> When user adds a product with same attributes (color, size) to cart again, then quantity of that product in cart is added up #working', () => {
+it('Product Detail Page -> Add To Cart Button -> When user adds a product with same attributes (color, size) to cart again, then quantity of that product in cart is added up #e2e-working', () => {
     const firstQuantity = 3;
     const secondQuantity = 2;
     const totalQuantity = 5;
@@ -56,13 +56,13 @@ it('Product Detail Page -> Add To Cart Button -> When user adds a product with s
 });
 
 
-it('Product Detail Page -> Edit Product Button -> When user logs in as admin and clicks Edit Product Button, then user is redirected to Edit Product Page #working', () => {
+it('Product Detail Page -> Edit Product Button -> When user logs in as admin and clicks Edit Product Button, then user is redirected to Edit Product Page #e2e-working', () => {
 
     cy.pipe(cySetAdminLoginToken).pipe(cyVisitExistingProduct);
     cy.getEl(EDIT).click().getLink().load();
 });
 
-it('Product Detail Page -> Delete Product Button -> When user logs in as admin and clicks Delete Product Button, then product is deleted #working', () => {
+it('Product Detail Page -> Delete Product Button -> When user logs in as admin and clicks Delete Product Button, then product is deleted #e2e-working', () => {
     cy
         .pipe(cySetAdminLoginToken)
         .pipe(cyCreateRandomProduct)

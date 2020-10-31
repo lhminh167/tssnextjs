@@ -1,16 +1,15 @@
 import { createProduct } from "../../../../modules/product/create/create-product.service";
-import { apiProductUrl, IProductFilterFilter, productUrl } from "../../../../modules/product/filter/product-filter.model";
+import { IProductFilterFilter, productUrl } from "../../../../modules/product/filter/product-filter.model";
 import { getFilter } from "../../../../modules/product/filter/product-filter.service";
-import { Response } from "../../../../modules/shared/crud/crud.model";
 import { upload } from "../../../../modules/shared/crud/crud.service";
 import { toUrl } from "../../../../modules/shared/helpers/string.helper";
 import { IProduct } from "../../../../modules/shared/models/product.model";
-import { CATEGORY, COLOR, DESCRIPTION, DISCOUNTED_PRICE, DISPLAY, tag, IMAGE, IMAGE_2, NAME, PRICE, SIZE, SUBMIT, THUMBNAIL, UPLOAD, YES, ITEM } from "../../../../modules/shared/tag/tag.model";
+import { CATEGORY, COLOR, DESCRIPTION, DISCOUNTED_PRICE, DISPLAY, tag, IMAGE, IMAGE_2, NAME, PRICE, SIZE, THUMBNAIL, UPLOAD, ITEM } from "../../../../modules/shared/tag/tag.model";
 import { cySetAdminLoginToken } from "../../shared/helpers/auth.helper";
 import { mockRandomProduct } from "../../shared/helpers/product.helper";
 import { TEST_IMAGE } from "../../shared/image/image.component.spec";
 
-export function cyCreateProduct(input: IProduct) {
+export function cyCreateProduct(input: IProduct): Cypress.Chainable<IProduct> {
 
     return cy
         .pipe(cySetAdminLoginToken)
@@ -41,10 +40,11 @@ export function cyCreateProduct(input: IProduct) {
         .its('content')
 }
 
+export const createProductTextFields = [NAME, DESCRIPTION, PRICE, DISCOUNTED_PRICE];
 
 export function typeCreateProductForm(input: IProduct) {
 
-    cy.fillTextFields([NAME, DESCRIPTION, PRICE, DISCOUNTED_PRICE], input)
+    cy.fillTextFields(createProductTextFields, input)
 
     cy.getEl(CATEGORY).click();
     cy.getEl(tag(ITEM, '', CATEGORY)).first().click();
@@ -74,19 +74,14 @@ export function cyAttachImage() {
     cy.getEl(NAME).should('have.text', TEST_IMAGE)
 }
 
-export function cyCreateRandomProduct() {
+export function cyCreateRandomProduct(): Cypress.Chainable {
     return cy
-        .pipe(getFilter)
-        .testApi({ status: 200, title: 'Filters were successfully retrieved.' })
-        .its('content')
-        .pipe(res => {
-
-            return {
-                ...mockRandomProduct(),
-                category: res.categories[0],
-                attributes: res.attributes
-            }
-        })
+        .pipe(cyGetFilter)
+        .pipe(res => ({
+            ...mockRandomProduct(),
+            category: res.categories[0],
+            attributes: res.attributes
+        }))
         .pipe(cyCreateProduct);
 }
 
@@ -104,6 +99,13 @@ export function cyGetFilter(): IProductFilterFilter {
 export function cyVisitExistingProduct() {
     return cy
         .pipe(cyGetExistingProduct)
+        .pipe(productUrl.detail).its('as')
+        .pipe(cy.visit);
+}
+
+export function cyVisitStubbedProduct() {
+    return cy
+        .fixture('product-detail.json').its('content').as('product')
         .pipe(productUrl.detail).its('as')
         .pipe(cy.visit);
 }

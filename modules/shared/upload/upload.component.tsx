@@ -58,7 +58,7 @@ export default function UploadComponent({
                     component='span'
                     size='large'
                 >
-                    {buttonText ?? 'Chose File'}
+                    {buttonText ?? 'Choose File'}
                 </Button>
             </Grid>
             <Grid item>

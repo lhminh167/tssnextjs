@@ -8,7 +8,7 @@ import { getLastEl, getRandomDomEl } from "../helpers/shared/helpers/other.helpe
 import ProductCardDetailTest from "../helpers/shared/product-card/product-card.component.spec";
 import ProductListTest from "../helpers/shared/product-list/product-list.component.spec";
 
-it('Home Page -> Top Panel -> Carousel Dot -> When user clicks a carousel dot, then the corresponding Top Panel Carousel Card is shown #working', () => {
+it('Home Page -> Top Panel -> Carousel Dot -> When user clicks a carousel dot, then the corresponding Top Panel Carousel Card is shown #e2e-working', () => {
     cy.visit('/').pipe(getHomepageProducts).its('content.topPanel.items').as('topPanel')
     cy.getEl(TOP_PANEL + CAROUSEL).within(() => {
         cy.getEl(DOT).last().click().clock(Date.now())
@@ -17,8 +17,9 @@ it('Home Page -> Top Panel -> Carousel Dot -> When user clicks a carousel dot, t
     })
 });
 
-it('Home Page -> Top Panel -> Product Cards -> When user accesses Home Page on Desktop, then Top Panel Product Cards show five Top Panel Products #working', () => {
+it('Home Page -> Top Panel -> Product Cards -> When user accesses Home Page on Desktop, then Top Panel Product Cards show five Top Panel Products #e2e-working #visual-working', () => {
     cy.visit('/').pipe(getHomepageProducts).its('content.topPanel.items').as('topPanel')
+    cy.getEl(TOP_PANEL + PRODUCT_CARD).wait(4000).takeScreenShot('Home Page');
     cy.getEl(TOP_PANEL + PRODUCT_CARD).within(() => {
         cy
             .get('@topPanel')
@@ -32,7 +33,7 @@ it('Home Page -> Top Panel -> Product Cards -> When user accesses Home Page on D
     })
 });
 
-it('Home Page -> Most Discounted Product Gallery -> When user accesses Home Page on Desktop, then Most Discounted Product Gallery shows most discounted products #working', () => {
+it('Home Page -> Most Discounted Product Gallery -> When user accesses Home Page on Desktop, then Most Discounted Product Gallery shows most discounted products #e2e-working', () => {
     cy.visit('/');
     cy.getEl(MOST_DISCOUNTED).within(() => {
         cy
@@ -50,7 +51,7 @@ it('Home Page -> Most Discounted Product Gallery -> When user accesses Home Page
 });
 
 
-it('Home Page -> Best Selling Product Gallery -> When user accesses Home Page on Desktop, then Best Selling Product Gallery shows best selling products #working', () => {
+it('Home Page -> Best Selling Product Gallery -> When user accesses Home Page on Desktop, then Best Selling Product Gallery shows best selling products #e2e-working', () => {
     cy.visit('/');
     cy.getEl(BEST_SELLING).within(() => {
         cy
@@ -68,7 +69,7 @@ it('Home Page -> Best Selling Product Gallery -> When user accesses Home Page on
 });
 
 
-it('Home Page -> Top Rated Product Gallery -> When user accesses Home Page on Desktop, then Top Rated Product Gallery shows top rated products #working', () => {
+it('Home Page -> Top Rated Product Gallery -> When user accesses Home Page on Desktop, then Top Rated Product Gallery shows top rated products #e2e-working', () => {
     cy.visit('/');
     cy.getEl(TOP_RATED).within(() => {
         cy
@@ -84,7 +85,7 @@ it('Home Page -> Top Rated Product Gallery -> When user accesses Home Page on De
     })
 });
 
-it('Home Page -> Newest Product List -> When user accesses Home Page on Desktop, then Newest Product List should show newest products #working', () => {
+it('Home Page -> Newest Product List -> When user accesses Home Page on Desktop, then Newest Product List should show newest products #e2e-working', () => {
     cy.visit('/');
     cy.getEl(NEWEST).within(() => {
         cy

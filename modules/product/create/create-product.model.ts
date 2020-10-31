@@ -29,9 +29,7 @@ export const defaultCreateProductState: ICreateProductState = {
   categoryId: ''
 };
 
-export class CreateProductStateValidator extends Validator<
-  ICreateProductState
-  > {
+export class CreateProductStateValidator extends Validator<ICreateProductState> {
   constructor() {
     super();
 

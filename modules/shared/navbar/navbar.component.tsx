@@ -1,13 +1,10 @@
-import { useTheme } from '@material-ui/core';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import React from 'react';
-import { transitionWidth } from '../layout/layout.theme';
+import { isMobile } from '../layout/layout.theme';
 import DesktopNavbarComponent from './desktop-navbar.component';
 import MobileNavbarComponent from './mobile-navbar.component';
 
 const NavbarComponent = () => {
-    const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up(transitionWidth));
+    const matches = isMobile();
 
     return matches ?
         <DesktopNavbarComponent /> :
