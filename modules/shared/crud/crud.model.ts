@@ -1,3 +1,8 @@
+/**
+ * The latest version of tssnetcore backend API that is compatible with this frontend version
+ */
+export const backendApiVersion = 'v1.0.2';
+
 export interface IState<T> {
   data: T;
   error: IResponse<T>;
