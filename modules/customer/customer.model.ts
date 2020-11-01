@@ -1,5 +1,6 @@
 import { Validator } from 'fluentvalidation-ts';
 import { defaultShippingRegion, ShippingRegion } from '../shared/models/shipping-region.model';
+import { beRequired } from '../shared/validator/validator';
 
 export const apiCustomerBaseUrl = 'Customer';
 
@@ -98,10 +99,10 @@ export class LoginRequestValidator extends Validator<ILoginRequest> {
         super();
 
         this.ruleFor('email')
-            .notNull().notEmpty().emailAddress();
+            .must(beRequired()).emailAddress();
 
         this.ruleFor('password')
-            .notNull().notEmpty();
+            .must(beRequired());
     }
 }
 
@@ -117,13 +118,13 @@ export class CreateCustomerRequestValidator extends Validator<ICreateCustomerReq
         super();
 
         this.ruleFor('email')
-            .notNull().notEmpty().emailAddress();
+            .must(beRequired()).emailAddress();
 
         this.ruleFor('name')
-            .notNull().notEmpty();
+            .must(beRequired());
 
         this.ruleFor('password')
-            .notNull().notEmpty();
+            .must(beRequired());
     }
 }
 
@@ -175,23 +176,23 @@ export class CustomerUpdateRequestValidator extends Validator<CustomerUpdateRequ
         super();
 
         this.ruleFor('customerId').greaterThan(0);
-        this.ruleFor('name').notNull().notEmpty();
-        this.ruleFor('email').notNull().notEmpty().emailAddress();
-        this.ruleFor('address1').notNull().notEmpty();
-        this.ruleFor('address2').notNull().notEmpty();
-        this.ruleFor('city').notNull().notEmpty();
-        this.ruleFor('region').notNull().notEmpty();
-        this.ruleFor('postalCode').notNull().notEmpty();
+        this.ruleFor('name').must(beRequired());
+        this.ruleFor('email').must(beRequired()).emailAddress();
+        this.ruleFor('address1').must(beRequired());
+        this.ruleFor('address2').must(beRequired());
+        this.ruleFor('city').must(beRequired());
+        this.ruleFor('region').must(beRequired());
+        this.ruleFor('postalCode').must(beRequired());
         // .must(value => postalCodeRegex.test(value));
-        this.ruleFor('country').notNull().notEmpty();
+        this.ruleFor('country').must(beRequired());
         this.ruleFor('shippingRegionId').greaterThan(1);
-        this.ruleFor('dayPhone').notNull().notEmpty();
+        this.ruleFor('dayPhone').must(beRequired());
         // .must(value => phoneNumberRegex.test(value));
-        this.ruleFor('evePhone').notNull().notEmpty();
+        this.ruleFor('evePhone').must(beRequired());
         // .must(value => phoneNumberRegex.test(value));
-        this.ruleFor('mobPhone').notNull().notEmpty();
+        this.ruleFor('mobPhone').must(beRequired());
         // .must(value => phoneNumberRegex.test(value));
-        this.ruleFor('role').notNull().notEmpty();
+        this.ruleFor('role').must(beRequired());
     }
 }
 
@@ -211,10 +212,10 @@ export class CustomerUpdatePasswordStateValidator extends Validator<CustomerUpda
     constructor() {
         super();
 
-        this.ruleFor('password').notNull().notEmpty();
-        this.ruleFor('newPassword').notNull().notEmpty();
-        this.ruleFor('confirmNewPassword').notNull().notEmpty().must((value, model) => value === model.newPassword)
-            .withMessage('New Password and Confirm New Password fields do not match.');
+        this.ruleFor('password').must(beRequired());
+        this.ruleFor('newPassword').must(beRequired());
+        this.ruleFor('confirmNewPassword').must(beRequired()).must((value, model) => value === model.newPassword)
+            .withMessage('New Password and Confirm New Password fields do not match');
     }
 }
 
@@ -235,7 +236,7 @@ export const defaultCustomerForgotPasswordRequest: CustomerForgotPasswordRequest
 export class CustomerForgotPasswordRequestValidator extends Validator<CustomerForgotPasswordRequest> {
     constructor() {
         super();
-        this.ruleFor('email').notNull().notEmpty().emailAddress();
+        this.ruleFor('email').must(beRequired()).emailAddress();
     }
 }
 
@@ -263,8 +264,9 @@ export const defaultCustomerPasswordResetState: CustomerPasswordResetState = {
 export class CustomerPasswordResetStateValidator extends Validator<CustomerPasswordResetState> {
     constructor() {
         super();
-        this.ruleFor('newPassword').notNull().notEmpty();
-        this.ruleFor('confirmNewPassword').notNull().notEmpty()
-            .must((value, model) => value === model.newPassword);
+        this.ruleFor('newPassword').must(beRequired());
+        this.ruleFor('confirmNewPassword').must(beRequired())
+            .must((value, model) => value === model.newPassword)
+            .withMessage('New Password and Confirm New Password fields do not match');
     }
 }

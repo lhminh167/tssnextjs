@@ -1,5 +1,6 @@
 import { Validator } from 'fluentvalidation-ts';
 import { toNumber } from '../../shared/helpers/auth.helper';
+import { beRequired } from '../../shared/validator/validator';
 
 export interface ICreateProductState {
   name: string;
@@ -33,17 +34,16 @@ export class CreateProductStateValidator extends Validator<ICreateProductState> 
   constructor() {
     super();
 
-    this.ruleFor('name').notNull().notEmpty();
+    this.ruleFor('name').must(beRequired());
 
-    this.ruleFor('description').notNull().notEmpty();
+    this.ruleFor('description').must(beRequired());
 
     this.ruleFor('price').must(value => toNumber(value) > 0);
 
     this.ruleFor('discountedPrice')
-      .must(
-        (discountedPrice, model) =>
-          toNumber(discountedPrice) < toNumber(model.price)
-      );
+      .must((discountedPrice, model) => toNumber(discountedPrice) < toNumber(model.price))
+      .withMessage('Discounted price should be less than original price');
+
 
     this.ruleFor('image')
       .notNull()

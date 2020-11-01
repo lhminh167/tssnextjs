@@ -4,6 +4,7 @@ import { IAttributeValue } from '../../shared/models/attribute-value.model';
 import { toNumber } from '../../shared/helpers/auth.helper';
 import { getImage2Name, getImageName, getThumbnailName } from '../../shared/models/product.model';
 import { removeFileExtension } from '../../shared/helpers/string.helper';
+import { beRequired } from '../../shared/validator/validator';
 
 export interface IEditProductState {
     productId: number;
@@ -39,17 +40,15 @@ export class EditProductStateValidator extends Validator<IEditProductState> {
     constructor() {
         super();
 
-        this.ruleFor('name').notNull().notEmpty();
+        this.ruleFor('name').must(beRequired());
 
-        this.ruleFor('description').notNull().notEmpty();
+        this.ruleFor('description').must(beRequired());
 
         this.ruleFor('price').must(value => toNumber(value) > 0);
 
         this.ruleFor('discountedPrice')
-            .must(
-                (discountedPrice, model) =>
-                    toNumber(discountedPrice) < toNumber(model.price)
-            );
+            .must((discountedPrice, model) => toNumber(discountedPrice) < toNumber(model.price))
+            .withMessage('Discounted price should be less than original price');
 
         this.ruleFor('image')
             .notNull()
