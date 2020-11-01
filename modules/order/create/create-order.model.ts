@@ -2,6 +2,7 @@ import { Validator } from 'fluentvalidation-ts';
 import { Shipping } from '../../shared/models/shipping.model';
 import { ShippingRegion } from '../../shared/models/shipping-region.model';
 import { Tax } from '../../shared/models/tax.model';
+import { beRequired } from '../../shared/validator/validator';
 
 export interface OrderCreateRequest {
   customerId?: number;
@@ -29,19 +30,19 @@ export class OrderCreateRequestValidator extends Validator<OrderCreateRequest> {
     super();
 
     this.ruleFor('customerId').greaterThan(0);
-    this.ruleFor('name').notNull().notEmpty();
+    this.ruleFor('name').must(beRequired());
     // this.ruleFor('creditCard').notEmpty();
-    this.ruleFor('address1').notNull().notEmpty();
-    this.ruleFor('address2').notNull().notEmpty();
-    this.ruleFor('city').notNull().notEmpty();
-    this.ruleFor('region').notNull().notEmpty();
-    this.ruleFor('postalCode').notNull().notEmpty();
-    this.ruleFor('country').notNull().notEmpty();
-    // this.ruleFor('dayPhone').notNull().notEmpty();
-    // this.ruleFor('evePhone').notNull().notEmpty();
-    this.ruleFor('mobPhone').notNull().notEmpty();
-    // this.ruleFor('comments').notNull().notEmpty();
-    // this.ruleFor('paymentMethodId').notNull().notEmpty();
+    this.ruleFor('address1').must(beRequired());
+    this.ruleFor('address2').must(beRequired());
+    this.ruleFor('city').must(beRequired());
+    this.ruleFor('region').must(beRequired());
+    this.ruleFor('postalCode').must(beRequired());
+    this.ruleFor('country').must(beRequired());
+    // this.ruleFor('dayPhone').must(beRequired());
+    // this.ruleFor('evePhone').must(beRequired());
+    this.ruleFor('mobPhone').must(beRequired());
+    // this.ruleFor('comments').must(beRequired());
+    // this.ruleFor('paymentMethodId').must(beRequired());
     this.ruleFor('shippingId').greaterThan(0);
     this.ruleFor('shippingRegionId').greaterThan(1);
   }
