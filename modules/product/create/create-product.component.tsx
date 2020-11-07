@@ -1,111 +1,42 @@
-import { Button, Grid, InputAdornment, makeStyles, MenuItem, TextField, Typography } from '@material-ui/core';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../root/root.model';
+import { Button, Grid, InputAdornment, MenuItem, TextField, Typography } from '@material-ui/core';
+import { ValidationErrors } from 'fluentvalidation-ts/dist/ValidationErrors';
 import { ConfirmationDialog } from '../../shared/confirmation-dialog/confirmation-dialog.component';
-import { UploadRequest } from '../../shared/crud/crud.model';
-import { upload } from '../../shared/crud/crud.service';
-import { toNumber, goTo } from '../../shared/helpers/auth.helper';
-import { toUrl } from '../../shared/helpers/string.helper';
 import { IAttributeValue } from '../../shared/models/attribute-value.model';
-import { productDisplayOptions, defaultProduct } from '../../shared/models/product.model';
+import { productDisplayOptions } from '../../shared/models/product.model';
+import { CATEGORY, COLOR, DESCRIPTION, DISCOUNTED_PRICE, DISPLAY, IMAGE, IMAGE_2, ITEM, NAME, NO, PRICE, SIZE, SUBMIT, tag, THUMBNAIL, TITLE, YES } from '../../shared/tag/tag.model';
 import UploadComponent from '../../shared/upload/upload.component';
-import { isValidForm } from '../../shared/validator/validator';
-import { IProductFilterCategory, ProductFilterFilterEnum, productUrl } from '../filter/product-filter.model';
-import productFilterSlice from '../filter/product-filter.slice';
-import { CreateProductStateValidator, defaultCreateProductState, ICreateProductRequest, ICreateProductState } from './create-product.model';
-import { createProduct } from './create-product.service';
-import { DESCRIPTION, COLOR, SIZE, YES, NAME, PRICE, DISCOUNTED_PRICE, SUBMIT, NO, CATEGORY, THUMBNAIL, IMAGE, DISPLAY, IMAGE_2, tag, TITLE, ITEM } from '../../shared/tag/tag.model';
+import { IProductFilterCategory } from '../filter/product-filter.model';
+import { ICreateProductState } from './create-product.model';
 
+interface CreateProductComponentProps {
+    state: ICreateProductState;
+    submitted: boolean;
+    isDialogOpen: boolean;
+    errors: ValidationErrors<ICreateProductState>;
+    categories: IProductFilterCategory[];
+    sizes: IAttributeValue[];
+    colors: IAttributeValue[];
+    showProductDetail(): void;
+    resetForm(): void;
+    submit(event: any): Promise<void>;
+    change(event: any): void;
+    closeDialog(): void;
+}
 
-const useStyles = makeStyles(theme => ({
-    input: {
-        display: 'none'
-    }
-}));
-
-export default function CreateProductComponent() {
-    const classes = useStyles({});
-    const [state, setState] = useState<ICreateProductState>(defaultCreateProductState);
-    const [submitted, setSubmitted] = useState<boolean>(false);
-    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-    const [productId, setProductId] = useState<number>(0);
-    let errors = new CreateProductStateValidator().validate(state);;
-    const colors = useSelector<IRootState, IAttributeValue[]>(
-        state => state.productFilter.filter?.data?.attributes.filter(a => a.name === ProductFilterFilterEnum.Color)
-    );
-    const sizes = useSelector<IRootState, IAttributeValue[]>(
-        state => state.productFilter.filter?.data?.attributes.filter(a => a.name === ProductFilterFilterEnum.Size)
-    );
-    const categories = useSelector<IRootState, IProductFilterCategory[]>(
-        state => state.productFilter.filter?.data?.categories
-    );
-    const dispatch = useDispatch();
-    useEffect(() => {
-        if (!categories.length)
-            dispatch(productFilterSlice.actions.getFilterPending());
-    }, []);
-
-    function change(event) {
-
-        const target = event.target;
-        const name = target.name;
-        let value: any = target.value;
-        const type = target.type;
-
-        if (type === 'file') value = target.files[0];
-
-        setState({
-            ...state,
-            [name]: value,
-        });
-    }
-
-    async function submit(event) {
-        setSubmitted(true);
-        if (!isValidForm(errors)) return;
-
-        const images: UploadRequest[] = [
-            { name: toUrl(state.name) + '-thumbnail', file: state.thumbnail },
-            { name: toUrl(state.name), file: state.image },
-            { name: toUrl(state.name) + '-2', file: state.image2 },
-        ];
-        const data: ICreateProductRequest = {
-            name: state.name.trim(),
-            description: state.description.trim(),
-            price: toNumber(state.price),
-            discountedPrice: toNumber(state.discountedPrice),
-            categoryId: toNumber(state.categoryId),
-            attributes: [...state.color, ...state.size].map(x => toNumber(x)),
-            display: toNumber(state.display),
-            thumbnail: images[0].name,
-            image: images[1].name,
-            image2: images[2].name,
-        };
-
-        await upload(images);
-        const response = await createProduct(data);
-
-        setProductId(response.content.productId);
-        setIsDialogOpen(true);
-    }
-
-    function closeDialog() {
-        setIsDialogOpen(false);
-    }
-
-    function showProductDetail() {
-        goTo(productUrl.detail({
-            ...defaultProduct,
-            name: state.name,
-            productId: productId
-        }).as);
-    }
-
-    function resetForm() {
-        setState(defaultCreateProductState);
-        closeDialog();
-    }
+export default function CreateProductComponent({
+    state,
+    submitted,
+    isDialogOpen,
+    errors,
+    categories,
+    sizes,
+    colors,
+    showProductDetail,
+    resetForm,
+    submit,
+    change,
+    closeDialog
+}: CreateProductComponentProps) {
 
     return (
         <Grid container spacing={2}
