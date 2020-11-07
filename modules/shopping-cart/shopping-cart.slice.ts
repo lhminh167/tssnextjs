@@ -7,7 +7,7 @@ import { apiShoppingCartUrl } from './shopping-cart.model';
 import { IRootState } from '../root/root.model';
 
 
-const shoppingCartItemCountInitialState = crudInitialState(0) as IState<number>;
+export const shoppingCartItemCountInitialState = crudInitialState(0) as IState<number>;
 
 export const shoppingCartItemCountSelector = (state: IRootState) => state?.shoppingCartItemCount?.data;
 

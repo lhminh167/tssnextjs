@@ -5,7 +5,7 @@ import { crudInitialState, paginatedInitialState } from '../../shared/crud/crud.
 import { IProduct } from '../../shared/models/product.model';
 import { defaultProductSearchRequest, IProductFilterFilter, IProductFilterState, IProductSearchRequest, apiProductUrl, filterInitialData } from './product-filter.model';
 
-const productFilterInitialState: IProductFilterState = {
+export const productFilterInitialState: IProductFilterState = {
     filter: crudInitialState(filterInitialData),
     product: paginatedInitialState([]),
     choice: defaultProductSearchRequest

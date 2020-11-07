@@ -8,7 +8,7 @@ import { IRootState } from '../root/root.model';
 type CurrentUserState = IState<Customer>;
 type CurrentUserAction = PayloadAction<Customer>;
 
-const initialState: CurrentUserState = crudInitialState(defaultCustomer);
+export const currentUserInitialState: CurrentUserState = crudInitialState(defaultCustomer);
 
 export const customerIdSelector = (state: IRootState) => state?.currentUser?.data?.customerId;
 
@@ -16,7 +16,7 @@ export const customerRoleSelector = (state: IRootState) => state?.currentUser?.d
 
 export const currentUserSlice = createSlice({
     name: apiCustomerUrl.baseUrl,
-    initialState,
+    initialState: currentUserInitialState,
     reducers: {
         loginPending(
             state: CurrentUserState,
@@ -33,7 +33,7 @@ export const currentUserSlice = createSlice({
         },
         logout(state: CurrentUserState) {
             return {
-                ...initialState
+                ...currentUserInitialState
             }
         },
 
@@ -80,7 +80,7 @@ export const currentUserSlice = createSlice({
         getCustomerIdle(
             state: CurrentUserState
         ) {
-            idle(state, initialState);
+            idle(state, currentUserInitialState);
         },
     }
 });
