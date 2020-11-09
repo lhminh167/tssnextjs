@@ -8,6 +8,6 @@ export function cyGoToConfirmationForm() {
 }
 
 export function cyFinishConfirmationForm() {
-    cy.getEl(SUBMIT).click().wait(5000);
+    cy.getEl(SUBMIT).click();
     return cy;
 }

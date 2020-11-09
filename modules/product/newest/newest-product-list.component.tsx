@@ -1,5 +1,4 @@
-import { Button, createStyles, makeStyles, TablePagination, Theme, Typography } from '@material-ui/core';
-import Link from 'next/link';
+import { createStyles, makeStyles, TablePagination, Theme, Typography } from '@material-ui/core';
 import { useState } from 'react';
 import { defaultRowsPerPageOptions, PaginatedList } from '../../shared/crud/crud.model';
 import GalleryHeaderComponent from '../../shared/gallery-header/gallery-header.component';
@@ -11,19 +10,13 @@ import { defaultProductSearchRequest, IProductSearchRequest, SortByEnum } from '
 import { getProducts } from '../filter/product-filter.service';
 import { NEWEST } from '../../shared/tag/tag.model';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-    }),
-);
-
 interface Props {
     data: PaginatedList<IProduct>;
 }
 
-export default function NewestProductList({
+export default function NewestProductListComponent({
     data
 }: Props) {
-    const classes = useStyles({});
     const [state, setState] = useState<PaginatedList<IProduct>>(data);
     const [choice, setChoice] = useState<IProductSearchRequest>({
         ...defaultProductSearchRequest,
@@ -100,6 +93,7 @@ export default function NewestProductList({
                 onChangePage={changePageIndex}
                 onChangeRowsPerPage={changePageSize}
                 ActionsComponent={PaginationComponent}
+                labelRowsPerPage='Items per page:'
             />
         </article>
     );

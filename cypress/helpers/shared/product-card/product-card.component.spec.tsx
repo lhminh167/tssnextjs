@@ -14,5 +14,6 @@ export default function ProductCardDetailTest(input: IProduct) {
 export function ProductLinkTest() {
   cy.getEl(PRODUCT_CARD).first().click();
   cy.getEl(PRODUCT_LINK).first().getLink().load().go('back');
+  return cy;
 }
 

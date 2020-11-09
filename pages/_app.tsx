@@ -21,12 +21,10 @@ export default function App(props) {
                 />
             </Head>
             <Provider store={store}>
-
                 <Layout>
                     <props.Component {...props.pageProps} />
                 </Layout>
             </Provider>
-
         </ErrorBoundary>
     );
 }

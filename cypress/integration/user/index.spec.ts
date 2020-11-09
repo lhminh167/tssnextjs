@@ -2,8 +2,9 @@ import { customerUrl } from "../../../modules/customer/customer.model";
 import { getCustomerIdNumberFromLoginToken, getCustomerIdNumberFromStore } from "../../../modules/shared/helpers/auth.helper";
 import { DETAIL, EDIT, NEW_PASSWORD } from "../../../modules/shared/tag/tag.model";
 import { cySetCustomerLoginToken } from "../../helpers/shared/helpers/auth.helper";
+import { cyIt } from "../../helpers/shared/helpers/other.helper";
 
-it('User Area Page -> View Customer Link -> When a user clicks View Customer Link, then user is redirect to Customer Detail Page #e2e-working #visual-working', () => {
+cyIt.run('User Area Page -> View Customer Link -> When a user clicks View Customer Link, then user is redirect to Customer Detail Page #e2e-working #visual-working', () => {
     cy.pipe(cySetCustomerLoginToken).visit(customerUrl.baseUrl);
     cy.pipe(getCustomerIdNumberFromLoginToken).should('be.greaterThan', 0)
     cy.getEl(DETAIL).takeScreenShot('User Area Page')
@@ -11,12 +12,12 @@ it('User Area Page -> View Customer Link -> When a user clicks View Customer Lin
 });
 
 
-it('User Area Page -> Edit Customer Link -> When a user clicks Edit Customer Link, then user is redirect to Edit Customer Page #e2e-working', () => {
+cyIt.run('User Area Page -> Edit Customer Link -> When a user clicks Edit Customer Link, then user is redirect to Edit Customer Page #e2e-working', () => {
     cy.pipe(cySetCustomerLoginToken).visit(customerUrl.baseUrl);
     cy.getEl(EDIT).click().getLink().load();
 });
 
-it('User Area Page -> Change Password Link -> When a user clicks Change Password Link, then user is redirect to Change Password page #e2e-working', () => {
+cyIt.run('User Area Page -> Change Password Link -> When a user clicks Change Password Link, then user is redirect to Change Password page #e2e-working', () => {
     cy.pipe(cySetCustomerLoginToken).visit(customerUrl.baseUrl);
     cy.getEl(NEW_PASSWORD).click().getLink().load();
 });

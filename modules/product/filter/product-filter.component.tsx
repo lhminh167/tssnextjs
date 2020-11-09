@@ -24,7 +24,7 @@ import ProductListComponent from '../../shared/product-list/product-list.compone
 import SizePickerComponent from '../../shared/size-picker/size-picker.component';
 import { defaultIsDescendingOptions, defaultProductSearchRequest, defaultSortByOptions, IProductFilterCategory, IProductSearchRequest, ProductFilterFilterEnum, productUrl } from './product-filter.model';
 import { mb2, mr, mb } from '../../shared/layout/layout.style';
-import { COUNT, SUBMIT, MIN_PRICE, MAX_PRICE, SORT_BY, SORT_ORDER, tag, FILTER, PRICE } from '../../shared/tag/tag.model';
+import { COUNT, SUBMIT, MIN_PRICE, MAX_PRICE, SORT_BY, SORT_ORDER, tag, FILTER, PRICE, ITEM } from '../../shared/tag/tag.model';
 import { formatCurrency } from '../../shared/helpers/string.helper';
 import { goTo } from '../../shared/helpers/auth.helper';
 
@@ -322,7 +322,7 @@ export default function ProductFilterComponent({
                                         <MenuItem
                                             key={entry.value}
                                             value={entry.value}
-                                            data-cy={SORT_BY + entry.value}
+                                            data-cy={tag(ITEM, entry.value, SORT_BY)}
                                         >
                                             {entry.label}
                                         </MenuItem>
@@ -344,7 +344,7 @@ export default function ProductFilterComponent({
                                         <MenuItem
                                             key={entry.value}
                                             value={entry.value}
-                                            data-cy={SORT_ORDER + entry.value}
+                                            data-cy={tag(ITEM, entry.value, SORT_ORDER)}
                                         >
                                             {entry.label}
                                         </MenuItem>
@@ -389,6 +389,7 @@ export default function ProductFilterComponent({
                 onChangePage={changePageIndex}
                 onChangeRowsPerPage={changePageSize}
                 ActionsComponent={ProductFilterPaginationComponent}
+                labelRowsPerPage='Items per page:'
             />
         </Fragment>
     );

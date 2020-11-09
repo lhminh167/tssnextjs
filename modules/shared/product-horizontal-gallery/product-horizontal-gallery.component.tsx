@@ -36,7 +36,7 @@ export const horizontalGalleryTheme = createMuiTheme({
     MuiFab: {
       root: {
         position: 'absolute',
-        zIndex: theme.zIndex.modal,
+        zIndex: theme.zIndex.speedDial,
         backgroundColor: 'rgba(0,0,0,.7)'
       }
     }
@@ -55,7 +55,7 @@ export const usehorizontalGalleryStyles = makeStyles((theme: Theme) =>
       position: 'relative'
     },
     gridList: {
-      width: '100%',
+      width: '101%',
       //   marginTop: theme.spacing(3),
       // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
       transform: 'translateZ(0)'

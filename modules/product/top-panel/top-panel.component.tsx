@@ -4,14 +4,14 @@ import { IProduct } from '../../shared/models/product.model';
 import ProductCarouselComponent, { defaultAutoplay } from '../../shared/product-carousel/product-carousel.component';
 import { CAROUSEL, PRODUCT_CARD, TOP_PANEL } from '../../shared/tag/tag.model';
 import ProductGrid from './top-panel-card.component';
-import { isMobile } from '../../shared/layout/layout.theme';
+import { isMediumWidth } from '../../shared/layout/layout.theme';
 
 interface Props {
   data: PaginatedList<IProduct>;
 }
 
 export default function TopPanelComponent({ data }: Props) {
-  const matches = isMobile();
+  const matches = isMediumWidth();
   const pageSize = matches ? 4 : 2;
 
   return (

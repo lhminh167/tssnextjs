@@ -255,6 +255,7 @@ export default function ShoppingCartComponent({
                     onChangePage={changePageIndex}
                     onChangeRowsPerPage={changePageSize}
                     ActionsComponent={PaginationComponent}
+                    labelRowsPerPage='Items per page:'
                 />
             </div>
             <ActionButtonsComponent

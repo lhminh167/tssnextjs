@@ -1,5 +1,6 @@
 import { Typography } from '@material-ui/core';
 import Link from 'next/link';
+import { getEnvVar } from '../crud/crud.service';
 import { HOMEPAGE } from '../tag/tag.model';
 
 interface IProps {
@@ -8,6 +9,7 @@ interface IProps {
 
 function BrandComponent(props: IProps) {
     const { className } = props;
+    const siteName = getEnvVar('SITE_NAME') ?? 'eShopMate';
 
     return (
         <Link
@@ -22,7 +24,7 @@ function BrandComponent(props: IProps) {
                 color='primary'
                 data-cy={HOMEPAGE}
             >
-                {process.env.SITE_NAME.toUpperCase()}
+                {siteName.toUpperCase()}
             </Typography>
         </Link>
     );

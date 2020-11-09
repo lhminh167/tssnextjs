@@ -2,9 +2,9 @@ import { getDepartments } from "../../modules/department/department.service";
 import { departmentUrl } from "../../modules/shared/models/department.model";
 import { CATEGORY, LINK, tag } from "../../modules/shared/tag/tag.model";
 import DepartmentDetailTest, { openDepartmentPanel } from "../helpers/department/list/department-list.component.spec";
-import { getFirstEl, getRandomEl } from "../helpers/shared/helpers/other.helper";
+import { cyIt, getFirstEl, getRandomEl } from "../helpers/shared/helpers/other.helper";
 
-it('Department List Page -> Details -> When user accesses Department List Page, then department and catefory lists should be displayed correctly #e2e-working #visual-working', () => {
+cyIt.run('Department List Page -> Details -> When user accesses Department List Page, then department and catefory lists should be displayed correctly #e2e-working #visual-working', () => {
   cy
     .visit(departmentUrl)
     .pipe(getDepartments).its('content').as('departments')
@@ -15,7 +15,7 @@ it('Department List Page -> Details -> When user accesses Department List Page, 
 });
 
 
-it('Department List Page -> Category Link -> When user clicks a category item, then user is redirected to Category Detail Page #e2e-working', () => {
+cyIt.run('Department List Page -> Category Link -> When user clicks a category item, then user is redirected to Category Detail Page #e2e-working', () => {
   cy
     .visit(departmentUrl)
     .pipe(getDepartments).its('content')

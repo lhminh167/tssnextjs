@@ -52,7 +52,7 @@ declare namespace Cypress {
          * Fill in form.
          */
         fillTextFields<E extends Node = HTMLElement>(
-            fiels: string[],
+            fields: string[],
             value: object
         ): Chainable<JQuery<E>>;
 
@@ -60,14 +60,14 @@ declare namespace Cypress {
          * Clear text fields.
          */
         clearTextFields<E extends Node = HTMLElement>(
-            fiels: string[]
+            fields: string[]
         ): Chainable<JQuery<E>>;
 
         /**
          * Test texts.
          */
         testTexts<E extends Node = HTMLElement>(
-            fiels: string[],
+            fields: string[],
             value: object
         ): Chainable<JQuery<E>>;
 
@@ -75,7 +75,7 @@ declare namespace Cypress {
          * Test text fields.
          */
         testTextFields<E extends Node = HTMLElement>(
-            fiels: string[],
+            fields: string[],
             value: object
         ): Chainable<JQuery<E>>;
 

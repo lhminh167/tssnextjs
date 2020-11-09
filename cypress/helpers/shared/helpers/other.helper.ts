@@ -31,25 +31,23 @@ export function getMiddleEl(input: any[]) {
     return res;
 }
 
-export const cyItWithConfig = (
-    title: string,
-    config: Cypress.TestConfigOverrides,
-    fn?: Mocha.Func
-) => {
-    if (!Cypress.env('tags')) return it(title, config, fn);
+export function shouldRunThisTest(title: string) {
+    if (!Cypress.env('tags')) return true;
 
     const tags: string[] = Cypress.env('tags').split(',');
     const isFound = tags.some((tag) => title.includes(tag));
-    if (isFound) return it(title, config, fn);
-};
+    return isFound;
+}
 
-export const cyIt = (title: string, fn?: Mocha.Func) => {
-    console.log(Cypress.env('tags'))
-    if (Cypress.env('tags')) {
-        const tags: string[] = Cypress.env('tags').split(',');
-        const isFound = tags.some((tag) => title.includes(tag));
-        if (!isFound) return;
-    }
+export const cyIt = {
+    run: (title: string, fn?: Mocha.Func) => shouldRunThisTest(title) ? it(title, fn) : null,
+    skip: (title: string, fn?: Mocha.Func) => shouldRunThisTest(title) ? it.skip(title, fn) : null,
+    only: (title: string, fn?: Mocha.Func) => shouldRunThisTest(title) ? it.only(title, fn) : null,
+}
 
-    it(title, fn);
+
+export const cyItWithConfig = {
+    run: (title: string,config: Cypress.TestConfigOverrides,fn?: Mocha.Func) => shouldRunThisTest(title) ? it(title, config, fn) : null,
+    skip: (title: string,config: Cypress.TestConfigOverrides,fn?: Mocha.Func) => shouldRunThisTest(title) ? it.skip(title, config, fn) : null,
+    only: (title: string,config: Cypress.TestConfigOverrides,fn?: Mocha.Func) => shouldRunThisTest(title) ? it.only(title, config, fn) : null,
 }

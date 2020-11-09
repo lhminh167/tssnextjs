@@ -16,7 +16,7 @@ interface IProps {
 const useStyles = makeStyles((theme: Theme) => createStyles({
   row: {
     flexDirection: 'row',
-    width: 200
+    width: 240
   }
 }));
 
@@ -33,7 +33,7 @@ function ShoppingCartQuantityPickerComponent({
   return (
     <Grid
       container
-      spacing={1}
+      spacing={2}
       // direction='row'
       className={classes.row}
       justify='center'

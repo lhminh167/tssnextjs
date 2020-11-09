@@ -8,7 +8,6 @@ import { cyAddToCart } from "../../shopping-cart/detail/shopping-cart.component.
 
 export async function cyCreateOrder(input: OrderCreateRequest = {}): Promise<Order> {
     const user = cyGetExistingCustomer();
-    const cart = await cyAddToCart(cyGetExistingProduct(), 1, true);
     const { content: form } = await getOrderCreateForm();
     const shipping = form.shippings[0];
     const request: OrderCreateRequest = {

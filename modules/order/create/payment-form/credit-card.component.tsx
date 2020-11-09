@@ -3,14 +3,15 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import ActionButtonsComponent from '../../../shared/action-buttons/action-buttons.component';
-import { p, w100 } from '../../../shared/layout/layout.style';
+import { mb2, p, w100 } from '../../../shared/layout/layout.style';
 import { shoppingCartItemCountSlice } from '../../../shopping-cart/shopping-cart.slice';
 import { createOrder, createPayment } from '../../order.service';
 
 const useStyles = makeStyles(theme =>
     createStyles({
         w100: w100,
-        p: p
+        p: p,
+        mb2: mb2
     })
 );
 
@@ -78,11 +79,8 @@ export default function CreditCardComponent({
         <form
             className={classes.w100}
         >
-            {/* <Typography variant='h6' gutterBottom>
-                Payment method
-            </Typography> */}
             <CardElement
-                className={classes.p}
+                className={classes.p + ' ' + classes.mb2}
             />
             <Grid
                 item

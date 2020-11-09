@@ -9,9 +9,10 @@ import { getResetPasswordToken } from "../../helpers/customer/customer.service";
 import { typeLogin } from "../../helpers/customer/login/login.component.spec";
 import { resetPasswordFields, resetPasswordTest } from "../../helpers/customer/reset-password/reset-password.component.spec";
 import { mockRandomCustomer } from "../../helpers/shared/helpers/auth.helper";
+import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navbar.component.spec";
 
-it('Forgot Password Page -> Forgot Password -> When user resets their forgotten password, then user can log in using new password #e2e-working #visual-working', () => {
+cyIt.run('Forgot Password Page -> Forgot Password -> When user resets their forgotten password, then user can log in using new password #e2e-working #visual-working', () => {
     const user = mockRandomCustomer();
     cy
         .server().route({ url: getUrl(apiCustomerUrl.forgotPassword), method: HttpMethod.PUT }).as('route')

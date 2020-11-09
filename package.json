@@ -6,14 +6,14 @@
   },
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev -p 5009",
-    "dev:test": "percy exec -- cypress open",
+    "dev:test": "cypress open",
     "dev:start": "next dev -p 5009",
     "start": "next start -p $PORT",
     "build": "next build",
     "analyze": "cross-env ANALYZE=true npm run build",
-    "test": "percy exec -- cypress run",
     "ci": "npm i -f && npm i -D cypress@5.3.0 && start-server-and-test dev:start http://localhost:5009 test",
-    "dev:test:visual": "npx cypress run --env tags='#visual'"
+    "test": "percy exec -- cypress run",
+    "test:visual": "percy exec -- cypress run --env tags='#visual-working'"
   },
   "dependencies": {
     "@material-ui/core": "4.11.0",

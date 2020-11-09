@@ -10,8 +10,11 @@ import { openAllPanels, OrderDetailStatusTest, OrderStatus } from "../../helpers
 import { stockOk } from "../../../modules/order/order.service";
 import { setLoginToken } from "../../../modules/shared/helpers/token.helper";
 import { createCustomer } from "../../../modules/customer/customer.service";
+import { cyIt } from "../../helpers/shared/helpers/other.helper";
+import { cyGetExistingProduct } from "../../helpers/product/create/create-product.component.spec";
+import { cyAddToCart } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-it('Order Detail Page -> Confirm Stock Not Ok -> When logged in as admin, user could cancel an order because some of its products are out of stock #e2e-working', () => {
+cyIt.run('Order Detail Page -> Confirm Stock Not Ok -> When logged in as admin, user could cancel an order because some of its products are out of stock #e2e-working', () => {
 
     const comment = `The following products are out of stock:
 - Green XL Birds T-Shirt. Required Quantity: 10. Available Quantity: 09.
@@ -21,6 +24,7 @@ it('Order Detail Page -> Confirm Stock Not Ok -> When logged in as admin, user c
 
     cy
         .pipe(cySetCustomerLoginToken)
+        .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
         .chain(cyCreateOrder).as('order')
         .pipe(cySetAdminLoginToken)
         .get('@order').its('orderId').chain(orderUrl.detail).its('as')
@@ -35,10 +39,11 @@ it('Order Detail Page -> Confirm Stock Not Ok -> When logged in as admin, user c
 
 });
 
-it('Order Detail Page -> Complete Order -> When logged in as admin, user could confirm stock & shipping of any customer\'s order #e2e-working #visual-working', () => {
+cyIt.run('Order Detail Page -> Complete Order -> When logged in as admin, user could confirm stock & shipping of any customer\'s order #e2e-working #visual-working', () => {
 
     cy
         .pipe(cySetCustomerLoginToken)
+        .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
         .chain(cyCreateOrder).as('order')
         .pipe(cySetAdminLoginToken)
         .get('@order').its('orderId').chain(orderUrl.detail).its('as')
@@ -59,10 +64,11 @@ it('Order Detail Page -> Complete Order -> When logged in as admin, user could c
 });
 
 
-it('Order Detail Page -> Hide Order Confirmation -> When logged in as customer, the Order Confirmation section is hidden #e2e-working', () => {
+cyIt.run('Order Detail Page -> Hide Order Confirmation -> When logged in as customer, the Order Confirmation section is hidden #e2e-working', () => {
 
     cy
         .pipe(cySetCustomerLoginToken)
+        .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
         .chain(cyCreateOrder).its('orderId').as('orderId')
         .chain(orderUrl.detail).its('as')
         .pipe(cy.visit)
@@ -82,20 +88,21 @@ it('Order Detail Page -> Hide Order Confirmation -> When logged in as customer, 
 });
 
 
-it('Order Detail Page -> Access Denied -> When user is not logged in and access Order Detail Page, then user is redirected to Login Page #e2e-working', () => {
+cyIt.run('Order Detail Page -> Access Denied -> When user is not logged in and access Order Detail Page, then user is redirected to Login Page #e2e-working', () => {
 
     cy.visit(orderUrl.baseUrl);
     cy.load(customerUrl.login(orderUrl.baseUrl));
 });
 
 
-it('Order Detail Page -> Access Denied -> When user logs in as customer and accesses Order Detail Page of another customer, then user is redirected to Home Page #e2e-working', () => {
+cyIt.run('Order Detail Page -> Access Denied -> When user logs in as customer and accesses Order Detail Page of another customer, then user is redirected to Home Page #e2e-working', () => {
 
     cy
         .pipe(mockRandomCustomer)
         .pipe(createCustomer)
         .its('content.loginToken')
         .chain(setLoginToken)
+        .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
         .chain(cyCreateOrder).its('orderId').as('orderId')
 
         .chain(cySetCustomerLoginToken)

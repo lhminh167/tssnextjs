@@ -33,14 +33,8 @@ export default function Notifier() {
   });
 
   const handleResponse = (response: Response, color: Color) => {
-    response?.clone().json().then((data: Response) => {
-      setState({
-        ...state,
-        isOpen: true,
-        color,
-        data: data
-      });
-    })
+    response?.clone().json()
+      .then((data: Response) => setState({ ...state, isOpen: true, color, data }))
       .catch(err => ({
         content: null,
         status: response.status,

@@ -1,34 +1,30 @@
 import {
   createStyles,
-  makeStyles,
+  Grid, makeStyles,
   Paper,
   Step,
   StepLabel,
   Stepper,
   Theme,
-  Typography,
-  Container,
-  Box,
-  Grid
+  Typography
 } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../root/root.model';
 import { toNumber } from '../../shared/helpers/auth.helper';
+import { p, pl0, pr0 } from '../../shared/layout/layout.style';
+import { isSmallWidth } from '../../shared/layout/layout.theme';
+import { defaultOrder, Order } from '../order.model';
 import { getOrderCreateForm } from '../order.service';
 import OrderConfirmationComponent from './confirmation-form/confirmation-form.component';
-import OrderCreateRequestComponent from './delivery-form/delivery-form.component';
-import FinishFormComponent from './finish-form/finish-form.component';
 import {
   defaultOrderCreateForm,
   OrderCreateForm,
   OrderCreateRequest
 } from './create-order.model';
+import OrderCreateRequestComponent from './delivery-form/delivery-form.component';
+import FinishFormComponent from './finish-form/finish-form.component';
 import PaymentFormComponent from './payment-form/payment-form.component';
-import { Order, defaultOrder } from '../order.model';
-import { currentUserSlice } from '../../customer/customer.slice';
-import { p, pl0, pr0 } from '../../shared/layout/layout.style';
-import { isMobile } from '../../shared/layout/layout.theme';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   pl0: pl0,
@@ -86,7 +82,7 @@ function ActiveStepComponent({
 }
 
 export default function CreateOrderComponent() {
-  const matches = isMobile();
+  const matches = isSmallWidth();
   const classes = useStyles({});
   const currentUser = useSelector(
     (state: IRootState) => state.currentUser.data
@@ -108,14 +104,14 @@ export default function CreateOrderComponent() {
 
   useEffect(() => {
     getOrderCreateForm().then(data => {
-      
+
 
       setForm(data.content);
     });
   }, []);
 
   useEffect(() => {
-    
+
 
     setState(defaultOrderCreateRequest);
   }, [currentUser]);
@@ -137,11 +133,11 @@ export default function CreateOrderComponent() {
     <Grid
       container
       component={Paper}
-      className={classes.p}
     >
       <Grid
         item
         xs={12}
+        className={classes.p}
       >
         <Typography component='h1' variant='h4' align='left'>
           Checkout
@@ -150,6 +146,7 @@ export default function CreateOrderComponent() {
       <Grid
         item
         xs={12}
+        className={classes.p}
       >
         <Stepper
           activeStep={activeStep}
