@@ -5,7 +5,7 @@ import { mockRandomCustomer } from '../helpers/shared/helpers/auth.helper';
 import { cyIt } from "../helpers/shared/helpers/other.helper";
 import { cyMount, CyMountProps } from '../helpers/shared/layout/layout.component.spec';
 
-cyIt.run('Change Password Component -> When user click a navigation button, then gallery shows the corresponding slide. When there is no corresponding slide, then the corresponding navigation button is disabled #unit-working', () => {
+cyIt.run('Change Password Component -> Unmatched Passwords -> When the entered New Password and Confirm New Password do not match, then an error message is shown #unit-working', () => {
     cy
         .wrap<CyMountProps>({
             Component: ChangePasswordComponent,

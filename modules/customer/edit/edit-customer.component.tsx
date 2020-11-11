@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../root/root.model';
-import { toNumber } from '../../shared/helpers/auth.helper';
+import { goTo, toNumber } from '../../shared/helpers/auth.helper';
+import { isOk } from '../../shared/helpers/http.helper';
 import { mb, mb2, p } from '../../shared/layout/layout.style';
 import { defaultCatalogGetRequest, defaultCatalogGetResponse, ICatalogGetResponse } from '../../shared/models/catalog.model';
 import { getCatalog } from '../../shared/services/catalog.service';
@@ -83,6 +84,7 @@ export default function CustomerEditComponent({
         setSubmitted(true);
         if (!isValidForm(errors)) return;
         const response = await updateCustomer(state);
+        if (!isOk(response.status)) return;
 
         if (userId === currentUserId)
             dispatch(currentUserSlice.actions.setCurrentUser({
@@ -90,10 +92,7 @@ export default function CustomerEditComponent({
                 shippingRegion: form.shippingRegion.find(e => e.shippingRegionId === state.shippingRegionId)
             }));
 
-        router.push(
-            `/user/[userId]`,
-            `/user/${userId}`
-        );
+        goTo(`/user/[userId]`, '', `/user/${userId}`);
     }
 
     return (

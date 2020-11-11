@@ -4,9 +4,9 @@
   "experimentalFetchPolyfill": true,
   "experimentalComponentTesting": true,
   "chromeWebSecurity": false,
-  "defaultCommandTimeout": 60000,
-  "requestTimeout": 60000,
-  "responseTimeout": 60000,
+  "defaultCommandTimeout": 15000,
+  "requestTimeout": 15000,
+  "responseTimeout": 30000,
   "retries": {
     "runMode": 2,
     "openMode": 1

@@ -2,7 +2,8 @@ import { customerUrl, defaultCustomer } from "../../modules/customer/customer.mo
 import { getUserAvatar } from "../../modules/shared/helpers/string.helper";
 import { decodeLoginToken } from "../../modules/shared/helpers/token.helper";
 import { departmentUrl } from "../../modules/shared/models/department.model";
-import { ADMIN, DEPARTMENT, EMAIL, HOMEPAGE, LINK, LOGIN, LOGOUT, MENU, NAME, ORDER, REGISTER, ROLE, SEARCH, SHOPPING_CART, tag, USER, WISHLIST } from "../../modules/shared/tag/tag.model";
+import { ADMIN, BACK, CLEAR, COUNT, DEPARTMENT, EMAIL, GO_BACK, HOMEPAGE, LINK, LOGIN, LOGOUT, MENU, NAME, ORDER, PRODUCT_CARD, REGISTER, ROLE, SEARCH, SEARCH_BOX, SHOPPING_CART, tag, USER, WISHLIST } from "../../modules/shared/tag/tag.model";
+import { cyGetExistingProduct } from "../helpers/product/create/create-product.component.spec";
 import { cyGetExistingCustomer, cySetAdminLoginToken, cySetCustomerLoginToken } from "../helpers/shared/helpers/auth.helper";
 import { cyItWithConfig } from "../helpers/shared/helpers/other.helper";
 import { cyMobileWidth, cySnapshotMobileConfig } from "../helpers/shared/layout/layout.theme";
@@ -11,14 +12,14 @@ import { MobileAccountDetailTest } from "../helpers/shared/navbar/desktop-navbar
 
 cyItWithConfig.run('Mobile Navbar -> Home Page Brand Link -> When user clicks Home Page Brand Link, then user is redirected to Home Page #e2e-working #visual-working', { viewportWidth: cyMobileWidth }, () => {
   cy.visit(departmentUrl);
-  cy.getEl(HOMEPAGE).wait(4000).takeScreenShot('Mobile Navbar', cySnapshotMobileConfig);
+  cy.getEl(HOMEPAGE).takeScreenShot('Mobile Navbar', cySnapshotMobileConfig);
   cy.getEl(HOMEPAGE).should('have.text', (Cypress.env('SITE_NAME') as string).toUpperCase())
     .click().getLink().load();
 });
 
 cyItWithConfig.run('Mobile Navbar -> Home Page Link -> When user clicks Home Page Link, then user is redirected to Home Page #e2e-working #visual-working', { viewportWidth: cyMobileWidth }, () => {
   cy.visit(departmentUrl);
-  cy.getEl(MENU).click().wait(4000).takeScreenShot('Mobile Drawer for Visitors', cySnapshotMobileConfig);
+  cy.getEl(MENU).click().takeScreenShot('Mobile Drawer for Visitors', cySnapshotMobileConfig);
   cy.getEl(HOMEPAGE + LINK).should('have.text', 'Home')
     .click().getLink().load();
   cy.get('.MuiBackdrop-root').click({ force: true })
@@ -35,7 +36,7 @@ cyItWithConfig.run('Mobile Navbar -> Search Page Link -> When user clicks Search
 cyItWithConfig.run('Mobile Navbar -> Deparments Link -> When user clicks Deparments Link, then user is redirected to Deparment List Page #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   cy.visit(customerUrl.login());
   cy.getEl(MENU).click();
-  cy.getEl(DEPARTMENT).wait(4000).should('have.text', 'Departments')
+  cy.getEl(DEPARTMENT).should('have.text', 'Departments')
     .click().getLink().load();
   cy.get('.MuiBackdrop-root').click({ force: true })
 });
@@ -50,7 +51,7 @@ cyItWithConfig.run('Mobile Navbar -> Wish List Link -> When user clicks Wish Lis
 cyItWithConfig.run('Mobile Navbar -> Admin Area Link -> When user clicks Admin Area Link, then user is redirected to Admin Area Page #e2e-working #visual-working', { viewportWidth: cyMobileWidth }, () => {
   cy.pipe(cySetAdminLoginToken).visit(departmentUrl);
   cy.getEl(MENU).click();
-  cy.getEl(ADMIN).wait(4000).takeScreenShot('Mobile Drawer for Customers & Admins', cySnapshotMobileConfig);
+  cy.getEl(ADMIN).takeScreenShot('Mobile Drawer for Customers & Admins', cySnapshotMobileConfig);
   cy.getEl(ADMIN).should('have.text', 'Admin')
     .click().getLink().load();
   cy.get('.MuiBackdrop-root').click({ force: true })
@@ -105,4 +106,29 @@ cyItWithConfig.run('Mobile Navbar -> User Area Link -> When user clicks User Are
     .pipe(cyGetExistingCustomer).chain(MobileAccountDetailTest)
   cy.getEl(USER + LINK).click().getLink().load();
   cy.get('.MuiBackdrop-root').click({ force: true })
+});
+
+cyItWithConfig.run('Mobile Navbar -> Back Button -> When user click Back Button, then the previous page is shown #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+  cy.visit(departmentUrl);
+  cy.getEl(MENU).click();
+  cy.getEl(LOGIN).click().getLink().load()
+  cy.get('.MuiBackdrop-root').click({ force: true })
+
+  cy.getEl(GO_BACK).click();
+  cy.load(departmentUrl);
+});
+
+cyItWithConfig.run('Mobile Navbar -> Search From Other Page -> When user is not on Product Search Page and enters a search keyword, then user should be redirected to Product Search Page #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+  const product = cyGetExistingProduct();
+  cy.visit(customerUrl.login());
+
+  cy.getEl(SEARCH_BOX).type(product.name);
+  cy.getEl(CLEAR).click();
+  cy.getEl(SEARCH_BOX).should('have.value', '');
+
+  cy.getEl(SEARCH_BOX).type(product.name + '{enter}')
+  cy.getEl(COUNT).should('have.text', 1);
+  cy.getEl(PRODUCT_CARD).first().within(() => {
+    cy.getEl(NAME).should('have.text', product.name);
+  });
 });

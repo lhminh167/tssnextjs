@@ -10,6 +10,7 @@ import UserDetailTest from "../../helpers/customer/detail/customer-detail.compon
 import { cyGetExistingProduct } from "../../helpers/product/create/create-product.component.spec";
 import { cyGetExistingCustomer, cySetCustomerLoginToken, mockRandomAccount, mockRandomCustomer } from "../../helpers/shared/helpers/auth.helper";
 import { cyIt } from "../../helpers/shared/helpers/other.helper";
+import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navbar.component.spec";
 import { ShoppingCartItemDetailTest } from "../../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { fromProductToCartItem } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
@@ -28,8 +29,9 @@ cyIt.run('Register Page -> Register -> When not-logged-in user accesses Register
 
     cy
         .get('@user').its('customerId').chain(customerUrl.detail).its('as')
-        .pipe(cy.visit).wrap(user)
-        .chain(UserDetailTest);
+        .pipe(cy.visit)
+        .wrap(user).chain(UserDetailTest)
+        .wrap(user).chain(UserPopoverDetailTest)
 });
 
 cyIt.run('Register Page -> Email Adready Taken -> When an email address was used by a user to register, then another user cannot use this email address to register #e2e-working', () => {
@@ -81,7 +83,7 @@ cyIt.run('Register Page -> Anonymous Shopping Cart -> Given anonymous user has s
         .chain(ShoppingCartItemDetailTest);
 });
 
-cyIt.run('Register Page -> Anonymous Wish List -> Given anonymous user has some items in wish list, when user logs in, then anonymous wish list items are added to the account user used to log in #e2e-working', () => {
+cyIt.run('Register Page -> Anonymous Wish List -> Given anonymous user has some items in wish list, when user registers, then anonymous wish list items are added to the account user used to log in #e2e-working', () => {
     const item = fromProductToCartItem(cyGetExistingProduct(), 2, false);
     cy
         .wrap(item).pipe(addShoppingCartItem)

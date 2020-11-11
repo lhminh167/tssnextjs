@@ -42,13 +42,6 @@ declare namespace Cypress {
         ): Chainable<JQuery<E>>;
 
         /**
-         * Check the status, title, content, errors of API responses by comparing the response object and condition object.
-         */
-        testApi<E extends Node = HTMLElement>(
-            condition: any
-        ): Chainable<JQuery<E>>;
-
-        /**
          * Fill in form.
          */
         fillTextFields<E extends Node = HTMLElement>(

@@ -1,13 +1,13 @@
 import { post, put, get } from '../shared/crud/crud.service';
 import { apiOrderUrl, Order } from './order.model';
-import { OrderCreateForm, OrderCreateRequest } from './create/create-order.model';
+import { OrderCreateForm, OrderCreateRequest, OrderCreateResponse } from './create/create-order.model';
 import { IResponse, PaginationRequest } from '../shared/crud/crud.model';
 
 export async function getOrderCreateForm(): Promise<IResponse<OrderCreateForm>> {
   return await get(apiOrderUrl.new, 0);
 }
 
-export async function createPayment(input: OrderCreateRequest) {
+export async function createPayment(input: OrderCreateRequest): Promise<IResponse<OrderCreateResponse>> {
   return await post(apiOrderUrl.payment, input);
 }
 

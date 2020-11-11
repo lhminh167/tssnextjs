@@ -24,7 +24,7 @@ cyIt.run('Order Detail Page -> Confirm Stock Not Ok -> When logged in as admin, 
 
     cy
         .pipe(cySetCustomerLoginToken)
-        .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
+        .then(() => cyAddToCart(cyGetExistingProduct(), 1, true))
         .chain(cyCreateOrder).as('order')
         .pipe(cySetAdminLoginToken)
         .get('@order').its('orderId').chain(orderUrl.detail).its('as')
@@ -68,7 +68,7 @@ cyIt.run('Order Detail Page -> Hide Order Confirmation -> When logged in as cust
 
     cy
         .pipe(cySetCustomerLoginToken)
-        .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
+        .then(() => cyAddToCart(cyGetExistingProduct(), 1, true))
         .chain(cyCreateOrder).its('orderId').as('orderId')
         .chain(orderUrl.detail).its('as')
         .pipe(cy.visit)
@@ -102,7 +102,7 @@ cyIt.run('Order Detail Page -> Access Denied -> When user logs in as customer an
         .pipe(createCustomer)
         .its('content.loginToken')
         .chain(setLoginToken)
-        .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
+        .then(() => cyAddToCart(cyGetExistingProduct(), 1, true))
         .chain(cyCreateOrder).its('orderId').as('orderId')
 
         .chain(cySetCustomerLoginToken)

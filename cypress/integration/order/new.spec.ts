@@ -91,20 +91,20 @@ cyIt.run('Checkout Page -> Complete Checkout -> When user logged in and shopping
   cy.getEl(TOTAL_QUANTITY).should('have.text', 0)
     .route(apiShoppingCartUrl.baseUrl + '**').as('route')
 
-  cy.getEl(SHOPPING_CART).click().getLink().load().wait('@route')
-    .get('@itemId').then((itemId: any) => tag(ITEM, itemId, SHOPPING_CART)).pipe(cy.shouldNotExist)
-    .route(apiOrderUrl.baseUrl + '**').as('orderRoute')
+  // cy.getEl(SHOPPING_CART).click().getLink().load().wait('@route')
+  //   .get('@itemId').then((itemId: any) => tag(ITEM, itemId, SHOPPING_CART)).pipe(cy.shouldNotExist)
+  //   .route(apiOrderUrl.baseUrl + '**').as('orderRoute')
 
-  cy.getEl(ORDER).click().getLink().load().wait('@orderRoute')
-    .get('@orderId').then((orderId: any) => tag(ITEM, orderId, ORDER)).pipe(cy.getEl).click()
-    .get('@orderId').chain(orderUrl.detail).its('as').load()
-    .wrap(OrderStatus.ConfirmStock).chain(OrderDetailStatusTest)
+  // cy.getEl(ORDER).click().getLink().load().wait('@orderRoute')
+  //   .get('@orderId').then((orderId: any) => tag(ITEM, orderId, ORDER)).pipe(cy.getEl).click()
+  //   .get('@orderId').chain(orderUrl.detail).its('as').load()
+  //   .wrap(OrderStatus.ConfirmStock).chain(OrderDetailStatusTest)
 
-    .get('@customerId').pipe(getCustomer).its('content').then(user => {
-      cy.visit(customerUrl.detail(user.customerId).as)
-        .wrap(user).chain(UserDetailTest)
-        .wrap(user).chain(UserPopoverDetailTest)
-    })
+    // .get('@customerId').pipe(getCustomer).its('content').then(user => {
+    //   cy.visit(customerUrl.detail(user.customerId).as)
+    //     .wrap(user).chain(UserDetailTest)
+    //     .wrap(user).chain(UserPopoverDetailTest)
+    // })
 })
 
 cyIt.run('Checkout Page -> Back Buttons -> When user is at Payment Form and keeps clicking Back Buttons, then user is back to previous pages and eventually arrives at Shopping Cart Page #e2e-working', () => {
@@ -158,7 +158,7 @@ cyIt.run('Checkout Page -> Payment Form -> 3D Secure Auth Success -> When user u
     .pipe(get3DSecurePaymentInfo)
     .pipe(typePaymentForm)
   cy
-    .getEl(SUBMIT).click().wait(10000)
+    .getEl(SUBMIT).click().wait(5000)
     .pipe(getChallengeFrame).find('#test-source-authorize-3ds').click()
   cy
     .getEl(ID).invoke('text')
@@ -178,7 +178,7 @@ cyIt.run('Checkout Page -> Payment Form -> 3D Secure Auth Failure -> When user u
     .pipe(get3DSecurePaymentInfo)
     .pipe(typePaymentForm)
   cy
-    .getEl(SUBMIT).click().wait(10000)
+    .getEl(SUBMIT).click().wait(5000)
     .pipe(getChallengeFrame).find('#test-source-fail-3ds').click()
     .pipe(getSuccessPaymentInfo)
     .pipe(typePaymentForm)

@@ -14,15 +14,15 @@ export async function createCustomer(input: Customer): Promise<IResponse<ILoginR
     return await post(apiCustomerUrl.baseUrl, input);
 }
 
-export async function login(input: ILoginRequest) {
+export async function login(input: ILoginRequest): Promise<IResponse<ILoginResponse>> {
     return await post(apiCustomerUrl.login, input);
 }
 
-export async function updateCustomer(input: CustomerUpdateRequest) {
+export async function updateCustomer(input: CustomerUpdateRequest): Promise<IResponse<Customer>> {
     return await put(apiCustomerUrl.baseUrl, input.customerId, input);
 }
 
-export async function removeCustomer(input: Customer) {
+export async function removeCustomer(input: Customer): Promise<IResponse<Customer>> {
     return await remove(apiCustomerUrl.baseUrl, 0, input.customerId);
 }
 

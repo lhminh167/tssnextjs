@@ -3,7 +3,7 @@ import { createCustomer, getCustomer } from "../../../../modules/customer/custom
 import { getUrl } from "../../../../modules/shared/crud/crud.service";
 import { toNumber } from "../../../../modules/shared/helpers/auth.helper";
 import { setLoginToken } from "../../../../modules/shared/helpers/token.helper";
-import { ADDRESS_1, ADDRESS_2, CITY, COUNTRY, DAY_PHONE, EDIT, EMAIL, EVE_PHONE, MOB_PHONE, NAME, POSTALCODE, REGION, ROLE, SHIPPING_REGION, SUBMIT } from "../../../../modules/shared/tag/tag.model";
+import { ADDRESS_1, ADDRESS_2, CITY, COUNTRY, DAY_PHONE, DESCRIPTION, EDIT, EMAIL, EVE_PHONE, MOB_PHONE, NAME, POSTALCODE, REGION, ROLE, SHIPPING_REGION, SUBMIT } from "../../../../modules/shared/tag/tag.model";
 import { chooseRole } from "../../../helpers/customer/customer.model";
 import UserDetailTest, { userDetailTexts } from "../../../helpers/customer/detail/customer-detail.component.spec";
 import { testUserEditForm, typeUserEditForm } from "../../../helpers/customer/edit/edit-customer.component.spec";
@@ -39,6 +39,30 @@ cyIt.run('Edit User Page -> Edit User Form -> When logged in as customer, then u
         .getEl(EDIT).click()
         .get('@customer').chain(testUserEditForm)
 });
+
+
+cyIt.run('Edit User Page -> Email Adready Taken -> When an email address was used by a user to register, then another user cannot use this email address to register #e2e-working', () => {
+    const user = mockRandomCustomer();
+    const changes = mockRandomCustomer();
+    cy
+        .wrap(user).pipe(createCustomer).its('content').as('createResponse')
+        .its('loginToken').chain(setLoginToken)
+
+        .get('@createResponse').its('customer.customerId').as('customerId')
+        .chain(apiCustomerUrl.detail).chain(getUrl)
+        .then((url: any) => cy.server().route({ url })).as('route')
+
+        .get('@customerId').chain(customerUrl.edit).its('as').as('editRoute')
+        .chain(cy.visit).wait('@route')
+    cy
+        .wrap({ ...changes, email: cyGetExistingCustomer().email }).chain(typeUserEditForm)
+    cy
+        .getEl(SUBMIT).click()
+    cy
+        .getEl(DESCRIPTION)
+        .should('have.text', 'This email address is already taken. Please use another email address.')
+});
+
 
 cyIt.run('Edit User Page -> Grant Admin Role -> When logged in as admin, then user can grant any customer admin role #e2e-working', () => {
     cy

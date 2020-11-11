@@ -1,7 +1,7 @@
 import { customerUrl } from "../../../modules/customer/customer.model";
 import { createCustomer } from "../../../modules/customer/customer.service";
-import { apiOrderUrl, orderUrl } from "../../../modules/order/order.model";
-import { shipOk, stockNotOk, stockOk } from "../../../modules/order/order.service";
+import { apiOrderUrl, Order, orderUrl } from "../../../modules/order/order.model";
+import { IResponse, PaginatedList } from "../../../modules/shared/crud/crud.model";
 import { getUrl } from "../../../modules/shared/crud/crud.service";
 import { removeLoginToken, setLoginToken } from "../../../modules/shared/helpers/token.helper";
 import { cyCreateOrder } from "../../helpers/order/create/create-order.component.spec";
@@ -11,13 +11,13 @@ import { cySetAdminLoginToken, cySetCustomerLoginToken, mockRandomCustomer } fro
 import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { cyAddToCart } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Order List Page -> Customer\'s Orders -> When customer accesses Order List Page, customer can see their own orders and cannot see order of other customers #e2e-working #visual-working', () => {
+cyIt.run('Order List Page -> Customer\'s Orders -> When customer accesses Order List Page, then customer can see their own orders and cannot see order of other customers #e2e-working #visual-working', () => {
 
     cy
         .server().route({ url: getUrl(apiOrderUrl.baseUrl) + '**' }).as('route')
 
         .pipe(cySetCustomerLoginToken)
-        .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
+        .then(() => cyAddToCart(cyGetExistingProduct(), 1, true))
         .chain(cyCreateOrder).as('yourOrder')
 
         .chain(removeLoginToken)
@@ -25,7 +25,7 @@ cyIt.run('Order List Page -> Customer\'s Orders -> When customer accesses Order 
         .pipe(createCustomer)
         .its('content.loginToken')
         .chain(setLoginToken)
-        .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
+        .then(() => cyAddToCart(cyGetExistingProduct(), 1, true))
         .chain(cyCreateOrder).as('myOrder')
         .wrap(orderUrl.baseUrl).chain(cy.visit).wait('@route')
 
@@ -35,7 +35,7 @@ cyIt.run('Order List Page -> Customer\'s Orders -> When customer accesses Order 
 
 });
 
-cyIt.run('Order List Page -> Admin -> When admin accesses Order List Page, admin can see orders created by any customers #e2e-working', () => {
+cyIt.run('Order List Page -> Admin -> When admin accesses Order List Page, then admin can see orders created by any customers #e2e-working', () => {
 
     cy
         .server().route({ url: getUrl(apiOrderUrl.baseUrl) + '**' }).as('route')
@@ -44,11 +44,11 @@ cyIt.run('Order List Page -> Admin -> When admin accesses Order List Page, admin
         .pipe(createCustomer)
         .its('content.loginToken')
         .chain(setLoginToken)
-        .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
+        .then(() => cyAddToCart(cyGetExistingProduct(), 1, true))
         .chain(cyCreateOrder).as('yourOrder')
 
         .pipe(cySetCustomerLoginToken)
-        .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
+        .then(() => cyAddToCart(cyGetExistingProduct(), 1, true))
         .chain(cyCreateOrder).as('myOrder')
 
         .pipe(cySetAdminLoginToken)
@@ -63,4 +63,22 @@ cyIt.run('Order List Page -> Access Denied -> When user is not logged in and acc
 
     cy.visit(orderUrl.baseUrl);
     cy.load(customerUrl.login(orderUrl.baseUrl));
+});
+
+
+cyIt.only('Order List Page -> Visual Regression Test -> When user accesses Order List Page, then CSS styles, HTML elements, retrieved should be displayed as expected #visual-working', () => {
+
+    cy
+        .server()
+        .fixture<IResponse<PaginatedList<Order>>>('orders.json')
+        .then(res => ({
+            ...res, content: {
+                ...res.content,
+                items: res.content.items.slice(0, 8),
+            }
+        }))
+        .then(res => cy.route({ url: getUrl(apiOrderUrl.baseUrl + '**'), response: res }))
+        .pipe(cySetCustomerLoginToken)
+        .visit(orderUrl.baseUrl)
+        .takeScreenShot('Order List Page')
 });

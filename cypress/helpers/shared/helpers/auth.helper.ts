@@ -17,7 +17,8 @@ export function mockRandomAccount() {
         ...defaultCustomer,
         name: randomText,
         email: randomText + '@mail.com',
-        password: randomText
+        password: randomText,
+        confirmNewPassword: randomText
     };
     return res;
 }
