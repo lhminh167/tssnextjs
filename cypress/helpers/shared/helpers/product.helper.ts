@@ -2,13 +2,6 @@ import { defaultProduct, IProduct } from "../../../../modules/shared/models/prod
 import { cyGetFilter } from "../../product/create/create-product.component.spec";
 import { getRandomString } from "./string.helper";
 
-export function encodeAttributes() {
-}
-
-export function decodeAttributes() {
-
-}
-
 export function mockRandomProduct(): IProduct {
     const filter = cyGetFilter();
     return {

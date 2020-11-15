@@ -1,5 +1,3 @@
-import { SUBMIT, ORDER_SUMMARY, GRAND_TOTAL, ID } from "../../../../../modules/shared/tag/tag.model";
-import { cyFinishConfirmationForm, cyGoToConfirmationForm } from "../confirmation-form/confirmation-form.component.spec";
 
 export function typePaymentForm(input: IPaymentInfo) {
   cy.wait(5000).get(".__PrivateStripeElement > iframe").then(($element) => {
@@ -68,10 +66,4 @@ export function getInsufficientFundsPaymentInfo() {
     postal: '12345'
   }
   return res;
-}
-
-export function cyGoToPaymentForm() {
-  return cy
-    .pipe(cyGoToConfirmationForm)
-    .pipe(cyFinishConfirmationForm);
 }

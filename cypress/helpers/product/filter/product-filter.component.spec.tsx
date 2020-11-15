@@ -106,15 +106,6 @@ export function getRandomPrice(isMinimum: boolean): number {
         getRandomNumber(middlePrice, maxLimit);
 }
 
-export function searchByPrice() {
-
-    productUrl.search({
-        ...defaultProductSearchRequest,
-        minPrice: getMinPrice(),
-        maxPrice: getMaxPrice(),
-    })
-}
-
 export function openProductFilter() {
 
     cy.scrollTo('top')
@@ -131,7 +122,7 @@ export function ProductFilterDetailTest() {
         .get('@filter').its('attributes').chain(ColorPickerTest)
         .get('@filter').its('categories').chain(BrandPickerTest)
         .pipe(SortByOptionsTest)
-        .pipe(SortByOptionsTest)
+        .pipe(SortOrderOptionsTest)
 
     return cy;
 }

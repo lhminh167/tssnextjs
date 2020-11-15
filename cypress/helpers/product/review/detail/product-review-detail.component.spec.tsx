@@ -1,16 +1,6 @@
 import { IReview } from "../../../../../modules/shared/models/review.model";
 import { ITEM, DESCRIPTION, RATING, NAME, DATETIME } from "../../../../../modules/shared/tag/tag.model";
 
-export default function ProductReviewDetailComponentTest() {
-    describe('ProductReviewDetailComponentTest', () => {
-        describe('', () => {
-            it('', () => {
-
-            });
-        });
-    });
-}
-
 export function ProductReviewDetailComponentBasicTest(input: IReview) {
     cy
         .getEl(ITEM)

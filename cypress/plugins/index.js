@@ -17,7 +17,7 @@ import {
   saveCustomerLoginToken, saveAdminLoginToken, saveProduct,
   percyHeathCheck
 } from './helpers';
-const preprocessor = require('cypress-react-unit-test/plugins/next')
+const filePreprocessor = require('cypress-react-unit-test/plugins/next/file-preprocessor')
 
 /**
  * @type {Cypress.PluginConfig}
@@ -26,10 +26,12 @@ export default async (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   config.env = process.env;
-  preprocessor(on, config)
   await saveCustomerLoginToken(config);
   await saveAdminLoginToken(config);
   await saveProduct(config);
   percyHeathCheck(on, config);
+  on('task', require('@cypress/code-coverage/task'))
+  // on('file:preprocessor', require('@cypress/code-coverage/use-babelrc'))
+  on('file:preprocessor', filePreprocessor(config))
   return config;
 }

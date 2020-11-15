@@ -1,11 +1,4 @@
-import { GRAND_TOTAL, ORDER_SUMMARY, SUBMIT } from "../../../../../modules/shared/tag/tag.model";
-import { cyFinishDeliveryForm, cyGoToDeliveryForm } from "../delivery-form/delivery-form.component.spec";
-
-export function cyGoToConfirmationForm() {
-    return cy
-        .pipe(cyGoToDeliveryForm)
-        .pipe(cyFinishDeliveryForm)
-}
+import { SUBMIT } from "../../../../../modules/shared/tag/tag.model";
 
 export function cyFinishConfirmationForm() {
     cy.getEl(SUBMIT).click();

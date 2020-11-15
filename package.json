@@ -5,7 +5,7 @@
     "node": "10.19.0"
   },
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS='--inspect' next dev -p 5009",
+    "dev": "next dev -p 5009",
     "dev:test": "cypress open",
     "dev:start": "next dev -p 5009",
     "start": "next start -p $PORT",
@@ -46,7 +46,7 @@
     "webpack": "4.41.2"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "1.14.0",
+    "@cypress/code-coverage": "2.0.5",
     "@percy/cypress": "2.3.2",
     "@types/chai": "4.2.12",
     "@types/jwt-decode": "2.2.1",
@@ -57,7 +57,7 @@
     "@types/react-dom": "16.9.8",
     "@types/react-lazyload": "2.6.0",
     "@types/react-redux": "7.1.9",
-    "cross-blob": "^2.0.0",
+    "cross-blob": "2.0.0",
     "cross-env": "6.0.3",
     "cypress": "5.3.0",
     "cypress-file-upload": "4.1.0",

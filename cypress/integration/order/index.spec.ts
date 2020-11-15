@@ -66,7 +66,7 @@ cyIt.run('Order List Page -> Access Denied -> When user is not logged in and acc
 });
 
 
-cyIt.only('Order List Page -> Visual Regression Test -> When user accesses Order List Page, then CSS styles, HTML elements, retrieved should be displayed as expected #visual-working', () => {
+cyIt.run('Order List Page -> Visual Regression Test -> When user accesses Order List Page, then CSS styles, HTML elements, retrieved should be displayed as expected #visual-working', () => {
 
     cy
         .server()
