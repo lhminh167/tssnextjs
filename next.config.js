@@ -3,6 +3,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true'
 });
 const withOffline = require('next-offline');
+const withPreact = require('next-plugin-preact')
 
 const nextConfig = {
 
@@ -75,4 +76,4 @@ const nextConfig = {
   }
 };
 
-module.exports = withOffline(withBundleAnalyzer(nextConfig));
+module.exports = withPreact(withOffline(withBundleAnalyzer(nextConfig)));
