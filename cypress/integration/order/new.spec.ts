@@ -19,47 +19,6 @@ import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navbar.component.spec";
 import { cyAddToCart, cyGetAnyCartItem, finishShoppingCartPage } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-
-cyIt.skip('Checkout Page -> Order Completion -> Visitor who visits the website for the first time can complete an order #sanity #e2e-working', () => {
-
-  const user = mockRandomCustomer();
-  cy.visit('/').wrap('/').load();
-  cy.getEl(PRODUCT_CARD).last().click()
-  cy.getEl(PRODUCT_LINK).last().getLink().load()
-  cy.getEl(SIZE).last().click()
-  cy.getEl(COLOR).last().click()
-
-  cy.getEl(ADD_TO_CART).click()
-  cy.getEl(SHOPPING_CART).click().getLink().load();
-  cy.server().route({ url: getUrl(apiShoppingCartUrl.baseUrl + '?**') }).as('cartItemListRoute')
-    .wait('@cartItemListRoute', { timeout: 120000 })
-    .pipe(cyGetAnyCartItem).should('exist');
-  cy.getEl(SUBMIT).click()
-
-  cy.load(customerUrl.login(orderUrl.new))
-  cy.getEl(REGISTER_LINK).click()
-  cy.getEl(REGISTER_LINK).getLink().load()
-  cy.wrap(user).chain(typeRegister)
-  cy.getEl(SUBMIT).click()
-
-  cy.load(orderUrl.new)
-    .wrap({ ...user, shippingId: 2, })
-    .chain(typeDeliveryForm)
-  cy.getEl(SUBMIT).click()
-
-  cy.getEl(ORDER_SUMMARY).should('have.text', 'Order summary')
-  cy.getEl(GRAND_TOTAL).should('not.eq', '$0.00')
-  cy.getEl(SUBMIT).click()
-
-  cy.pipe(getSuccessPaymentInfo).pipe(typePaymentForm)
-  cy.getEl(SUBMIT).click()
-
-  cy.getEl(ID).invoke('text').then(parseFloat).should('be.gt', 0).as('orderId')
-  cy.getEl(BACK).click().getLink().load()
-  cy.getEl(LOGOUT).click().shouldNotExist(USER)
-  cy.get('@orderId').chain(OrderCompletionTest)
-});
-
 cyIt.run('Checkout Page -> Complete Checkout -> When user logged in and shopping cart is not empty, then user can complete Checkout Form to place an order #e2e-working #visual-working', () => {
 
   cy.server()
