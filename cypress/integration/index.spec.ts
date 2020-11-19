@@ -57,12 +57,11 @@ cyIt.run('Home Page -> Best Selling Product Gallery -> When user accesses Home P
             .wrap({
                 ...defaultProductSearchRequest,
                 pageIndex: 0,
-                pageSize: 8,
+                pageSize: 4,
                 sortBy: SortByEnum.BestSelling,
                 isDescending: true
             })
             .pipe(getProducts).its('content.items')
-            .pipe(items => items.slice(0, 4))
             .chain(ProductListTest).chain(ProductLinkTest)
     })
 });
