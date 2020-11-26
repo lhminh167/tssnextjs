@@ -74,7 +74,7 @@ export function cyAttachImage() {
     cy.getEl(NAME).should('have.text', TEST_IMAGE)
 }
 
-export function cyCreateRandomProduct(): Cypress.Chainable {
+export function cyCreateRandomProduct(): Cypress.Chainable<IProduct> {
     return cy
         .pipe(cyGetFilter)
         .pipe(res => ({

@@ -4,7 +4,7 @@ import BestSellingProductGalleryComponent from '../modules/product/best-selling/
 import { getHomepageProducts } from '../modules/product/filter/product-filter.service';
 import { HomePageMetadataComponent } from '../modules/product/home-page-metadata/home-page-metadata.component';
 import MostDiscountedProductGalleryComponent from '../modules/product/most-discounted/most-discounted-product-gallery.component';
-import NewestProductList from '../modules/product/newest/newest-product-list.component';
+import NewestProductListComponent from '../modules/product/newest/newest-product-list.component';
 import TopPanelComponent from '../modules/product/top-panel/top-panel.component';
 import TopRatedProductGalleryComponent from '../modules/product/top-rated/top-rated-product-gallery.component';
 import ErrorBoundary from '../modules/shared/error-boundary/error-boundary.component';
@@ -41,7 +41,7 @@ export default function ProductSearchPage({
       </ErrorBoundary>
       <ErrorBoundary>
         {/* <LazyHydrate whenVisible> */}
-        <NewestProductList data={data.newest} />
+        <NewestProductListComponent data={data.newest} />
         {/* </LazyHydrate> */}
       </ErrorBoundary>
       <ErrorBoundary>

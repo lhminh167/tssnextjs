@@ -3,6 +3,7 @@ import { Shipping } from '../../shared/models/shipping.model';
 import { ShippingRegion } from '../../shared/models/shipping-region.model';
 import { Tax } from '../../shared/models/tax.model';
 import { beRequired } from '../../shared/validator/validator';
+import { Order } from '../order.model';
 
 export interface OrderCreateRequest {
   customerId?: number;
@@ -58,4 +59,11 @@ export const defaultOrderCreateForm: OrderCreateForm = {
   shippings: [],
   shippingRegions: [],
   taxes: []
+}
+
+export interface OrderCreateResponse {
+  order: Order;
+  paymentId: string;
+  paymentStatus: string;
+  paymentSecret: string;
 }

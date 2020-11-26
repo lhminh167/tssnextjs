@@ -161,6 +161,7 @@ export default function ProductReviewListComponent({ data }: Props) {
               onChangeRowsPerPage={changePageSize}
               ActionsComponent={PaginationComponent}
               className={classes.mlAuto}
+              labelRowsPerPage='Items per page:'
             />
           </Fragment>
         )

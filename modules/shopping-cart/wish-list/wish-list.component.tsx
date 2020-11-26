@@ -252,6 +252,7 @@ export default function WishListComponent({
                     onChangePage={changePageIndex}
                     onChangeRowsPerPage={changePageSize}
                     ActionsComponent={PaginationComponent}
+                    labelRowsPerPage='Items per page:'
                 />
             </div>
             <ActionButtonsComponent

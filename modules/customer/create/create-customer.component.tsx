@@ -13,7 +13,7 @@ import { mb, mb2 } from '../../shared/layout/layout.style';
 import { isValidForm } from '../../shared/validator/validator';
 import { CreateCustomerRequestValidator, defaultCreateCustomerRequest, ICreateCustomerRequest } from '../customer.model';
 import { currentUserSlice } from '../customer.slice';
-import { NAME, EMAIL, PASSWORD, SUBMIT, LOGIN_LINK } from '../../shared/tag/tag.model';
+import { NAME, EMAIL, PASSWORD, SUBMIT, LOGIN_LINK, CONFIRM_NEW_PASSWORD } from '../../shared/tag/tag.model';
 
 const useStyles = makeStyles(theme => ({
     mb: mb,
@@ -124,17 +124,27 @@ export default function CreateCustomerComponent() {
                         onChange={change}
                         error={errors.password && submitted}
                         helperText={errors.password && submitted ? errors.password : null}
-                        className={classes.mb2}
                         data-cy={PASSWORD}
 
                     />
                 </Grid>
-                {/* <Grid item xs={12}>
-                            <FormControlLabel
-                                control={<Checkbox value='allowExtraEmails' color='primary' />}
-                                label='I want to receive inspiration, marketing promotions and updates via email.'
-                            />
-                        </Grid> */}
+                <Grid item xs={12}>
+                    <TextField
+                        variant='outlined'
+                        required
+                        fullWidth
+                        name='confirmNewPassword'
+                        label='Confirm Password'
+                        type='password'
+                        autoComplete='new-password'
+                        value={state.confirmNewPassword}
+                        onChange={change}
+                        error={errors.confirmNewPassword && submitted}
+                        helperText={errors.confirmNewPassword && submitted ? errors.confirmNewPassword : null}
+                        className={classes.mb2}
+                        data-cy={CONFIRM_NEW_PASSWORD}
+                    />
+                </Grid>
             </Grid>
             <Button
                 fullWidth

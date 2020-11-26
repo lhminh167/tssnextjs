@@ -8,8 +8,13 @@ import { ADDRESS_1, ADDRESS_2, CITY, COUNT, COUNTRY, DATETIME, DAY_PHONE, DESCRI
  */
 export const transitionWidth = 'md';
 
-export function isMobile() {
+export function isMediumWidth() {
     const matches = useMediaQuery(theme.breakpoints.up(transitionWidth));
+    return matches;
+}
+
+export function isSmallWidth() {
+    const matches = useMediaQuery(theme.breakpoints.up('sm'));
     return matches;
 }
 

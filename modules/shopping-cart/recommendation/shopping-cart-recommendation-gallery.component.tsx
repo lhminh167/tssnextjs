@@ -55,7 +55,7 @@ export default function ShoppingCartProductRecommendationGalleryComponent({
             output={change}
             title={
                 <Typography variant='h6' component='h2'>
-                    Product Recommendations
+                    Customers who bought this item also bought:
                 </Typography>
             }
             // seeMore={

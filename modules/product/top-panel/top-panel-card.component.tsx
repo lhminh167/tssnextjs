@@ -1,21 +1,19 @@
 import { ButtonBase, createStyles, GridListTileBar, makeStyles, Theme, Typography } from '@material-ui/core';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { formatCurrency } from '../../shared/helpers/string.helper';
 import ImageComponent from '../../shared/image/image.component';
 import { w100 } from '../../shared/layout/layout.style';
-import { themeColor } from '../../shared/layout/layout.theme';
 import { getDiscountedPrice, IProduct } from '../../shared/models/product.model';
-import { PRODUCT_LINK, DISCOUNTED_PRICE, NAME, PRODUCT_CARD } from '../../shared/tag/tag.model';
+import { DISCOUNTED_PRICE, NAME, PRODUCT_CARD, PRODUCT_LINK } from '../../shared/tag/tag.model';
 import { productUrl } from '../filter/product-filter.model';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        discount: {
-            marginRight: theme.spacing(1),
-            color: themeColor.white,
-            borderColor: themeColor.white
-        },
+        // discount: {
+        //     marginRight: theme.spacing(1),
+        //     color: themeColor.white,
+        //     borderColor: themeColor.white
+        // },
         link: {
             ...w100
         }

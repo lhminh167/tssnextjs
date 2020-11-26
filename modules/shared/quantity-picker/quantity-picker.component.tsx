@@ -20,13 +20,15 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     textField: {
       width: theme.spacing(7),
+      marginLeft: theme.spacing(2),
+      marginRight: theme.spacing(2),
       [`& fieldset`]: {
         borderRadius: theme.spacing(3)
       }
     },
     row: {
       flexDirection: 'row',
-      width: 150
+      width: 170
     }
   })
 );
@@ -52,12 +54,9 @@ function QuantityPickerComponent(props: IProps) {
     <Grid
       container
       spacing={1}
-      // direction='row'
-      // item
       alignItems='center'
       className={classes.row}
     >
-      {/* <Grid item> */}
       <Fab
         onClick={decreaseByOne}
         size='small'
@@ -65,8 +64,6 @@ function QuantityPickerComponent(props: IProps) {
       >
         <RemoveRoundedIcon />
       </Fab>
-      {/* </Grid>
-      <Grid item> */}
       <TextField
         className={classes.textField}
         margin='dense'
@@ -80,8 +77,6 @@ function QuantityPickerComponent(props: IProps) {
         value={quantity}
         onChange={updateNumberInput}
       />
-      {/* </Grid>
-      <Grid item> */}
       <Fab
         onClick={increaseByOne}
         size='small'
@@ -89,7 +84,6 @@ function QuantityPickerComponent(props: IProps) {
       >
         <AddRoundedIcon />
       </Fab>
-      {/* </Grid> */}
     </Grid>
   );
 }

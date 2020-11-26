@@ -80,17 +80,6 @@ Cypress.Commands.add('load', {
 
 });
 
-Cypress.Commands.add('testApi', {
-    prevSubject: 'optional'
-}, (subject: any, condition: IResponse<any>) => {
-
-    expect(subject.status, 'response status').to.eq(condition.status);
-    expect(subject.title, 'response title').to.eq(condition.title);
-    if (condition.errors) expect(subject.errors, 'response errors').to.be.deep.eq(condition.errors);
-    if (condition.content) expect(subject.content, 'response content').not.be.undefined;
-    return subject;
-});
-
 Cypress.Commands.add('chain', {
     prevSubject: 'optional'
 }, (subject: any, func: Function) => {

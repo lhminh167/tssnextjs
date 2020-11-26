@@ -1,14 +1,13 @@
 import { defaultProductSearchRequest, SortByEnum } from "../../modules/product/filter/product-filter.model";
 import { getHomepageProducts, getProducts } from "../../modules/product/filter/product-filter.service";
-import { IProduct } from "../../modules/shared/models/product.model";
 import { BEST_SELLING, CAROUSEL, DOT, MOST_DISCOUNTED, NEWEST, PRODUCT_CARD, PRODUCT_LINK, TOP_PANEL, TOP_RATED } from "../../modules/shared/tag/tag.model";
 import MostDiscountedTest from "../helpers/product/most-discounted/most-discounted-product-gallery.component.spec";
 import NewestTest from "../helpers/product/newest/newest-product-list.component.spec";
-import { getLastEl, getRandomDomEl } from "../helpers/shared/helpers/other.helper";
-import ProductCardDetailTest from "../helpers/shared/product-card/product-card.component.spec";
-import ProductListTest from "../helpers/shared/product-list/product-list.component.spec";
+import { cyIt, getLastEl, getRandomDomEl } from "../helpers/shared/helpers/other.helper";
+import ProductCardDetailTest, { ProductLinkTest } from "../helpers/shared/product-card/product-card.component.spec";
+import ProductListTest, { ProductListPageSizeTest, ProductListPaginationTest } from "../helpers/shared/product-list/product-list.component.spec";
 
-it('Home Page -> Top Panel -> Carousel Dot -> When user clicks a carousel dot, then the corresponding Top Panel Carousel Card is shown #e2e-working', () => {
+cyIt.run('Home Page -> Top Panel -> Carousel Dot -> When user clicks a carousel dot, then the corresponding Top Panel Carousel Card is shown #e2e-working', () => {
     cy.visit('/').pipe(getHomepageProducts).its('content.topPanel.items').as('topPanel')
     cy.getEl(TOP_PANEL + CAROUSEL).within(() => {
         cy.getEl(DOT).last().click().clock(Date.now())
@@ -17,7 +16,7 @@ it('Home Page -> Top Panel -> Carousel Dot -> When user clicks a carousel dot, t
     })
 });
 
-it('Home Page -> Top Panel -> Product Cards -> When user accesses Home Page on Desktop, then Top Panel Product Cards show five Top Panel Products #e2e-working #visual-working', () => {
+cyIt.run('Home Page -> Top Panel -> Product Cards -> When user accesses Home Page on Desktop, then Top Panel Product Cards show five Top Panel Products #e2e-working #visual-working', () => {
     cy.visit('/').pipe(getHomepageProducts).its('content.topPanel.items').as('topPanel')
     cy.getEl(TOP_PANEL + PRODUCT_CARD).wait(4000).takeScreenShot('Home Page');
     cy.getEl(TOP_PANEL + PRODUCT_CARD).within(() => {
@@ -33,7 +32,7 @@ it('Home Page -> Top Panel -> Product Cards -> When user accesses Home Page on D
     })
 });
 
-it('Home Page -> Most Discounted Product Gallery -> When user accesses Home Page on Desktop, then Most Discounted Product Gallery shows most discounted products #e2e-working', () => {
+cyIt.run('Home Page -> Most Discounted Product Gallery -> When user accesses Home Page on Desktop, then Most Discounted Product Gallery shows most discounted products #e2e-working', () => {
     cy.visit('/');
     cy.getEl(MOST_DISCOUNTED).within(() => {
         cy
@@ -46,30 +45,29 @@ it('Home Page -> Most Discounted Product Gallery -> When user accesses Home Page
                 isDescending: true
             })
             .pipe(getProducts).its('content.items')
-            .chain(ProductListTest)
+            .chain(ProductListTest).chain(ProductLinkTest)
     })
 });
 
 
-it('Home Page -> Best Selling Product Gallery -> When user accesses Home Page on Desktop, then Best Selling Product Gallery shows best selling products #e2e-working', () => {
+cyIt.run('Home Page -> Best Selling Product Gallery -> When user accesses Home Page on Desktop, then Best Selling Product Gallery shows best selling products #e2e-working', () => {
     cy.visit('/');
     cy.getEl(BEST_SELLING).within(() => {
         cy
             .wrap({
                 ...defaultProductSearchRequest,
                 pageIndex: 0,
-                pageSize: 8,
+                pageSize: 4,
                 sortBy: SortByEnum.BestSelling,
                 isDescending: true
             })
             .pipe(getProducts).its('content.items')
-            .pipe(items => items.slice(0, 4))
-            .chain(ProductListTest)
+            .chain(ProductListTest).chain(ProductLinkTest)
     })
 });
 
 
-it('Home Page -> Top Rated Product Gallery -> When user accesses Home Page on Desktop, then Top Rated Product Gallery shows top rated products #e2e-working', () => {
+cyIt.run('Home Page -> Top Rated Product Gallery -> When user accesses Home Page on Desktop, then Top Rated Product Gallery shows top rated products #e2e-working', () => {
     cy.visit('/');
     cy.getEl(TOP_RATED).within(() => {
         cy
@@ -81,11 +79,11 @@ it('Home Page -> Top Rated Product Gallery -> When user accesses Home Page on De
                 isDescending: true
             })
             .pipe(getProducts).its('content.items').as('items')
-            .chain(ProductListTest)
+            .chain(ProductListTest).chain(ProductLinkTest)
     })
 });
 
-it('Home Page -> Newest Product List -> When user accesses Home Page on Desktop, then Newest Product List should show newest products #e2e-working', () => {
+cyIt.run('Home Page -> Newest Product List -> When user accesses Home Page on Desktop, then Newest Product List should show newest products #e2e-working', () => {
     cy.visit('/');
     cy.getEl(NEWEST).within(() => {
         cy
@@ -98,7 +96,6 @@ it('Home Page -> Newest Product List -> When user accesses Home Page on Desktop,
                 isDescending: true
             })
             .pipe(getProducts).its('content.items')
-            .chain(ProductListTest)
+            .chain(ProductListTest).pipe(ProductLinkTest)
     })
-
 });

@@ -110,7 +110,7 @@ export interface ICreateCustomerRequest {
     name?: string;
     email?: string;
     password?: string;
-    // role?: string;
+    confirmNewPassword?: string;
 }
 
 export class CreateCustomerRequestValidator extends Validator<ICreateCustomerRequest> {
@@ -125,6 +125,10 @@ export class CreateCustomerRequestValidator extends Validator<ICreateCustomerReq
 
         this.ruleFor('password')
             .must(beRequired());
+
+        this.ruleFor('confirmNewPassword')
+            .must(beRequired()).must(beRequired())
+            .must((value, model) => value === model.password).withMessage('New Password and Confirm New Password fields do not match');
     }
 }
 

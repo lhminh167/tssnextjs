@@ -1,18 +1,20 @@
-import { apiCustomerUrl, customerUrl } from "../../../modules/customer/customer.model";
+import { apiCustomerUrl, customerUrl, ICreateCustomerRequest } from "../../../modules/customer/customer.model";
 import { createCustomer } from "../../../modules/customer/customer.service";
 import { HttpMethod } from "../../../modules/shared/crud/crud.model";
 import { setLoginToken } from "../../../modules/shared/helpers/token.helper";
-import { LOGIN_LINK, SUBMIT } from "../../../modules/shared/tag/tag.model";
+import { DESCRIPTION, LOGIN_LINK, SUBMIT } from "../../../modules/shared/tag/tag.model";
 import { apiShoppingCartUrl, shoppingCartUrl } from "../../../modules/shopping-cart/shopping-cart.model";
 import { addShoppingCartItem } from "../../../modules/shopping-cart/shopping-cart.service";
 import { registerTextFields, typeRegister } from "../../helpers/customer/create/create-customer.component.spec";
 import UserDetailTest from "../../helpers/customer/detail/customer-detail.component.spec";
 import { cyGetExistingProduct } from "../../helpers/product/create/create-product.component.spec";
-import { cySetCustomerLoginToken, mockRandomAccount, mockRandomCustomer } from "../../helpers/shared/helpers/auth.helper";
+import { cyGetExistingCustomer, cySetCustomerLoginToken, mockRandomAccount, mockRandomCustomer } from "../../helpers/shared/helpers/auth.helper";
+import { cyIt } from "../../helpers/shared/helpers/other.helper";
+import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navbar.component.spec";
 import { ShoppingCartItemDetailTest } from "../../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { fromProductToCartItem } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-it('Register Page -> Register -> When not-logged-in user accesses Register Page, then user can register a new account #e2e-working #visual-working', () => {
+cyIt.run('Register Page -> Register -> When not-logged-in user accesses Register Page, then user can register a new account #e2e-working #visual-working', () => {
     const user = mockRandomAccount();
     cy
         .server().route({ url: apiCustomerUrl.register, method: HttpMethod.POST }).as('route')
@@ -27,11 +29,28 @@ it('Register Page -> Register -> When not-logged-in user accesses Register Page,
 
     cy
         .get('@user').its('customerId').chain(customerUrl.detail).its('as')
-        .pipe(cy.visit).wrap(user)
-        .chain(UserDetailTest);
+        .pipe(cy.visit)
+        .wrap(user).chain(UserDetailTest)
+        .wrap(user).chain(UserPopoverDetailTest)
 });
 
-it('Register Page -> Access Denied -> When logged-in user accesses Register Page, then user is redirected to Home Page #e2e-working', () => {
+cyIt.run('Register Page -> Email Adready Taken -> When an email address was used by a user to register, then another user cannot use this email address to register #e2e-working', () => {
+    const user: ICreateCustomerRequest = {
+        ...mockRandomAccount(),
+        email: cyGetExistingCustomer().email
+    };
+    cy
+        .server().route({ url: apiCustomerUrl.register, method: HttpMethod.POST }).as('route')
+        .visit(customerUrl.register())
+        .wrap(user).chain(typeRegister)
+    cy
+        .getEl(SUBMIT).click().wait('@route')
+    cy
+        .getEl(DESCRIPTION)
+        .should('have.text', 'This email address is already taken. Please use another email address.')
+});
+
+cyIt.run('Register Page -> Access Denied -> When logged-in user accesses Register Page, then user is redirected to Home Page #e2e-working', () => {
     cy
         .pipe(cySetCustomerLoginToken)
         .visit(customerUrl.login())
@@ -39,12 +58,12 @@ it('Register Page -> Access Denied -> When logged-in user accesses Register Page
 });
 
 
-it('Register Page -> Login Link -> When user clicks Login Link, then user is redirected to Login Page #e2e-working', () => {
+cyIt.run('Register Page -> Login Link -> When user clicks Login Link, then user is redirected to Login Page #e2e-working', () => {
     cy.visit(customerUrl.register())
     cy.getEl(LOGIN_LINK).click().getLink().load();
 });
 
-it('Register Page -> Anonymous Shopping Cart -> Given anonymous user has some items in shopping cart, when user registers, then anonymous cart items are added to the account user used to log in #e2e-working', () => {
+cyIt.run('Register Page -> Anonymous Shopping Cart -> Given anonymous user has some items in shopping cart, when user registers, then anonymous cart items are added to the account user used to log in #e2e-working', () => {
     const item = fromProductToCartItem(cyGetExistingProduct(), 2, true);
     cy
         .wrap(item).pipe(addShoppingCartItem)
@@ -64,7 +83,7 @@ it('Register Page -> Anonymous Shopping Cart -> Given anonymous user has some it
         .chain(ShoppingCartItemDetailTest);
 });
 
-it('Register Page -> Anonymous Wish List -> Given anonymous user has some items in wish list, when user logs in, then anonymous wish list items are added to the account user used to log in #e2e-working', () => {
+cyIt.run('Register Page -> Anonymous Wish List -> Given anonymous user has some items in wish list, when user registers, then anonymous wish list items are added to the account user used to log in #e2e-working', () => {
     const item = fromProductToCartItem(cyGetExistingProduct(), 2, false);
     cy
         .wrap(item).pipe(addShoppingCartItem)

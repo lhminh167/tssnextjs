@@ -113,7 +113,7 @@ export default function OrderListComponent() {
                                         component='span'
                                         data-cy={tag(ID)}
                                     >
-                                    {row.orderId}
+                                        {row.orderId}
                                     </Typography>
                                 </TableCell>
                                 <TableCell
@@ -123,7 +123,7 @@ export default function OrderListComponent() {
                                         className={classes[row.orderStatus.cssClass]}
                                         data-cy={tag(STATUS)}
                                     >
-                                    {row.orderStatus.message}
+                                        {row.orderStatus.message}
                                     </Typography>
                                 </TableCell>
                                 <TableCell
@@ -132,7 +132,7 @@ export default function OrderListComponent() {
                                         component='span'
                                         data-cy={tag(USER + NAME)}
                                     >
-                                    {row.customer.name}
+                                        {row.customer.name}
                                     </Typography>
                                 </TableCell>
                                 <TableCell
@@ -141,7 +141,7 @@ export default function OrderListComponent() {
                                         component='span'
                                         data-cy={tag(DATETIME)}
                                     >
-                                    {formatDatetime(row.createdOn)}
+                                        {formatDatetime(row.createdOn)}
                                     </Typography>
                                 </TableCell>
                                 <TableCell
@@ -150,7 +150,7 @@ export default function OrderListComponent() {
                                         component='span'
                                         data-cy={tag(SHIPPING + DATETIME)}
                                     >
-                                    {formatDatetime(row.shippedOn)}
+                                        {formatDatetime(row.shippedOn)}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -167,6 +167,7 @@ export default function OrderListComponent() {
                 onChangePage={changePageIndex}
                 onChangeRowsPerPage={changePageSize}
                 ActionsComponent={OrderListPaginationComponent}
+                labelRowsPerPage='Items per page:'
             />
         </Fragment>
     );

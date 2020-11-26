@@ -4,9 +4,11 @@ import { CATEGORY, GALLERY, RECOMMENDATION } from "../../../modules/shared/tag/t
 import { CategoryDetailTest } from "../../helpers/category/detail/category-detail.component.spec";
 import { cyVisitExistingProduct, cyGetExistingProduct } from "../../helpers/product/create/create-product.component.spec";
 import { ProductDetailTest } from "../../helpers/product/detail/product-detail-card.component.spec";
+import { cyIt } from "../../helpers/shared/helpers/other.helper";
+import { ProductLinkTest } from "../../helpers/shared/product-card/product-card.component.spec";
 import ProductListTest from "../../helpers/shared/product-list/product-list.component.spec";
 
-it('Category Detail Page -> Category Details -> When page finished loading, product details should have correct values #e2e-working #visual-working', () => {
+cyIt.run('Category Detail Page -> Category Details -> When page finished loading, product details should have correct values #e2e-working #visual-working', () => {
   cy.wrap(1).pipe(getCategory).its('content').as('category')
     .pipe(categoryUrl.detail).its('as')
     .pipe(cy.visit);
@@ -16,7 +18,7 @@ it('Category Detail Page -> Category Details -> When page finished loading, prod
   })
 });
 
-it('Category Detail Page -> Product Recommendations -> When page finished loading, product recommendations should have correct values #e2e-working', () => {
+cyIt.run('Category Detail Page -> Product Recommendations -> When page finished loading, product recommendations should have correct values #e2e-working', () => {
   cy
     .wrap(1).pipe(getCategory).its('content').as('category')
     .pipe(categoryUrl.detail).its('as')
@@ -26,7 +28,7 @@ it('Category Detail Page -> Product Recommendations -> When page finished loadin
       cy
         .get('@category').its('product.items')
         .pipe(items => items.slice(0, 4))
-        .chain(ProductListTest)
+        .chain(ProductListTest).chain(ProductLinkTest)
     )
 });
 
