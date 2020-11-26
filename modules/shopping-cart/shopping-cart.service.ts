@@ -1,9 +1,9 @@
 import querystring from 'query-string';
-import { PaginationRequest } from '../shared/crud/crud.model';
+import { IResponse, PaginationRequest } from '../shared/crud/crud.model';
 import { get, post, put, remove } from '../shared/crud/crud.service';
-import { IShopingCartItem, ShopingCartGetRequest, apiShoppingCartUrl } from './shopping-cart.model';
+import { IShopingCartItem, ShopingCartGetRequest, apiShoppingCartUrl, IShopingCart } from './shopping-cart.model';
 
-export async function getShoppingCart(input: ShopingCartGetRequest) {
+export async function getShoppingCart(input: ShopingCartGetRequest): Promise<IResponse<IShopingCart>> {
     return await get(apiShoppingCartUrl.shoppingCart(input), 0);
 }
 

@@ -1,11 +1,13 @@
 import { customerUrl } from "../../../modules/customer/customer.model";
 import { createCustomer, getCustomer } from "../../../modules/customer/customer.service";
 import { apiOrderUrl, orderUrl } from "../../../modules/order/order.model";
+import { getOrder } from "../../../modules/order/order.service";
 import { HttpMethod } from "../../../modules/shared/crud/crud.model";
 import { getUrl } from "../../../modules/shared/crud/crud.service";
 import { setLoginToken } from "../../../modules/shared/helpers/token.helper";
 import { ADD_TO_CART, BACK, COLOR, DESCRIPTION, GRAND_TOTAL, ID, ITEM, LOGOUT, NAME, ORDER, ORDER_SUMMARY, PRODUCT_CARD, PRODUCT_LINK, REGISTER_LINK, SHIPPING, SHOPPING_CART, SIZE, SUBMIT, tag, TOTAL_QUANTITY, USER, YES } from "../../../modules/shared/tag/tag.model";
-import { apiShoppingCartUrl, shoppingCartUrl } from "../../../modules/shopping-cart/shopping-cart.model";
+import { apiShoppingCartUrl, defaultShopingCartGetRequest, ShopingCartGetRequest, shoppingCartUrl } from "../../../modules/shopping-cart/shopping-cart.model";
+import { getShoppingCart } from "../../../modules/shopping-cart/shopping-cart.service";
 import { typeRegister } from "../../helpers/customer/create/create-customer.component.spec";
 import UserDetailTest from "../../helpers/customer/detail/customer-detail.component.spec";
 import { cyFinishConfirmationForm } from "../../helpers/order/create/confirmation-form/confirmation-form.component.spec";
@@ -18,47 +20,6 @@ import { cyGetExistingCustomer, cySetCustomerLoginToken, mockRandomCustomer } fr
 import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navbar.component.spec";
 import { cyAddToCart, cyGetAnyCartItem, finishShoppingCartPage } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
-
-
-cyIt.skip('Checkout Page -> Order Completion -> Visitor who visits the website for the first time can complete an order #sanity #e2e-working', () => {
-
-  const user = mockRandomCustomer();
-  cy.visit('/').wrap('/').load();
-  cy.getEl(PRODUCT_CARD).last().click()
-  cy.getEl(PRODUCT_LINK).last().getLink().load()
-  cy.getEl(SIZE).last().click()
-  cy.getEl(COLOR).last().click()
-
-  cy.getEl(ADD_TO_CART).click()
-  cy.getEl(SHOPPING_CART).click().getLink().load();
-  cy.server().route({ url: getUrl(apiShoppingCartUrl.baseUrl + '?**') }).as('cartItemListRoute')
-    .wait('@cartItemListRoute', { timeout: 120000 })
-    .pipe(cyGetAnyCartItem).should('exist');
-  cy.getEl(SUBMIT).click()
-
-  cy.load(customerUrl.login(orderUrl.new))
-  cy.getEl(REGISTER_LINK).click()
-  cy.getEl(REGISTER_LINK).getLink().load()
-  cy.wrap(user).chain(typeRegister)
-  cy.getEl(SUBMIT).click()
-
-  cy.load(orderUrl.new)
-    .wrap({ ...user, shippingId: 2, })
-    .chain(typeDeliveryForm)
-  cy.getEl(SUBMIT).click()
-
-  cy.getEl(ORDER_SUMMARY).should('have.text', 'Order summary')
-  cy.getEl(GRAND_TOTAL).should('not.eq', '$0.00')
-  cy.getEl(SUBMIT).click()
-
-  cy.pipe(getSuccessPaymentInfo).pipe(typePaymentForm)
-  cy.getEl(SUBMIT).click()
-
-  cy.getEl(ID).invoke('text').then(parseFloat).should('be.gt', 0).as('orderId')
-  cy.getEl(BACK).click().getLink().load()
-  cy.getEl(LOGOUT).click().shouldNotExist(USER)
-  cy.get('@orderId').chain(OrderCompletionTest)
-});
 
 cyIt.run('Checkout Page -> Complete Checkout -> When user logged in and shopping cart is not empty, then user can complete Checkout Form to place an order #e2e-working #visual-working', () => {
 
@@ -76,7 +37,7 @@ cyIt.run('Checkout Page -> Complete Checkout -> When user logged in and shopping
     .takeScreenShot('Delivery Form')
 
     .get('@customerRes').its('customer.customerId').as('customerId')
-    .then(customerId => ({ ...mockRandomCustomer(), customerId, shippingId: 2, }))
+    .then(customerId => ({ ...mockRandomCustomer(), customerId, shippingId: 2, })).as('customer')
     .chain(typeDeliveryForm)
     .pipe(cyFinishDeliveryForm)
 
@@ -89,98 +50,13 @@ cyIt.run('Checkout Page -> Complete Checkout -> When user logged in and shopping
     .takeScreenShot('Finish Form').pipe(cyCompleteFinishForm)
 
   cy.getEl(TOTAL_QUANTITY).should('have.text', 0)
-    .route(apiShoppingCartUrl.baseUrl + '**').as('route')
 
-  // cy.getEl(SHOPPING_CART).click().getLink().load().wait('@route')
-  //   .get('@itemId').then((itemId: any) => tag(ITEM, itemId, SHOPPING_CART)).pipe(cy.shouldNotExist)
-  //   .route(apiOrderUrl.baseUrl + '**').as('orderRoute')
+    .wrap(defaultShopingCartGetRequest).pipe(getShoppingCart)
+    .its('content.totalQuantity').should('have.value', 0)
 
-  // cy.getEl(ORDER).click().getLink().load().wait('@orderRoute')
-  //   .get('@orderId').then((orderId: any) => tag(ITEM, orderId, ORDER)).pipe(cy.getEl).click()
-  //   .get('@orderId').chain(orderUrl.detail).its('as').load()
-  //   .wrap(OrderStatus.ConfirmStock).chain(OrderDetailStatusTest)
+    .get('@orderId').pipe(getOrder).its('content.orderStatus.message')
+    .should('have.value', OrderStatus.ConfirmStock)
 
-    // .get('@customerId').pipe(getCustomer).its('content').then(user => {
-    //   cy.visit(customerUrl.detail(user.customerId).as)
-    //     .wrap(user).chain(UserDetailTest)
-    //     .wrap(user).chain(UserPopoverDetailTest)
-    // })
+    .get('@customerId').pipe(getCustomer).its('content')
+    .then(customer => cy.get('@customer').should('deep.equal', customer))
 })
-
-cyIt.run('Checkout Page -> Back Buttons -> When user is at Payment Form and keeps clicking Back Buttons, then user is back to previous pages and eventually arrives at Shopping Cart Page #e2e-working', () => {
-  cySetCustomerLoginToken();
-  cy
-    .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
-    .visit(shoppingCartUrl.baseUrl)
-    .pipe(finishShoppingCartPage)
-    .wrap(orderUrl.new).load()
-    .pipe(cyFinishDeliveryForm)
-    .pipe(cyFinishConfirmationForm)
-
-  cy.getEl(BACK).click();
-  cy.getEl(ORDER_SUMMARY);
-  cy.getEl(GRAND_TOTAL).should('not.eq', '$0.00');
-
-  cy.getEl(BACK).click().clearTextFields([NAME])
-
-  cy.getEl(BACK).click().wrap(shoppingCartUrl.baseUrl).load();
-})
-
-cyIt.run('Checkout Page -> Payment Form -> Insufficient Funds -> When user enters an insufficient funded credit card, an error message should be shown #e2e-working', () => {
-  cySetCustomerLoginToken();
-  cy
-    .server().route({ url: getUrl(apiOrderUrl.payment), method: HttpMethod.POST }).as('route')
-    .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
-    .visit(shoppingCartUrl.baseUrl)
-    .pipe(finishShoppingCartPage)
-    .wrap(orderUrl.new).load()
-    .pipe(cyFinishDeliveryForm)
-    .pipe(cyFinishConfirmationForm)
-    .pipe(getInsufficientFundsPaymentInfo)
-    .pipe(typePaymentForm)
-  cy.getEl(SUBMIT).click().wait('@route');
-  cy.getEl(DESCRIPTION).should('have.text', 'Your card has insufficient funds.')
-  cy.getEl(YES).click()
-    .pipe(getSuccessPaymentInfo)
-    .pipe(typePaymentForm)
-})
-
-
-cyIt.run('Checkout Page -> Payment Form -> 3D Secure Auth Success -> When user uses a 3D Secure Credit Card and succeeds to authorize, then user can proceed to Order Finish Form #e2e-working', () => {
-  cySetCustomerLoginToken();
-  cy
-    .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
-    .visit(shoppingCartUrl.baseUrl)
-    .pipe(finishShoppingCartPage)
-    .wrap(orderUrl.new).load()
-    .pipe(cyFinishDeliveryForm)
-    .pipe(cyFinishConfirmationForm)
-    .pipe(get3DSecurePaymentInfo)
-    .pipe(typePaymentForm)
-  cy
-    .getEl(SUBMIT).click().wait(5000)
-    .pipe(getChallengeFrame).find('#test-source-authorize-3ds').click()
-  cy
-    .getEl(ID).invoke('text')
-    .then(parseFloat).should('be.gt', 0)
-
-})
-
-cyIt.run('Checkout Page -> Payment Form -> 3D Secure Auth Failure -> When user uses a 3D Secure Credit Card and fails to authorize, then user cannot proceed to Order Finish Form #e2e-working', () => {
-  cySetCustomerLoginToken();
-  cy
-    .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
-    .visit(shoppingCartUrl.baseUrl)
-    .pipe(finishShoppingCartPage)
-    .wrap(orderUrl.new).load()
-    .pipe(cyFinishDeliveryForm)
-    .pipe(cyFinishConfirmationForm)
-    .pipe(get3DSecurePaymentInfo)
-    .pipe(typePaymentForm)
-  cy
-    .getEl(SUBMIT).click().wait(5000)
-    .pipe(getChallengeFrame).find('#test-source-fail-3ds').click()
-    .pipe(getSuccessPaymentInfo)
-    .pipe(typePaymentForm)
-})
-

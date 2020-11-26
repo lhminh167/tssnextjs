@@ -1,5 +1,5 @@
 import { getProduct } from "../../../../modules/product/detail/product-detail.service";
-import { defaultProductSearchRequest, defaultSortByOptions, IProductSearchRequest, productUrl } from "../../../../modules/product/filter/product-filter.model";
+import { defaultIsDescendingOptions, defaultProductSearchRequest, defaultSortByOptions, IProductSearchRequest, productUrl } from "../../../../modules/product/filter/product-filter.model";
 import { toNumber } from "../../../../modules/shared/helpers/auth.helper";
 import { getColors, getSizes } from "../../../../modules/shared/helpers/product.helper";
 import { COUNT, ITEM, PRODUCT_CARD, SORT_BY, SORT_ORDER, SUBMIT, tag } from "../../../../modules/shared/tag/tag.model";
@@ -141,8 +141,8 @@ export function SortByOptionsTest() {
 export function SortOrderOptionsTest() {
     cy.getEl(SORT_ORDER).click();
     cy.get(`[data-cy*=${tag(ITEM, '', SORT_ORDER)}]`).should(($els) => {
-        const criteria = defaultSortByOptions.map(e => e.value);
-        const elsText = $els.toArray().map(el => el.getAttribute('data-value'));
+        const criteria = defaultIsDescendingOptions.map(e => e.value);
+        const elsText = $els.toArray().map(el => el.getAttribute('data-value') ? true : false);
         expect(elsText).to.deep.eq(criteria);
     }).last().click()
     return cy;

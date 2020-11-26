@@ -71,6 +71,21 @@ const nextConfig = {
   },
 
   webpack(config) {
+
+    const isDev = process.env.NODE_ENV !== 'production';
+    const shoudInstrument = config.module.rules.some(e => e.use && e.use.loader !== 'next-babel-loader');
+
+    if (isDev && shoudInstrument)
+      config.module.rules.push({
+        test: /\.+(js|jsx|ts|tsx)$/,
+        use: {
+          loader: 'istanbul-instrumenter-loader',
+          options: { esModules: true }
+        },
+        enforce: 'post',
+        exclude: /node_modules|\.spec\.js$/,
+      })
+
     return config;
   }
 };
