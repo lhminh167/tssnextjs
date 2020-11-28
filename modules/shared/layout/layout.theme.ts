@@ -1,5 +1,6 @@
 import { useMediaQuery } from '@material-ui/core';
 import { createMuiTheme, Theme } from '@material-ui/core/styles';
+import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 import { CreateCSSProperties } from '@material-ui/core/styles/withStyles';
 import { ADDRESS_1, ADDRESS_2, CITY, COUNT, COUNTRY, DATETIME, DAY_PHONE, DESCRIPTION, DISCOUNTED_PRICE, EMAIL, EVE_PHONE, ID, MOB_PHONE, NAME, POSTALCODE, PRICE, REGION, ROLE, STATUS, USER } from '../tag/tag.model';
 
@@ -9,13 +10,15 @@ import { ADDRESS_1, ADDRESS_2, CITY, COUNT, COUNTRY, DATETIME, DAY_PHONE, DESCRI
 export const transitionWidth = 'md';
 
 export function isMediumWidth() {
-    const matches = useMediaQuery(theme.breakpoints.up(transitionWidth));
-    return matches;
+    return matchScreenWidth(transitionWidth);
 }
 
 export function isSmallWidth() {
-    const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    return matches;
+    return matchScreenWidth('sm');
+}
+
+export function matchScreenWidth(width: Breakpoint | number): boolean {
+    return useMediaQuery(theme.breakpoints.up(width));
 }
 
 export const themeColor = {

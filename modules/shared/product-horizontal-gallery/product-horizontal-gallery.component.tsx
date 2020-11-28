@@ -2,11 +2,8 @@ import {
   createMuiTheme,
   Fab,
   Grid,
-
-
-
   GridList,
-  GridListTile, ThemeProvider, useMediaQuery
+  GridListTile, ThemeProvider
 } from '@material-ui/core';
 import {
   createStyles,
@@ -18,10 +15,10 @@ import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounde
 import React, { ElementType, useEffect } from 'react';
 import { PaginatedList } from '../crud/crud.model';
 import GalleryHeaderComponent from '../gallery-header/gallery-header.component';
-import theme from '../layout/layout.theme';
+import theme, { isSmallWidth } from '../layout/layout.theme';
 import { IProduct } from '../models/product.model';
 import ProductCardComponent from '../product-card/product-card.component';
-import { NEXT, PREVIOUS, GALLERY } from '../tag/tag.model';
+import { GALLERY, NEXT, PREVIOUS } from '../tag/tag.model';
 
 export const horizontalGalleryTheme = createMuiTheme({
   ...theme,
@@ -94,7 +91,7 @@ export default function ProductHorizontalGallery({
   galleryTestId
 }: Props) {
   const classes = usehorizontalGalleryStyles({});
-  const matches = useMediaQuery('(min-width:600px)');
+  const matches = isSmallWidth();
   const pageSize = fixedPageSize ? fixedPageSize : matches ? 4 : 2;
   const items = data.items.slice(0, pageSize).filter(e => e);
 
