@@ -43,7 +43,7 @@ cyIt.run('Order Detail Page -> Complete Order -> When logged in as admin, user c
 
     cy
         .pipe(cySetCustomerLoginToken)
-        .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
+        .then(() => cyAddToCart(cyGetExistingProduct(), 1, true))
         .chain(cyCreateOrder).as('order')
         .pipe(cySetAdminLoginToken)
         .get('@order').its('orderId').chain(orderUrl.detail).its('as')
