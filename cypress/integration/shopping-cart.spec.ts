@@ -13,7 +13,7 @@ import ProductListTest from "../helpers/shared/product-list/product-list.compone
 import { ShoppingCartItemDetailTest } from "../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { cartItemShouldBeRemoved, cyAddToCart } from "../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Shopping Cart Page -> Remove Item Button -> When user clicks Remove Item button, the corresponding item should be removed from cart #e2e-working #visual-working', () => {
+cyIt.run('Shopping Cart Page -> Remove Item Button -> When user clicks Remove Item button, the corresponding item should be removed from cart #priority-1-working #e2e-working #visual-working', () => {
   cy.server().route(apiShoppingCartUrl.baseUrl + '**').as('route')
     .wrap(cyAddToCart(cyGetExistingProduct(), 1, true)).its('content.loginToken').chain(setLoginToken)
     .visit(shoppingCartUrl.baseUrl);
@@ -23,7 +23,7 @@ cyIt.run('Shopping Cart Page -> Remove Item Button -> When user clicks Remove It
     .its('responseBody.content').pipe(cartItemShouldBeRemoved)
 });
 
-cyIt.run('Shopping Cart Page -> Add To Wishlist Button -> When user clicks Remove Item button, the corresponding item should be moved to wish list #e2e-working', () => {
+cyIt.run('Shopping Cart Page -> Add To Wishlist Button -> When user clicks Add To Wishlist button, the corresponding item should be moved to wish list #priority-1-working #e2e-working', () => {
   cy.server().route(apiShoppingCartUrl.baseUrl + '?**').as('route')
     .wrap(cyAddToCart(cyGetExistingProduct(), 1, true)).as('addResponse')
     .its('content.loginToken').chain(setLoginToken)
@@ -36,23 +36,12 @@ cyIt.run('Shopping Cart Page -> Add To Wishlist Button -> When user clicks Remov
   cy.get('@item').chain(ShoppingCartItemDetailTest);
 });
 
-cyIt.run('Shopping Cart Page -> Checkout Button -> When there are no items in cart, then Checkout Button is disabled #e2e-working', () => {
+cyIt.run('Shopping Cart Page -> Checkout Button -> When there are no items in cart, then Checkout Button is disabled #priority-3-working #e2e-working', () => {
   cy.visit(shoppingCartUrl.baseUrl);
   cy.getEl(SUBMIT).should('be.disabled');
 });
 
-cyIt.run('Shopping Cart Page -> Checkout Button -> When there are items in cart, then Checkout Button is enabled #e2e-working', () => {
-  cy.wrap(cyAddToCart(cyGetExistingProduct(), 1, true)).its('content.loginToken').chain(setLoginToken);
-  cy.visit(shoppingCartUrl.baseUrl);
-  cy.getEl(SUBMIT).should('not.be.disabled');
-});
-
-cyIt.run('Shopping Cart Page -> Back To Shop Button -> When Back To Shop Button is clicked, then user is redirected to homepage #e2e-working', () => {
-  cy.visit(shoppingCartUrl.baseUrl);
-  cy.getEl(BACK).click().wrap('/').load();
-});
-
-cyIt.run('Shopping Cart Page -> Checkout Button -> When user is logged in, clicks Checkout Button, and there are items in cart, then user is redirected to checkout page #e2e-working', () => {
+cyIt.run('Shopping Cart Page -> Checkout Button -> When user is logged in, clicks Checkout Button, and there are items in cart, then user is redirected to checkout page #priority-3-working #e2e-working', () => {
   cy.server().route(apiShoppingCartUrl.baseUrl + '?**').as('route')
     .pipe(cySetCustomerLoginToken)
     .then(() => cyAddToCart(cyGetExistingProduct(), 1, true))
@@ -60,7 +49,7 @@ cyIt.run('Shopping Cart Page -> Checkout Button -> When user is logged in, click
   cy.getEl(SUBMIT).should('not.be.disabled').click().wrap(orderUrl.new).load();
 });
 
-cyIt.run('Shopping Cart Page -> Checkout Button -> When user is not logged in, clicks Checkout Button, and there are items in cart, then user is redirected to login page with checkout page as return URL #e2e-working', () => {
+cyIt.run('Shopping Cart Page -> Checkout Button -> When user is not logged in, clicks Checkout Button, and there are items in cart, then user is redirected to login page with checkout page as return URL #priority-1-working #e2e-working', () => {
   cy.server().route(apiShoppingCartUrl.baseUrl + '?**').as('route')
   cy.wrap(cyAddToCart(cyGetExistingProduct(), 1, true)).its('content.loginToken').chain(setLoginToken)
     .visit(shoppingCartUrl.baseUrl).wait('@route')
@@ -69,7 +58,12 @@ cyIt.run('Shopping Cart Page -> Checkout Button -> When user is not logged in, c
     .wrap(customerUrl.login(orderUrl.new)).load();
 });
 
-cyIt.run('Shopping Cart Page -> Recommendations -> When user accesses Shopping Cart Page, then Recommendations section shows products that were ordered together with products in this shopping cart within the last month #e2e-working', () => {
+cyIt.run('Shopping Cart Page -> Back To Shop Button -> When Back To Shop Button is clicked, then user is redirected to homepage #priority-3-working #e2e-working', () => {
+  cy.visit(shoppingCartUrl.baseUrl);
+  cy.getEl(BACK).click().wrap('/').load();
+});
+
+cyIt.run('Shopping Cart Page -> Recommendations -> When user accesses Shopping Cart Page, then Recommendations section shows products that were ordered together with products in this shopping cart within the last month #priority-3-working #e2e-working', () => {
   const user1 = mockRandomCustomer();
   cy
     .pipe(cyCreateRandomProduct).its('productId')

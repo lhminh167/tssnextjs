@@ -11,7 +11,7 @@ import { mockRandomCustomer } from "../../../../helpers/shared/helpers/auth.help
 import { cyIt } from "../../../../helpers/shared/helpers/other.helper";
 import { getRandomString } from "../../../../helpers/shared/helpers/string.helper";
 
-cyIt.run('Reset Password Page -> Invalid Reset Password Token -> When user access this page using an expired or invalid reset password token, then an error message is shown to user #e2e-working #visual-working', () => {
+cyIt.run('Reset Password Page -> Invalid Reset Password Token -> When user access this page using an expired or invalid reset password token, then an error message is shown to user #priority-1-working #e2e-working #visual-working', () => {
     const user = mockRandomCustomer();
     cy
         .wrap(user).pipe(createCustomer).its('content').as('response')

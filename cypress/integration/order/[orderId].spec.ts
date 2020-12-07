@@ -14,7 +14,7 @@ import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { cyGetExistingProduct } from "../../helpers/product/create/create-product.component.spec";
 import { cyAddToCart } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Order Detail Page -> Confirm Stock Not Ok -> When logged in as admin, user could cancel an order because some of its products are out of stock #e2e-working', () => {
+cyIt.run('Order Detail Page -> Confirm Stock Not Ok -> When logged in as admin, user could cancel an order because some of its products are out of stock #priority-1-working #e2e-working', () => {
 
     const comment = `The following products are out of stock:
 - Green XL Birds T-Shirt. Required Quantity: 10. Available Quantity: 09.
@@ -39,7 +39,7 @@ cyIt.run('Order Detail Page -> Confirm Stock Not Ok -> When logged in as admin, 
 
 });
 
-cyIt.run('Order Detail Page -> Complete Order -> When logged in as admin, user could confirm stock & shipping of any customer\'s order #e2e-working #visual-working', () => {
+cyIt.run('Order Detail Page -> Complete Order -> When logged in as admin, user could confirm stock & shipping of any customer\'s order #priority-1-working #e2e-working #visual-working', () => {
 
     cy
         .pipe(cySetCustomerLoginToken)
@@ -64,7 +64,7 @@ cyIt.run('Order Detail Page -> Complete Order -> When logged in as admin, user c
 });
 
 
-cyIt.run('Order Detail Page -> Hide Order Confirmation -> When logged in as customer, the Order Confirmation section is hidden #e2e-working', () => {
+cyIt.run('Order Detail Page -> Hide Order Confirmation -> When logged in as customer, the Order Confirmation section is hidden #priority-3-working #e2e-working', () => {
 
     cy
         .pipe(cySetCustomerLoginToken)
@@ -88,14 +88,14 @@ cyIt.run('Order Detail Page -> Hide Order Confirmation -> When logged in as cust
 });
 
 
-cyIt.run('Order Detail Page -> Access Denied -> When user is not logged in and access Order Detail Page, then user is redirected to Login Page #e2e-working', () => {
+cyIt.run('Order Detail Page -> Access Denied -> When user is not logged in and access Order Detail Page, then user is redirected to Login Page #priority-3-working #e2e-working', () => {
 
     cy.visit(orderUrl.baseUrl);
     cy.load(customerUrl.login(orderUrl.baseUrl));
 });
 
 
-cyIt.run('Order Detail Page -> Access Denied -> When user logs in as customer and accesses Order Detail Page of another customer, then user is redirected to Home Page #e2e-working', () => {
+cyIt.run('Order Detail Page -> Access Denied -> When user logs in as customer and accesses Order Detail Page of another customer, then user is redirected to Home Page #priority-3-working #e2e-working', () => {
 
     cy
         .pipe(mockRandomCustomer)

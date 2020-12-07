@@ -10,14 +10,14 @@ import { cyMobileWidth, cySnapshotMobileConfig } from "../helpers/shared/layout/
 import { MobileAccountDetailTest } from "../helpers/shared/navbar/desktop-navbar.component.spec";
 
 
-cyItWithConfig.run('Mobile Navbar -> Home Page Brand Link -> When user clicks Home Page Brand Link, then user is redirected to Home Page #e2e-working #visual-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Home Page Brand Link -> When user clicks Home Page Brand Link, then user is redirected to Home Page #priority-1-working #e2e-working #visual-working', { viewportWidth: cyMobileWidth }, () => {
   cy.visit(departmentUrl);
   cy.getEl(HOMEPAGE).takeScreenShot('Mobile Navbar', cySnapshotMobileConfig);
   cy.getEl(HOMEPAGE).should('have.text', (Cypress.env('SITE_NAME') as string).toUpperCase())
     .click().getLink().load();
 });
 
-cyItWithConfig.run('Mobile Navbar -> Home Page Link -> When user clicks Home Page Link, then user is redirected to Home Page #e2e-working #visual-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Home Page Link -> When user clicks Home Page Link, then user is redirected to Home Page #priority-1-working #e2e-working #visual-working', { viewportWidth: cyMobileWidth }, () => {
   cy.visit(departmentUrl);
   cy.getEl(MENU).click().takeScreenShot('Mobile Drawer for Visitors', cySnapshotMobileConfig);
   cy.getEl(HOMEPAGE + LINK).should('have.text', 'Home')
@@ -25,7 +25,7 @@ cyItWithConfig.run('Mobile Navbar -> Home Page Link -> When user clicks Home Pag
   cy.get('.MuiBackdrop-root').click({ force: true })
 });
 
-cyItWithConfig.run('Mobile Navbar -> Search Page Link -> When user clicks Search Page Link, then user is redirected to Search Page #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Search Page Link -> When user clicks Search Page Link, then user is redirected to Search Page #priority-3-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   cy.visit(departmentUrl);
   cy.getEl(MENU).click();
   cy.getEl(SEARCH).should('have.text', 'Search')
@@ -33,7 +33,7 @@ cyItWithConfig.run('Mobile Navbar -> Search Page Link -> When user clicks Search
   cy.get('.MuiBackdrop-root').click({ force: true })
 });
 
-cyItWithConfig.run('Mobile Navbar -> Deparments Link -> When user clicks Deparments Link, then user is redirected to Deparment List Page #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Deparments Link -> When user clicks Deparments Link, then user is redirected to Deparment List Page #priority-3-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   cy.visit(customerUrl.login());
   cy.getEl(MENU).click();
   cy.getEl(DEPARTMENT).should('have.text', 'Departments')
@@ -41,14 +41,14 @@ cyItWithConfig.run('Mobile Navbar -> Deparments Link -> When user clicks Deparme
   cy.get('.MuiBackdrop-root').click({ force: true })
 });
 
-cyItWithConfig.run('Mobile Navbar -> Wish List Link -> When user clicks Wish List Link, then user is redirected to Wish List Page #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Wish List Link -> When user clicks Wish List Link, then user is redirected to Wish List Page #priority-3-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   cy.visit(departmentUrl);
   cy.getEl(MENU).click();
   cy.getEl(WISHLIST).click().getLink().load();
   cy.get('.MuiBackdrop-root').click({ force: true })
 });
 
-cyItWithConfig.run('Mobile Navbar -> Admin Area Link -> When user clicks Admin Area Link, then user is redirected to Admin Area Page #e2e-working #visual-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Admin Area Link -> When user clicks Admin Area Link, then user is redirected to Admin Area Page #priority-1-working #e2e-working #visual-working', { viewportWidth: cyMobileWidth }, () => {
   cy.pipe(cySetAdminLoginToken).visit(departmentUrl);
   cy.getEl(MENU).click();
   cy.getEl(ADMIN).takeScreenShot('Mobile Drawer for Customers & Admins', cySnapshotMobileConfig);
@@ -57,7 +57,7 @@ cyItWithConfig.run('Mobile Navbar -> Admin Area Link -> When user clicks Admin A
   cy.get('.MuiBackdrop-root').click({ force: true })
 });
 
-cyItWithConfig.run('Mobile Navbar -> Order List Link -> When user clicks Order List Link, then user is redirected to Order List Page #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Order List Link -> When user clicks Order List Link, then user is redirected to Order List Page #priority-3-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   cy.pipe(cySetCustomerLoginToken).visit(departmentUrl);
   cy.getEl(MENU).click();
   cy.getEl(ORDER).should('have.text', 'Orders')
@@ -65,7 +65,7 @@ cyItWithConfig.run('Mobile Navbar -> Order List Link -> When user clicks Order L
   cy.get('.MuiBackdrop-root').click({ force: true })
 });
 
-cyItWithConfig.run('Mobile Navbar -> Logout Link -> When user clicks Logout Link, then user is logged out and redirected to Home Page #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Logout Link -> When user clicks Logout Link, then user is logged out and redirected to Home Page #priority-3-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   cy.pipe(cySetCustomerLoginToken).visit(departmentUrl);
   cy.getEl(MENU).click();
   cy.getEl(LOGOUT).click().wrap('/').load()
@@ -77,7 +77,7 @@ cyItWithConfig.run('Mobile Navbar -> Logout Link -> When user clicks Logout Link
 
 });
 
-cyItWithConfig.run('Mobile Navbar -> Login Page Link -> When user clicks Login Page Link, then user is redirected to Login Page #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Login Page Link -> When user clicks Login Page Link, then user is redirected to Login Page #priority-3-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   cy.visit(departmentUrl);
   cy.getEl(MENU).click();
   cy.getEl(LOGIN).should('have.text', 'Login')
@@ -85,7 +85,7 @@ cyItWithConfig.run('Mobile Navbar -> Login Page Link -> When user clicks Login P
   cy.get('.MuiBackdrop-root').click({ force: true })
 });
 
-cyItWithConfig.run('Mobile Navbar -> Register Page Link -> When user clicks Register Page Link, then user is redirected to Register Page #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Register Page Link -> When user clicks Register Page Link, then user is redirected to Register Page #priority-3-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   cy.visit(departmentUrl);
   cy.getEl(MENU).click();
   cy.getEl(REGISTER).should('have.text', 'Register')
@@ -93,14 +93,14 @@ cyItWithConfig.run('Mobile Navbar -> Register Page Link -> When user clicks Regi
   cy.get('.MuiBackdrop-root').click({ force: true })
 });
 
-cyItWithConfig.run('Mobile Navbar -> Shopping Cart Page Link -> When user clicks Shopping Cart Page Link, then user is redirected to Shopping Cart Page #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Shopping Cart Page Link -> When user clicks Shopping Cart Page Link, then user is redirected to Shopping Cart Page #priority-3-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   cy.visit(departmentUrl);
   cy.getEl(MENU).click();
   cy.getEl(SHOPPING_CART).click().getLink().load();
   cy.get('.MuiBackdrop-root').click({ force: true })
 });
 
-cyItWithConfig.run('Mobile Navbar -> User Area Link -> When user clicks User Area Link, then user is redirected to User Area Page #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> User Area Link -> When user clicks User Area Link, then user is redirected to User Area Page #priority-3-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   cy.pipe(cySetCustomerLoginToken).visit(departmentUrl)
   cy.getEl(MENU).click()
     .pipe(cyGetExistingCustomer).chain(MobileAccountDetailTest)
@@ -108,7 +108,7 @@ cyItWithConfig.run('Mobile Navbar -> User Area Link -> When user clicks User Are
   cy.get('.MuiBackdrop-root').click({ force: true })
 });
 
-cyItWithConfig.run('Mobile Navbar -> Back Button -> When user click Back Button, then the previous page is shown #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Back Button -> When user click Back Button, then the previous page is shown #priority-3-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   cy.visit(departmentUrl);
   cy.getEl(MENU).click();
   cy.getEl(LOGIN).click().getLink().load()
@@ -118,7 +118,7 @@ cyItWithConfig.run('Mobile Navbar -> Back Button -> When user click Back Button,
   cy.load(departmentUrl);
 });
 
-cyItWithConfig.run('Mobile Navbar -> Search From Other Page -> When user is not on Product Search Page and enters a search keyword, then user should be redirected to Product Search Page #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Search From Other Page -> When user is not on Product Search Page and enters a search keyword, then user should be redirected to Product Search Page #priority-3-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   const product = cyGetExistingProduct();
   cy.visit(customerUrl.login());
 

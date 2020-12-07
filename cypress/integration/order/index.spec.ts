@@ -11,7 +11,7 @@ import { cySetAdminLoginToken, cySetCustomerLoginToken, mockRandomCustomer } fro
 import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { cyAddToCart } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Order List Page -> Customer\'s Orders -> When customer accesses Order List Page, then customer can see their own orders and cannot see order of other customers #e2e-working #visual-working', () => {
+cyIt.run('Order List Page -> Customer\'s Orders -> When customer accesses Order List Page, then customer can see their own orders and cannot see order of other customers #priority-1-working #e2e-working #visual-working', () => {
 
     cy
         .server().route({ url: getUrl(apiOrderUrl.baseUrl) + '**' }).as('route')
@@ -35,7 +35,7 @@ cyIt.run('Order List Page -> Customer\'s Orders -> When customer accesses Order 
 
 });
 
-cyIt.run('Order List Page -> Admin -> When admin accesses Order List Page, then admin can see orders created by any customers #e2e-working', () => {
+cyIt.run('Order List Page -> Admin -> When admin accesses Order List Page, then admin can see orders created by any customers #priority-3-working #e2e-working', () => {
 
     cy
         .server().route({ url: getUrl(apiOrderUrl.baseUrl) + '**' }).as('route')
@@ -59,7 +59,7 @@ cyIt.run('Order List Page -> Admin -> When admin accesses Order List Page, then 
 });
 
 
-cyIt.run('Order List Page -> Access Denied -> When user is not logged in and access Order List Page, then user is redirected to Login Page #e2e-working', () => {
+cyIt.run('Order List Page -> Access Denied -> When user is not logged in and access Order List Page, then user is redirected to Login Page #priority-3-working #e2e-working', () => {
 
     cy.visit(orderUrl.baseUrl);
     cy.load(customerUrl.login(orderUrl.baseUrl));

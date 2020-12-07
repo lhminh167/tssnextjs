@@ -16,7 +16,7 @@ import { cyEditQuantity } from "../../../../../helpers/shared/quantity-picker/qu
 import { ShoppingCartItemDetailTest } from "../../../../../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { cyAddToCart, fromProductToCartItem } from "../../../../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Product Detail Page -> Add To Cart Button -> When Add To Cart Button is clicked, then product is added to cart #e2e-working', () => {
+cyIt.run('Product Detail Page -> Add To Cart Button -> When Add To Cart Button is clicked, then product is added to cart #priority-1-working #e2e-working', () => {
     const product = cyGetExistingProduct();
     let item = fromProductToCartItem(product, 3, true);
     const size = getCartItemSize(decodeAttributes(item.attributes));
@@ -41,7 +41,7 @@ cyIt.run('Product Detail Page -> Add To Cart Button -> When Add To Cart Button i
 
 });
 
-cyIt.run('Product Detail Page -> Add To Cart Button -> When user adds a product with same attributes (color, size) to cart again, then quantity of that product in cart is added up #e2e-working', () => {
+cyIt.run('Product Detail Page -> Add To Cart Button -> When user adds a product with same attributes (color, size) to cart again, then quantity of that product in cart is added up #priority-3-working #e2e-working', () => {
     const firstQuantity = 3;
     const secondQuantity = 2;
     const totalQuantity = 5;
@@ -62,13 +62,13 @@ cyIt.run('Product Detail Page -> Add To Cart Button -> When user adds a product 
 });
 
 
-cyIt.run('Product Detail Page -> Edit Product Button -> When user logs in as admin and clicks Edit Product Button, then user is redirected to Edit Product Page #e2e-working', () => {
+cyIt.run('Product Detail Page -> Edit Product Button -> When user logs in as admin and clicks Edit Product Button, then user is redirected to Edit Product Page #priority-3-working #e2e-working', () => {
 
     cy.pipe(cySetAdminLoginToken).pipe(cyVisitExistingProduct);
     cy.getEl(EDIT).click().getLink().load();
 });
 
-cyIt.run('Product Detail Page -> Delete Product Button -> When user logs in as admin and clicks Delete Product Button, then product is deleted #e2e-working', () => {
+cyIt.run('Product Detail Page -> Delete Product Button -> When user logs in as admin and clicks Delete Product Button, then product is deleted #priority-1-working #e2e-working', () => {
     cy
         .pipe(cySetAdminLoginToken)
         .pipe(cyCreateRandomProduct)
@@ -84,7 +84,7 @@ cyIt.run('Product Detail Page -> Delete Product Button -> When user logs in as a
     cy.contains('Product not found.')
 });
 
-cyIt.run('Product Detail Page -> Recommendations -> When user accesses Product Detail Page, then Recommendations section shows products that were ordered together with this product within the last month #e2e-working', () => {
+cyIt.run('Product Detail Page -> Recommendations -> When user accesses Product Detail Page, then Recommendations section shows products that were ordered together with this product within the last month #priority-3-working #e2e-working', () => {
     const user1 = mockRandomCustomer();
     cy
         .pipe(cyCreateRandomProduct).its('productId')

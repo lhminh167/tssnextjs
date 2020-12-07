@@ -7,7 +7,7 @@ import UserDetailTest from "../../../helpers/customer/detail/customer-detail.com
 import { cyGetExistingCustomer, cySetAdminLoginToken, cySetCustomerLoginToken, mockRandomCustomer } from "../../../helpers/shared/helpers/auth.helper";
 import { cyIt } from "../../../helpers/shared/helpers/other.helper";
 
-cyIt.run('User Detail Page -> User Details -> When user accesses his own User Detail Page, user details should have correct values #e2e-working #visual-working', () => {
+cyIt.run('User Detail Page -> User Details -> When user accesses his own User Detail Page, user details should have correct values #priority-1-working #e2e-working #visual-working', () => {
     const user = cyGetExistingCustomer();
     cy
         .server().route({ url: getUrl(apiCustomerUrl.detail(toNumber(user.customerId))) }).as('route')
@@ -18,7 +18,7 @@ cyIt.run('User Detail Page -> User Details -> When user accesses his own User De
         .wrap(user).chain(UserDetailTest);
 });
 
-cyIt.run('User Detail Page -> Access Denied -> When not-logged-in user accesses User Detail Page, then user is redirected to Home Page #e2e-working', () => {
+cyIt.run('User Detail Page -> Access Denied -> When not-logged-in user accesses User Detail Page, then user is redirected to Home Page #priority-3-working #e2e-working', () => {
     const user = cyGetExistingCustomer();
     const detailUrl = customerUrl.detail(toNumber(user.customerId)).as;
     cy
@@ -26,7 +26,7 @@ cyIt.run('User Detail Page -> Access Denied -> When not-logged-in user accesses 
         .wrap(customerUrl.login(detailUrl)).load();
 });
 
-cyIt.run('User Detail Page -> Access Denied -> When a customer accesses User Detail Page of another customer, then user is redirected to Home Page #e2e-working', () => {
+cyIt.run('User Detail Page -> Access Denied -> When a customer accesses User Detail Page of another customer, then user is redirected to Home Page #priority-3-working #e2e-working', () => {
     cy
         .visit('/')
         .pipe(mockRandomCustomer).pipe(createCustomer).its('content.customer.customerId')
@@ -37,7 +37,7 @@ cyIt.run('User Detail Page -> Access Denied -> When a customer accesses User Det
 });
 
 
-cyIt.run('User Detail Page -> Edit Button -> When customer clicks Edit button, then customer is redirected to Edit User Page #e2e-working', () => {
+cyIt.run('User Detail Page -> Edit Button -> When customer clicks Edit button, then customer is redirected to Edit User Page #priority-3-working #e2e-working', () => {
     cy
         .pipe(cySetCustomerLoginToken)
         .pipe(cyGetExistingCustomer).its('customerId')
@@ -48,7 +48,7 @@ cyIt.run('User Detail Page -> Edit Button -> When customer clicks Edit button, t
 
 });
 
-cyIt.run('User Detail Page -> Access Denied -> When user logged in as admin, then user could access User Detail Page of any user #e2e-working', () => {
+cyIt.run('User Detail Page -> Access Denied -> When user logged in as admin, then user could access User Detail Page of any user #priority-3-working #e2e-working', () => {
     cy
         .pipe(cySetAdminLoginToken)
         .pipe(cyGetExistingCustomer).its('customerId')

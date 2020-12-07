@@ -14,7 +14,7 @@ import ReviewEditTest from "../../../../../helpers/product/review/edit/product-r
 import { cySetAdminLoginToken, cySetCustomerLoginToken, mockRandomCustomer } from "../../../../../helpers/shared/helpers/auth.helper";
 import { cyIt } from "../../../../../helpers/shared/helpers/other.helper";
 
-cyIt.run('Product Detail Page -> Review -> When user is not logged in, then Adding Review Form, Edit Review, and Delete Review buttons are hidden #e2e-working', () => {
+cyIt.run('Product Detail Page -> Review -> When user is not logged in, then Adding Review Form, Edit Review, and Delete Review buttons are hidden #priority-3-working #e2e-working', () => {
     cyVisitExistingProduct();
     cy.getEl(UNAUTHORIZED).should('have.text', 'Please login or register to add a review.')
     cy.getEl(LOGIN_LINK).should('have.text', 'login').click().getLink().load();
@@ -23,7 +23,7 @@ cyIt.run('Product Detail Page -> Review -> When user is not logged in, then Addi
     cyVisitExistingProduct();
 });
 
-cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then user can create a new review #e2e-working', () => {
+cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then user can create a new review #priority-1-working #e2e-working', () => {
     cy
         .server()
         .route({ url: getUrl(apiReviewUrl.baseUrl), method: HttpMethod.POST }).as('addRoute')
@@ -38,7 +38,7 @@ cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then u
         .get('@review').chain(ReviewDetailTest)
 });
 
-cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then user can edit or delete their own review #e2e-working', () => {
+cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then user can edit or delete their own review #priority-1-working #e2e-working', () => {
     cy
         .pipe(cyCreateRandomReview).as('reviewId')
         .pipe(cyVisitExistingProduct)
@@ -46,7 +46,7 @@ cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then u
         .get('@reviewId').chain(ReviewDeleteTest)
 });
 
-cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then user cannot edit or delete reviews of other customers #e2e-working', () => {
+cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then user cannot edit or delete reviews of other customers #priority-3-working #e2e-working', () => {
     cy
         .pipe(cyCreateRandomReview).as('reviewId').chain(removeLoginToken)
         .pipe(mockRandomCustomer).pipe(createCustomer).its('content.loginToken').chain(setLoginToken)
@@ -57,7 +57,7 @@ cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then u
         })
 });
 
-cyIt.run('Product Detail Page -> Review -> When user logs in as admin, then user can edit or delete any review #e2e-working', () => {
+cyIt.run('Product Detail Page -> Review -> When user logs in as admin, then user can edit or delete any review #priority-3-working #e2e-working', () => {
     cy
         .pipe(cyCreateRandomReview).as('reviewId').chain(removeLoginToken)
         .pipe(cySetAdminLoginToken)
@@ -66,7 +66,7 @@ cyIt.run('Product Detail Page -> Review -> When user logs in as admin, then user
         .get('@reviewId').chain(ReviewDeleteTest)
 });
 
-cyIt.run('Product Detail Page -> Review -> When a product has multiple reviews, then product\'s average rating and number of ratings are, respectively, the average and total number of all reviews left by customers for that product #e2e-working #visual-working', () => {
+cyIt.run('Product Detail Page -> Review -> When a product has multiple reviews, then product\'s average rating and number of ratings are, respectively, the average and total number of all reviews left by customers for that product #priority-1-working #e2e-working #visual-working', () => {
     cy.pipe(cyCreateRandomProduct).as('product').its('productId').then(productId => {
         cy
             .pipe(mockRandomCustomer).pipe(createCustomer).its('content.loginToken').chain(setLoginToken)

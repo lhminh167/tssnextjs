@@ -10,11 +10,11 @@ import { getRandomNumber, getRandomString, unformatCurrency } from "../../helper
 import { ProductLinkTest } from "../../helpers/shared/product-card/product-card.component.spec";
 import { ProductListPageInfoTest, ProductListPageSizeTest, ProductListPaginationTest } from "../../helpers/shared/product-list/product-list.component.spec";
 
-cyIt.run('Product Search Page -> Product Filter -> When user opens the Product Filter, then the panel\'s details should have correct values #e2e-working', () => {
+cyIt.run('Product Search Page -> Product Filter -> When user opens the Product Filter, then the panel\'s details should have correct values #priority-3-working #e2e-working', () => {
   cy.visit(productUrl.product).pipe(ProductFilterDetailTest)
 });
 
-cyIt.run('Product Search Page -> Search By Name -> When user types a keyword into the search box and press Enter key, then page should show products whose title containing keyword #e2e-working', () => {
+cyIt.run('Product Search Page -> Search By Name -> When user types a keyword into the search box and press Enter key, then page should show products whose title containing keyword #priority-1-working #e2e-working', () => {
   const product = cyGetExistingProduct();
   cy.visit(productUrl.product).wait(4000);
   cy.getEl(SEARCH_BOX).type(product.name + '{enter}');
@@ -24,7 +24,7 @@ cyIt.run('Product Search Page -> Search By Name -> When user types a keyword int
   });
 });
 
-cyIt.run('Product Search Page -> Search By Description -> When user types a keyword into the search box and press Enter key, then page should show products whose description containing keyword #e2e-working', () => {
+cyIt.run('Product Search Page -> Search By Description -> When user types a keyword into the search box and press Enter key, then page should show products whose description containing keyword #priority-3-working #e2e-working', () => {
   const product = cyGetExistingProduct();
   cy.visit(productUrl.product).wait(4000);
   cy.getEl(SEARCH_BOX).type(product.description + '{enter}');
@@ -33,14 +33,14 @@ cyIt.run('Product Search Page -> Search By Description -> When user types a keyw
   cy.getEl(DESCRIPTION).should('have.text', product.description);
 });
 
-cyIt.run('Product Search Page -> Search From Other Page -> When user is not on Product Search Page and enters a search keyword, then user should be redirected to Product Search Page #e2e-working', () => {
+cyIt.run('Product Search Page -> Search From Other Page -> When user is not on Product Search Page and enters a search keyword, then user should be redirected to Product Search Page #priority-3-working #e2e-working', () => {
   const text = getRandomString(5);
   cy.visit('/').wait(4000);
   cy.getEl(SEARCH_BOX).type(text + '{enter}');
   cy.load(productUrl.search({ ...defaultProductSearchRequest, keyword: text }));
 })
 
-cyIt.run('Product Search Page -> Search By Category -> should show products which belongs to the chosen category #e2e-working #visual-working', () => {
+cyIt.run('Product Search Page -> Search By Category -> should show products which belongs to the chosen category #priority-1-working #e2e-working #visual-working', () => {
 
   cy.visit(productUrl.product).pipe(openProductFilter);
   cy.getEl(CATEGORY).takeScreenShot('Product Search Page');
@@ -57,7 +57,7 @@ cyIt.run('Product Search Page -> Search By Category -> should show products whic
   cy.get('@category').chain(ProductListCategoryTest);
 });
 
-cyIt.run('Product Search Page -> Search By Price Range -> should show products which belongs to the chosen price range #e2e-working', () => {
+cyIt.run('Product Search Page -> Search By Price Range -> should show products which belongs to the chosen price range #priority-3-working #e2e-working', () => {
 
   const minPrice = getMinPrice();
   const maxPrice = getMaxPrice();
@@ -83,7 +83,7 @@ cyIt.run('Product Search Page -> Search By Price Range -> should show products w
     )
 });
 
-cyIt.run('Product Search Page -> Search By Size -> When user chooses a size and searches, then result products should have that size #e2e-working', () => {
+cyIt.run('Product Search Page -> Search By Size -> When user chooses a size and searches, then result products should have that size #priority-3-working #e2e-working', () => {
 
   cy.visit(productUrl.product).pipe(openProductFilter);
   cy.getEl(SIZE).last().click().invoke('attr', 'data-id').as('size');
@@ -97,7 +97,7 @@ cyIt.run('Product Search Page -> Search By Size -> When user chooses a size and 
 
 });
 
-cyIt.run('Product Search Page -> Search By Color -> When user chooses a color and searches, then result products should have that color #e2e-working', () => {
+cyIt.run('Product Search Page -> Search By Color -> When user chooses a color and searches, then result products should have that color #priority-3-working #e2e-working', () => {
   cy.visit(productUrl.product).pipe(openProductFilter);
   cy.getEl(COLOR).last().click().invoke('attr', 'data-id').as('color');
   cy.getEl(SUBMIT).click();
@@ -110,7 +110,7 @@ cyIt.run('Product Search Page -> Search By Color -> When user chooses a color an
 });
 
 
-cyIt.run('Product Search Page -> Sort By Ascending Name -> When user sorts products by name in ascending order, then result products should be sorted by name in ascending order #e2e-working', () => {
+cyIt.run('Product Search Page -> Sort By Ascending Name -> When user sorts products by name in ascending order, then result products should be sorted by name in ascending order #priority-3-working #e2e-working', () => {
 
   setupProductSortingTest({
     ...defaultProductSearchRequest,
@@ -127,7 +127,7 @@ cyIt.run('Product Search Page -> Sort By Ascending Name -> When user sorts produ
 
 
 
-cyIt.run('Product Search Page -> Sort By Descending Price -> When user sorts products by price in descending order, then result products should be sorted by price in descending order #e2e-working', () => {
+cyIt.run('Product Search Page -> Sort By Descending Price -> When user sorts products by price in descending order, then result products should be sorted by price in descending order #priority-3-working #e2e-working', () => {
 
   setupProductSortingTest({
     ...defaultProductSearchRequest,
@@ -143,7 +143,7 @@ cyIt.run('Product Search Page -> Sort By Descending Price -> When user sorts pro
 });
 
 
-cyIt.run('Product Search Page -> Sort By Ascending Price -> When user sorts products by price in ascending order, then result products should be sorted by price in ascending order #e2e-working', () => {
+cyIt.run('Product Search Page -> Sort By Ascending Price -> When user sorts products by price in ascending order, then result products should be sorted by price in ascending order #priority-3-working #e2e-working', () => {
   setupProductSortingTest({
     ...defaultProductSearchRequest,
     sortBy: SortByEnum.Price,
@@ -157,7 +157,7 @@ cyIt.run('Product Search Page -> Sort By Ascending Price -> When user sorts prod
   })
 });
 
-cyIt.run('Product Search Page -> Pagination -> When user clicks First Page, Previous Page, Next Page, and Last Page buttons, then the corresponding page is shown #e2e-working', () => {
+cyIt.run('Product Search Page -> Pagination -> When user clicks First Page, Previous Page, Next Page, and Last Page buttons, then the corresponding page is shown #priority-3-working #e2e-working', () => {
   cy
     .server().route({ url: '/_next/**/product.json**', method: HttpMethod.GET })
     .as('route')
@@ -170,7 +170,7 @@ cyIt.run('Product Search Page -> Pagination -> When user clicks First Page, Prev
     .pipe(ProductListPageInfoTest)
 });
 
-cyIt.run('Product Search Page -> Change Page Size -> When user changes number of items per page size, then number of products shown on the page should be equal to the chosen number #e2e-working', () => {
+cyIt.run('Product Search Page -> Change Page Size -> When user changes number of items per page size, then number of products shown on the page should be equal to the chosen number #priority-3-working #e2e-working', () => {
   cy
     .server().route({ url: '/_next/**/product.json**', method: HttpMethod.GET })
     .as('route')

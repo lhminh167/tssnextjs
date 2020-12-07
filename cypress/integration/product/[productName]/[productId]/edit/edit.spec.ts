@@ -13,7 +13,7 @@ import { mockRandomProduct } from "../../../../../helpers/shared/helpers/product
 // });
 
 
-cyIt.run('Edit Product Page -> Edit Product Form -> When user logged in as admin, then user can edit any product #e2e-working #visual-working', () => {
+cyIt.run('Edit Product Page -> Edit Product Form -> When user logged in as admin, then user can edit any product #priority-1-working #e2e-working #visual-working', () => {
    cy
       .pipe(cySetAdminLoginToken)
       .pipe(cyCreateRandomProduct).as('product')
@@ -35,7 +35,7 @@ cyIt.run('Edit Product Page -> Edit Product Form -> When user logged in as admin
       .get('@editedProduct').chain(ProductDetailTest);
 });
 
-cyIt.run('Edit Product Page -> Edit Product Form -> When user accesses Edit Product Page as customer, then user is redirected to Home Page #e2e-working', () => {
+cyIt.run('Edit Product Page -> Edit Product Form -> When user accesses Edit Product Page as customer, then user is redirected to Home Page #priority-3-working #e2e-working', () => {
    const product = cyGetExistingProduct();
    cy
       .pipe(cySetCustomerLoginToken)
@@ -43,7 +43,7 @@ cyIt.run('Edit Product Page -> Edit Product Form -> When user accesses Edit Prod
 });
 
 
-cyIt.run('Edit Product Page -> Edit Product Form -> When not-logged-in user accesses Edit Product Page, then user is redirected to Home Page #e2e-working', () => {
+cyIt.run('Edit Product Page -> Edit Product Form -> When not-logged-in user accesses Edit Product Page, then user is redirected to Home Page #priority-3-working #e2e-working', () => {
    const product = cyGetExistingProduct();
    cy.visit(productUrl.edit(product).as).wrap('/').load();
 });

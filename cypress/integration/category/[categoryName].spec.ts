@@ -8,7 +8,7 @@ import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { ProductLinkTest } from "../../helpers/shared/product-card/product-card.component.spec";
 import ProductListTest from "../../helpers/shared/product-list/product-list.component.spec";
 
-cyIt.run('Category Detail Page -> Category Details -> When page finished loading, product details should have correct values #e2e-working #visual-working', () => {
+cyIt.run('Category Detail Page -> Category Details -> When page finished loading, product details should have correct values #priority-1-working #e2e-working #visual-working', () => {
   cy.wrap(1).pipe(getCategory).its('content').as('category')
     .pipe(categoryUrl.detail).its('as')
     .pipe(cy.visit);
@@ -18,7 +18,7 @@ cyIt.run('Category Detail Page -> Category Details -> When page finished loading
   })
 });
 
-cyIt.run('Category Detail Page -> Product Recommendations -> When page finished loading, product recommendations should have correct values #e2e-working', () => {
+cyIt.run('Category Detail Page -> Product Recommendations -> When page finished loading, product recommendations should have correct values #priority-3-working #e2e-working', () => {
   cy
     .wrap(1).pipe(getCategory).its('content').as('category')
     .pipe(categoryUrl.detail).its('as')

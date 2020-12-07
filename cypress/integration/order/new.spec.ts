@@ -19,7 +19,7 @@ import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navbar.component.spec";
 import { cyAddToCart, cyGetAnyCartItem, finishShoppingCartPage } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Checkout Page -> Complete Checkout -> When user logged in and shopping cart is not empty, then user can complete Checkout Form to place an order #e2e-working #visual-working', () => {
+cyIt.run('Checkout Page -> Complete Checkout -> When user logged in and shopping cart is not empty, then user can complete Checkout Form to place an order #priority-1-working #e2e-working #visual-working', () => {
 
   cy.server()
     .pipe(mockRandomCustomer).chain(createCustomer).its('content').as('customerRes')
@@ -59,9 +59,9 @@ cyIt.run('Checkout Page -> Complete Checkout -> When user logged in and shopping
   //   .get('@orderId').chain(orderUrl.detail).its('as').load()
   //   .wrap(OrderStatus.ConfirmStock).chain(OrderDetailStatusTest)
 
-    // .get('@customerId').pipe(getCustomer).its('content').then(user => {
-    //   cy.visit(customerUrl.detail(user.customerId).as)
-    //     .wrap(user).chain(UserDetailTest)
-    //     .wrap(user).chain(UserPopoverDetailTest)
-    // })
+  // .get('@customerId').pipe(getCustomer).its('content').then(user => {
+  //   cy.visit(customerUrl.detail(user.customerId).as)
+  //     .wrap(user).chain(UserDetailTest)
+  //     .wrap(user).chain(UserPopoverDetailTest)
+  // })
 })

@@ -11,11 +11,19 @@
     "start": "next start -p $PORT",
     "build": "next build",
     "analyze": "cross-env ANALYZE=true npm run build",
-    "ci:setup": "npm i && npm i -D cypress@5.3.0",
-    "ci:visual": "npm run ci:setup && start-server-and-test dev:start http://localhost:5009 test:visual",
     "ci": "npm run ci:setup && start-server-and-test dev:start http://localhost:5009 test",
+    "ci:setup": "npm i && npm i -D cypress@5.3.0",
+    "ci:visual": "start-server-and-test dev:start http://localhost:5009 test:visual",
+    "ci:priority:1": "start-server-and-test dev:start http://localhost:5009 test:priority:1",
+    "ci:priority:2": "start-server-and-test dev:start http://localhost:5009 test:priority:2",
+    "ci:priority:3": "start-server-and-test dev:start http://localhost:5009 test:priority:3",
+    "ci:priority:4": "start-server-and-test dev:start http://localhost:5009 test:priority:4",
     "test": "percy exec -- cypress run",
-    "test:visual": "percy exec -- cypress run --env tags='#visual-working'"
+    "test:visual": "percy exec -- cypress run --env tags='#visual-working'",
+    "test:priority:1": "percy exec -- cypress run --env tags='#priority-1-working'",
+    "test:priority:2": "cypress run --env tags='#priority-2-working'",
+    "test:priority:3": "cypress run --env tags='#priority-3-working'",
+    "test:priority:4": "cypress run --env tags='#priority-4-working'"
   },
   "dependencies": {
     "@material-ui/core": "4.11.0",
