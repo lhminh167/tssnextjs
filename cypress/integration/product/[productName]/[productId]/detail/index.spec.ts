@@ -4,7 +4,7 @@ import { productUrl } from "../../../../../../modules/product/filter/product-fil
 import { HttpMethod } from "../../../../../../modules/shared/crud/crud.model";
 import { decodeAttributes, getCartItemColor, getCartItemSize } from "../../../../../../modules/shared/helpers/product.helper";
 import { removeLoginToken, setLoginToken } from "../../../../../../modules/shared/helpers/token.helper";
-import { ADD_TO_CART, COLOR, COUNT, EDIT, RECOMMENDATION, REMOVE, SHOPPING_CART, SIZE, TOTAL_QUANTITY, YES } from "../../../../../../modules/shared/tag/tag.model";
+import { ADD_TO_CART, ADD_TO_WISH_LIST, COLOR, COUNT, EDIT, RECOMMENDATION, REMOVE, SHOPPING_CART, SIZE, TOTAL_QUANTITY, WISHLIST, YES } from "../../../../../../modules/shared/tag/tag.model";
 import { apiShoppingCartUrl } from "../../../../../../modules/shopping-cart/shopping-cart.model";
 import { cyCreateOrder } from "../../../../../helpers/order/create/create-order.component.spec";
 import { cyCreateRandomProduct, cyGetExistingProduct, cyVisitExistingProduct } from "../../../../../helpers/product/create/create-product.component.spec";
@@ -61,6 +61,48 @@ cyIt.run('Product Detail Page -> Add To Cart Button -> When user adds a product 
 
 });
 
+cyIt.run('Product Detail Page -> Add To Wish List Button -> When Add To Wish List Button is clicked, then product is added to wish list #priority-1-working #e2e-working', () => {
+    const product = cyGetExistingProduct();
+    let item = fromProductToCartItem(product, 3, true);
+    const size = getCartItemSize(decodeAttributes(item.attributes));
+    const color = getCartItemColor(decodeAttributes(item.attributes));
+
+    cy.server().route({ url: apiShoppingCartUrl.baseUrl, method: HttpMethod.POST }).as('route')
+        .pipe(cyVisitExistingProduct)
+        .wrap(product).pipe(ProductDetailTest)
+
+    cy.getEl(SIZE).get(`[data-id="${size}"]`).should('exist').click();
+    cy.getEl(COLOR).get(`[data-id="${color}"]`).should('exist').click()
+    cy.wrap(item.quantity).pipe(cyEditQuantity)
+    cy.getEl(ADD_TO_WISH_LIST).click().wait('@route');
+
+    cy.getEl(WISHLIST).click().getLink().load();
+    cy
+        .get('@route').its('responseBody.content.item')
+        .then(res => ({ ...res, product }))
+        .pipe(ShoppingCartItemDetailTest);
+    cy.getEl(COUNT).should('have.text', item.quantity);
+
+});
+
+cyIt.run('Product Detail Page -> Add To Wish List Button -> When user adds a product with same attributes (color, size) to wish list again, then quantity of that product in wish list is added up #priority-3-working #e2e-working', () => {
+    const firstQuantity = 3;
+    const secondQuantity = 2;
+    const totalQuantity = 5;
+    cy.server().route({ url: apiShoppingCartUrl.baseUrl, method: HttpMethod.POST }).as('route');
+    cyVisitExistingProduct();
+    cyEditQuantity(firstQuantity);
+    cy.getEl(ADD_TO_WISH_LIST).click().wait('@route');
+    cyEditQuantity(secondQuantity);
+    cy.getEl(ADD_TO_WISH_LIST).click().wait('@route');
+    cy.getEl(WISHLIST).click().getLink().load();
+    cy
+        .get('@route').its('responseBody.content.item')
+        .then(res => ({ ...res, product: cyGetExistingProduct(), quantity: totalQuantity }))
+        .pipe(ShoppingCartItemDetailTest);
+    cy.getEl(COUNT).should('have.text', totalQuantity);
+
+});
 
 cyIt.run('Product Detail Page -> Edit Product Button -> When user logs in as admin and clicks Edit Product Button, then user is redirected to Edit Product Page #priority-3-working #e2e-working', () => {
 
