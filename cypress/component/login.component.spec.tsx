@@ -5,7 +5,7 @@ import { mockRandomCustomer } from '../helpers/shared/helpers/auth.helper';
 import { cyIt } from "../helpers/shared/helpers/other.helper";
 import { cyMount, CyMountProps } from '../helpers/shared/layout/layout.component.spec';
 
-cyIt.run('Login Component -> Email Address Validation -> When user submits an invalid email address, then an error message is shown #unit-working', () => {
+cyIt.run('Login Component -> Email Address Validation -> When user submits an invalid email address, then an error message is shown #priority-3-working #unit-working', () => {
     cy
         .wrap<CyMountProps>({
             Component: LoginComponent,

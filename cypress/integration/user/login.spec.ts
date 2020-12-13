@@ -12,7 +12,7 @@ import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navba
 import { ShoppingCartItemDetailTest } from "../../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { fromProductToCartItem } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Login Page -> Login -> When not-logged-in user accesses Login Page, then user can log in #e2e-working #visual-working', () => {
+cyIt.run('Login Page -> Login -> When not-logged-in user accesses Login Page, then user can log in #priority-1-working #e2e-working #visual-working', () => {
     const user = cyGetExistingCustomer();
     cy
         .visit(customerUrl.login())
@@ -25,7 +25,7 @@ cyIt.run('Login Page -> Login -> When not-logged-in user accesses Login Page, th
         .wrap(user).chain(UserPopoverDetailTest).wait(4000).takeScreenShot('User Detail Popover')
 });
 
-cyIt.run('Login Page -> Incorrect email or password -> When not-logged-in user enters incorrect email address or password, then an error message is showm #e2e-working', () => {
+cyIt.run('Login Page -> Incorrect email or password -> When not-logged-in user enters incorrect email address or password, then an error message is showm #priority-2-working #e2e-working', () => {
     const user = cyGetExistingCustomer();
     const anotherUser = mockRandomCustomer();
 
@@ -41,26 +41,26 @@ cyIt.run('Login Page -> Incorrect email or password -> When not-logged-in user e
     cy.getEl(DESCRIPTION).should('have.text', 'Incorrect email or password. Please try again.')
 });
 
-cyIt.run('Login Page -> Access Denied -> When logged-in user accesses Login Page, then user is redirected to Home Page #e2e-working', () => {
+cyIt.run('Login Page -> Access Denied -> When logged-in user accesses Login Page, then user is redirected to Home Page #priority-4-working #e2e-working', () => {
     cy
         .pipe(cySetCustomerLoginToken)
         .visit(customerUrl.login())
         .wrap('/').load();
 });
 
-cyIt.run('Login Page -> Register Link -> When user clicks Register Link, then user is redirected to Register Page #e2e-working', () => {
+cyIt.run('Login Page -> Register Link -> When user clicks Register Link, then user is redirected to Register Page #priority-3-working #e2e-working', () => {
     cy.visit(customerUrl.login())
     cy.getEl(REGISTER_LINK).click().getLink().load();
 });
 
 
-cyIt.run('Login Page -> Forgot Password Link -> When user clicks Forgot Password Link, then user is redirected to Forgot Password Page #e2e-working', () => {
+cyIt.run('Login Page -> Forgot Password Link -> When user clicks Forgot Password Link, then user is redirected to Forgot Password Page #priority-3-working #e2e-working', () => {
     cy.visit(customerUrl.login())
     cy.getEl(FORGOT_PASSWORD).click().getLink().load();
 });
 
 
-cyIt.run('Login Page -> Anonymous Shopping Cart -> Given anonymous user has some items in shopping cart, when user logs in, then anonymous cart items are added to the account user used to log in #e2e-working', () => {
+cyIt.run('Login Page -> Anonymous Shopping Cart -> Given anonymous user has some items in shopping cart, when user logs in, then anonymous cart items are added to the account user used to log in #priority-2-working #e2e-working', () => {
     const item = fromProductToCartItem(cyGetExistingProduct(), 2, true);
     cy
         .pipe(mockRandomCustomer).as('customer')
@@ -84,7 +84,7 @@ cyIt.run('Login Page -> Anonymous Shopping Cart -> Given anonymous user has some
 });
 
 
-cyIt.run('Login Page -> Anonymous Shopping Cart -> Given an anonymous user has a cart item and a customer has the same cart item, when user logs in as that customer, then anonymous cart item is removed and its quantity is added up to the customer/s same item #e2e-working', () => {
+cyIt.run('Login Page -> Anonymous Shopping Cart -> Given an anonymous user has a cart item and a customer has the same cart item, when user logs in as that customer, then anonymous cart item is removed and its quantity is added up to the customer/s same item #priority-2-working #e2e-working', () => {
     const item = fromProductToCartItem(cyGetExistingProduct(), 2, true);
     cy
         .pipe(mockRandomCustomer).as('customer')
@@ -111,7 +111,7 @@ cyIt.run('Login Page -> Anonymous Shopping Cart -> Given an anonymous user has a
 });
 
 
-cyIt.run('Login Page -> Anonymous Wish List -> Given anonymous user has some items in wish list, when user logs in, then anonymous wish list items are added to the account user used to log in #e2e-working', () => {
+cyIt.run('Login Page -> Anonymous Wish List -> Given anonymous user has some items in wish list, when user logs in, then anonymous wish list items are added to the account user used to log in #priority-2-working #e2e-working', () => {
     const item = fromProductToCartItem(cyGetExistingProduct(), 2, false);
     cy
         .pipe(mockRandomCustomer).as('customer')
@@ -135,7 +135,7 @@ cyIt.run('Login Page -> Anonymous Wish List -> Given anonymous user has some ite
 });
 
 
-cyIt.run('Login Page -> Anonymous wish List -> Given an anonymous user has a wish list item and a customer has the same wish list item, when user logs in as that customer, then anonymous wish list item is removed and its quantity is added up to the customer/s same item #e2e-working', () => {
+cyIt.run('Login Page -> Anonymous wish List -> Given an anonymous user has a wish list item and a customer has the same wish list item, when user logs in as that customer, then anonymous wish list item is removed and its quantity is added up to the customer/s same item #priority-2-working #e2e-working', () => {
     const item = fromProductToCartItem(cyGetExistingProduct(), 2, false);
     cy
         .pipe(mockRandomCustomer).as('customer')

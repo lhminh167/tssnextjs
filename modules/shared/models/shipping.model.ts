@@ -1,10 +1,12 @@
 import { Validator } from 'fluentvalidation-ts';
+import { defaultShippingRegion, ShippingRegion } from './shipping-region.model';
 
 export class Shipping {
     shippingId: number;
     shippingType: string;
     shippingCost: number;
     shippingRegionId: number;
+    shippingRegion: ShippingRegion;
 }
 
 export class ShippingValidator extends Validator<Shipping> {
@@ -26,5 +28,6 @@ export const defaultShipping = {
     shippingId: 1,
     shippingType: '',
     shippingCost: 0,
-    shippingRegionId: 0
+    shippingRegionId: 0,
+    shippingRegion: defaultShippingRegion
 }

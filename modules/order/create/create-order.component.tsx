@@ -25,6 +25,8 @@ import {
 import OrderCreateRequestComponent from './delivery-form/delivery-form.component';
 import FinishFormComponent from './finish-form/finish-form.component';
 import PaymentFormComponent from './payment-form/payment-form.component';
+import { defaultCustomer } from "../../customer/customer.model";
+import { defaultShipping } from '../../shared/models/shipping.model';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   pl0: pl0,
@@ -87,16 +89,13 @@ export default function CreateOrderComponent() {
   const currentUser = useSelector(
     (state: IRootState) => state.currentUser.data
   );
-  const defaultOrderCreateRequest: OrderCreateRequest = {
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [state, setState] = React.useState<OrderCreateRequest>({
+    ...defaultCustomer,
+    customerId: toNumber(defaultCustomer.customerId),
     shippingId: 1,
     shippingRegionId: 2,
-    ...currentUser,
-    customerId: toNumber(currentUser.customerId)
-  };
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [state, setState] = React.useState<OrderCreateRequest>(
-    defaultOrderCreateRequest
-  );
+  });
   const [form, setForm] = React.useState<OrderCreateForm>(
     defaultOrderCreateForm
   );
@@ -104,16 +103,18 @@ export default function CreateOrderComponent() {
 
   useEffect(() => {
     getOrderCreateForm().then(data => {
-
-
-      setForm(data.content);
+      const formResponse = data.content ?? defaultOrderCreateForm;
+      const shipping = 
+        formResponse.shippings.find(e => e.shippingRegion.shippingRegionId === currentUser.shippingRegionId) 
+        ?? defaultShipping;
+      setForm(formResponse);
+      setState({
+        ...currentUser,
+        customerId: toNumber(currentUser.customerId),
+        shippingId: shipping.shippingId,
+        shippingRegionId: currentUser.shippingRegion.shippingRegionId
+      });
     });
-  }, []);
-
-  useEffect(() => {
-
-
-    setState(defaultOrderCreateRequest);
   }, [currentUser]);
 
   const next = async (order: Order = null) => {

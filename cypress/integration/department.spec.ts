@@ -4,7 +4,7 @@ import { CATEGORY, LINK, tag } from "../../modules/shared/tag/tag.model";
 import DepartmentDetailTest, { openDepartmentPanel } from "../helpers/department/list/department-list.component.spec";
 import { cyIt, getFirstEl, getRandomEl } from "../helpers/shared/helpers/other.helper";
 
-cyIt.run('Department List Page -> Details -> When user accesses Department List Page, then department and catefory lists should be displayed correctly #e2e-working #visual-working', () => {
+cyIt.run('Department List Page -> Details -> When user accesses Department List Page, then department and catefory lists should be displayed correctly #priority-1-working #e2e-working #visual-working', () => {
   cy
     .visit(departmentUrl)
     .pipe(getDepartments).its('content').as('departments')
@@ -15,7 +15,7 @@ cyIt.run('Department List Page -> Details -> When user accesses Department List 
 });
 
 
-cyIt.run('Department List Page -> Category Link -> When user clicks a category item, then user is redirected to Category Detail Page #e2e-working', () => {
+cyIt.run('Department List Page -> Category Link -> When user clicks a category item, then user is redirected to Category Detail Page #priority-3-working #e2e-working', () => {
   cy
     .visit(departmentUrl)
     .pipe(getDepartments).its('content')

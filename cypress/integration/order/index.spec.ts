@@ -11,7 +11,7 @@ import { cySetAdminLoginToken, cySetCustomerLoginToken, mockRandomCustomer } fro
 import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { cyAddToCart } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Order List Page -> Customer\'s Orders -> When customer accesses Order List Page, then customer can see their own orders and cannot see order of other customers #e2e-working #visual-working', () => {
+cyIt.run('Order List Page -> Customer\'s Orders -> When customer accesses Order List Page, then customer can see their own orders and cannot see order of other customers #priority-4-working #e2e-working', () => {
 
     cy
         .server().route({ url: getUrl(apiOrderUrl.baseUrl) + '**' }).as('route')
@@ -31,11 +31,9 @@ cyIt.run('Order List Page -> Customer\'s Orders -> When customer accesses Order 
 
         .get('@yourOrder').chain(OrderListItemDetailHiddenTest)
         .get('@myOrder').chain(OrderListItemDetailTest)
-        .takeScreenShot('Order List Page')
-
 });
 
-cyIt.run('Order List Page -> Admin -> When admin accesses Order List Page, then admin can see orders created by any customers #e2e-working', () => {
+cyIt.run('Order List Page -> Admin -> When admin accesses Order List Page, then admin can see orders created by any customers #priority-2-working #e2e-working', () => {
 
     cy
         .server().route({ url: getUrl(apiOrderUrl.baseUrl) + '**' }).as('route')
@@ -59,14 +57,14 @@ cyIt.run('Order List Page -> Admin -> When admin accesses Order List Page, then 
 });
 
 
-cyIt.run('Order List Page -> Access Denied -> When user is not logged in and access Order List Page, then user is redirected to Login Page #e2e-working', () => {
+cyIt.run('Order List Page -> Access Denied -> When user is not logged in and access Order List Page, then user is redirected to Login Page #priority-4-working #e2e-working', () => {
 
     cy.visit(orderUrl.baseUrl);
     cy.load(customerUrl.login(orderUrl.baseUrl));
 });
 
 
-cyIt.run('Order List Page -> Visual Regression Test -> When user accesses Order List Page, then CSS styles, HTML elements, retrieved should be displayed as expected #visual-working', () => {
+cyIt.run('Order List Page -> Visual Regression Test -> When user accesses Order List Page, then CSS styles, HTML elements, retrieved should be displayed as expected #priority-1-working #integration-working #visual-working', () => {
 
     cy
         .server()

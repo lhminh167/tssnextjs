@@ -9,7 +9,7 @@ import { cyMount, CyMountProps } from '../helpers/shared/layout/layout.component
 import { cyEditQuantity } from '../helpers/shared/quantity-picker/quantity-picker.component.spec';
 import { fromProductToCartItem } from '../helpers/shopping-cart/detail/shopping-cart.component.spec';
 
-cyIt.run('Shopping Cart Quantity Picker Component -> When user click a navigation button, then gallery shows the corresponding slide. When there is no corresponding slide, then the corresponding navigation button is disabled #unit-working', () => {
+cyIt.run('Shopping Cart Quantity Picker Component -> When user click a navigation button, then gallery shows the corresponding slide. When there is no corresponding slide, then the corresponding navigation button is disabled #priority-3-working #unit-working', () => {
     cy
         .pipe(cyGetExistingProduct).then(res => fromProductToCartItem(res, 1, true))
         .then<CyMountProps>(res => ({

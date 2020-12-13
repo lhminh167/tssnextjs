@@ -11,9 +11,19 @@
     "start": "next start -p $PORT",
     "build": "next build",
     "analyze": "cross-env ANALYZE=true npm run build",
-    "ci": "npm i -f && npm i -D cypress@5.3.0 && start-server-and-test dev:start http://localhost:5009 test",
+    "ci": "npm run ci:setup && start-server-and-test dev:start http://localhost:5009 test",
+    "ci:setup": "npm i && npm i -D cypress@5.3.0",
+    "ci:visual": "start-server-and-test dev:start http://localhost:5009 test:visual",
+    "ci:priority:1": "start-server-and-test dev:start http://localhost:5009 test:priority:1",
+    "ci:priority:2": "start-server-and-test dev:start http://localhost:5009 test:priority:2",
+    "ci:priority:3": "start-server-and-test dev:start http://localhost:5009 test:priority:3",
+    "ci:priority:4": "start-server-and-test dev:start http://localhost:5009 test:priority:4",
     "test": "percy exec -- cypress run",
-    "test:visual": "percy exec -- cypress run --env tags='#visual-working'"
+    "test:visual": "percy exec -- cypress run --env tags='#visual-working'",
+    "test:priority:1": "percy exec -- cypress run --env tags='#priority-1-working'",
+    "test:priority:2": "cypress run --env tags='#priority-2-working'",
+    "test:priority:3": "cypress run --env tags='#priority-3-working'",
+    "test:priority:4": "cypress run --env tags='#priority-4-working'"
   },
   "dependencies": {
     "@material-ui/core": "4.11.0",
@@ -65,7 +75,7 @@
     "cypress-react-unit-test": "4.16.0",
     "formdata-node": "2.4.0",
     "isomorphic-unfetch": "3.0.0",
-    "istanbul-instrumenter-loader": "^3.0.1",
+    "istanbul-instrumenter-loader": "3.0.1",
     "istanbul-lib-coverage": "2.0.5",
     "nyc": "14.1.1",
     "schema-dts": "0.5.3",
@@ -73,7 +83,8 @@
   },
   "nyc": {
     "reporter": [
-      "html"
+      "html",
+      "cobertura"
     ]
   }
 }

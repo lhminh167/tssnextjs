@@ -8,7 +8,7 @@ import { cySetAdminLoginToken, cySetCustomerLoginToken } from "../../helpers/sha
 import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { mockRandomProduct } from "../../helpers/shared/helpers/product.helper";
 
-cyIt.run('Add New Product Page -> Add New Product -> When user logged in as admin, then user could add a new product #e2e-working', () => {
+cyIt.run('Add New Product Page -> Add New Product -> When user logged in as admin, then user could add a new product #priority-1-working #e2e-working #visual-working', () => {
   cy
     .server().route({ url: apiProductUrl.product, method: HttpMethod.POST }).as('route')
     .pipe(cySetAdminLoginToken)
@@ -25,14 +25,14 @@ cyIt.run('Add New Product Page -> Add New Product -> When user logged in as admi
     .chain(ProductDetailTest);
 });
 
-cyIt.run('Add New Product Page -> Access Denied -> When user logged in as customer, then user is redirected to Home Page #e2e-working', () => {
+cyIt.run('Add New Product Page -> Access Denied -> When user logged in as customer, then user is redirected to Home Page #priority-4-working #e2e-working', () => {
   cy
     .pipe(cySetCustomerLoginToken)
     .visit(productUrl.new)
     .wrap('/').load();
 });
 
-cyIt.run('Add New Product Page -> Access Denied -> When user is not logged in, then user is redirected to Home Page #e2e-working', () => {
+cyIt.run('Add New Product Page -> Access Denied -> When user is not logged in, then user is redirected to Home Page #priority-4-working #e2e-working', () => {
   cy
     .visit(productUrl.new)
     .wrap('/').load();

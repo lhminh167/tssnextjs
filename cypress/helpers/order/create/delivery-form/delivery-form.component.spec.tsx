@@ -1,5 +1,6 @@
 import { OrderCreateRequest } from "../../../../../modules/order/create/create-order.model";
-import { orderUrl } from "../../../../../modules/order/order.model";
+import { apiOrderUrl, orderUrl } from "../../../../../modules/order/order.model";
+import { getUrl } from "../../../../../modules/shared/crud/crud.service";
 import { ADDRESS_1, ADDRESS_2, CITY, COUNTRY, DAY_PHONE, EVE_PHONE, GRAND_TOTAL, MOB_PHONE, NAME, ORDER_SUMMARY, POSTALCODE, REGION, SHIPPING, SUBMIT } from "../../../../../modules/shared/tag/tag.model";
 import { cyGetExistingProduct } from "../../../product/create/create-product.component.spec";
 import { cySetCustomerLoginToken } from "../../../shared/helpers/auth.helper";
@@ -39,8 +40,10 @@ export function cyGoToDeliveryForm() {
 }
 
 export function cyFinishDeliveryForm() {
+    cy.getEl(MOB_PHONE).find(`[name=${MOB_PHONE}]`)
+      .should('exist').invoke('val').should('not.equal', '')
     cy.getEl(SUBMIT).click();
     cy.getEl(ORDER_SUMMARY);
-    cy.getEl(GRAND_TOTAL).should('not.eq', '$0.00');
+    cy.getEl(GRAND_TOTAL).should('not.equal', '$0.00');
     return cy;
 }

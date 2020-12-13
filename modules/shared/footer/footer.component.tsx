@@ -1,12 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Paper } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { Metadata } from '../metadata/metadata.model';
-import { Grid, useMediaQuery, Paper } from '@material-ui/core';
 import Link from 'next/link';
-import { bgWhite, p, mt, mtAuto } from '../layout/layout.style';
+import React from 'react';
+import { bgWhite, mt, mtAuto, p } from '../layout/layout.style';
 import { FOOTER } from '../tag/tag.model';
 
 
@@ -16,10 +14,6 @@ const useStyles = makeStyles((theme) => ({
     mt: mt,
     mtAuto: mtAuto
 }));
-
-interface Props extends Metadata {
-
-};
 
 export default function FooterComponent(props) {
     const classes = useStyles();

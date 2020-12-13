@@ -12,7 +12,7 @@ import { mockRandomCustomer } from "../../helpers/shared/helpers/auth.helper";
 import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navbar.component.spec";
 
-cyIt.run('Forgot Password Page -> Forgot Password -> When user resets their forgotten password, then user can log in using new password #e2e-working #visual-working', () => {
+cyIt.run('Forgot Password Page -> Forgot Password -> When user resets their forgotten password, then user can log in using new password #priority-1-working #e2e-working #visual-working', () => {
     const user = mockRandomCustomer();
     cy
         .server().route({ url: getUrl(apiCustomerUrl.forgotPassword), method: HttpMethod.PUT }).as('route')
