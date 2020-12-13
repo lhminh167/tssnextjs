@@ -65,7 +65,7 @@ cyItWithConfig.run('Mobile Navbar -> Order List Link -> When user clicks Order L
   cy.get('.MuiBackdrop-root').click({ force: true })
 });
 
-cyItWithConfig.run('Mobile Navbar -> Logout Link -> When user clicks Logout Link, then user is logged out and redirected to Home Page #priority-3-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
+cyItWithConfig.run('Mobile Navbar -> Logout Link -> When user clicks Logout Link, then user is logged out and redirected to Home Page #priority-4-working #e2e-working', { viewportWidth: cyMobileWidth }, () => {
   cy.pipe(cySetCustomerLoginToken).visit(departmentUrl);
   cy.getEl(MENU).click();
   cy.getEl(LOGOUT).click().wrap('/').load()

@@ -26,7 +26,7 @@ cyIt.run('Change Password Page -> Change Password -> When user is logged in, the
     cy.getEl(SUBMIT).click().wrap('/').load();
 });
 
-cyIt.run('Change Password Page -> Access Denied -> When logged-in user accesses Change Password Page of another user, then user is redirected to Home Page #priority-3-working #e2e-working', () => {
+cyIt.run('Change Password Page -> Access Denied -> When logged-in user accesses Change Password Page of another user, then user is redirected to Home Page #priority-4-working #e2e-working', () => {
     cy
         .pipe(mockRandomCustomer).pipe(createCustomer)
         .its('content.customer.customerId')
@@ -35,7 +35,7 @@ cyIt.run('Change Password Page -> Access Denied -> When logged-in user accesses 
         .get('@url').chain(cy.visit).wrap('/').load();
 });
 
-cyIt.run('Change Password Page -> Access Denied -> When not-logged-in user accesses Change Password Page, then user is redirected to Home Page #priority-3-working #e2e-working', () => {
+cyIt.run('Change Password Page -> Access Denied -> When not-logged-in user accesses Change Password Page, then user is redirected to Home Page #priority-4-working #e2e-working', () => {
     cy
         .pipe(mockRandomCustomer).pipe(createCustomer)
         .its('content.customer.customerId')

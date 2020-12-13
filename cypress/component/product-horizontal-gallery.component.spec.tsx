@@ -3,7 +3,7 @@ import MostDiscountedProductGalleryComponentMock from '../helpers/product/most-d
 import { cyIt } from '../helpers/shared/helpers/other.helper';
 import { cyMount, CyMountProps } from '../helpers/shared/layout/layout.component.spec';
 
-cyIt.run('Product Horizontal Gallery Component -> When user click a navigation button, then gallery shows the corresponding slide. When there is no corresponding slide, then the corresponding navigation button is disabled #priority-2-working #unit-working', () => {
+cyIt.run('Product Horizontal Gallery Component -> When user click a navigation button, then gallery shows the corresponding slide. When there is no corresponding slide, then the corresponding navigation button is disabled #priority-3-working #unit-working', () => {
     cy
         .fixture('most-discounted-products.json').its('content')
         .then(res => ({ ...res, count: 12 }))

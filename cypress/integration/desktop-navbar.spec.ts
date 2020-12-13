@@ -41,7 +41,7 @@ cyIt.run('Desktop Navbar -> Order List Link -> When user clicks Order List Link,
     .click().getLink().load();
 });
 
-cyIt.run('Desktop Navbar -> Logout Link -> When user clicks Logout Link, then user is logged out and redirected to Home Page #priority-3-working #e2e-working', () => {
+cyIt.run('Desktop Navbar -> Logout Link -> When user clicks Logout Link, then user is logged out and redirected to Home Page #priority-4-working #e2e-working', () => {
   cy.pipe(cySetCustomerLoginToken).visit(departmentUrl);
   cy.getEl(LOGOUT).click().wrap('/').load()
   cy.shouldNotExist(USER + LINK);

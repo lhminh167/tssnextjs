@@ -64,7 +64,7 @@ cyIt.run('Order Detail Page -> Complete Order -> When logged in as admin, user c
 });
 
 
-cyIt.run('Order Detail Page -> Hide Order Confirmation -> When logged in as customer, the Order Confirmation section is hidden #priority-3-working #e2e-working', () => {
+cyIt.run('Order Detail Page -> Hide Order Confirmation -> When logged in as customer, the Order Confirmation section is hidden #priority-4-working #e2e-working', () => {
 
     cy
         .pipe(cySetCustomerLoginToken)
@@ -88,14 +88,14 @@ cyIt.run('Order Detail Page -> Hide Order Confirmation -> When logged in as cust
 });
 
 
-cyIt.run('Order Detail Page -> Access Denied -> When user is not logged in and access Order Detail Page, then user is redirected to Login Page #priority-3-working #e2e-working', () => {
+cyIt.run('Order Detail Page -> Access Denied -> When user is not logged in and access Order Detail Page, then user is redirected to Login Page #priority-4-working #e2e-working', () => {
 
     cy.visit(orderUrl.baseUrl);
     cy.load(customerUrl.login(orderUrl.baseUrl));
 });
 
 
-cyIt.run('Order Detail Page -> Access Denied -> When user logs in as customer and accesses Order Detail Page of another customer, then user is redirected to Home Page #priority-3-working #e2e-working', () => {
+cyIt.run('Order Detail Page -> Access Denied -> When user logs in as customer and accesses Order Detail Page of another customer, then user is redirected to Home Page #priority-4-working #e2e-working', () => {
 
     cy
         .pipe(mockRandomCustomer)

@@ -14,7 +14,7 @@ import ReviewEditTest from "../../../../../helpers/product/review/edit/product-r
 import { cySetAdminLoginToken, cySetCustomerLoginToken, mockRandomCustomer } from "../../../../../helpers/shared/helpers/auth.helper";
 import { cyIt } from "../../../../../helpers/shared/helpers/other.helper";
 
-cyIt.run('Product Detail Page -> Review -> When user is not logged in, then Adding Review Form, Edit Review, and Delete Review buttons are hidden #priority-3-working #e2e-working', () => {
+cyIt.run('Product Detail Page -> Review -> When user is not logged in, then Adding Review Form, Edit Review, and Delete Review buttons are hidden #priority-4-working #e2e-working', () => {
     cyVisitExistingProduct();
     cy.getEl(UNAUTHORIZED).should('have.text', 'Please login or register to add a review.')
     cy.getEl(LOGIN_LINK).should('have.text', 'login').click().getLink().load();
@@ -46,7 +46,7 @@ cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then u
         .get('@reviewId').chain(ReviewDeleteTest)
 });
 
-cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then user cannot edit or delete reviews of other customers #priority-3-working #e2e-working', () => {
+cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then user cannot edit or delete reviews of other customers #priority-4-working #e2e-working', () => {
     cy
         .pipe(cyCreateRandomReview).as('reviewId').chain(removeLoginToken)
         .pipe(mockRandomCustomer).pipe(createCustomer).its('content.loginToken').chain(setLoginToken)
@@ -57,7 +57,7 @@ cyIt.run('Product Detail Page -> Review -> When user logs in as customer, then u
         })
 });
 
-cyIt.run('Product Detail Page -> Review -> When user logs in as admin, then user can edit or delete any review #priority-3-working #e2e-working', () => {
+cyIt.run('Product Detail Page -> Review -> When user logs in as admin, then user can edit or delete any review #priority-4-working #e2e-working', () => {
     cy
         .pipe(cyCreateRandomReview).as('reviewId').chain(removeLoginToken)
         .pipe(cySetAdminLoginToken)

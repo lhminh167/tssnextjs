@@ -4,7 +4,7 @@ import { DETAIL, EDIT, NEW_PASSWORD } from "../../../modules/shared/tag/tag.mode
 import { cySetCustomerLoginToken } from "../../helpers/shared/helpers/auth.helper";
 import { cyIt } from "../../helpers/shared/helpers/other.helper";
 
-cyIt.run('User Area Page -> View Customer Link -> When a user clicks View Customer Link, then user is redirect to Customer Detail Page #priority-1-working #e2e-working #visual-working', () => {
+cyIt.run('User Area Page -> View Customer Link -> When a user clicks View Customer Link, then user is redirected to Customer Detail Page #priority-1-working #e2e-working #visual-working', () => {
     cy.pipe(cySetCustomerLoginToken).visit(customerUrl.baseUrl);
     cy.pipe(getCustomerIdNumberFromLoginToken).should('be.greaterThan', 0)
     cy.getEl(DETAIL).takeScreenShot('User Area Page')
@@ -12,12 +12,12 @@ cyIt.run('User Area Page -> View Customer Link -> When a user clicks View Custom
 });
 
 
-cyIt.run('User Area Page -> Edit Customer Link -> When a user clicks Edit Customer Link, then user is redirect to Edit Customer Page #priority-3-working #e2e-working', () => {
+cyIt.run('User Area Page -> Edit Customer Link -> When a user clicks Edit Customer Link, then user is redirected to Edit Customer Page #priority-3-working #e2e-working', () => {
     cy.pipe(cySetCustomerLoginToken).visit(customerUrl.baseUrl);
     cy.getEl(EDIT).click().getLink().load();
 });
 
-cyIt.run('User Area Page -> Change Password Link -> When a user clicks Change Password Link, then user is redirect to Change Password page #priority-3-working #e2e-working', () => {
+cyIt.run('User Area Page -> Change Password Link -> When a user clicks Change Password Link, then user is redirected to Change Password page #priority-3-working #e2e-working', () => {
     cy.pipe(cySetCustomerLoginToken).visit(customerUrl.baseUrl);
     cy.getEl(NEW_PASSWORD).click().getLink().load();
 });

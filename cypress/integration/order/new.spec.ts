@@ -31,7 +31,7 @@ cyIt.run('Checkout Page -> Complete Checkout -> When user logged in and shopping
     .pipe(finishShoppingCartPage)
     .wrap(orderUrl.new).load()
 
-    .clearTextFields(deliveryFormTextFields).wait(4000)
+    .clearTextFields(deliveryFormTextFields).wait(2000)
     .takeScreenShot('Delivery Form')
 
     .get('@customerRes').its('customer.customerId').as('customerId')

@@ -2,7 +2,7 @@ import { ADD_NEW_PRODUCT } from "../../modules/shared/tag/tag.model";
 import { cySetAdminLoginToken } from "../helpers/shared/helpers/auth.helper";
 import { cyIt } from "../helpers/shared/helpers/other.helper";
 
-cyIt.run('Admin Area Page -> Access Denied -> When user is not logged in as admin and accesses Admin Area Page, then user is redirected to homepage #priority-3-working #e2e-working', () => {
+cyIt.run('Admin Area Page -> Access Denied -> When user is not logged in as admin and accesses Admin Area Page, then user is redirected to homepage #priority-4-working #e2e-working', () => {
   cy.visit('/admin').wrap('/').load();
 });
 

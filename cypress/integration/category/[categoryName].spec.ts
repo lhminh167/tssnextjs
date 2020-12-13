@@ -18,7 +18,7 @@ cyIt.run('Category Detail Page -> Category Details -> When page finished loading
   })
 });
 
-cyIt.run('Category Detail Page -> Product Recommendations -> When page finished loading, product recommendations should have correct values #priority-3-working #e2e-working', () => {
+cyIt.run('Category Detail Page -> Product Recommendations -> When page finished loading, product recommendations should have correct values #priority-2-working #e2e-working', () => {
   cy
     .wrap(1).pipe(getCategory).its('content').as('category')
     .pipe(categoryUrl.detail).its('as')
@@ -31,4 +31,3 @@ cyIt.run('Category Detail Page -> Product Recommendations -> When page finished 
         .chain(ProductListTest).chain(ProductLinkTest)
     )
 });
-

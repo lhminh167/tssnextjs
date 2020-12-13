@@ -6,7 +6,7 @@ import { cyIt } from "../helpers/shared/helpers/other.helper";
 import { ShoppingCartItemDetailTest } from "../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { cartItemShouldBeRemoved, cyAddToCart } from "../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Wish List Page -> Back To Shop Button -> When Back To Shop Button is clicked, then user is redirected to homepage #priority-3-working #e2e-working', () => {
+cyIt.run('Wish List Page -> Back To Shop Button -> When Back To Shop Button is clicked, then user is redirected to homepage #priority-4-working #e2e-working', () => {
   cy.visit(shoppingCartUrl.wishList);
   cy.getEl(BACK).click().wrap('/').load();
 });
@@ -36,7 +36,7 @@ cyIt.run('Wish List Page -> Move Item To Cart Button -> When user clicks Move It
   cy.get('@item').chain(ShoppingCartItemDetailTest);
 });
 
-cyIt.run('Wish List Page -> Go To Cart Button -> When Back To Shop Button is clicked, then user is redirected to Shopping Cart Page #priority-3-working #e2e-working', () => {
+cyIt.run('Wish List Page -> Go To Cart Button -> When Go To Cart Button is clicked, then user is redirected to Shopping Cart Page #priority-4-working #e2e-working', () => {
   cy.visit(shoppingCartUrl.wishList);
   cy.getEl(SUBMIT).click().wrap(shoppingCartUrl.baseUrl).load();
 });

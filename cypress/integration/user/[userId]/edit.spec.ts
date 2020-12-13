@@ -41,7 +41,7 @@ cyIt.run('Edit User Page -> Edit User Form -> When logged in as customer, then u
 });
 
 
-cyIt.run('Edit User Page -> Email Adready Taken -> When an email address was used by a user to register, then another user cannot use this email address to register #priority-3-working #e2e-working', () => {
+cyIt.run('Edit User Page -> Email Adready Taken -> When an email address was used by a user to register, then another user cannot use this email address to register #priority-2-working #e2e-working', () => {
     const user = mockRandomCustomer();
     const changes = mockRandomCustomer();
     cy
@@ -64,7 +64,7 @@ cyIt.run('Edit User Page -> Email Adready Taken -> When an email address was use
 });
 
 
-cyIt.run('Edit User Page -> Grant Admin Role -> When logged in as admin, then user can grant any customer admin role #priority-3-working #e2e-working', () => {
+cyIt.run('Edit User Page -> Grant Admin Role -> When logged in as admin, then user can grant any customer admin role #priority-2-working #e2e-working', () => {
     cy
         .pipe(mockRandomCustomer).pipe(createCustomer)
         .its('content.customer.customerId').as('customerId')
@@ -87,7 +87,7 @@ cyIt.run('Edit User Page -> Grant Admin Role -> When logged in as admin, then us
         .getEl(ROLE).should('have.text', Role.Admin)
 });
 
-cyIt.run('Edit User Page -> Access Denied -> When not-logged-in user accesses Edit User Page, then user is redirected to Home Page #priority-3-working #e2e-working', () => {
+cyIt.run('Edit User Page -> Access Denied -> When not-logged-in user accesses Edit User Page, then user is redirected to Home Page #priority-4-working #e2e-working', () => {
     const user = cyGetExistingCustomer();
     const customerId = toNumber(user.customerId);
 
@@ -95,7 +95,7 @@ cyIt.run('Edit User Page -> Access Denied -> When not-logged-in user accesses Ed
     cy.visit(url).wrap(customerUrl.login(url)).load();
 });
 
-cyIt.run('Edit User Page -> Access Denied -> When a customer accesses Edit User Page of another customer, then user is redirected to Home Page #priority-3-working #e2e-working', () => {
+cyIt.run('Edit User Page -> Access Denied -> When a customer accesses Edit User Page of another customer, then user is redirected to Home Page #priority-4-working #e2e-working', () => {
     cy
         .pipe(mockRandomCustomer).pipe(createCustomer)
         .its('content.customer.customerId').as('customerId')
@@ -105,7 +105,7 @@ cyIt.run('Edit User Page -> Access Denied -> When a customer accesses Edit User 
 
 });
 
-cyIt.run('Edit User Page -> Access Denied -> When user logged in as admin, then user could access Edit User Page of any user #priority-3-working #e2e-working', () => {
+cyIt.run('Edit User Page -> Access Denied -> When user logged in as admin, then user could access Edit User Page of any user #priority-4-working #e2e-working', () => {
     const user = cyGetExistingCustomer();
     const customerId = toNumber(user.customerId);
 

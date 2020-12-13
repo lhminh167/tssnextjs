@@ -36,7 +36,7 @@ cyIt.run('Shopping Cart Page -> Add To Wishlist Button -> When user clicks Add T
   cy.get('@item').chain(ShoppingCartItemDetailTest);
 });
 
-cyIt.run('Shopping Cart Page -> Checkout Button -> When there are no items in cart, then Checkout Button is disabled #priority-3-working #e2e-working', () => {
+cyIt.run('Shopping Cart Page -> Checkout Button -> When there are no items in cart, then Checkout Button is disabled #priority-4-working #e2e-working', () => {
   cy.visit(shoppingCartUrl.baseUrl);
   cy.getEl(SUBMIT).should('be.disabled');
 });
@@ -58,12 +58,12 @@ cyIt.run('Shopping Cart Page -> Checkout Button -> When user is not logged in, c
     .wrap(customerUrl.login(orderUrl.new)).load();
 });
 
-cyIt.run('Shopping Cart Page -> Back To Shop Button -> When Back To Shop Button is clicked, then user is redirected to homepage #priority-3-working #e2e-working', () => {
+cyIt.run('Shopping Cart Page -> Back To Shop Button -> When Back To Shop Button is clicked, then user is redirected to homepage #priority-4-working #e2e-working', () => {
   cy.visit(shoppingCartUrl.baseUrl);
   cy.getEl(BACK).click().wrap('/').load();
 });
 
-cyIt.run('Shopping Cart Page -> Recommendations -> When user accesses Shopping Cart Page, then Recommendations section shows products that were ordered together with products in this shopping cart within the last month #priority-3-working #e2e-working', () => {
+cyIt.run('Shopping Cart Page -> Recommendations -> When user accesses Shopping Cart Page, then Recommendations section shows products that were ordered together with products in this shopping cart within the last month #priority-2-working #e2e-working', () => {
   const user1 = mockRandomCustomer();
   cy
     .pipe(cyCreateRandomProduct).its('productId')

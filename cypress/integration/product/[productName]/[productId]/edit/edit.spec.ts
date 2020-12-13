@@ -35,7 +35,7 @@ cyIt.run('Edit Product Page -> Edit Product Form -> When user logged in as admin
       .get('@editedProduct').chain(ProductDetailTest);
 });
 
-cyIt.run('Edit Product Page -> Edit Product Form -> When user accesses Edit Product Page as customer, then user is redirected to Home Page #priority-3-working #e2e-working', () => {
+cyIt.run('Edit Product Page -> Access Denied -> When user accesses Edit Product Page as customer, then user is redirected to Home Page #priority-4-working #e2e-working', () => {
    const product = cyGetExistingProduct();
    cy
       .pipe(cySetCustomerLoginToken)
@@ -43,7 +43,7 @@ cyIt.run('Edit Product Page -> Edit Product Form -> When user accesses Edit Prod
 });
 
 
-cyIt.run('Edit Product Page -> Edit Product Form -> When not-logged-in user accesses Edit Product Page, then user is redirected to Home Page #priority-3-working #e2e-working', () => {
+cyIt.run('Edit Product Page -> Access Denied -> When not-logged-in user accesses Edit Product Page, then user is redirected to Home Page #priority-4-working #e2e-working', () => {
    const product = cyGetExistingProduct();
    cy.visit(productUrl.edit(product).as).wrap('/').load();
 });

@@ -19,7 +19,7 @@ import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navbar.component.spec";
 import { cyAddToCart, cyGetAnyCartItem, finishShoppingCartPage } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Checkout Page -> Back Buttons -> When user is at Payment Form and keeps clicking Back Buttons, then user is back to previous pages and eventually arrives at Shopping Cart Page #priority-3-working #e2e-working', () => {
+cyIt.run('Checkout Page -> Back Buttons -> When user is at Payment Form and keeps clicking Back Buttons, then user is back to previous pages and eventually arrives at Shopping Cart Page #priority-4-working #e2e-working', () => {
   cySetCustomerLoginToken();
   cy
     .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
@@ -38,7 +38,7 @@ cyIt.run('Checkout Page -> Back Buttons -> When user is at Payment Form and keep
   cy.getEl(BACK).click().wrap(shoppingCartUrl.baseUrl).load();
 })
 
-cyIt.run('Checkout Page -> Payment Form -> Insufficient Funds -> When user enters an insufficient funded credit card, an error message should be shown #priority-3-working #e2e-working', () => {
+cyIt.run('Checkout Page -> Payment Form -> Insufficient Funds -> When user enters an insufficient funded credit card, an error message should be shown #priority-2-working #e2e-working', () => {
   cySetCustomerLoginToken();
   cy
     .server().route({ url: getUrl(apiOrderUrl.payment), method: HttpMethod.POST }).as('route')
@@ -46,8 +46,8 @@ cyIt.run('Checkout Page -> Payment Form -> Insufficient Funds -> When user enter
     .visit(shoppingCartUrl.baseUrl)
     .pipe(finishShoppingCartPage)
     .wrap(orderUrl.new).load()
-    .pipe(cyFinishDeliveryForm)
-    .pipe(cyFinishConfirmationForm)
+    .chain(cyFinishDeliveryForm)
+    .chain(cyFinishConfirmationForm)
     .pipe(getInsufficientFundsPaymentInfo)
     .pipe(typePaymentForm)
   cy.getEl(SUBMIT).click().wait('@route');
@@ -58,7 +58,7 @@ cyIt.run('Checkout Page -> Payment Form -> Insufficient Funds -> When user enter
 })
 
 
-cyIt.run('Checkout Page -> Payment Form -> 3D Secure Auth Success -> When user uses a 3D Secure Credit Card and succeeds to authorize, then user can proceed to Order Finish Form #priority-3-working #e2e-working', () => {
+cyIt.run('Checkout Page -> Payment Form -> 3D Secure Auth Success -> When user uses a 3D Secure Credit Card and succeeds to authorize, then user can proceed to Order Finish Form #priority-2-working #e2e-working', () => {
   cySetCustomerLoginToken();
   cy
     .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
@@ -78,7 +78,7 @@ cyIt.run('Checkout Page -> Payment Form -> 3D Secure Auth Success -> When user u
 
 })
 
-cyIt.run('Checkout Page -> Payment Form -> 3D Secure Auth Failure -> When user uses a 3D Secure Credit Card and fails to authorize, then user cannot proceed to Order Finish Form #priority-3-working #e2e-working', () => {
+cyIt.run('Checkout Page -> Payment Form -> 3D Secure Auth Failure -> When user uses a 3D Secure Credit Card and fails to authorize, then user cannot proceed to Order Finish Form #priority-2-working #e2e-working', () => {
   cySetCustomerLoginToken();
   cy
     .wrap(cyAddToCart(cyGetExistingProduct(), 1, true))
@@ -95,4 +95,3 @@ cyIt.run('Checkout Page -> Payment Form -> 3D Secure Auth Failure -> When user u
     .pipe(getSuccessPaymentInfo)
     .pipe(typePaymentForm)
 })
-

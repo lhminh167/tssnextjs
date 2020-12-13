@@ -41,7 +41,7 @@ cyIt.run('Product Detail Page -> Add To Cart Button -> When Add To Cart Button i
 
 });
 
-cyIt.run('Product Detail Page -> Add To Cart Button -> When user adds a product with same attributes (color, size) to cart again, then quantity of that product in cart is added up #priority-3-working #e2e-working', () => {
+cyIt.run('Product Detail Page -> Add To Cart Button -> When user adds a product with same attributes (color, size) to cart again, then quantity of that product in cart is added up #priority-2-working #e2e-working', () => {
     const firstQuantity = 3;
     const secondQuantity = 2;
     const totalQuantity = 5;
@@ -85,7 +85,7 @@ cyIt.run('Product Detail Page -> Add To Wish List Button -> When Add To Wish Lis
 
 });
 
-cyIt.run('Product Detail Page -> Add To Wish List Button -> When user adds a product with same attributes (color, size) to wish list again, then quantity of that product in wish list is added up #priority-3-working #e2e-working', () => {
+cyIt.run('Product Detail Page -> Add To Wish List Button -> When user adds a product with same attributes (color, size) to wish list again, then quantity of that product in wish list is added up #priority-2-working #e2e-working', () => {
     const firstQuantity = 3;
     const secondQuantity = 2;
     const totalQuantity = 5;
@@ -104,7 +104,7 @@ cyIt.run('Product Detail Page -> Add To Wish List Button -> When user adds a pro
 
 });
 
-cyIt.run('Product Detail Page -> Edit Product Button -> When user logs in as admin and clicks Edit Product Button, then user is redirected to Edit Product Page #priority-3-working #e2e-working', () => {
+cyIt.run('Product Detail Page -> Edit Product Button -> When user logs in as admin and clicks Edit Product Button, then user is redirected to Edit Product Page #priority-4-working #e2e-working', () => {
 
     cy.pipe(cySetAdminLoginToken).pipe(cyVisitExistingProduct);
     cy.getEl(EDIT).click().getLink().load();
@@ -126,7 +126,7 @@ cyIt.run('Product Detail Page -> Delete Product Button -> When user logs in as a
     cy.contains('Product not found.')
 });
 
-cyIt.run('Product Detail Page -> Recommendations -> When user accesses Product Detail Page, then Recommendations section shows products that were ordered together with this product within the last month #priority-3-working #e2e-working', () => {
+cyIt.run('Product Detail Page -> Recommendations -> When user accesses Product Detail Page, then Recommendations section shows products that were ordered together with this product within the last month #priority-2-working #e2e-working', () => {
     const user1 = mockRandomCustomer();
     cy
         .pipe(cyCreateRandomProduct).its('productId')
