@@ -10,5 +10,9 @@
   "retries": {
     "runMode": 2,
     "openMode": 1
+  },
+  "reporter": "cypress-multi-reporters",
+  "reporterOptions": {
+    "configFile": "reporter-config.json"
   }
 }
