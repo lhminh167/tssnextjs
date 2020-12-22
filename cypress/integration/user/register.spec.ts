@@ -14,18 +14,20 @@ import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navba
 import { ShoppingCartItemDetailTest } from "../../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { fromProductToCartItem } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Register Page -> Register -> When not-logged-in user accesses Register Page, then user can register a new account #priority-1-working #e2e-working #visual-working', () => {
+cyIt.only('Register Page -> Register -> When not-logged-in user accesses Register Page, then user can register a new account and be redirected to return URL #priority-1-working #e2e-working #visual-working', () => {
     const user = mockRandomAccount();
     cy
         .server().route({ url: apiCustomerUrl.register, method: HttpMethod.POST }).as('route')
-        .visit(customerUrl.register())
+        .wrap(user.customerId).chain(customerUrl.detail).its('as').as('returnUrl')
+        .chain(customerUrl.register)
+        .chain(cy.visit)
         .clearTextFields(registerTextFields).takeScreenShot('Register Page')
         .wrap(user)
         .chain(typeRegister)
     cy
         .getEl(SUBMIT).click()
         .wait('@route').its('responseBody.content.customer').as('user')
-        .wrap('/').load();
+        .get('@returnUrl').load();
 
     cy
         .get('@user').its('customerId').chain(customerUrl.detail).its('as')

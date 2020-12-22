@@ -12,16 +12,18 @@ import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navba
 import { ShoppingCartItemDetailTest } from "../../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { fromProductToCartItem } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Login Page -> Login -> When not-logged-in user accesses Login Page, then user can log in #priority-1-working #e2e-working #visual-working', () => {
+cyIt.only('Login Page -> Login -> When not-logged-in user accesses Login Page, then user can log in and be redirected to return URL #priority-1-working #e2e-working #visual-working', () => {
     const user = cyGetExistingCustomer();
     cy
-        .visit(customerUrl.login())
+        .wrap(user.customerId).chain(customerUrl.detail).its('as').as('returnUrl')
+        .chain(customerUrl.login)
+        .chain(cy.visit)
     cy
         .clearTextFields(loginTextFields).takeScreenShot('Login Page')
         .wrap(user).pipe(typeLogin)
     cy
         .getEl(SUBMIT).click()
-        .wrap('/').load()
+        .get('@returnUrl').load()
         .wrap(user).chain(UserPopoverDetailTest).wait(4000).takeScreenShot('User Detail Popover')
 });
 
