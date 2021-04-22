@@ -13,7 +13,7 @@ export function mockRootAdminAccount() {
 
 export function mockRandomAccount() {
     const randomText = getRandomString(5);
-    const res: ICreateCustomerRequest = {
+    const res: cyCustomer = {
         ...defaultCustomer,
         name: randomText,
         email: randomText + '@mail.com',
