@@ -1,18 +1,15 @@
-import { createStyles, makeStyles, Theme, ThemeProvider } from "@material-ui/core/styles";
-import { Fragment, useEffect } from "react";
-import Navbar from "../navbar/navbar.component";
-import theme, { transitionWidth } from "./layout.theme";
-import ErrorBoundary from "../error-boundary/error-boundary.component";
-import Notifier from "../notifier/notifier.component";
-import FooterComponent from "../footer/footer.component";
-import { mb } from "./layout.style";
-import { getValidLoginToken, decodeLoginToken } from "../helpers/token.helper";
-import { shoppingCartItemCountSlice } from "../../shopping-cart/shopping-cart.slice";
-import { getCurrentUser, getCustomerIdNumberFromLoginToken } from "../helpers/auth.helper";
-import { currentUserSlice } from "../../customer/customer.slice";
 import { CssBaseline } from "@material-ui/core";
+import { createStyles, makeStyles, Theme, ThemeProvider } from "@material-ui/core/styles";
 import * as Sentry from '@sentry/browser';
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import ErrorBoundary from "../error-boundary/error-boundary.component";
+import FooterComponent from "../footer/footer.component";
+import { getCurrentUser } from "../helpers/auth.helper";
+import Navbar from "../navbar/navbar.component";
+import Notifier from "../notifier/notifier.component";
+import { mb } from "./layout.style";
+import theme, { transitionWidth } from "./layout.theme";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
