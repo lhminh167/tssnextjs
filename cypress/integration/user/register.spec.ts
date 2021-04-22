@@ -2,7 +2,7 @@ import { apiCustomerUrl, customerUrl, ICreateCustomerRequest } from "../../../mo
 import { createCustomer } from "../../../modules/customer/customer.service";
 import { HttpMethod } from "../../../modules/shared/crud/crud.model";
 import { setLoginToken } from "../../../modules/shared/helpers/token.helper";
-import { DESCRIPTION, LOGIN_LINK, SUBMIT } from "../../../modules/shared/tag/tag.model";
+import { DESCRIPTION, LOGIN_LINK, SUBMIT, TOTAL_QUANTITY } from "../../../modules/shared/tag/tag.model";
 import { apiShoppingCartUrl, shoppingCartUrl } from "../../../modules/shopping-cart/shopping-cart.model";
 import { addShoppingCartItem } from "../../../modules/shopping-cart/shopping-cart.service";
 import { registerTextFields, typeRegister } from "../../helpers/customer/create/create-customer.component.spec";
@@ -83,6 +83,8 @@ cyIt.run('Register Page -> Anonymous Shopping Cart -> Given anonymous user has s
             itemId: res[0].itemId,
         }))
         .chain(ShoppingCartItemDetailTest);
+    cy
+        .getEl(TOTAL_QUANTITY).should('have.text', 2);
 });
 
 cyIt.run('Register Page -> Anonymous Wish List -> Given anonymous user has some items in wish list, when user registers, then anonymous wish list items are added to the account user used to log in #priority-2-working #e2e-working', () => {

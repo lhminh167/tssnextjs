@@ -1,7 +1,7 @@
 import { customerUrl } from "../../../modules/customer/customer.model";
 import { createCustomer, login } from "../../../modules/customer/customer.service";
 import { getValidLoginToken, removeLoginToken, setLoginToken } from "../../../modules/shared/helpers/token.helper";
-import { DESCRIPTION, FORGOT_PASSWORD, REGISTER_LINK, SUBMIT, YES } from "../../../modules/shared/tag/tag.model";
+import { DESCRIPTION, FORGOT_PASSWORD, REGISTER_LINK, SUBMIT, TOTAL_QUANTITY, YES } from "../../../modules/shared/tag/tag.model";
 import { apiShoppingCartUrl, shoppingCartUrl } from "../../../modules/shopping-cart/shopping-cart.model";
 import { addShoppingCartItem } from "../../../modules/shopping-cart/shopping-cart.service";
 import { loginTextFields, typeLogin } from "../../helpers/customer/login/login.component.spec";
@@ -83,6 +83,8 @@ cyIt.run('Login Page -> Anonymous Shopping Cart -> Given anonymous user has some
             itemId: res[0].itemId,
         }))
         .chain(ShoppingCartItemDetailTest);
+    cy
+        .getEl(TOTAL_QUANTITY).should('have.text', 2);
 });
 
 
@@ -110,6 +112,8 @@ cyIt.run('Login Page -> Anonymous Shopping Cart -> Given an anonymous user has a
             quantity: 4,
         }))
         .chain(ShoppingCartItemDetailTest);
+    cy
+        .getEl(TOTAL_QUANTITY).should('have.text', 4);
 });
 
 
