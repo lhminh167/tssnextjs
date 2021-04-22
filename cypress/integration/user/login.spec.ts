@@ -12,7 +12,7 @@ import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navba
 import { ShoppingCartItemDetailTest } from "../../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { fromProductToCartItem } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.only('Login Page -> Login -> When not-logged-in user accesses Login Page, then user can log in and be redirected to return URL #priority-1-working #e2e-working #visual-working', () => {
+cyIt.run('Login Page -> Login -> When not-logged-in user accesses Login Page, then user can log in and be redirected to return URL #priority-1-working #e2e-working #visual-working', () => {
     const user = cyGetExistingCustomer();
     cy
         .wrap(user.customerId).chain(customerUrl.detail).its('as').as('returnUrl')
