@@ -122,7 +122,7 @@ cyIt.run('Product Search Page -> Sort By Ascending Name -> When user sorts produ
   });
 
   cy.getEl(NAME).should(els => {
-    const data = els.toArray().map(e => e.innerText);
+    const data = els.toArray().map(e => e.innerText.toLowerCase());
     const condition = Cypress._.orderBy(data, e => e, ['asc']);
     expect(data).to.deep.equal(condition);
   })
