@@ -1,4 +1,3 @@
-import { getProduct } from "../../../modules/product/detail/product-detail.service";
 import { apiProductUrl, defaultProductSearchRequest, IProductSearchRequest, productUrl, SortByEnum } from "../../../modules/product/filter/product-filter.model";
 import { getProducts } from "../../../modules/product/filter/product-filter.service";
 import { defaultPaginationList, defaultPaginationRequest, HttpMethod, PaginatedList } from "../../../modules/shared/crud/crud.model";
@@ -11,7 +10,7 @@ import { cyIt } from "../../helpers/shared/helpers/other.helper";
 import { mockRandomProduct } from "../../helpers/shared/helpers/product.helper";
 import { getRandomNumber, getRandomString, unformatCurrency } from "../../helpers/shared/helpers/string.helper";
 import { ProductLinkTest } from "../../helpers/shared/product-card/product-card.component.spec";
-import ProductListTest, { ProductListFirstPageButtonTest, ProductListFirstPageTest, ProductListLastPageButtonTest, ProductListNextPageButtonTest, ProductListPageInfoTest, ProductListPageSizeTest, ProductListPaginationTest, ProductListPreviousPageButtonTest } from "../../helpers/shared/product-list/product-list.component.spec";
+import ProductListTest, { ProductListFirstPageButtonTest, ProductListFirstPageTest, ProductListLastPageButtonTest, ProductListNextPageButtonTest, ProductListPageInfoTest, ProductListPageSizeTest, ProductListPreviousPageButtonTest } from "../../helpers/shared/product-list/product-list.component.spec";
 
 cyIt.run('Product Search Page -> Product Filter -> When user opens the Product Filter, then the panel\'s details should have correct values #priority-2-working #e2e-working', () => {
   cy.visit(productUrl.product).pipe(ProductFilterDetailTest)
@@ -139,7 +138,7 @@ cyIt.run('Product Search Page -> Sort By Descending Price -> When user sorts pro
   });
 
   cy.getEl(DISCOUNTED_PRICE).should(els => {
-    const data = els.toArray().map(e => e.innerText);
+    const data = els.toArray().map(e => unformatCurrency(e.innerText));
     const condition = Cypress._.orderBy(data, e => e, ['desc']);
     expect(data).to.deep.equal(condition);
   })
@@ -154,7 +153,7 @@ cyIt.run('Product Search Page -> Sort By Ascending Price -> When user sorts prod
   });
 
   cy.getEl(DISCOUNTED_PRICE).should(els => {
-    const data = els.toArray().map(e => e.innerText);
+    const data = els.toArray().map(e => unformatCurrency(e.innerText));
     const condition = Cypress._.orderBy(data, e => e, ['asc']);
     expect(data).to.deep.equal(condition);
   })
