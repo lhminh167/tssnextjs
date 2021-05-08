@@ -1,10 +1,11 @@
 import { setLoginToken } from "../../modules/shared/helpers/token.helper";
-import { BACK, COUNT, tag, ITEM, MOVE_ITEM_TO_CART, REMOVE, SHOPPING_CART, SUBMIT, WISHLIST } from "../../modules/shared/tag/tag.model";
+import { BACK, COUNT, MOVE_ITEM_TO_CART, REMOVE, SHOPPING_CART, SUBMIT, TOTAL_QUANTITY } from "../../modules/shared/tag/tag.model";
 import { apiShoppingCartUrl, shoppingCartUrl } from "../../modules/shopping-cart/shopping-cart.model";
 import { cyGetExistingProduct } from "../helpers/product/create/create-product.component.spec";
 import { cyIt } from "../helpers/shared/helpers/other.helper";
 import { ShoppingCartItemDetailTest } from "../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
-import { cartItemShouldBeRemoved, cyAddToCart } from "../helpers/shopping-cart/detail/shopping-cart.component.spec";
+import { cyAddToCart } from "../helpers/shopping-cart/detail/shopping-cart.component.spec";
+import { wishlistItemShouldBeRemoved } from "../helpers/shopping-cart/wish-list/wish-list.component.spec";
 
 cyIt.run('Wish List Page -> Back To Shop Button -> When Back To Shop Button is clicked, then user is redirected to homepage #priority-4-working #e2e-working', () => {
   cy.visit(shoppingCartUrl.wishList);
@@ -19,7 +20,8 @@ cyIt.run('Wish List Page -> Remove Item Button -> When user clicks Remove Item b
 
   cy.getEl(REMOVE).takeScreenShot('Wish List Page')
   cy.getEl(REMOVE).click().wait('@route')
-    .its('responseBody.content').pipe(cartItemShouldBeRemoved)
+    .its('responseBody.content').pipe(wishlistItemShouldBeRemoved)
+  cy.getEl(TOTAL_QUANTITY).should('have.text', '0');
 });
 
 cyIt.run('Wish List Page -> Move Item To Cart Button -> When user clicks Move Item To Cart Button button, the corresponding item should be moved to cart #priority-1-working #e2e-working', () => {
@@ -31,7 +33,8 @@ cyIt.run('Wish List Page -> Move Item To Cart Button -> When user clicks Move It
 
   cy.getEl(MOVE_ITEM_TO_CART).click()
   cy.getEl(COUNT).should('have.text', 0);
-  cy.get('@item').chain(cartItemShouldBeRemoved);
+  cy.get('@item').chain(wishlistItemShouldBeRemoved);
+  cy.getEl(TOTAL_QUANTITY).should('have.text', '1');
   cy.getEl(SHOPPING_CART).click().getLink().load().wait('@route');
   cy.get('@item').chain(ShoppingCartItemDetailTest);
 });

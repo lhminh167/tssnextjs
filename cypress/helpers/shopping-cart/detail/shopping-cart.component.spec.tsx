@@ -2,7 +2,7 @@ import { defaultPaginationRequest, PaginatedList, IResponse } from "../../../../
 import { encodeAttributes } from "../../../../modules/shared/helpers/product.helper";
 import { getLoginToken, setLoginToken } from "../../../../modules/shared/helpers/token.helper";
 import { IProduct } from "../../../../modules/shared/models/product.model";
-import { tag, ITEM, SHOPPING_CART, SUBMIT } from "../../../../modules/shared/tag/tag.model";
+import { tag, ITEM, SHOPPING_CART, SUBMIT, TOTAL_QUANTITY } from "../../../../modules/shared/tag/tag.model";
 import { IShopingCartItem } from "../../../../modules/shopping-cart/shopping-cart.model";
 import { addShoppingCartItem, getShoppingCart, removeShoppingCartItem } from "../../../../modules/shopping-cart/shopping-cart.service";
 import { cySetCustomerLoginToken } from "../../shared/helpers/auth.helper";
@@ -63,6 +63,7 @@ export function fromProductToCartItem(
 
 export function cartItemShouldBeRemoved(input: IShopingCartItem) {
     cy.shouldNotExist(tag(ITEM, input.itemId, SHOPPING_CART));
+    cy.getEl(TOTAL_QUANTITY).should('have.text', '0');
     return input;
 }
 

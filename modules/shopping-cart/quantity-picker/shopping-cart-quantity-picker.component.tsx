@@ -4,10 +4,12 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import QuantityPickerComponent from '../../shared/quantity-picker/quantity-picker.component';
+import { UPDATE_QUANTITY } from '../../shared/tag/tag.model';
 import { IShopingCartItem } from '../shopping-cart.model';
 import { updateShoppingCartItem } from '../shopping-cart.service';
-import { UPDATE_QUANTITY } from '../../shared/tag/tag.model';
+import { shoppingCartItemCountSlice } from '../shopping-cart.slice';
 
 interface IProps {
   data: IShopingCartItem;
@@ -25,9 +27,11 @@ function ShoppingCartQuantityPickerComponent({
 }: IProps) {
   const classes = useStyles({});
   const [state, setState] = useState(data.quantity);
+  const dispatch = useDispatch();
 
-  function updateItem() {
-    updateShoppingCartItem({ ...data, quantity: state })
+  async function updateItem() {
+    await updateShoppingCartItem({ ...data, quantity: state });
+    if (data.buyNow) dispatch(shoppingCartItemCountSlice.actions.getTotalQuantityPending());
   }
 
   return (

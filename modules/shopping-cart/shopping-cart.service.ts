@@ -1,5 +1,5 @@
 import querystring from 'query-string';
-import { PaginationRequest } from '../shared/crud/crud.model';
+import { IResponse, PaginationRequest } from '../shared/crud/crud.model';
 import { get, post, put, remove } from '../shared/crud/crud.service';
 import { IShopingCartItem, ShopingCartGetRequest, apiShoppingCartUrl } from './shopping-cart.model';
 
@@ -11,7 +11,7 @@ export async function addShoppingCartItem(item: IShopingCartItem) {
     return await post(apiShoppingCartUrl.baseUrl, item);
 }
 
-export async function updateShoppingCartItem(item: IShopingCartItem) {
+export async function updateShoppingCartItem(item: IShopingCartItem): Promise<IResponse<IShopingCartItem>> {
     return await put(apiShoppingCartUrl.baseUrl, item.itemId, item);
 }
 

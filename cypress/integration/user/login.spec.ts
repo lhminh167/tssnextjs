@@ -1,7 +1,7 @@
 import { customerUrl } from "../../../modules/customer/customer.model";
 import { createCustomer, login } from "../../../modules/customer/customer.service";
 import { getValidLoginToken, removeLoginToken, setLoginToken } from "../../../modules/shared/helpers/token.helper";
-import { DESCRIPTION, FORGOT_PASSWORD, REGISTER_LINK, SUBMIT, YES } from "../../../modules/shared/tag/tag.model";
+import { DESCRIPTION, FORGOT_PASSWORD, REGISTER_LINK, SUBMIT, TOTAL_QUANTITY, YES } from "../../../modules/shared/tag/tag.model";
 import { apiShoppingCartUrl, shoppingCartUrl } from "../../../modules/shopping-cart/shopping-cart.model";
 import { addShoppingCartItem } from "../../../modules/shopping-cart/shopping-cart.service";
 import { loginTextFields, typeLogin } from "../../helpers/customer/login/login.component.spec";
@@ -12,16 +12,18 @@ import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navba
 import { ShoppingCartItemDetailTest } from "../../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { fromProductToCartItem } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Login Page -> Login -> When not-logged-in user accesses Login Page, then user can log in #priority-1-working #e2e-working #visual-working', () => {
+cyIt.run('Login Page -> Login -> When not-logged-in user accesses Login Page, then user can log in and be redirected to return URL #priority-1-working #e2e-working #visual-working', () => {
     const user = cyGetExistingCustomer();
     cy
-        .visit(customerUrl.login())
+        .wrap(user.customerId).chain(customerUrl.detail).its('as').as('returnUrl')
+        .chain(customerUrl.login)
+        .chain(cy.visit)
     cy
         .clearTextFields(loginTextFields).takeScreenShot('Login Page')
         .wrap(user).pipe(typeLogin)
     cy
         .getEl(SUBMIT).click()
-        .wrap('/').load()
+        .get('@returnUrl').load()
         .wrap(user).chain(UserPopoverDetailTest).wait(4000).takeScreenShot('User Detail Popover')
 });
 
@@ -81,6 +83,8 @@ cyIt.run('Login Page -> Anonymous Shopping Cart -> Given anonymous user has some
             itemId: res[0].itemId,
         }))
         .chain(ShoppingCartItemDetailTest);
+    cy
+        .getEl(TOTAL_QUANTITY).should('have.text', 2);
 });
 
 
@@ -108,6 +112,8 @@ cyIt.run('Login Page -> Anonymous Shopping Cart -> Given an anonymous user has a
             quantity: 4,
         }))
         .chain(ShoppingCartItemDetailTest);
+    cy
+        .getEl(TOTAL_QUANTITY).should('have.text', 4);
 });
 
 

@@ -2,7 +2,7 @@ import { apiCustomerUrl, customerUrl, ICreateCustomerRequest } from "../../../mo
 import { createCustomer } from "../../../modules/customer/customer.service";
 import { HttpMethod } from "../../../modules/shared/crud/crud.model";
 import { setLoginToken } from "../../../modules/shared/helpers/token.helper";
-import { DESCRIPTION, LOGIN_LINK, SUBMIT } from "../../../modules/shared/tag/tag.model";
+import { DESCRIPTION, LOGIN_LINK, SUBMIT, TOTAL_QUANTITY } from "../../../modules/shared/tag/tag.model";
 import { apiShoppingCartUrl, shoppingCartUrl } from "../../../modules/shopping-cart/shopping-cart.model";
 import { addShoppingCartItem } from "../../../modules/shopping-cart/shopping-cart.service";
 import { registerTextFields, typeRegister } from "../../helpers/customer/create/create-customer.component.spec";
@@ -14,18 +14,20 @@ import { UserPopoverDetailTest } from "../../helpers/shared/navbar/desktop-navba
 import { ShoppingCartItemDetailTest } from "../../helpers/shopping-cart/detail/shopping-cart-item.component.spec";
 import { fromProductToCartItem } from "../../helpers/shopping-cart/detail/shopping-cart.component.spec";
 
-cyIt.run('Register Page -> Register -> When not-logged-in user accesses Register Page, then user can register a new account #priority-1-working #e2e-working #visual-working', () => {
+cyIt.run('Register Page -> Register -> When not-logged-in user accesses Register Page, then user can register a new account and be redirected to return URL #priority-1-working #e2e-working #visual-working', () => {
     const user = mockRandomAccount();
     cy
         .server().route({ url: apiCustomerUrl.register, method: HttpMethod.POST }).as('route')
-        .visit(customerUrl.register())
+        .wrap(user.customerId).chain(customerUrl.detail).its('as').as('returnUrl')
+        .chain(customerUrl.register)
+        .chain(cy.visit)
         .clearTextFields(registerTextFields).takeScreenShot('Register Page')
         .wrap(user)
         .chain(typeRegister)
     cy
         .getEl(SUBMIT).click()
         .wait('@route').its('responseBody.content.customer').as('user')
-        .wrap('/').load();
+        .get('@returnUrl').load();
 
     cy
         .get('@user').its('customerId').chain(customerUrl.detail).its('as')
@@ -81,6 +83,8 @@ cyIt.run('Register Page -> Anonymous Shopping Cart -> Given anonymous user has s
             itemId: res[0].itemId,
         }))
         .chain(ShoppingCartItemDetailTest);
+    cy
+        .getEl(TOTAL_QUANTITY).should('have.text', 2);
 });
 
 cyIt.run('Register Page -> Anonymous Wish List -> Given anonymous user has some items in wish list, when user registers, then anonymous wish list items are added to the account user used to log in #priority-2-working #e2e-working', () => {

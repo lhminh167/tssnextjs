@@ -23,7 +23,7 @@ cyIt.run('Shopping Cart Page -> Remove Item Button -> When user clicks Remove It
     .its('responseBody.content').pipe(cartItemShouldBeRemoved)
 });
 
-cyIt.run('Shopping Cart Page -> Add To Wishlist Button -> When user clicks Add To Wishlist button, the corresponding item should be moved to wish list #priority-1-working #e2e-working', () => {
+cyIt.run('Shopping Cart Page -> Save For Later Button -> When user clicks Save For Later button, the corresponding item should be moved to wish list #priority-1-working #e2e-working', () => {
   cy.server().route(apiShoppingCartUrl.baseUrl + '?**').as('route')
     .wrap(cyAddToCart(cyGetExistingProduct(), 1, true)).as('addResponse')
     .its('content.loginToken').chain(setLoginToken)
