@@ -40,7 +40,7 @@ export const horizontalGalleryTheme = createMuiTheme({
   }
 });
 
-export const usehorizontalGalleryStyles = makeStyles((theme: Theme) =>
+export const useHorizontalGalleryStyles = makeStyles((theme: Theme) =>
   createStyles({
     previous: {
       left: 0
@@ -90,7 +90,7 @@ export default function ProductHorizontalGallery({
   customTitle,
   galleryTestId
 }: Props) {
-  const classes = usehorizontalGalleryStyles({});
+  const classes = useHorizontalGalleryStyles({});
   const matches = isSmallWidth();
   const pageSize = fixedPageSize ? fixedPageSize : matches ? 4 : 2;
   const items = data.items.slice(0, pageSize).filter(e => e);
