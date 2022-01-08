@@ -43,19 +43,19 @@ export const horizontalGalleryTheme = createMuiTheme({
 export const useHorizontalGalleryStyles = makeStyles((theme: Theme) =>
   createStyles({
     previous: {
-      left: 0
+      left: 0,
     },
     next: {
-      right: 0
+      right: 0,
     },
     container: {
-      position: 'relative'
+      position: "relative",
     },
     gridList: {
-      width: '101%',
+      width: "101%",
       //   marginTop: theme.spacing(3),
       // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-      transform: 'translateZ(0)'
+      transform: "translateZ(0)",
     },
     gridListTile: {
       // boxShadow:
@@ -63,7 +63,7 @@ export const useHorizontalGalleryStyles = makeStyles((theme: Theme) =>
     },
     last: {
       // paddingRight: '0 !important'
-    }
+    },
   })
 );
 
@@ -88,77 +88,74 @@ export default function ProductHorizontalGallery({
   CardElement,
   fixedPageSize,
   customTitle,
-  galleryTestId
+  galleryTestId,
 }: Props) {
   const classes = useHorizontalGalleryStyles({});
   const matches = isSmallWidth();
   const pageSize = fixedPageSize ? fixedPageSize : matches ? 4 : 2;
-  const items = data.items.slice(0, pageSize).filter(e => e);
+  const items = data.items.slice(0, pageSize).filter((e) => e);
 
   useEffect(() => {
     if (pageSize > data.pageSize)
       output({
         pageIndex: 0,
-        pageSize
+        pageSize,
       });
   }, [pageSize]);
 
   const toPreviousPage = () => {
     output({
       pageIndex: data.pageIndex - 1,
-      pageSize
+      pageSize,
     });
   };
 
   const toNextPage = () => {
     output({
       pageIndex: data.pageIndex + 1,
-      pageSize
+      pageSize,
     });
   };
 
   return (
     <ThemeProvider theme={horizontalGalleryTheme}>
-      <Grid container
-        component='article'
-        data-cy={galleryTestId ?? GALLERY}
-      >
+      <Grid container component="article" data-cy={galleryTestId ?? GALLERY}>
         <GalleryHeaderComponent
           title={title}
           titleIcon={titleIcon}
           seeMore={seeMore}
           customTitle={customTitle}
         />
-        <Grid container item className={classes.container} alignItems='center'>
+        <Grid container item className={classes.container} alignItems="center">
           <Fab
             className={classes.previous}
             onClick={toPreviousPage}
             disabled={data.pageIndex === 0}
-            size='medium'
+            size="medium"
             data-cy={PREVIOUS}
           >
             <ArrowBackIosRoundedIcon />
           </Fab>
           <GridList
-            cellHeight={'auto'}
+            cellHeight={"auto"}
             cols={pageSize}
             className={classes.gridList}
-            component='div'
+            component="div"
           >
             {items.map((entry, index) => (
               <GridListTile
-                component='section'
+                component="section"
                 key={entry.productId}
                 classes={{
                   tile: classes.gridListTile,
-                  root: (index === items.length - 1 ? classes.last : '')
+                  root: index === items.length - 1 ? classes.last : "",
                 }}
               >
                 {CardElement ? (
                   <CardElement data={entry} />
                 ) : (
-                    <ProductCardComponent data={entry} />
-                  )}
+                  <ProductCardComponent data={entry} />
+                )}
               </GridListTile>
             ))}
           </GridList>
@@ -166,7 +163,7 @@ export default function ProductHorizontalGallery({
             className={classes.next}
             disabled={data.pageIndex >= Math.ceil(data.count / pageSize) - 1}
             onClick={toNextPage}
-            size='medium'
+            size="medium"
             data-cy={NEXT}
           >
             <ArrowForwardIosRoundedIcon />
