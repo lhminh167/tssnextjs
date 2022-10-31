@@ -1,5 +1,5 @@
 
-import { Container } from "@material-ui/core";
+import { Container } from "@mui/material";
 import { CustomerIndexMetadataComponent } from "../../modules/customer/index/customer-index-metadata.component";
 import CustomerIndexComponent from "../../modules/customer/index/customer-index.component";
 import { allowCustomerHoc } from "../../modules/shared/allow/allow-customer.component";

@@ -1,6 +1,6 @@
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Typography from '@material-ui/core/Typography';
-import { Color } from '@material-ui/lab';
+import DialogContentText from '@mui/material/DialogContentText';
+import Typography from '@mui/material/Typography';
+import { Color } from '@mui/lab';
 import * as Sentry from '@sentry/browser';
 import fetchIntercept from 'fetch-intercept';
 import React, { Fragment, useState } from 'react';

@@ -1,4 +1,4 @@
-import Container from "@material-ui/core/Container";
+import Container from "@mui/material/Container";
 // import LazyHydrate from "react-lazy-hydration";
 import BestSellingProductGalleryComponent from '../modules/product/best-selling/best-selling-product.component';
 import { getHomepageProducts } from '../modules/product/filter/product-filter.service';

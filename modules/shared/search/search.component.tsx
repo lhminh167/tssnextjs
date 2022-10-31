@@ -1,111 +1,118 @@
-import { IconButton } from '@material-ui/core';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import ClearIcon from '@material-ui/icons/Clear';
-import SearchIcon from '@material-ui/icons/Search';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { IProductSearchRequest, productUrl } from '../../product/filter/product-filter.model';
-import productFilterSlice from '../../product/filter/product-filter.slice';
-import { IRootState } from '../../root/root.model';
-import theme from '../layout/layout.theme';
-import { CLEAR, SEARCH_BOX } from '../tag/tag.model';
-import { goTo } from '../helpers/auth.helper';
+import ClearIcon from "@mui/icons-material/Clear";
+import SearchIcon from "@mui/icons-material/Search";
+import { adaptV4Theme, IconButton } from "@mui/material";
+import InputAdornment from "@mui/material/InputAdornment";
+import {
+  createTheme,
+  StyledEngineProvider,
+  Theme,
+  ThemeProvider,
+} from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  IProductSearchRequest,
+  productUrl,
+} from "../../product/filter/product-filter.model";
+import productFilterSlice from "../../product/filter/product-filter.slice";
+import { IRootState } from "../../root/root.model";
+import { goTo } from "../helpers/auth.helper";
+import theme from "../layout/layout.theme";
+import { CLEAR, SEARCH_BOX } from "../tag/tag.model";
 
-const searchTheme = createMuiTheme({
-    ...theme,
-    overrides: {
-        MuiOutlinedInput: {
-            notchedOutline: {
-                border: 'none',
-            },
-            root: {
-                background: '#fce4ec'
-            }
-        },
-        MuiIconButton: {
-            root: {
-                opacity: 0.5
-            }
-        }
-    },
-});
-
-interface IProps {
-    className: string;
-    fullWidth: boolean;
+declare module "@mui/styles/defaultTheme" {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
 }
 
-export default function SearchComponent({
-    className,
-    fullWidth
-}: IProps) {
-    const dispatch = useDispatch();
-    const choice = useSelector<IRootState, IProductSearchRequest>(
-        state => state.productFilter.choice
-    );
-    const [state, setState] = useState<string>(choice.keyword);
-    let typingTimeout = null;
+const searchTheme = createTheme(
+  adaptV4Theme({
+    ...theme,
+    overrides: {
+      MuiOutlinedInput: {
+        notchedOutline: {
+          border: "none",
+        },
+        root: {
+          background: "#fce4ec",
+        },
+      },
+      MuiIconButton: {
+        root: {
+          opacity: 0.5,
+        },
+      },
+    },
+  })
+);
 
-    const change = (e) => {
-        if (typingTimeout) clearTimeout(typingTimeout);
-        setState(e.target.value);
-        typingTimeout = setTimeout(() => {
-            changeKeyword(e.target.value);
-        }, 1000);
-    };
+interface IProps {
+  className: string;
+  fullWidth: boolean;
+}
 
-    const submit = (e) => {
-        if (e.key !== 'Enter') return;
-        e.preventDefault();
-        changeKeyword(state);
-        goTo(productUrl.search({ ...choice, keyword: state }));
-    };
+export default function SearchComponent({ className, fullWidth }: IProps) {
+  const dispatch = useDispatch();
+  const choice = useSelector<IRootState, IProductSearchRequest>(
+    (state) => state.productFilter.choice
+  );
+  const [state, setState] = useState<string>(choice.keyword);
+  let typingTimeout: NodeJS.Timeout = null;
 
-    const clear = () => {
-        setState('');
-        changeKeyword('');
-    };
+  const change = (e) => {
+    if (typingTimeout) clearTimeout(typingTimeout);
+    setState(e.target.value);
+    typingTimeout = setTimeout(() => {
+      changeKeyword(e.target.value);
+    }, 1000);
+  };
 
-    function changeKeyword(input: string) {
-        dispatch(productFilterSlice.actions.changeKeyword(input));
-    }
+  const submit = (e) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    changeKeyword(state);
+    goTo(productUrl.search({ ...choice, keyword: state }), "", "");
+  };
 
-    return (
-        <ThemeProvider theme={searchTheme}>
-            <TextField
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position='start'>
-                            <SearchIcon
-                                color='primary'
-                            />
-                        </InputAdornment>
-                    ),
-                    endAdornment: state ? (
-                        <InputAdornment position='end'>
-                            <IconButton
-                                onClick={clear}
-                                size='small'
-                                data-cy={CLEAR}
-                            >
-                                <ClearIcon
-                                />
-                            </IconButton>
-                        </InputAdornment>
-                    ) : null,
-                }}
-                variant='outlined'
-                margin='dense'
-                fullWidth={fullWidth}
-                className={className}
-                onChange={change}
-                value={state}
-                onKeyPress={submit}
-                placeholder='Search for products...'
-                data-cy={SEARCH_BOX}
-            />
-        </ThemeProvider>
-    );
+  const clear = () => {
+    setState("");
+    changeKeyword("");
+  };
+
+  function changeKeyword(input: string) {
+    dispatch(productFilterSlice.actions.changeKeyword(input));
+  }
+
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={searchTheme}>
+        <TextField
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon color="primary" />
+              </InputAdornment>
+            ),
+            endAdornment: state ? (
+              <InputAdornment position="end">
+                <IconButton onClick={clear} size="small" data-cy={CLEAR}>
+                  <ClearIcon />
+                </IconButton>
+              </InputAdornment>
+            ) : null,
+          }}
+          variant="outlined"
+          margin="dense"
+          fullWidth={fullWidth}
+          className={className}
+          onChange={change}
+          value={state}
+          onKeyPress={submit}
+          placeholder="Search for products..."
+          data-cy={SEARCH_BOX}
+        />
+      </ThemeProvider>
+    </StyledEngineProvider>
+  );
 }

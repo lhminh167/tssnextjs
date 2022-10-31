@@ -1,289 +1,292 @@
-import { Avatar, List, ListItem, ListItemSecondaryAction, ListItemText, ListSubheader, Tooltip } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Badge from '@material-ui/core/Badge';
-import IconButton from '@material-ui/core/IconButton';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
-import Link from 'next/link';
-import React, { Fragment } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Customer } from '../../customer/customer.model';
-import { currentUserSlice } from '../../customer/customer.slice';
-import { IRootState } from '../../root/root.model';
-import { shoppingCartItemCountSelector } from '../../shopping-cart/shopping-cart.slice';
-import BrandComponent from '../brand/brand.component';
-import { toNumber } from '../helpers/auth.helper';
-import { getUserAvatar } from '../helpers/string.helper';
-import { themeColor } from '../layout/layout.theme';
-import SearchComponent from '../search/search.component';
-import { ADMIN, DEPARTMENT, LOGIN, LOGOUT, ORDER, REGISTER, SEARCH, SHOPPING_CART, TOTAL_QUANTITY, WISHLIST, USER, tag, ROLE, EMAIL, NAME, LINK } from '../tag/tag.model';
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import {
+  Avatar,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  ListSubheader,
+  Tooltip,
+} from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Badge from "@mui/material/Badge";
+import IconButton from "@mui/material/IconButton";
+import { Theme } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { makeStyles } from "@mui/styles";
+import createStyles from "@mui/styles/createStyles";
+import Link from "next/link";
+import { Fragment } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Customer } from "../../customer/customer.model";
+import { currentUserSlice } from "../../customer/customer.slice";
+import { IRootState } from "../../root/root.model";
+import { shoppingCartItemCountSelector } from "../../shopping-cart/shopping-cart.slice";
+import BrandComponent from "../brand/brand.component";
+import { toNumber } from "../helpers/auth.helper";
+import { getUserAvatar } from "../helpers/string.helper";
+import { themeColor } from "../layout/layout.theme";
+import SearchComponent from "../search/search.component";
+import {
+  ADMIN,
+  DEPARTMENT,
+  EMAIL,
+  LINK,
+  LOGIN,
+  LOGOUT,
+  NAME,
+  ORDER,
+  REGISTER,
+  ROLE,
+  SEARCH,
+  SHOPPING_CART,
+  tag,
+  TOTAL_QUANTITY,
+  USER,
+  WISHLIST,
+} from "../tag/tag.model";
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        sectionDesktop: {
-            display: 'flex'
-        },
-        grow: {
-            flexGrow: 1
-        },
-        seperator: {
-            marginLeft: theme.spacing(2)
-        },
-        avatar: {
-            width: theme.spacing(3),
-            height: theme.spacing(3),
-            background: themeColor.primary
-        },
-        tooltip: {
-            minWidth: '300px',
-        },
-
-    })
+  createStyles({
+    sectionDesktop: {
+      display: "flex",
+    },
+    grow: {
+      flexGrow: 1,
+    },
+    seperator: {
+      marginLeft: theme.spacing(2),
+    },
+    avatar: {
+      width: theme.spacing(3),
+      height: theme.spacing(3),
+      background: themeColor.primary,
+    },
+    tooltip: {
+      minWidth: "300px",
+    },
+  })
 );
 
 const NotLoggedInComponent = () => {
-    const classes = useStyles({});
-    return (
-        <Fragment>
-            <Link href='/user/login' as='/user/login' passHref>
-                <Typography
-                    variant='subtitle2'
-                    component='a'
-                    color='primary'
-                    className={classes.seperator}
-                    data-cy={LOGIN}
-                >
-                    Login
-                </Typography>
-            </Link>
-            <Link href='/user/register' as='/user/register' passHref>
-                <Typography
-                    variant='subtitle2'
-                    component='a'
-                    color='primary'
-                    className={classes.seperator}
-                    data-cy={REGISTER}
-                >
-                    Register
-                </Typography>
-            </Link>
-        </Fragment>
-    );
+  const classes = useStyles({});
+  return (
+    <Fragment>
+      <Link href="/user/login" as="/user/login" passHref>
+        <Typography
+          variant="subtitle2"
+          component="a"
+          color="primary"
+          className={classes.seperator}
+          data-cy={LOGIN}
+        >
+          Login
+        </Typography>
+      </Link>
+      <Link href="/user/register" as="/user/register" passHref>
+        <Typography
+          variant="subtitle2"
+          component="a"
+          color="primary"
+          className={classes.seperator}
+          data-cy={REGISTER}
+        >
+          Register
+        </Typography>
+      </Link>
+    </Fragment>
+  );
 };
 
 const LoggedInComponent = () => {
-    const classes = useStyles({});
-    const dispatch = useDispatch();
-    const isAdmin = useSelector<IRootState, boolean>(
-        state => state.currentUser.data.role === 'Admin'
-    );
-    const userId = useSelector<IRootState, number>(
-        state => toNumber(state.currentUser.data.customerId)
-    );
+  const classes = useStyles({});
+  const dispatch = useDispatch();
+  const isAdmin = useSelector<IRootState, boolean>(
+    (state) => state.currentUser.data.role === "Admin"
+  );
+  const userId = useSelector<IRootState, number>((state) =>
+    toNumber(state.currentUser.data.customerId)
+  );
 
-    function logout() {
-        dispatch(currentUserSlice.actions.logout());
-    }
+  function logout() {
+    dispatch(currentUserSlice.actions.logout());
+  }
 
-    return (
-        <Fragment>
-            {
-                isAdmin &&
-                <Link href='/admin' as='/admin' passHref>
-                    <Typography
-                        variant='subtitle2'
-                        component='a'
-                        color='primary'
-                        className={classes.seperator}
-                        data-cy={ADMIN}
-                    >
-                        Admin
-                    </Typography>
-                </Link>
-            }
-            <Link href='/order' as='/order' passHref>
-                <Typography
-                    variant='subtitle2'
-                    component='a'
-                    color='primary'
-                    className={classes.seperator}
-                    data-cy={ORDER}
-                >
-                    Orders
-            </Typography>
-            </Link>
-            <Typography
-                variant='subtitle2'
-                component='a'
-                color='primary'
-                className={classes.seperator}
-                onClick={logout}
-                data-cy={LOGOUT}
-            >
-                Logout
-            </Typography>
-        </Fragment>
-    );
+  return (
+    <Fragment>
+      {isAdmin && (
+        <Link href="/admin" as="/admin" passHref>
+          <Typography
+            variant="subtitle2"
+            component="a"
+            color="primary"
+            className={classes.seperator}
+            data-cy={ADMIN}
+          >
+            Admin
+          </Typography>
+        </Link>
+      )}
+      <Link href="/order" as="/order" passHref>
+        <Typography
+          variant="subtitle2"
+          component="a"
+          color="primary"
+          className={classes.seperator}
+          data-cy={ORDER}
+        >
+          Orders
+        </Typography>
+      </Link>
+      <Typography
+        variant="subtitle2"
+        component="a"
+        color="primary"
+        className={classes.seperator}
+        onClick={logout}
+        data-cy={LOGOUT}
+      >
+        Logout
+      </Typography>
+    </Fragment>
+  );
 };
 
 export default function DesktopNavbarComponent() {
-    const classes = useStyles({});
-    const isLoggedIn = useSelector<IRootState, boolean>(
-        state => toNumber(state.currentUser.data.customerId) > 0
-    );
-    const itemCount = useSelector<IRootState, number>(shoppingCartItemCountSelector);
-    const currentUser = useSelector<IRootState, Customer>(
-        state => state.currentUser.data
-    );
+  const classes = useStyles({});
+  const isLoggedIn = useSelector<IRootState, boolean>(
+    (state) => toNumber(state.currentUser.data.customerId) > 0
+  );
+  const itemCount = useSelector<IRootState, number>(
+    shoppingCartItemCountSelector
+  );
+  const currentUser = useSelector<IRootState, Customer>(
+    (state) => state.currentUser.data
+  );
 
-    return (
-        <AppBar className={classes.sectionDesktop} color='default'>
-            <Toolbar>
-                <BrandComponent />
-                <Link href='/product' as='/product' passHref>
-                    <Typography
-                        variant='subtitle2'
-                        component='a'
-                        color='primary'
-                        className={classes.seperator}
-                        title={`Search for products on ${process.env.SITE_NAME}`}
-                        data-cy={SEARCH}
+  return (
+    <AppBar className={classes.sectionDesktop} color="default">
+      <Toolbar>
+        <BrandComponent />
+        <Link href="/product" as="/product" passHref>
+          <Typography
+            variant="subtitle2"
+            component="a"
+            color="primary"
+            className={classes.seperator}
+            title={`Search for products on ${process.env.NEXT_PUBLIC_SITE_NAME}`}
+            data-cy={SEARCH}
+          >
+            Search
+          </Typography>
+        </Link>
+        <Link href="/department" as="/department" passHref>
+          <Typography
+            variant="subtitle2"
+            component="a"
+            color="primary"
+            className={classes.seperator}
+            title="List of Departments and Categories"
+            data-cy={DEPARTMENT}
+          >
+            Departments
+          </Typography>
+        </Link>
+        <Link href="/wish-list" as="/wish-list" passHref>
+          <Typography
+            variant="subtitle2"
+            component="a"
+            color="primary"
+            className={classes.seperator}
+            data-cy={WISHLIST}
+          >
+            Wishlist
+          </Typography>
+        </Link>
+        {isLoggedIn ? <LoggedInComponent /> : <NotLoggedInComponent />}
+        <div className={classes.grow} />
+        <SearchComponent className={""} fullWidth={false} />
+        <Link href="/shopping-cart" as="/shopping-cart" passHref>
+          <IconButton
+            component="a"
+            className={classes.seperator}
+            title="Shopping Cart"
+            data-cy={SHOPPING_CART}
+            size="large"
+          >
+            <Badge
+              badgeContent={itemCount ?? 0}
+              color="primary"
+              data-cy={TOTAL_QUANTITY}
+            >
+              <ShoppingCartOutlinedIcon color="primary" />
+            </Badge>
+          </IconButton>
+        </Link>
+        {isLoggedIn && (
+          <Link
+            href={{
+              pathname: "/user",
+            }}
+            as={`/user`}
+            passHref
+          >
+            <IconButton
+              component="a"
+              title="Customer Area"
+              className={classes.seperator}
+              data-cy={USER + LINK}
+              size="large"
+            >
+              <Tooltip
+                classes={{ tooltip: classes.tooltip }}
+                title={
+                  <Fragment>
+                    <List
+                      subheader={
+                        <ListSubheader color="primary">
+                          Account Details
+                        </ListSubheader>
+                      }
                     >
-                        Search
-                    </Typography>
-                </Link>
-                <Link href='/department' as='/department' passHref>
-                    <Typography
-                        variant='subtitle2'
-                        component='a'
-                        color='primary'
-                        className={classes.seperator}
-                        title='List of Departments and Categories'
-                        data-cy={DEPARTMENT}
-                    >
-                        Departments
-                    </Typography>
-                </Link>
-                <Link href='/wish-list' as='/wish-list' passHref>
-                    <Typography
-                        variant='subtitle2'
-                        component='a'
-                        color='primary'
-                        className={classes.seperator}
-                        data-cy={WISHLIST}
-                    >
-                        Wishlist
-                    </Typography>
-                </Link>
-                {isLoggedIn ? <LoggedInComponent /> : <NotLoggedInComponent />}
-                <div
-                    className={classes.grow}
-                />
-                <SearchComponent className={''} fullWidth={false} />
-                <Link
-                    href='/shopping-cart'
-                    as='/shopping-cart'
-                    passHref
-                >
-                    <IconButton
-                        component='a'
-                        className={classes.seperator}
-                        title='Shopping Cart'
-                        data-cy={SHOPPING_CART}
-                    >
-                        <Badge
-                            badgeContent={itemCount ?? 0}
-                            color='primary'
-                            data-cy={TOTAL_QUANTITY}
-                        >
-                            <ShoppingCartOutlinedIcon
-                                color='primary'
-                            />
-                        </Badge>
-                    </IconButton>
-                </Link>
-                {
-                    isLoggedIn &&
-                    <Link
-                        href={{
-                            pathname: '/user'
-                        }}
-                        as={`/user`}
-                        passHref
-                    >
-                        <IconButton
-                            component='a'
-                            title='Customer Area'
-                            className={classes.seperator}
-                            data-cy={USER + LINK}
-                        >
-                            <Tooltip
-                                classes={{ tooltip: classes.tooltip }}
-                                title={
-                                    <Fragment>
-                                        <List
-                                            subheader={
-                                                <ListSubheader
-                                                    color='primary'
-                                                >
-                                                    Account Details
-                                                </ListSubheader>
-                                            }
-                                        >
-                                            <ListItem>
-                                                <ListItemText
-                                                    primary='Name:'
-                                                />
-                                                <ListItemSecondaryAction>
-                                                    <Typography
-                                                        data-cy={tag(NAME, '', USER)}
-                                                    >
-                                                        {currentUser.name}
-                                                    </Typography>
-                                                </ListItemSecondaryAction>
-                                            </ListItem>
-                                            <ListItem>
-                                                <ListItemText
-                                                    primary='Email:'
-                                                />
-                                                <ListItemSecondaryAction>
-                                                    <Typography
-                                                        data-cy={tag(EMAIL, '', USER)}
-                                                    >
-                                                        {currentUser.email}
-                                                    </Typography>
-                                                </ListItemSecondaryAction>
-                                            </ListItem>
+                      <ListItem>
+                        <ListItemText primary="Name:" />
+                        <ListItemSecondaryAction>
+                          <Typography data-cy={tag(NAME, "", USER)}>
+                            {currentUser.name}
+                          </Typography>
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                      <ListItem>
+                        <ListItemText primary="Email:" />
+                        <ListItemSecondaryAction>
+                          <Typography data-cy={tag(EMAIL, "", USER)}>
+                            {currentUser.email}
+                          </Typography>
+                        </ListItemSecondaryAction>
+                      </ListItem>
 
-                                            <ListItem>
-                                                <ListItemText
-                                                    primary='Role:'
-                                                />
-                                                <ListItemSecondaryAction>
-                                                    <Typography
-                                                        data-cy={tag(ROLE, '', USER)}
-                                                    >
-                                                        {currentUser.role}
-                                                    </Typography>
-                                                </ListItemSecondaryAction>
-                                            </ListItem>
-                                        </List>
-                                    </Fragment>
-                                }
-                            >
-                                <Avatar
-                                    className={classes.avatar}
-                                    data-cy={USER}
-                                >
-                                    {getUserAvatar(currentUser.name)}
-                                </Avatar>
-                            </Tooltip>
-                        </IconButton>
-                    </Link>
+                      <ListItem>
+                        <ListItemText primary="Role:" />
+                        <ListItemSecondaryAction>
+                          <Typography data-cy={tag(ROLE, "", USER)}>
+                            {currentUser.role}
+                          </Typography>
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    </List>
+                  </Fragment>
                 }
-            </Toolbar>
-        </AppBar>
-    );
-};
+              >
+                <Avatar className={classes.avatar} data-cy={USER}>
+                  {getUserAvatar(currentUser.name)}
+                </Avatar>
+              </Tooltip>
+            </IconButton>
+          </Link>
+        )}
+      </Toolbar>
+    </AppBar>
+  );
+}

@@ -1,25 +1,25 @@
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import { Grid, IconButton, Theme } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import createStyles from "@mui/styles/createStyles";
+import { Fragment, useEffect, useState } from "react";
 import {
-  createStyles,
-  Grid,
-  IconButton,
-  makeStyles,
-  Theme
-} from '@material-ui/core';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import { Fragment, useEffect, useState } from 'react';
-import { PaginatedList } from '../crud/crud.model';
-import { IProduct } from '../models/product.model';
-import ProductHorizontalGallery from '../product-horizontal-gallery/product-horizontal-gallery.component';
-import ErrorBoundary from '../error-boundary/error-boundary.component';
-import { DOT } from '../tag/tag.model';
+  defaultPaginationRequest,
+  PaginatedList,
+  PaginationRequest,
+} from "../crud/crud.model";
+import ErrorBoundary from "../error-boundary/error-boundary.component";
+import { IProduct } from "../models/product.model";
+import ProductHorizontalGallery from "../product-horizontal-gallery/product-horizontal-gallery.component";
+import { DOT } from "../tag/tag.model";
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     dots: {
-      position: 'absolute',
+      position: "absolute",
       bottom: 0,
-      listStyle: 'none'
-    }
+      listStyle: "none",
+    },
   })
 );
 
@@ -34,7 +34,7 @@ interface Props {
 export default function ProductCarouselComponent({
   data,
   autoplay,
-  card
+  card,
 }: Props) {
   const classes = useStyles({});
 
@@ -43,7 +43,7 @@ export default function ProductCarouselComponent({
     items: [data.items[0]],
     pageSize: 1,
     totalPages: 1,
-    count: 8
+    count: 8,
   });
 
   useEffect(() => {
@@ -55,18 +55,18 @@ export default function ProductCarouselComponent({
       setState({
         ...state,
         items: [data.items[pageIndex]],
-        pageIndex
+        pageIndex,
       });
     }, autoplay);
 
     return () => clearInterval(interval);
   }, [state.pageIndex]);
 
-  function change({ pageIndex, pageSize }) {
+  function change({ pageIndex, pageSize }: PaginationRequest) {
     setState({
       ...state,
       items: [data.items[pageIndex]],
-      pageIndex
+      pageIndex,
     });
   }
 
@@ -86,28 +86,27 @@ export default function ProductCarouselComponent({
         container
         item
         xs={12}
-        direction='row'
-        justify='center'
+        direction="row"
+        justifyContent="center"
         className={classes.dots}
-        component='ul'
+        component="ul"
       >
         {data.items.map((entry, index) => (
-          <Grid item key={entry.productId}
-            component='li'
-          >
+          <Grid item key={entry.productId} component="li">
             <IconButton
-              size='small'
+              size="small"
               onClick={() =>
                 change({
+                  ...defaultPaginationRequest,
                   pageIndex: index,
-                  pageSize: 1
+                  pageSize: 1,
                 })
               }
               data-cy={DOT}
             >
               <FiberManualRecordIcon
-                fontSize='inherit'
-                color={state.pageIndex === index ? 'primary' : 'inherit'}
+                fontSize="inherit"
+                color={state.pageIndex === index ? "primary" : "inherit"}
               />
             </IconButton>
           </Grid>

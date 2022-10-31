@@ -1,4 +1,4 @@
-import Drawer from '@material-ui/core/Drawer';
+import Drawer from '@mui/material/Drawer';
 import React from 'react';
 import SideBarContentComponent from './sidebar-content.component';
 

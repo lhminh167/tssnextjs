@@ -1,4 +1,4 @@
-import { Container } from "@material-ui/core";
+import { Container } from "@mui/material";
 import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
 import CustomerListComponent from "../../modules/customer/list/customer-list.component";
 import { allowAdminHoc } from "../../modules/shared/allow/allow-admin.component";

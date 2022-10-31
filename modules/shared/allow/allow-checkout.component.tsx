@@ -6,18 +6,17 @@ import { goTo, isCustomer } from "../helpers/auth.helper";
 import { allowHoc } from "./allow.component";
 
 function allowCheckout(): boolean {
-    let allowed = isCustomer();
+  let allowed = isCustomer();
 
+  if (!allowed) goTo(customerUrl.login(), Router.pathname, "");
 
-    if (!allowed) goTo(customerUrl.login(), Router.pathname);
+  const count = shoppingCartItemCountSelector(getState());
+  allowed = count > 0;
+  if (!allowed) goTo("/shopping-cart", "", "");
 
-    const count = shoppingCartItemCountSelector(getState());
-    allowed = count > 0;
-    if (!allowed) goTo('/shopping-cart');
-
-    return allowed;
+  return allowed;
 }
 
 export function allowCheckoutHoc(WrappedComponent) {
-    return allowHoc(WrappedComponent, allowCheckout);
+  return allowHoc(WrappedComponent, allowCheckout);
 }

@@ -1,7 +1,5 @@
-import { useMediaQuery } from '@material-ui/core';
-import { createMuiTheme, Theme } from '@material-ui/core/styles';
-import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
-import { CreateCSSProperties } from '@material-ui/core/styles/withStyles';
+import { useMediaQuery, adaptV4Theme } from '@mui/material';
+import { createTheme, Theme, Breakpoint, CreateCSSProperties } from '@mui/material/styles';
 import { ADDRESS_1, ADDRESS_2, CITY, COUNT, COUNTRY, DATETIME, DAY_PHONE, DESCRIPTION, DISCOUNTED_PRICE, EMAIL, EVE_PHONE, ID, MOB_PHONE, NAME, POSTALCODE, PRICE, REGION, ROLE, STATUS, USER } from '../tag/tag.model';
 
 /**
@@ -32,7 +30,7 @@ export const themeColor = {
 
 export const boxShadow: string = '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)';
 
-const theme: Theme = createMuiTheme({
+const theme: Theme = createTheme(adaptV4Theme({
     palette: {
         primary: {
             main: themeColor.primary
@@ -74,7 +72,7 @@ const theme: Theme = createMuiTheme({
             }
         },
     }
-});
+}));
 
 function percyText(tags: string[]) {
     const result = tags.map(e => `[class*="MuiTypography-root"][data-cy*="${e}" i]`).join(', ');

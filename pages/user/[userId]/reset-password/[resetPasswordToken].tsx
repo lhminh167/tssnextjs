@@ -1,28 +1,24 @@
-import Container from '@material-ui/core/Container'; import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import ResetPasswordComponent from '../../../../modules/customer/reset-password/reset-password.component';
-import ErrorBoundary from '../../../../modules/shared/error-boundary/error-boundary.component';
-import { ResetPasswordMetadataComponent } from '../../../../modules/customer/reset-password/reset-password-metadata.component';
+import Container from "@mui/material/Container";
+import { makeStyles } from "@mui/styles";
+import { ResetPasswordMetadataComponent } from "../../../../modules/customer/reset-password/reset-password-metadata.component";
+import ResetPasswordComponent from "../../../../modules/customer/reset-password/reset-password.component";
+import ErrorBoundary from "../../../../modules/shared/error-boundary/error-boundary.component";
 
-const useStyles = makeStyles(theme => ({
-}));
+const useStyles = makeStyles((theme) => ({}));
 
-interface Props {
-}
+interface Props {}
 
-export default function ResetPasswordPage({
+export default function ResetPasswordPage({}: Props) {
+  const classes = useStyles({});
 
-}: Props) {
-    const classes = useStyles({});
-
-    return (
-        <Container>
-            <ErrorBoundary>
-                <ResetPasswordComponent />
-            </ErrorBoundary>
-            <ErrorBoundary>
-                <ResetPasswordMetadataComponent />
-            </ErrorBoundary>
-        </Container >
-    );
+  return (
+    <Container>
+      <ErrorBoundary>
+        <ResetPasswordComponent />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <ResetPasswordMetadataComponent />
+      </ErrorBoundary>
+    </Container>
+  );
 }

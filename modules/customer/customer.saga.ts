@@ -1,12 +1,15 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
-import { removeLoginToken, setLoginToken } from '../shared/helpers/token.helper';
-import { shoppingCartItemCountSlice } from '../shopping-cart/shopping-cart.slice';
-import { getCustomer, login, createCustomer } from './customer.service';
-import { currentUserSlice } from './customer.slice';
-import Router from 'next/router';
-import { goTo, backToPreviousPage } from '../shared/helpers/auth.helper';
+import { PayloadAction } from "@reduxjs/toolkit";
+import { call, put, takeLatest } from "redux-saga/effects";
+import { backToPreviousPage, goTo } from "../shared/helpers/auth.helper";
+import {
+  removeLoginToken,
+  setLoginToken,
+} from "../shared/helpers/token.helper";
+import { shoppingCartItemCountSlice } from "../shopping-cart/shopping-cart.slice";
+import { createCustomer, getCustomer, login } from "./customer.service";
+import { currentUserSlice } from "./customer.slice";
 
-function* loginWorker(action) {
+function* loginWorker(action: PayloadAction<any>): any {
   const response = yield call(login, action.payload);
 
   if (response.status >= 300) {
@@ -20,12 +23,12 @@ function* loginWorker(action) {
   backToPreviousPage();
 }
 
-function logoutWorker(action) {
+function logoutWorker(action: PayloadAction<any>): any {
   removeLoginToken();
-  goTo(action.payload);
+  goTo(action.payload, "", "");
 }
 
-function* createCustomerWorker(action) {
+function* createCustomerWorker(action: PayloadAction<any>): any {
   const response = yield call(createCustomer, action.payload);
 
   if (response.status >= 300) {
@@ -33,20 +36,22 @@ function* createCustomerWorker(action) {
     return;
   }
 
-  yield put(currentUserSlice.actions.createCustomerSucceeded(response.content.customer));
+  yield put(
+    currentUserSlice.actions.createCustomerSucceeded(response.content.customer)
+  );
   setLoginToken(response.content.loginToken);
   yield put(shoppingCartItemCountSlice.actions.getTotalQuantityPending());
   backToPreviousPage();
 }
 
-function* getCustomerWorker(action) {
+function* getCustomerWorker(action: PayloadAction<any>): any {
   const response = yield call(getCustomer, action.payload);
-  response.status < 300 ?
-    yield put(currentUserSlice.actions.getCustomerSucceeded(response.content)) :
-    yield put(currentUserSlice.actions.getCustomerFailed(response.title));
+  response.status < 300
+    ? yield put(currentUserSlice.actions.getCustomerSucceeded(response.content))
+    : yield put(currentUserSlice.actions.getCustomerFailed(response.title));
 }
 
-// function* deleteCustomerWorker(action) {
+// function* deleteCustomerWorker(action: PayloadAction<any>):any {
 //     yield put(mainLoader.actions.show());
 //     const { response, error } = yield call(deleteCustomer, action.payload)
 //     response ?
@@ -54,7 +59,7 @@ function* getCustomerWorker(action) {
 //         yield put(currentUserSlice.actions.deleteCustomerFailed(error));
 // }
 
-// function* updateCustomerWorker(action) {
+// function* updateCustomerWorker(action: PayloadAction<any>):any {
 //     yield put(mainLoader.actions.show());
 //     const { response, error } = yield call(updateCustomer, action.payload)
 //     response ?
@@ -74,6 +79,8 @@ export const customerWatchers = [
   takeLatest(currentUserSlice.actions.logout, logoutWorker),
   takeLatest(currentUserSlice.actions.loginPending, loginWorker),
   takeLatest(currentUserSlice.actions.getCustomerPending, getCustomerWorker),
-  takeLatest(currentUserSlice.actions.createCustomerPending, createCustomerWorker)
-
+  takeLatest(
+    currentUserSlice.actions.createCustomerPending,
+    createCustomerWorker
+  ),
 ];

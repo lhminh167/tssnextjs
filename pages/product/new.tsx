@@ -1,4 +1,4 @@
-import { Container } from "@material-ui/core";
+import { Container } from "@mui/material";
 import { CreateProductMetadataComponent } from "../../modules/product/create/create-product-metadata.component";
 import ErrorBoundary from "../../modules/shared/error-boundary/error-boundary.component";
 import { allowAdminHoc } from "../../modules/shared/allow/allow-admin.component";
