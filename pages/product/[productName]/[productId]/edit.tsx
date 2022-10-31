@@ -1,4 +1,4 @@
-import { Container } from "@material-ui/core";
+import { Container } from "@mui/material";
 import { getProduct } from "../../../../modules/product/detail/product-detail.service";
 import { EditProductMetadataComponent } from "../../../../modules/product/edit/edit-product-metadata.component";
 import EditProductComponent from "../../../../modules/product/edit/edit-product.component";

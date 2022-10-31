@@ -1,4 +1,4 @@
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 import { CreateOrderMetadataComponent } from '../../modules/order/create/create-order-metadata.component';
 import CreateOrderComponent from '../../modules/order/create/create-order.component';
 import ErrorBoundary from '../../modules/shared/error-boundary/error-boundary.component';

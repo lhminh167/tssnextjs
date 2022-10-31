@@ -1,101 +1,90 @@
-import { createStyles, Grid, makeStyles } from '@material-ui/core';
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import ActionButtonsComponent from '../../../shared/action-buttons/action-buttons.component';
-import { mb2, p, w100 } from '../../../shared/layout/layout.style';
-import { shoppingCartItemCountSlice } from '../../../shopping-cart/shopping-cart.slice';
-import { createOrder, createPayment } from '../../order.service';
+import { Grid } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import createStyles from "@mui/styles/createStyles";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { useDispatch } from "react-redux";
+import ActionButtonsComponent from "../../../shared/action-buttons/action-buttons.component";
+import { mb2, p, w100 } from "../../../shared/layout/layout.style";
+import { shoppingCartItemCountSlice } from "../../../shopping-cart/shopping-cart.slice";
+import { createOrder, createPayment } from "../../order.service";
 
-const useStyles = makeStyles(theme =>
-    createStyles({
-        w100: w100,
-        p: p,
-        mb2: mb2
-    })
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    w100: w100,
+    p: p,
+    mb2: mb2,
+  })
 );
 
 interface Props {
-    data: any
-    next: any;
-    back: any;
+  data: any;
+  next: any;
+  back: any;
 }
 
-export default function CreditCardComponent({
-    data,
-    next,
-    back
-}: Props) {
+export default function CreditCardComponent({ data, next, back }: Props) {
+  const classes = useStyles({});
+  const stripe = useStripe();
+  const elements = useElements();
+  const dispatch = useDispatch();
 
-    const classes = useStyles({});
-    const stripe = useStripe();
-    const elements = useElements();
-    const dispatch = useDispatch();
+  const submit = async (ev) => {
+    // Block native form submission.
+    ev.preventDefault();
 
-    const submit = async (ev) => {
-        // Block native form submission.
-        ev.preventDefault();
+    // Stripe.js has not loaded yet. Make sure to disable
+    // form submission until Stripe.js has loaded.
+    if (!stripe || !elements) return;
 
-        // Stripe.js has not loaded yet. Make sure to disable
-        // form submission until Stripe.js has loaded.
-        if (!stripe || !elements) return;
+    // Get a reference to a mounted CardElement. Elements knows how
+    // to find your CardElement because there can only ever be one of
+    // each type of element.
+    const cardElement = elements.getElement(CardElement);
 
-        // Get a reference to a mounted CardElement. Elements knows how
-        // to find your CardElement because there can only ever be one of
-        // each type of element.
-        const cardElement = elements.getElement(CardElement);
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card: cardElement,
+      billing_details: { name: "cardholderName.value" },
+    });
+    if (!paymentMethod) return;
 
-        const { error, paymentMethod } = await stripe.createPaymentMethod({
-            type: 'card',
-            card: cardElement,
-            billing_details: { name: 'cardholderName.value' }
-        });
-        if (!paymentMethod) return;
+    const paymentResponse = await createPayment({
+      ...data,
+      paymentMethodId: paymentMethod.id,
+    });
+    if (paymentResponse.status >= 300) return;
 
-        const paymentResponse = await createPayment({
-            ...data,
-            paymentMethodId: paymentMethod.id
-        });
-        if (paymentResponse.status >= 300) return;
+    if (paymentResponse.content.paymentStatus === "requires_action") {
+      const { error, paymentIntent } = await stripe.confirmCardPayment(
+        paymentResponse.content.paymentSecret
+      );
+      if (!paymentIntent) return;
+    }
 
-        if (paymentResponse.content.paymentStatus === 'requires_action') {
-            const { error, paymentIntent } = await stripe.confirmCardPayment(paymentResponse.content.paymentSecret);
-            if (!paymentIntent) return;
-        }
+    const orderResponse = await createOrder({
+      ...data,
+      paymentMethodId: paymentMethod.id,
+      paymentId: paymentResponse.content.paymentId,
+      paymentSecret: paymentResponse.content.paymentSecret,
+    });
+    if (orderResponse.status >= 300) return;
 
-        const orderResponse = await createOrder({
-            ...data,
-            paymentMethodId: paymentMethod.id,
-            paymentId: paymentResponse.content.paymentId,
-            paymentSecret: paymentResponse.content.paymentSecret
-        });
-        if (orderResponse.status >= 300) return;
+    dispatch(shoppingCartItemCountSlice.actions.change(0));
+    next(orderResponse.content.order);
+  };
 
-        dispatch(shoppingCartItemCountSlice.actions.change(0));
-        next(orderResponse.content.order);
-    };
-
-    return (
-        <form
-            className={classes.w100}
-        >
-            <CardElement
-                className={classes.p + ' ' + classes.mb2}
-            />
-            <Grid
-                item
-                container
-                xs={12}
-            >
-                <ActionButtonsComponent
-                    backButtonText={'Back'}
-                    nextButtonText={'Next Step'}
-                    back={back}
-                    next={submit}
-                    nextButtonDisabled={!stripe}
-                />
-            </Grid>
-        </form>
-    );
-
+  return (
+    <form className={classes.w100}>
+      <CardElement className={classes.p + " " + classes.mb2} />
+      <Grid item container xs={12}>
+        <ActionButtonsComponent
+          backButtonText={"Back"}
+          nextButtonText={"Next Step"}
+          back={back}
+          next={submit}
+          nextButtonDisabled={!stripe}
+        />
+      </Grid>
+    </form>
+  );
 }

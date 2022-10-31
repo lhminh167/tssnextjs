@@ -1,4 +1,4 @@
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 import { useRouter } from 'next/router';
 import { ChangePasswordMetadataComponent } from '../../../modules/customer/change-password/change-password-metadata.component';
 import ChangePasswordComponent from '../../../modules/customer/change-password/change-password.component';

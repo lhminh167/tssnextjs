@@ -1,4 +1,4 @@
-import { SvgIcon, SvgIconProps } from '@material-ui/core';
+import { SvgIcon, SvgIconProps } from '@mui/material';
 
 export const PremiumBadgeIcon = (props: SvgIconProps) => (
   <SvgIcon viewBox='0 0 370.04 370.04' {...props}>

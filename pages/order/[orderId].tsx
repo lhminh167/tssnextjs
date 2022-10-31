@@ -1,4 +1,4 @@
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { OrderDetailMetadataComponent } from '../../modules/order/detail/order-detail-metadata.component';

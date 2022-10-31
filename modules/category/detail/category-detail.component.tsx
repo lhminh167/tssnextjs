@@ -1,5 +1,5 @@
-import { Paper, Typography } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
+import { Paper, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import ProductDetailImageComponent from '../../product/detail/product-detail-image.component';
 import { ICategory } from '../../shared/models/category.model';
 import { CATEGORY, DESCRIPTION, NAME } from '../../shared/tag/tag.model';

@@ -1,40 +1,43 @@
 import {
-  createStyles,
-  Grid, makeStyles,
+  Grid,
   Paper,
   Step,
   StepLabel,
   Stepper,
   Theme,
-  Typography
-} from '@material-ui/core';
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../root/root.model';
-import { toNumber } from '../../shared/helpers/auth.helper';
-import { p, pl0, pr0 } from '../../shared/layout/layout.style';
-import { isSmallWidth } from '../../shared/layout/layout.theme';
-import { defaultOrder, Order } from '../order.model';
-import { getOrderCreateForm } from '../order.service';
-import OrderConfirmationComponent from './confirmation-form/confirmation-form.component';
+  Typography,
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import createStyles from "@mui/styles/createStyles";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { defaultCustomer } from "../../customer/customer.model";
+import { IRootState } from "../../root/root.model";
+import { toNumber } from "../../shared/helpers/auth.helper";
+import { p, pl0, pr0 } from "../../shared/layout/layout.style";
+import { isSmallWidth } from "../../shared/layout/layout.theme";
+import { defaultShipping } from "../../shared/models/shipping.model";
+import { defaultOrder, Order } from "../order.model";
+import { getOrderCreateForm } from "../order.service";
+import OrderConfirmationComponent from "./confirmation-form/confirmation-form.component";
 import {
   defaultOrderCreateForm,
   OrderCreateForm,
-  OrderCreateRequest
-} from './create-order.model';
-import OrderCreateRequestComponent from './delivery-form/delivery-form.component';
-import FinishFormComponent from './finish-form/finish-form.component';
-import PaymentFormComponent from './payment-form/payment-form.component';
-import { defaultCustomer } from "../../customer/customer.model";
-import { defaultShipping } from '../../shared/models/shipping.model';
+  OrderCreateRequest,
+} from "./create-order.model";
+import OrderCreateRequestComponent from "./delivery-form/delivery-form.component";
+import FinishFormComponent from "./finish-form/finish-form.component";
+import PaymentFormComponent from "./payment-form/payment-form.component";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  pl0: pl0,
-  pr0: pr0,
-  p: p
-}));
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    pl0: pl0,
+    pr0: pr0,
+    p: p,
+  })
+);
 
-const steps = ['Delivery', 'Confirmation', 'Payment', 'Finish'];
+const steps = ["Delivery", "Confirmation", "Payment", "Finish"];
 
 interface ActiveStepProps {
   step: number;
@@ -53,7 +56,7 @@ function ActiveStepComponent({
   order,
   output,
   back,
-  next
+  next,
 }: ActiveStepProps) {
   switch (step) {
     case 0:
@@ -79,7 +82,7 @@ function ActiveStepComponent({
     case 3:
       return <FinishFormComponent data={order} back={back} />;
     default:
-      throw new Error('Unknown step');
+      throw new Error("Unknown step");
   }
 }
 
@@ -102,17 +105,19 @@ export default function CreateOrderComponent() {
   const [order, setOrder] = React.useState<Order>(defaultOrder);
 
   useEffect(() => {
-    getOrderCreateForm().then(data => {
+    getOrderCreateForm().then((data) => {
       const formResponse = data.content ?? defaultOrderCreateForm;
-      const shipping = 
-        formResponse.shippings.find(e => e.shippingRegion.shippingRegionId === currentUser.shippingRegionId) 
-        ?? defaultShipping;
+      const shipping =
+        formResponse.shippings.find(
+          (e) =>
+            e.shippingRegion.shippingRegionId === currentUser.shippingRegionId
+        ) ?? defaultShipping;
       setForm(formResponse);
       setState({
         ...currentUser,
         customerId: toNumber(currentUser.customerId),
         shippingId: shipping.shippingId,
-        shippingRegionId: currentUser.shippingRegion.shippingRegionId
+        shippingRegionId: currentUser.shippingRegion.shippingRegionId,
       });
     });
   }, [currentUser]);
@@ -131,35 +136,24 @@ export default function CreateOrderComponent() {
   };
 
   return (
-    <Grid
-      container
-      component={Paper}
-    >
-      <Grid
-        item
-        xs={12}
-        className={classes.p}
-      >
-        <Typography component='h1' variant='h4' align='left'>
+    <Grid container component={Paper}>
+      <Grid item xs={12} className={classes.p}>
+        <Typography component="h1" variant="h4" align="left">
           Checkout
         </Typography>
       </Grid>
-      <Grid
-        item
-        xs={12}
-        className={classes.p}
-      >
+      <Grid item xs={12} className={classes.p}>
         <Stepper
           activeStep={activeStep}
-          className={classes.pl0 + ' ' + classes.pr0}
-          orientation={matches ? 'horizontal' : 'vertical'}
+          className={classes.pl0 + " " + classes.pr0}
+          orientation={matches ? "horizontal" : "vertical"}
         >
           {steps.map((label, index) => (
             <Step
               key={label}
               className={
-                (index === 0 ? classes.pl0 + ' ' : '') +
-                (index === steps.length - 1 ? classes.pr0 : '')
+                (index === 0 ? classes.pl0 + " " : "") +
+                (index === steps.length - 1 ? classes.pr0 : "")
               }
             >
               <StepLabel>{label}</StepLabel>
@@ -178,6 +172,5 @@ export default function CreateOrderComponent() {
         order={order}
       />
     </Grid>
-
   );
 }

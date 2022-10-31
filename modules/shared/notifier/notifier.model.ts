@@ -1,4 +1,4 @@
-import { Color } from '@material-ui/lab';
+import { Color } from '@mui/lab';
 import { IResponse } from '../crud/crud.model';
 
 export interface INotifierState {

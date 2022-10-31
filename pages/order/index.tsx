@@ -1,4 +1,4 @@
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 import React from 'react';
 import { OrderListMetadataComponent } from '../../modules/order/list/order-list-metadata.component';
 import OrderListComponent from '../../modules/order/list/order-list.component';

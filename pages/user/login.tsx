@@ -1,4 +1,4 @@
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 import React from 'react';
 import { LoginMetadataComponent } from '../../modules/customer/login/login-metadata.component';
 import LoginComponent from '../../modules/customer/login/login.component';

@@ -1,4 +1,4 @@
-import { CreateCSSProperties } from '@material-ui/core/styles/withStyles'
+import { CreateCSSProperties } from '@mui/material/styles';
 import theme, { themeColor } from './layout.theme'
 
 export const w100: CreateCSSProperties<{}> = {
