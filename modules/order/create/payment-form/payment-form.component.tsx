@@ -3,7 +3,9 @@ import { loadStripe } from "@stripe/stripe-js";
 import { OrderCreateRequest } from "../create-order.model";
 import CreditCardComponent from "./credit-card.component";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY ?? "");
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY ?? ""
+);
 
 interface Props {
   data: OrderCreateRequest;
