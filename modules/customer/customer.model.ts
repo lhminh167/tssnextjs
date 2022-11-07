@@ -89,11 +89,6 @@ export interface ILoginResponse {
     customer?: Customer;
 }
 
-export interface ILoginRequest {
-    email?: string;
-    password?: string;
-}
-
 export class LoginRequestValidator extends Validator<ILoginRequest> {
     constructor() {
         super();
