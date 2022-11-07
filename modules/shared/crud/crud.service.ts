@@ -76,7 +76,7 @@ export async function upload(input: UploadRequest[]) {
 
   const requests = input.map((entry, index) => {
     const body = new FormData();
-    body.append("api_key", getEnvVar("NEXT_PUBLIC_CLOUDINARY_API_KEY"));
+    body.append("PUBLIC_KEY", getEnvVar("NEXT_PUBLIC_CLOUDINARY_PUBLIC_KEY"));
     body.append("upload_preset", "tss");
     body.append("file", entry.file);
     body.append("public_id", entry.name);
@@ -107,8 +107,9 @@ export function getEnvVar(key: string) {
 
   const config = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-    NEXT_PUBLIC_STRIPE_API_KEY: process.env.NEXT_PUBLIC_STRIPE_API_KEY,
-    NEXT_PUBLIC_CLOUDINARY_API_KEY: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+    NEXT_PUBLIC_STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
+    NEXT_PUBLIC_CLOUDINARY_PUBLIC_KEY:
+      process.env.NEXT_PUBLIC_CLOUDINARY_PUBLIC_KEY,
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME:
       process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,

@@ -44,6 +44,5 @@ cypress/logs
 cypress/results
 
 # others
-.env*
 .theia
 .vscode
