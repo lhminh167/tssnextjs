@@ -1,2 +1,2 @@
 @Library('core')_
-build('lhminh167/tssnextjs')
+service('lhminh167/tssnextjs')
