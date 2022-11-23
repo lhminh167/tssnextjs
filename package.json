@@ -1,10 +1,12 @@
 {
-  "name": "nextjs-with-typescript-with-mui-styles",
+  "name": "tssnextjs",
   "version": "5.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "ENVIRONMENT=development next dev",
     "build": "next build",
+    "build:aws-eb": "ENVIRONMENT=aws-eb npm run build",
+    "build:prod": "ENVIRONMENT=prod npm run build",
     "start": "next start",
     "lint": "next lint",
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
@@ -23,6 +25,7 @@
     "@stripe/stripe-js": "^1.42.0",
     "autoprefixer": "latest",
     "clean-css": "latest",
+    "dotenv": "^16.0.3",
     "es6-promise": "^4.2.8",
     "fetch-intercept": "^2.4.0",
     "fluentvalidation-ts": "^2.3.0",
