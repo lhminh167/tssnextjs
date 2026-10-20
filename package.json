@@ -2,14 +2,14 @@
   "name": "shop-mate-nextjs",
   "version": "1.0.0",
   "engines": {
-    "node": "10.19.0"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "next dev -p 5009",
     "dev:test": "cypress open",
     "dev:start": "next dev -p 5009",
     "start": "next start -p $PORT",
-    "build": "next build",
+    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider next build",
     "analyze": "cross-env ANALYZE=true npm run build",
     "delete:reports": "rm cypress/results/* || true",
     "ci": "npm run ci:setup && start-server-and-test dev:start http://localhost:5009 test",
