@@ -32,7 +32,7 @@
     "@material-ui/lab": "4.0.0-alpha.56",
     "@next/bundle-analyzer": "9.2.0",
     "@reduxjs/toolkit": "1.4.0",
-    "@sentry/browser": "5.23.0",
+    "@sentry/browser": "7.119.1",
     "@stripe/react-stripe-js": "1.1.2",
     "@stripe/stripe-js": "1.9.0",
     "dotenv": "8.2.0",
